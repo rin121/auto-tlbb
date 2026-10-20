@@ -1,9 +1,12 @@
 # Thông tin riêng của người chơi: không đưa lên GitHub
 tai_khoan.json
+tai_khoan.json.bak
 proxy_pool.txt
 tmac/
 nhat_ky_auto.log
+nhat_ky_auto.log.ngay
 cua_so_da_an.json
+license.dat
 
 # Không track trên GitHub (build, DLL, dữ liệu local, venv Win7)
 .venv_win7/
