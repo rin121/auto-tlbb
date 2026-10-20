@@ -1,0 +1,6 @@
+# Cài bằng --no-deps vào ocr_py (Python 3.8 embeddable); cv2 được thay bằng module rỗng nên không cần OpenCV.
+ddddocr==1.4.11
+onnxruntime==1.6.0
+numpy==1.24.4
+protobuf==3.20.3
+Pillow==10.4.0

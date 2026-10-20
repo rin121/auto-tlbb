@@ -1,0 +1,29 @@
+# Thông tin riêng của người chơi: không đưa lên GitHub
+tai_khoan.json
+proxy_pool.txt
+tmac/
+nhat_ky_auto.log
+cua_so_da_an.json
+
+# Không track trên GitHub (build, DLL, dữ liệu local, venv Win7)
+.venv_win7/
+dong_goi/
+ban_ghi/
+anh_chup/
+cong_cu/
+dll/
+tests/
+tools/
+
+# Build
+.venv/
+__pycache__/
+dong_goi/build/
+dong_goi/build_moi/
+dong_goi/build_tam/
+dong_goi/work/
+dong_goi/work_dung_thu/
+dong_goi/dist_dung_thu/
+_han_dung.py
+_kich_hoat_bat.py
+dong_goi/kich_hoat/license_private.pem

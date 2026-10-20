@@ -1,0 +1,39 @@
+{
+    "bat_tu_dang_nhap": true,
+    "thu_muc_game": "D:\\Games\\ThienLongCityCSClientFull2026\\TLBB Nhat Kiem",
+    "may_chu": "Máy Chủ Mới",
+    "ma_kiem_tra": "1234",
+    "giai_ma_kiem_tra": false,
+    "giay_cho_truoc_khi_nap_dll": 20,
+    "giay_toi_da_moi_buoc": 60,
+    "so_lan_thu_toi_da": 3,
+    "so_game_mo_cung_luc": 10,
+    "so_game_moi_dot": 1,
+    "giay_giua_moi_dot": 2,
+    "tai_khoan_pho_ban": [],
+    "tai_khoan_train": [],
+    "tao_nhan_vat_moi": {
+        "danh_sach": "",
+        "so_nhan_vat": 3,
+        "nhan_do_tan_thu": true,
+        "da_xong": {
+            "caychay9": [
+                "caychay9",
+                "caychay9995",
+                "caychay999"
+            ],
+            "caychay10": [
+                "caychay10",
+                "caychay100",
+                "caychay1000"
+            ]
+        },
+        "ten_thuc": {},
+        "duoi_ten": [
+            "99",
+            "999"
+        ]
+    },
+    "bat_tmac": false,
+    "bat_gia_mac": false
+}

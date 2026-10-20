@@ -1,0 +1,14 @@
+# Python 3.8 amd64 — Windows 7 SP1 x64 (channel win7\AutoHoc.exe)
+# Wheel onnxruntime mới (>=1.11) lỗi pybind11_state trên Win7 SP1; dùng 1.6.0 (đủ cho common_old.onnx).
+pywin32
+psutil==5.9.8
+Pillow
+pefile
+ziglang
+ddddocr==1.4.11
+onnxruntime==1.6.0
+numpy==1.24.4
+opencv-python-headless==4.8.1.78
+PySocks
+cryptography==41.0.7
+pyinstaller
