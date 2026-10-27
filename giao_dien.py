@@ -234,6 +234,8 @@ CAO_CUA_SO_MAC_DINH = 520
 RONG_CUA_SO_TOI_THIEU = 600
 CAO_CUA_SO_TOI_THIEU = 400
 DOAN_WRAP_GHI_CHU = 400
+# "Cài đặt chung" luôn ẩn (mở bằng cách khác); "Cài đặt" chứa ô ẩn / hiện tab nên không cho ẩn.
+TAB_LUON_HIEN = ("Cài đặt", "Cài đặt chung")
 GIAY_VE_LAI_KHI_CO_TIN = 0.5
 GIAY_VE_LAI_TOI_DA = 1.0
 MILI_GIAY_GOP_CAP_NHAT_TAB = 30
@@ -1776,7 +1778,8 @@ class UngDung:
                 lambda: self._tao_tab_tien_ich(so_tay),
                 lambda: self._tao_tab_tao_nhan_vat(so_tay),
                 lambda: self._tao_tab_cai_dat(so_tay),
-                lambda: self._cho_keo_tha_tab(so_tay)]
+                lambda: self._cho_keo_tha_tab(so_tay),
+                lambda: self._tao_o_an_hien_tab(so_tay)]
 
     def _tao_tab_tiep(self):
         if self._buoc_tao_tab:
@@ -1932,6 +1935,36 @@ class UngDung:
         so_tay.bind("<B1-Motion>", keo, add="+")
         so_tay.bind("<ButtonRelease-1>", tha, add="+")
 
+    def _tao_o_an_hien_tab(self, so_tay):
+        """Tab Cài đặt: mỗi tab một ô tích hiện / ẩn, lưu tên tab đang ẩn ở "tab_an". Tab Cài đặt luôn hiện."""
+        tab_an = set(cau_hinh.chung()["tab_an"])
+        cac_tab = [(so_tay.tab(tab, "text"), tab) for tab in so_tay.tabs()]
+        cac_tab = [(ten, tab) for ten, tab in cac_tab if ten not in TAB_LUON_HIEN]
+        self.bien_hien_tab = {}
+
+        def doi(ten, tab):
+            if self.bien_hien_tab[ten].get():
+                so_tay.add(tab)
+            else:
+                so_tay.hide(tab)
+            an = [t for t, _ in cac_tab if not self.bien_hien_tab[t].get()]
+            cau_hinh.dat_chung({"tab_an": an})
+            self.in_log(f"{'Hiện' if self.bien_hien_tab[ten].get() else 'Ẩn'} tab {ten}")
+
+        khung = ttk.LabelFrame(self.tab_cai_dat, text="Ẩn / hiện tab", padding=6)
+        khung.pack(fill="x", pady=(8, 0))
+        for so, (ten, tab) in enumerate(cac_tab):
+            self.bien_hien_tab[ten] = tk.BooleanVar(value=ten not in tab_an)
+            ttk.Checkbutton(khung, text=ten, variable=self.bien_hien_tab[ten],
+                            command=lambda ten=ten, tab=tab: doi(ten, tab)).grid(
+                row=so // 3, column=so % 3, sticky="w", padx=(0, 16), pady=1)
+            if ten in tab_an:
+                so_tay.hide(tab)
+        ttk.Label(khung, text="Bỏ tích để ẩn tab khỏi thanh tab (auto vẫn chạy như cũ, chỉ ẩn giao diện). "
+                              "Tab Cài đặt luôn hiện.",
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(
+            row=len(cac_tab) // 3 + 1, column=0, columnspan=3, sticky="w", pady=(4, 0))
+
     def _tao_tab_kich_hoat(self, so_tay):
         tab = self._tab_cuon(so_tay, "Kích hoạt")
         ttk.Label(tab, text="Mã máy (HWID) — gửi cho admin qua Zalo để nhận file license.dat:",
@@ -2055,7 +2088,7 @@ class UngDung:
         self.in_log(f"Đã xóa map {ten_map} khỏi danh sách (các mốc đang dùng map này vẫn giữ nguyên)")
 
     def _tao_tab_cai_dat(self, so_tay):
-        tab = self._tab_cuon(so_tay, "Cài đặt")
+        tab = self.tab_cai_dat = self._tab_cuon(so_tay, "Cài đặt")
         chung = cau_hinh.chung()
         self.bien_cai_dat_game = {}
         for khoa, nhan, _ in CAI_DAT_GAME:

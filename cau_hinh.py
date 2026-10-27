@@ -38,7 +38,7 @@ MAC_DINH_CHUNG = {"giay_cho_game_khoi_dong": 90, "bat_moi_nhom": False, "truong_
                   "chat_the_gioi": False, "noi_dung_chat_the_gioi": "", "giay_chat_the_gioi": 300,
                   "nhan_vat_chat_the_gioi": "",
                   "tat_am_thanh": True, "giam_do_hoa": True, "danh_sach_map": CAC_MAP_MAC_DINH,
-                  "thu_tu_tab": [], "thu_tu_nhan_vat": [], "cao_bang": {},
+                  "thu_tu_tab": [], "tab_an": [], "thu_tu_nhan_vat": [], "cao_bang": {},
                   "so_nguoi_mot_nhom": 4, "xv_chi_sat_tinh": False,
                   "xv_so_round": 3, "xv_test": False, "xv_chuyen_do": True, "xv_ngay_moi": True,
                   "xv_truong_nhom": [], "xv_tien_trinh": {},
