@@ -33,6 +33,7 @@ import traceback
 import psutil
 
 import cau_hinh
+import nang_cap_nhan_vat
 from bang_ma_viscii import giai_ma
 from dang_nhap import (CONG_MO_GAME, LoiDangNhap, LoiSaiRuleNhanVat, LoiSaiTaiKhoan, LuongDangNhap, bo_dau, cho_cua_so, chuoi_lua,
                        con_chay, dang_hien, dong_thong_bao, giu_client, lay_client_ranh, man_hinh_hien_tai,
@@ -411,7 +412,8 @@ class LuongTaoNhanVat(LuongDangNhap):
         if self._dung_client_ranh():
             return
         self.bao_trang_thai(f"Mở game (lần {lan}/{so_lan})")
-        self.pid = mo_game(cd["thu_muc_game"])
+        tk = self.tai_khoan["ten_dang_nhap"]
+        self.pid = mo_game(cd["thu_muc_game"], tk)
         giu_client(self.pid, self)
         self.in_log(f"Đã mở game (pid {self.pid}), "
                     f"chờ {cd['giay_cho_truoc_khi_nap_dll']} giây cho game tải xong")
@@ -505,6 +507,13 @@ class LuongTaoNhanVat(LuongDangNhap):
             raise LoiDangNhap(f"Chưa vào được game bằng {ten}")
         NhanDoTanThu(game, ten, self.in_log, self.dung.is_set, self.bao_trang_thai).chay()
         ghi_da_xong(tk, ten)
+        try:
+            nang_cap_nhan_vat.nang_cap(game, ten, self.in_log, self.dung.is_set, self.bao_trang_thai)
+        except Exception as loi:
+            if self.dung.is_set():
+                raise LoiDangNhap("Đã dừng")
+            self.in_log(f"{ten}: nâng cấp nhân vật chưa xong ({str(loi) or type(loi).__name__}), "
+                        "lần đăng nhập sau làm tiếp")
         self.ve_chon_may_chu(game)
 
     def ve_chon_nhan_vat(self, lua):

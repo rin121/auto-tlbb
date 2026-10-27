@@ -8,16 +8,9 @@ Cách chạy (mở game lên trước, vào nhân vật, để cửa sổ game h
 """
 import os
 
-from PIL import ImageGrab
-
-from cua_so_game import bat_dpi_awareness, dua_cua_so_len_truoc, tim_cua_so_game, vung_client
+from cua_so_game import bat_dpi_awareness, chup_cua_so, dua_cua_so_len_truoc, tim_cua_so_game, vung_client
 
 THU_MUC_ANH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "anh_chup")
-
-
-def chup_cua_so(hwnd):
-    x, y, rong, cao = vung_client(hwnd)
-    return ImageGrab.grab(bbox=(x, y, x + rong, y + cao), all_screens=True)
 
 
 def main():

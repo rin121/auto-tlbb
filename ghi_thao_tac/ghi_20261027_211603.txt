@@ -1,0 +1,2618 @@
+[21:16:03.090] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261027_211603.txt (mọi cửa sổ game)
+[21:16:03.213] caychay344: ở map [Đại Lý] (163, 144)
+[21:16:03.225] GaoDẻLâu: ở map [Đại Lý] (211, 166)
+[21:16:03.233] caychay32: GỌI PetButton_Show(1)
+[21:16:03.233] caychay32: GỌI PetButton_Show(1)
+[21:16:03.233] caychay32: GỌI PetButton_Show(1)
+[21:16:03.233] caychay32: GỌI PetButton_Show(2)
+[21:16:03.233] caychay32: GỌI PetButton_Show(2)
+[21:16:03.233] caychay32: GỌI PetButton_Show(2)
+[21:16:03.234] caychay32: ở map [Đại Lý] (147, 149)
+[21:16:03.239] caychay35: ở map [Đại Lý] (151, 145)
+[21:16:03.247] caychay344: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MessageBall, MiniMap, Packet, PlayerFrame, PlayerImpactFrame, ShopCustom, TargetBuff, TargetFrame
+[21:16:03.250] GaoDẻLâu: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_2, MainMenuBar_3, MessageBall, MiniMap, OtherInfo, Packet, PartyFrame, PetFrame, PlayerFrame, PlayerImpactFrame
+[21:16:03.255] caychay32: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_3, MessageBall, MiniMap, Packet, PartyFrame, PetFrame, PlayerFrame, PlayerImpactFrame, SelfEquip
+[21:16:03.279] caychay344: túi lúc đầu: ô 0 Bách Bảo Nang (mã 10163506) x1; ô 1 Bách Bảo Rương (mã 10163512) x1
+[21:16:03.296] caychay35: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_3, MessageBall, MiniMap, PartyFrame, PetFrame, PlayerFrame, PlayerImpactFrame
+[21:16:03.307] GaoDẻLâu: túi lúc đầu: ô 20 #-09Mảnh Vỡ Thiên Ngoại (mã 30503237) x200; ô 21 #-09Mảnh Vỡ Thiên Ngoại (mã 30503237) x50
+[21:16:03.310] caychay32: túi lúc đầu: ô 0 Bách Bảo Nang (mã 10141030) x1; ô 1 Bách Bảo Rương (mã 10141040) x1; ô 2 #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x200; ô 3 #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x200; ô 4 #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x35; ô 5 #-09Mảnh Vỡ Thời Trang (mã 30503263) x200; ô 6 #-09Mảnh Vỡ Thời Trang (mã 30503263) x164; ô 7 #-09Mảnh Vỡ Thời Trang (mã 30503263) x200; ô 8 #-09Mảnh Vỡ Bảo Thạch VIP (mã 30503236) x11; ô 9 #-09Mảnh Vỡ Trang Bị VIP (mã 30503235) x2; ô 10 Phiếu KNB 100 (mã 30004606) x14; ô 11 #-09Mảnh Vỡ Trang Bị (mã 30503234) x10; ô 12 Phiếu KNB 300 (mã 30004607) x3; ô 13 Phiếu KNB 3K (mã 30004611) x2
+[21:16:03.321] caychay344: trang bị lúc đầu: ô 0 Thanh Đồng Đao (mã 10100000) x1; ô 1 Tân Thủ - Khôi (mã 10162420) x1; ô 2 Tân Thủ - Giáp (mã 10162423) x1; ô 3 Tân Thủ - Thủ (mã 10162422) x1; ô 4 Tân Thủ - Ngoa (mã 10162421) x1; ô 5 Tân Thủ - Đái (mã 10162426) x1; ô 6 Tân Thủ - Giới (mã 10162427) x1; ô 7 Tân Thủ - Liên (mã 10162425) x1; ô 8 Cưỡi: Đà Điểu (mã 10158130) x1; ô 9 Bách Bảo Nang (mã 10141030) x1; ô 10 Bách Bảo Rương (mã 10141040) x1; ô 11 Tân Thủ - Giới (mã 10162427) x1; ô 12 Tân Thủ - Ngọc (mã 10162428) x1; ô 13 Tân Thủ - Ngọc (mã 10162428) x1; ô 14 Tân Thủ - Uyển (mã 10162429) x1; ô 15 Tân Thủ - Kiên (mã 10162424) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[21:16:03.328] GaoDẻLâu: trang bị lúc đầu: ô 0 Thái Ất Huyền Hoàn - VIP2 (mã 10162660) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Toạ Kỵ: Thương Lan Nguyên Thánh - VIP2 (mã 10165066) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Huyền Thiết - Giới (mã 10162437) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Thần Vương - Ngọc (mã 10162478) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 16 Tư Vô Tà - VIP2 (mã 10163077) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[21:16:03.339] caychay35: túi lúc đầu: ô 0 Phiếu KNB 100 (mã 30004606) x9; ô 1 Phiếu KNB 300 (mã 30004607) x4; ô 2 #-09Mảnh Vỡ Thời Trang (mã 30503263) x8; ô 3 Càn Khôn Hồ (mã 30008009) x1; ô 4 Phiếu KNB 3K (mã 30004611) x2; ô 5 #-09Mảnh Vỡ Trang Bị (mã 30503234) x6; ô 6 #-09Mảnh Vỡ Bảo Thạch VIP (mã 30503236) x7; ô 7 #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x6
+[21:16:03.342] caychay32: trang bị lúc đầu: ô 0 Minh Tôn (mã 10162570) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Cưỡi: Đà Điểu (mã 10158130) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Tân Thủ - Giới (mã 10162427) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Tân Thủ - Ngọc (mã 10162428) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[21:16:03.352] caychay344: chỉ số lúc đầu: LEVEL=120, MEMPAI=6, POINT_REMAIN=238, STR=136151, SPR=136152, CON=136174, INT=136125, DEX=136148, MAXHP=1153523, MAXMP=1141280, MONEY=100000000, YUANBAO=0, ZENGDIAN=1999420, EXP=979536130
+[21:16:03.361] caychay35: trang bị lúc đầu: ô 0 Minh Tôn (mã 10162570) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Cưỡi: Đà Điểu (mã 10158130) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Tân Thủ - Giới (mã 10162427) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Tân Thủ - Ngọc (mã 10162428) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[21:16:03.363] caychay32: chỉ số lúc đầu: LEVEL=127, MEMPAI=6, POINT_REMAIN=260, STR=316277, SPR=14316278, CON=650302, INT=650272, DEX=65648277, MAXHP=18865408, MAXMP=10848501, MONEY=100000000, YUANBAO=0, ZENGDIAN=1988420, EXP=613160519
+[21:16:03.370] GaoDẻLâu: chỉ số lúc đầu: LEVEL=144, MEMPAI=6, POINT_REMAIN=19151, STR=396295, SPR=11234060, CON=20962938, INT=10951201, DEX=51095058, MAXHP=250000000, MAXMP=182531571, MONEY=11304033, YUANBAO=376400, ZENGDIAN=1905130, EXP=0
+[21:16:03.395] caychay35: chỉ số lúc đầu: LEVEL=124, MEMPAI=6, POINT_REMAIN=251, STR=316215, SPR=14316216, CON=984239, INT=982209, DEX=64982213, MAXHP=24430664, MAXMP=16380621, MONEY=100000000, YUANBAO=0, ZENGDIAN=1988400, EXP=891551710
+[21:16:04.121] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:16:04.764] caychay32: GỌI PetButton_Show(1)
+[21:16:04.764] caychay32: GỌI PetButton_Show(1)
+[21:16:04.764] caychay32: GỌI PetButton_Show(1)
+[21:16:04.764] caychay32: GỌI PetButton_Show(2)
+[21:16:04.764] caychay32: GỌI PetButton_Show(2)
+[21:16:04.764] caychay32: GỌI PetButton_Show(2)
+[21:16:04.824] caychay35: GỌI PetButton_Show(1)
+[21:16:04.825] caychay35: GỌI PetButton_Show(1)
+[21:16:04.825] caychay35: GỌI PetButton_Show(1)
+[21:16:04.825] caychay35: GỌI PetButton_Show(2)
+[21:16:04.825] caychay35: GỌI PetButton_Show(2)
+[21:16:04.825] caychay35: GỌI PetButton_Show(2)
+[21:16:04.969] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:16:09.495] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:16:11.232] caychay35: GỌI PetButton_Show(1)
+[21:16:11.232] caychay35: GỌI PetButton_Show(1)
+[21:16:11.232] caychay35: GỌI PetButton_Show(1)
+[21:16:11.232] caychay35: GỌI PetButton_Show(2)
+[21:16:11.232] caychay35: GỌI PetButton_Show(2)
+[21:16:11.232] caychay35: GỌI PetButton_Show(2)
+[21:16:11.560] caychay32: GỌI PetButton_Show(1)
+[21:16:11.560] caychay32: GỌI PetButton_Show(1)
+[21:16:11.560] caychay32: GỌI PetButton_Show(1)
+[21:16:11.560] caychay32: GỌI PetButton_Show(2)
+[21:16:11.560] caychay32: GỌI PetButton_Show(2)
+[21:16:11.560] caychay32: GỌI PetButton_Show(2)
+[21:16:12.062] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:12.063] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:12.063] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:12.063] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:12.063] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:12.063] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:12.324] caychay32: GỌI PetButton_Show(1)
+[21:16:12.324] caychay32: GỌI PetButton_Show(1)
+[21:16:12.324] caychay32: GỌI PetButton_Show(1)
+[21:16:12.324] caychay32: GỌI PetButton_Show(2)
+[21:16:12.324] caychay32: GỌI PetButton_Show(2)
+[21:16:12.324] caychay32: GỌI PetButton_Show(2)
+[21:16:25.709] caychay35: GỌI PetButton_Show(1)
+[21:16:25.709] caychay35: GỌI PetButton_Show(1)
+[21:16:25.709] caychay35: GỌI PetButton_Show(1)
+[21:16:25.709] caychay35: GỌI PetButton_Show(2)
+[21:16:25.709] caychay35: GỌI PetButton_Show(2)
+[21:16:25.709] caychay35: GỌI PetButton_Show(2)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:25.873] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:41.323] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:16:41.913] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:16:45.796] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:16:49.534] caychay32: GỌI SelfEquip_ShowVigor()
+[21:16:49.534] caychay32: GỌI SelfEquip_ShowEnergy()
+[21:16:56.355] caychay32: GỌI PetButton_Show(1)
+[21:16:56.355] caychay32: GỌI PetButton_Show(1)
+[21:16:56.355] caychay32: GỌI PetButton_Show(1)
+[21:16:56.355] caychay32: GỌI PetButton_Show(2)
+[21:16:56.355] caychay32: GỌI PetButton_Show(2)
+[21:16:56.355] caychay32: GỌI PetButton_Show(2)
+[21:16:56.468] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:56.469] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:56.469] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:16:56.469] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:56.469] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:16:56.469] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:17:01.205] caychay32: GỌI PetButton_Show(1)
+[21:17:01.205] caychay32: GỌI PetButton_Show(1)
+[21:17:01.205] caychay32: GỌI PetButton_Show(1)
+[21:17:01.205] caychay32: GỌI PetButton_Show(2)
+[21:17:01.205] caychay32: GỌI PetButton_Show(2)
+[21:17:01.205] caychay32: GỌI PetButton_Show(2)
+[21:17:01.344] caychay35: GỌI PetButton_Show(1)
+[21:17:01.347] caychay35: GỌI PetButton_Show(1)
+[21:17:01.347] caychay35: GỌI PetButton_Show(1)
+[21:17:01.347] caychay35: GỌI PetButton_Show(2)
+[21:17:01.347] caychay35: GỌI PetButton_Show(2)
+[21:17:01.347] caychay35: GỌI PetButton_Show(2)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:17:02.131] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:17:15.208] caychay35: GỌI PetButton_Show(1)
+[21:17:15.208] caychay35: GỌI PetButton_Show(1)
+[21:17:15.208] caychay35: GỌI PetButton_Show(1)
+[21:17:15.208] caychay35: GỌI PetButton_Show(2)
+[21:17:15.209] caychay35: GỌI PetButton_Show(2)
+[21:17:15.209] caychay35: GỌI PetButton_Show(2)
+[21:17:17.901] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:17:18.988] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:17:24.877] caychay344: ĐÓNG cửa sổ Packet
+[21:17:24.877] caychay344: ĐÓNG cửa sổ ShopCustom
+[21:17:33.549] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:17:45.310] caychay32: GỌI PetButton_Show(1)
+[21:17:45.310] caychay32: GỌI PetButton_Show(1)
+[21:17:45.310] caychay32: GỌI PetButton_Show(1)
+[21:17:45.310] caychay32: GỌI PetButton_Show(2)
+[21:17:45.310] caychay32: GỌI PetButton_Show(2)
+[21:17:45.310] caychay32: GỌI PetButton_Show(2)
+[21:17:45.466] caychay35: GỌI PetButton_Show(1)
+[21:17:45.466] caychay35: GỌI PetButton_Show(1)
+[21:17:45.466] caychay35: GỌI PetButton_Show(1)
+[21:17:45.466] caychay35: GỌI PetButton_Show(2)
+[21:17:45.466] caychay35: GỌI PetButton_Show(2)
+[21:17:45.466] caychay35: GỌI PetButton_Show(2)
+[21:17:52.467] caychay32: GỌI PetButton_Show(1)
+[21:17:52.467] caychay32: GỌI PetButton_Show(1)
+[21:17:52.467] caychay32: GỌI PetButton_Show(1)
+[21:17:52.467] caychay32: GỌI PetButton_Show(2)
+[21:17:52.467] caychay32: GỌI PetButton_Show(2)
+[21:17:52.467] caychay32: GỌI PetButton_Show(2)
+[21:17:55.525] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:18:01.383] caychay344: đi tới (162, 147)
+[21:18:02.018] caychay344: đi tới (161, 150)
+[21:18:02.715] caychay344: đi tới (160, 153)
+[21:18:03.430] caychay344: đi tới (159, 156)
+[21:18:04.105] caychay344: đi tới (158, 159)
+[21:18:04.837] caychay344: đi tới (158, 162)
+[21:18:04.879] caychay344: ĐÓNG cửa sổ TargetBuff
+[21:18:04.879] caychay344: ĐÓNG cửa sổ TargetFrame
+[21:18:06.725] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:18:07.623] caychay344: MỞ cửa sổ Packet
+[21:18:08.257] caychay344: GỌI OpenEquip(1)
+[21:18:08.257] caychay344: GỌI SelfEquip_Open()
+[21:18:08.257] caychay344: GỌI SelfEquip_ShowVigor()
+[21:18:08.257] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:18:08.257] caychay344: GỌI SetAcceptButtonState()
+[21:18:08.257] caychay344: GỌI Equip_RefreshEquip()
+[21:18:08.257] caychay344: GỌI SelfEquip_ShowVigor()
+[21:18:08.257] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:18:08.257] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:18:08.278] caychay344: MỞ cửa sổ SelfEquip
+[21:18:09.527] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:18:10.355] caychay344: ĐÓNG cửa sổ Packet
+[21:18:10.355] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:18:11.094] caychay344: MỞ cửa sổ Packet
+[21:18:12.413] caychay344: MỞ cửa sổ SelfEquip
+[21:18:13.743] caychay344: MỞ cửa sổ OtherInfo
+[21:18:13.743] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:18:14.378] caychay344: GỌI SelfEquip_Bag_Click()
+[21:18:14.389] caychay344: MỞ cửa sổ SuperTooltip
+[21:18:14.431] caychay344: túi ô 2: thêm Bách Bảo Nang (mã 10141030) x1
+[21:18:14.453] caychay344: trang bị ô 9: mất Bách Bảo Nang (mã 10141030) x1
+[21:18:15.721] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:18:15.742] caychay344: túi ô 3: thêm Bách Bảo Rương (mã 10141040) x1
+[21:18:15.763] caychay344: trang bị ô 10: mất Bách Bảo Rương (mã 10141040) x1
+[21:18:16.433] caychay344: MỞ cửa sổ SuperTooltip
+[21:18:17.097] caychay344: MỞ cửa sổ MessageBox_Self
+[21:18:17.097] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:18:18.428] caychay344: GỌI City_Shop_SetCtl()
+[21:18:18.449] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:18:18.481] caychay344: túi ô 0: mất Bách Bảo Nang (mã 10163506) x1
+[21:18:18.513] caychay344: trang bị ô 9: thêm Bách Bảo Nang (mã 10163506) x1
+[21:18:18.524] caychay344: chỉ số: STR 136151 -> 146151, SPR 136152 -> 146152, CON 136174 -> 146174, INT 136125 -> 146125, DEX 136148 -> 146148, MAXHP 1153523 -> 1236857, MAXMP 1141280 -> 1224613
+[21:18:19.137] caychay344: MỞ cửa sổ MessageBox_Self
+[21:18:19.782] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:18:19.782] caychay344: GỌI MessageBox_OnOKClick()
+[21:18:19.782] caychay344: GỌI EquipItem(1, 10)
+[21:18:19.782] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:18:19.782] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:18:19.782] caychay344: GỌI Clear_XSCRIPT()
+[21:18:19.782] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:18:19.782] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:18:19.782] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:18:19.782] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:18:19.782] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:18:19.782] caychay344: GỌI Send_XSCRIPT()
+[21:18:19.782] caychay344: GỌI Equip_RefreshEquip()
+[21:18:19.782] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:18:19.782] caychay344: GỌI Equip_RefreshEquip1()
+[21:18:19.782] caychay344: GỌI City_Shop_SetCtl()
+[21:18:19.803] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:18:19.825] caychay344: túi ô 1: mất Bách Bảo Rương (mã 10163512) x1
+[21:18:19.847] caychay344: trang bị ô 10: thêm Bách Bảo Rương (mã 10163512) x1
+[21:18:20.507] caychay344: chỉ số: STR 146151 -> 156151, SPR 146152 -> 156152, CON 146174 -> 156174, INT 146125 -> 156125, DEX 146148 -> 156148, MAXHP 1236857 -> 9320190, MAXMP 1224613 -> 1307947
+[21:18:29.014] caychay344: ĐÓNG cửa sổ OtherInfo
+[21:18:29.014] caychay344: ĐÓNG cửa sổ Packet
+[21:18:30.365] caychay344: MỞ cửa sổ Packet
+[21:18:30.365] caychay344: MỞ cửa sổ ShopCustom
+[21:18:31.661] caychay344: GỌI City_Shop_SetCtl()
+[21:18:31.661] caychay344: GỌI ShopCustom_StringSplitID(101240351012403610124039101240401012404110124042101240431012)
+[21:18:31.661] caychay344: GỌI ShopCustom_StringSplit(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,, ,)
+[21:18:31.661] caychay344: GỌI ShopCustom_StringSplit(10000,10000,10000,10000,10000,10000,10000,10000,10000,10000,, ,)
+[21:18:31.661] caychay344: GỌI ShopCustom_StringSplit(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,, ,)
+[21:18:31.661] caychay344: GỌI ShopCustom_StringSplit(1,2,, ,)
+[21:18:33.056] caychay344: GỌI City_Shop_SetCtl()
+[21:18:33.056] caychay344: GỌI ShopCustom_StringSplitID(300080143000801830008019305051073050510730008029300080293050)
+[21:18:33.056] caychay344: GỌI ShopCustom_StringSplit(1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,, ,)
+[21:18:33.056] caychay344: GỌI ShopCustom_StringSplit(2000,20000,10000,2000,20000,2000,20000,10000,500000,50000,50, ,)
+[21:18:33.056] caychay344: GỌI ShopCustom_StringSplit(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,, ,)
+[21:18:33.056] caychay344: GỌI ShopCustom_StringSplit(1,2,, ,)
+[21:18:35.130] caychay32: GỌI PetButton_Show(1)
+[21:18:35.130] caychay32: GỌI PetButton_Show(1)
+[21:18:35.130] caychay32: GỌI PetButton_Show(1)
+[21:18:35.130] caychay32: GỌI PetButton_Show(2)
+[21:18:35.130] caychay32: GỌI PetButton_Show(2)
+[21:18:35.130] caychay32: GỌI PetButton_Show(2)
+[21:18:35.848] caychay344: MỞ cửa sổ SuperTooltip
+[21:18:36.613] caychay344: túi ô 0: thêm Minh Tôn (mã 10162570) x1
+[21:18:36.665] caychay344: chỉ số: ZENGDIAN 1999420 -> 1998420
+[21:18:37.319] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:18:39.406] caychay344: MỞ cửa sổ SuperTooltip
+[21:18:40.195] caychay344: thông báo: Các hạ đã mua 1 cái Nga Mi Biến Dị.
+[21:18:40.785] caychay344: túi ô 1: thêm Nga Mi Biến Dị (mã 30309907) x1
+[21:18:40.829] caychay344: chỉ số: ZENGDIAN 1998420 -> 1988420
+[21:18:41.405] caychay344: GỌI ShopCustom_Hidden()
+[21:18:41.437] caychay344: ĐÓNG cửa sổ Packet
+[21:18:41.437] caychay344: ĐÓNG cửa sổ ShopCustom
+[21:18:41.437] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:18:41.563] caychay35: GỌI PetButton_Show(1)
+[21:18:41.563] caychay35: GỌI PetButton_Show(1)
+[21:18:41.563] caychay35: GỌI PetButton_Show(1)
+[21:18:41.563] caychay35: GỌI PetButton_Show(2)
+[21:18:41.563] caychay35: GỌI PetButton_Show(2)
+[21:18:41.563] caychay35: GỌI PetButton_Show(2)
+[21:18:42.075] caychay344: GỌI City_Shop_SetCtl()
+[21:18:42.107] caychay344: MỞ cửa sổ Packet
+[21:18:42.749] caychay344: MỞ cửa sổ SuperTooltip
+[21:18:43.453] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:18:43.475] caychay344: túi ô 0: Minh Tôn (mã 10162570) -> Thanh Đồng Đao (mã 10100000) x1
+[21:18:43.496] caychay344: trang bị ô 0: Thanh Đồng Đao (mã 10100000) -> Minh Tôn (mã 10162570) x1
+[21:18:43.516] caychay344: chỉ số: STR 156151 -> 166151, SPR 156152 -> 166152, CON 156174 -> 166174, INT 156125 -> 166125, DEX 156148 -> 166148, MAXHP 9320190 -> 10795766, MAXMP 1307947 -> 2779005
+[21:18:43.559] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:18:44.002] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:18:44.083] caychay344: GỌI Packet_ItemBtnClicked(1, 2)
+[21:18:44.083] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:18:44.126] caychay344: túi ô 1: mất Nga Mi Biến Dị (mã 30309907) x1
+[21:18:44.204] caychay344: thông báo: Chúc mừng các hạ thành công thu được Nga Mi Biến Dị!
+[21:18:45.973] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:18:48.080] caychay344: chọn mục tiêu GIFTCODE
+[21:18:48.101] caychay344: MỞ cửa sổ Quest
+[21:18:48.101] caychay344: MỞ cửa sổ TargetBuff
+[21:18:48.101] caychay344: MỞ cửa sổ TargetFrame
+[21:18:48.185] caychay344: hội thoại NPC [GIFTCODE]:
+        - Ta là sứ giả phát GiftCode các hạ cần ta hỗ trợ gì ! (mã -1, -1; loại text)
+        - Vui Lòng Nhập Mã GiftCode Nhé! (mã 350097, 999; loại id)
+[21:18:49.453] caychay344: GỌI QuestOption_Clicked()
+[21:18:49.453] caychay344: GỌI QuestFrameOptionClicked(-1, 350097, 999)
+[21:18:49.453] caychay344: GỌI City_Shop_SetCtl()
+[21:18:49.453] caychay344: GỌI NewUserCard_SetText(20161231)
+[21:18:49.475] caychay344: MỞ cửa sổ NewbieCardActivation
+[21:18:53.628] caychay344: GỌI NewUserCard_Open_Click()
+[21:18:53.628] caychay344: GỌI NewUserCard(CHAOMUNGNHATKIEM01, 0)
+[21:18:53.628] caychay344: GỌI NewUserCard_Close()
+[21:18:53.628] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:18:53.629] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:18:53.650] caychay344: ĐÓNG cửa sổ NewbieCardActivation
+[21:18:53.671] caychay344: túi ô 1: thêm Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:18:53.757] caychay344: thông báo: Nhan GiftCode Thanh Cong!
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:18:55.582] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:18:56.745] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:18:57.088] caychay344: MỞ cửa sổ NewbieCardActivation
+[21:18:57.741] caychay344: ĐÓNG cửa sổ NewbieCardActivation
+[21:18:57.857] caychay344: thông báo: Nhan GiftCode Thanh Cong! Da trao du 2 hop Tan Thu 10M Point.
+[21:18:58.444] caychay344: túi ô 4: thêm Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:18:58.444] caychay344: túi ô 5: thêm Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:00.518] caychay344: GỌI City_Shop_SetCtl()
+[21:19:00.518] caychay344: GỌI NewUserCard_SetText(20161231)
+[21:19:00.539] caychay344: MỞ cửa sổ NewbieCardActivation
+[21:19:01.202] caychay344: ĐÓNG cửa sổ NewbieCardActivation
+[21:19:01.886] caychay344: túi ô 6: thêm Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:06.567] caychay344: MỞ cửa sổ NewbieCardActivation
+[21:19:07.899] caychay344: ĐÓNG cửa sổ NewbieCardActivation
+[21:19:07.932] caychay344: túi ô 7: thêm Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:07.932] caychay344: túi ô 8: thêm Hoàng Kim - Khôi (mã 10162450) x1
+[21:19:07.932] caychay344: túi ô 9: thêm Hoàng Kim - Ngoa (mã 10162451) x1
+[21:19:07.932] caychay344: túi ô 10: thêm Hoàng Kim - Thủ (mã 10162452) x1
+[21:19:07.932] caychay344: túi ô 11: thêm Hoàng Kim - Giáp (mã 10162453) x1
+[21:19:07.932] caychay344: túi ô 12: thêm Hoàng Kim - Kiên (mã 10162454) x1
+[21:19:07.932] caychay344: túi ô 13: thêm Hoàng Kim - Liên (mã 10162455) x1
+[21:19:07.932] caychay344: túi ô 14: thêm Hoàng Kim - Đái (mã 10162456) x1
+[21:19:07.932] caychay344: túi ô 15: thêm Hoàng Kim - Giới (mã 10162457) x1
+[21:19:07.932] caychay344: túi ô 16: thêm Hoàng Kim - Ngọc (mã 10162458) x1
+[21:19:07.932] caychay344: túi ô 17: thêm Hoàng Kim - Uyển (mã 10162459) x1
+[21:19:08.006] caychay344: hội thoại NPC [GIFTCODE]:
+        - Nhận thành công 1 Hộp Point Tân Thủ và 1 set Hoàng Kim 10 món. (mã -1, -1; loại text)
+[21:19:09.931] caychay344: ĐÓNG cửa sổ Quest
+[21:19:10.026] caychay344: đóng hội thoại NPC
+[21:19:11.309] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:11.941] caychay344: GỌI Packet_ItemBtnClicked(2, 4)
+[21:19:11.941] caychay344: GỌI CancelLastOp(20)
+[21:19:11.963] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:13.275] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:13.917] caychay344: GỌI City_Shop_SetCtl()
+[21:19:13.918] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:13.939] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:13.939] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:13.960] caychay344: túi ô 8: Hoàng Kim - Khôi (mã 10162450) -> Tân Thủ - Khôi (mã 10162420) x1
+[21:19:13.991] caychay344: trang bị ô 1: Tân Thủ - Khôi (mã 10162420) -> Hoàng Kim - Khôi (mã 10162450) x1
+[21:19:14.023] caychay344: chỉ số: STR 166151 -> 181151, SPR 166152 -> 181152, CON 166174 -> 181174, INT 166125 -> 181125, DEX 166148 -> 181148, MAXHP 10795766 -> 11045766, MAXMP 2779005 -> 3029005
+[21:19:14.641] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:14.641] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:15.274] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:15.275] caychay344: GỌI Clear_XSCRIPT()
+[21:19:15.275] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:19:15.275] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:19:15.275] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:19:15.275] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:19:15.275] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:19:15.275] caychay344: GỌI Send_XSCRIPT()
+[21:19:15.275] caychay344: GỌI Equip_RefreshEquip()
+[21:19:15.275] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:19:15.275] caychay344: GỌI Equip_RefreshEquip1()
+[21:19:15.275] caychay344: GỌI City_Shop_SetCtl()
+[21:19:15.296] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:15.296] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:15.318] caychay344: túi ô 9: Hoàng Kim - Ngoa (mã 10162451) -> Tân Thủ - Ngoa (mã 10162421) x1
+[21:19:15.339] caychay344: trang bị ô 4: Tân Thủ - Ngoa (mã 10162421) -> Hoàng Kim - Ngoa (mã 10162451) x1
+[21:19:15.360] caychay344: chỉ số: STR 181151 -> 196151, SPR 181152 -> 196152, CON 181174 -> 196174, INT 181125 -> 196125, DEX 181148 -> 196148, MAXHP 11045766 -> 11295766, MAXMP 3029005 -> 3279005
+[21:19:16.010] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:16.010] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:16.681] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:16.681] caychay344: GỌI MessageBox_OnOKClick()
+[21:19:16.681] caychay344: GỌI EquipItem(10, 3)
+[21:19:16.681] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:16.681] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:16.681] caychay344: GỌI Clear_XSCRIPT()
+[21:19:16.681] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:19:16.681] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:19:16.681] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:19:16.681] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:19:16.681] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:19:16.681] caychay344: GỌI Send_XSCRIPT()
+[21:19:16.681] caychay344: GỌI Equip_RefreshEquip()
+[21:19:16.681] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:19:16.681] caychay344: GỌI Equip_RefreshEquip1()
+[21:19:16.681] caychay344: GỌI City_Shop_SetCtl()
+[21:19:16.681] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:16.702] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:16.702] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:16.733] caychay344: túi ô 10: Hoàng Kim - Thủ (mã 10162452) -> Tân Thủ - Thủ (mã 10162422) x1
+[21:19:16.754] caychay344: trang bị ô 3: Tân Thủ - Thủ (mã 10162422) -> Hoàng Kim - Thủ (mã 10162452) x1
+[21:19:16.775] caychay344: chỉ số: STR 196151 -> 211151, SPR 196152 -> 211152, CON 196174 -> 211174, INT 196125 -> 211125, DEX 196148 -> 211148, MAXHP 11295766 -> 11545766, MAXMP 3279005 -> 3529005
+[21:19:17.361] caychay344: GỌI Packet_ItemBtnClicked(3, 2)
+[21:19:17.361] caychay344: GỌI CancelLastOp(20)
+[21:19:17.382] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:18.048] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:18.696] caychay344: GỌI City_Shop_SetCtl()
+[21:19:18.696] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:18.716] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:18.716] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:18.738] caychay344: túi ô 11: Hoàng Kim - Giáp (mã 10162453) -> Tân Thủ - Giáp (mã 10162423) x1
+[21:19:18.749] caychay344: trang bị ô 2: Tân Thủ - Giáp (mã 10162423) -> Hoàng Kim - Giáp (mã 10162453) x1
+[21:19:18.760] caychay344: chỉ số: STR 211151 -> 226151, SPR 211152 -> 226152, CON 211174 -> 226174, INT 211125 -> 226125, DEX 211148 -> 226148, MAXHP 11545766 -> 11795766, MAXMP 3529005 -> 3779005
+[21:19:19.340] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:19.340] caychay344: GỌI MessageBox_OnOKClick()
+[21:19:19.340] caychay344: GỌI EquipItem(12, 15)
+[21:19:19.340] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:19.362] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:20.001] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:20.022] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:20.054] caychay344: túi ô 12: Hoàng Kim - Kiên (mã 10162454) -> Tân Thủ - Kiên (mã 10162424) x1
+[21:19:20.075] caychay344: trang bị ô 15: Tân Thủ - Kiên (mã 10162424) -> Hoàng Kim - Kiên (mã 10162454) x1
+[21:19:20.096] caychay344: chỉ số: STR 226151 -> 241151, SPR 226152 -> 241152, CON 226174 -> 241174, INT 226125 -> 241125, DEX 226148 -> 241148, MAXHP 11795766 -> 12045766, MAXMP 3779005 -> 4029005
+[21:19:20.128] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:19:20.685] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:20.685] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:20.965] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:19:21.357] caychay344: GỌI City_Shop_SetCtl()
+[21:19:21.379] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:21.379] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:21.400] caychay344: túi ô 13: Hoàng Kim - Liên (mã 10162455) -> Tân Thủ - Liên (mã 10162425) x1
+[21:19:21.423] caychay344: trang bị ô 7: Tân Thủ - Liên (mã 10162425) -> Hoàng Kim - Liên (mã 10162455) x1
+[21:19:21.446] caychay344: chỉ số: STR 241151 -> 256151, SPR 241152 -> 256152, CON 241174 -> 256174, INT 241125 -> 256125, DEX 241148 -> 256148, MAXHP 12045766 -> 12295766, MAXMP 4029005 -> 4279005
+[21:19:22.055] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:22.055] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:22.726] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:22.726] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:22.747] caychay344: túi ô 14: Hoàng Kim - Đái (mã 10162456) -> Tân Thủ - Đái (mã 10162426) x1
+[21:19:22.769] caychay344: trang bị ô 5: Tân Thủ - Đái (mã 10162426) -> Hoàng Kim - Đái (mã 10162456) x1
+[21:19:22.791] caychay344: chỉ số: STR 256151 -> 271151, SPR 256152 -> 271152, CON 256174 -> 271174, INT 256125 -> 271125, DEX 256148 -> 271148, MAXHP 12295766 -> 12545766, MAXMP 4279005 -> 4529005
+[21:19:23.400] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:23.400] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:24.063] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:24.063] caychay344: GỌI MessageBox_OnOKClick()
+[21:19:24.063] caychay344: GỌI EquipItem(15, 6)
+[21:19:24.063] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:24.063] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:24.063] caychay344: GỌI Clear_XSCRIPT()
+[21:19:24.063] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:19:24.063] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:19:24.063] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:19:24.063] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:19:24.063] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:19:24.063] caychay344: GỌI Send_XSCRIPT()
+[21:19:24.063] caychay344: GỌI Equip_RefreshEquip()
+[21:19:24.063] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:19:24.063] caychay344: GỌI Equip_RefreshEquip1()
+[21:19:24.064] caychay344: GỌI City_Shop_SetCtl()
+[21:19:24.085] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:24.116] caychay344: túi ô 15: Hoàng Kim - Giới (mã 10162457) -> Tân Thủ - Giới (mã 10162427) x1
+[21:19:24.137] caychay344: trang bị ô 6: Tân Thủ - Giới (mã 10162427) -> Hoàng Kim - Giới (mã 10162457) x1
+[21:19:24.159] caychay344: chỉ số: STR 271151 -> 286151, SPR 271152 -> 286152, CON 271174 -> 286174, INT 271125 -> 286125, DEX 271148 -> 286148, MAXHP 12545766 -> 12795766, MAXMP 4529005 -> 4779005
+[21:19:24.732] caychay344: GỌI Packet_ItemBtnClicked(4, 2)
+[21:19:24.732] caychay344: GỌI CancelLastOp(20)
+[21:19:24.753] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:25.281] caychay32: GỌI PetButton_Show(1)
+[21:19:25.282] caychay32: GỌI PetButton_Show(1)
+[21:19:25.282] caychay32: GỌI PetButton_Show(1)
+[21:19:25.282] caychay32: GỌI PetButton_Show(2)
+[21:19:25.282] caychay32: GỌI PetButton_Show(2)
+[21:19:25.282] caychay32: GỌI PetButton_Show(2)
+[21:19:25.303] caychay35: GỌI PetButton_Show(1)
+[21:19:25.304] caychay35: GỌI PetButton_Show(1)
+[21:19:25.304] caychay35: GỌI PetButton_Show(1)
+[21:19:25.304] caychay35: GỌI PetButton_Show(2)
+[21:19:25.305] caychay35: GỌI PetButton_Show(2)
+[21:19:25.305] caychay35: GỌI PetButton_Show(2)
+[21:19:25.405] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:25.405] caychay344: GỌI Clear_XSCRIPT()
+[21:19:25.405] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:19:25.405] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:19:25.405] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:19:25.405] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:19:25.405] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:19:25.405] caychay344: GỌI Send_XSCRIPT()
+[21:19:25.405] caychay344: GỌI Equip_RefreshEquip()
+[21:19:25.405] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:19:25.405] caychay344: GỌI Equip_RefreshEquip1()
+[21:19:25.405] caychay344: GỌI City_Shop_SetCtl()
+[21:19:25.451] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:25.451] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:25.482] caychay344: túi ô 16: Hoàng Kim - Ngọc (mã 10162458) -> Tân Thủ - Ngọc (mã 10162428) x1
+[21:19:25.504] caychay344: trang bị ô 12: Tân Thủ - Ngọc (mã 10162428) -> Hoàng Kim - Ngọc (mã 10162458) x1
+[21:19:26.125] caychay344: GỌI Packet_ItemBtnClicked(4, 3)
+[21:19:26.125] caychay344: GỌI CancelLastOp(20)
+[21:19:26.146] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:26.146] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:26.199] caychay344: chỉ số: STR 286151 -> 301151, SPR 286152 -> 301152, CON 286174 -> 301174, INT 286125 -> 301125, DEX 286148 -> 301148, MAXHP 12795766 -> 13045766, MAXMP 4779005 -> 5029005
+[21:19:26.828] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:26.828] caychay344: GỌI MessageBox_OnOKClick()
+[21:19:26.828] caychay344: GỌI EquipItem(17, 14)
+[21:19:26.828] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:26.828] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:26.828] caychay344: GỌI Clear_XSCRIPT()
+[21:19:26.828] caychay344: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:19:26.828] caychay344: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:19:26.828] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:19:26.828] caychay344: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:19:26.828] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:19:26.828] caychay344: GỌI Send_XSCRIPT()
+[21:19:26.828] caychay344: GỌI Equip_RefreshEquip()
+[21:19:26.828] caychay344: GỌI OtherInfo_SetTabColor(4)
+[21:19:26.828] caychay344: GỌI Equip_RefreshEquip1()
+[21:19:26.828] caychay344: GỌI City_Shop_SetCtl()
+[21:19:26.850] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:26.871] caychay344: túi ô 17: Hoàng Kim - Uyển (mã 10162459) -> Tân Thủ - Uyển (mã 10162429) x1
+[21:19:26.881] caychay344: trang bị ô 14: Tân Thủ - Uyển (mã 10162429) -> Hoàng Kim - Uyển (mã 10162459) x1
+[21:19:27.566] caychay344: chỉ số: STR 301151 -> 316151, SPR 301152 -> 316152, CON 301174 -> 316174, INT 301125 -> 316125, DEX 301148 -> 316148, MAXHP 13045766 -> 13295766, MAXMP 5029005 -> 5279005
+[21:19:28.164] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:31.254] caychay35: GỌI PetButton_Show(1)
+[21:19:31.254] caychay35: GỌI PetButton_Show(1)
+[21:19:31.255] caychay35: GỌI PetButton_Show(1)
+[21:19:31.255] caychay35: GỌI PetButton_Show(2)
+[21:19:31.255] caychay35: GỌI PetButton_Show(2)
+[21:19:31.255] caychay35: GỌI PetButton_Show(2)
+[21:19:31.486] caychay344: GỌI Packet_ItemBtnClicked(2, 1)
+[21:19:31.528] caychay344: túi ô 1: mất Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:31.571] caychay344: hội thoại NPC [GIFTCODE]:
+        - chúc mừng bạn đã nhận 10.000.000 điểm tiềm năng thành công,Tân Thủ Người Chơi Mới (mã -1, -1; loại text)
+[21:19:32.187] caychay344: MỞ cửa sổ Quest
+[21:19:32.264] caychay344: chỉ số: POINT_REMAIN 238 -> 10000238
+[21:19:32.843] caychay344: GỌI Packet_ItemBtnClicked(2, 1)
+[21:19:32.843] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:32.885] caychay344: túi ô 4: mất Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:32.927] caychay344: chỉ số: POINT_REMAIN 10000238 -> 20000238
+[21:19:33.534] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:33.545] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:33.577] caychay344: túi ô 5: mất Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:33.630] caychay344: chỉ số: POINT_REMAIN 20000238 -> 30000238
+[21:19:34.220] caychay344: GỌI Packet_ItemBtnClicked(2, 2)
+[21:19:34.220] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:34.241] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:34.263] caychay344: túi ô 6: mất Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:34.886] caychay344: GỌI Packet_ItemBtnClicked(2, 3)
+[21:19:34.887] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:34.908] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:34.929] caychay344: túi ô 7: mất Hộp Point Tân Thủ Lễ Bao (mã 30004622) x1
+[21:19:34.982] caychay344: chỉ số: POINT_REMAIN 30000238 -> 50000238
+[21:19:35.572] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:36.224] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:36.884] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:37.629] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:37.629] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:37.640] caychay344: túi ô 0: mất Thanh Đồng Đao (mã 10100000) x1
+[21:19:38.272] caychay344: GỌI CancelLastOp(2)
+[21:19:38.272] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:38.286] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:38.286] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:38.915] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:38.915] caychay344: GỌI DiscardItem()
+[21:19:38.915] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:38.915] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:38.915] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:38.915] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:38.915] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:38.946] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:38.967] caychay344: túi ô 2: mất Bách Bảo Nang (mã 10141030) x1
+[21:19:39.603] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:40.244] caychay344: GỌI CancelLastOp(2)
+[21:19:40.244] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:40.265] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:40.870] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:40.880] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:40.901] caychay344: túi ô 3: mất Bách Bảo Rương (mã 10141040) x1
+[21:19:41.548] caychay344: GỌI CancelLastOp(2)
+[21:19:41.548] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:41.570] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:42.217] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:42.217] caychay344: GỌI DiscardItem()
+[21:19:42.217] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:42.217] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:42.217] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:42.217] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:42.249] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:42.260] caychay344: túi ô 10: mất Tân Thủ - Thủ (mã 10162422) x1
+[21:19:43.585] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:43.585] caychay344: GỌI DiscardItem()
+[21:19:43.585] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:43.585] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:43.585] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:43.585] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:43.649] caychay344: túi ô 15: mất Tân Thủ - Giới (mã 10162427) x1
+[21:19:44.908] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:45.547] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:45.547] caychay344: GỌI DiscardItem()
+[21:19:45.547] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:45.547] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:45.547] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:45.547] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:45.547] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:45.558] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:45.579] caychay344: túi ô 16: mất Tân Thủ - Ngọc (mã 10162428) x1
+[21:19:45.974] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:19:45.974] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:19:47.585] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:47.597] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:47.607] caychay344: túi ô 11: mất Tân Thủ - Giáp (mã 10162423) x1
+[21:19:48.325] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:48.325] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:49.048] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:49.090] caychay344: túi ô 17: mất Tân Thủ - Uyển (mã 10162429) x1
+[21:19:49.779] caychay344: MỞ cửa sổ SuperTooltip
+[21:19:50.548] caychay344: ĐÓNG cửa sổ SuperTooltip
+[21:19:51.256] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:51.256] caychay344: GỌI DiscardItem()
+[21:19:51.256] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:51.256] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:51.256] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:51.256] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:51.340] caychay344: túi ô 12: mất Tân Thủ - Kiên (mã 10162424) x1
+[21:19:52.738] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:52.738] caychay344: GỌI DiscardItem()
+[21:19:52.738] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:52.738] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:52.738] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:52.738] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:52.802] caychay344: túi ô 13: mất Tân Thủ - Liên (mã 10162425) x1
+[21:19:54.250] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:54.303] caychay344: túi ô 8: mất Tân Thủ - Khôi (mã 10162420) x1
+[21:19:55.776] caychay344: GỌI MessageBox_Self_OK_Clicked()
+[21:19:55.776] caychay344: GỌI DiscardItem()
+[21:19:55.776] caychay344: GỌI MessageBox_Self_OK_Clicked_Ex()
+[21:19:55.776] caychay344: GỌI MessageBox_Self_Cancel_Clicked(0)
+[21:19:55.777] caychay344: GỌI DiscardItemCancelLocked()
+[21:19:55.777] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:55.777] caychay344: GỌI Packet_ChangeTabIndex(0)
+[21:19:55.851] caychay344: túi ô 9: mất Tân Thủ - Ngoa (mã 10162421) x1
+[21:19:57.356] caychay344: MỞ cửa sổ MessageBox_Self
+[21:19:58.921] caychay344: ĐÓNG cửa sổ MessageBox_Self
+[21:19:58.953] caychay344: túi ô 14: mất Tân Thủ - Đái (mã 10162426) x1
+[21:20:01.046] caychay344: đi tới (158, 160)
+[21:20:01.707] caychay344: đi tới (157, 157)
+[21:20:03.102] caychay344: đi tới (160, 152)
+[21:20:03.123] caychay344: ĐÓNG cửa sổ Packet
+[21:20:03.123] caychay344: ĐÓNG cửa sổ Quest
+[21:20:03.220] caychay344: đóng hội thoại NPC
+[21:20:03.805] caychay344: đi tới (161, 149)
+[21:20:03.826] caychay344: MỞ cửa sổ SelfEquip
+[21:20:03.826] caychay344: ĐÓNG cửa sổ TargetBuff
+[21:20:03.826] caychay344: ĐÓNG cửa sổ TargetFrame
+[21:20:07.220] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:20:07.845] caychay344: chọn mục tiêu Cộng Point
+[21:20:07.867] caychay344: MỞ cửa sổ TargetBuff
+[21:20:07.868] caychay344: MỞ cửa sổ TargetFrame
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E4B0)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E2F8)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47E2F8)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E460)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47E460)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47E460)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E730)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47E730)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47E730)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47E730)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E910)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47E910)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47E910)
+[21:20:08.504] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47E910)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47E910)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47EA50)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47E960)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47F090)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47F090, table: 4E47EF28)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47F090, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EF28, table: 4E47EC80)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47F090, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EF28, table: 4E47F388)
+[21:20:08.505] caychay344: GỌI CompareTable_Quest(table: 4E47EC80, table: 4E47F388)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47F090, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EF28, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EC80, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47F388, table: 4E47F5B8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E230, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E4B0, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E2F8, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E460, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E730, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E910, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EA50, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47E960, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47F090, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EF28, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47EC80, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47F388, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E47F5B8, table: 4E47F478)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E480D78)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E480E68)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E480E68)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E480F30)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E480F30)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E480F30)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E480FA8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E480FA8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E480FA8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E480FA8)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470428)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470428)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470428)
+[21:20:08.506] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470428)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470428)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470298)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470298)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470298)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470298)
+[21:20:08.507] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470298)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E470298)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E4702C0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E470568)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470568, table: 4E4706D0)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E470568, table: 4E4709C8)
+[21:20:08.508] caychay344: GỌI CompareTable_Quest(table: 4E4706D0, table: 4E4709C8)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470568, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4706D0, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4709C8, table: 4E470658)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470568, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4706D0, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4709C8, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470658, table: 4E470FE0)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480AF8, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480D78, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480E68, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480F30, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E480FA8, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470428, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470298, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4702C0, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470568, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4706D0, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E4709C8, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470658, table: 4E470E50)
+[21:20:08.509] caychay344: GỌI CompareTable_Quest(table: 4E470FE0, table: 4E470E50)
+[21:20:08.520] caychay344: MỞ cửa sổ Quest
+[21:20:08.594] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0B20, table: 4B7F07B0)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0B20, table: 4B7F0990)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F07B0, table: 4B7F0990)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0B20, table: 4B7F0B48)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F07B0, table: 4B7F0B48)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0990, table: 4B7F0B48)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0B20, table: 4B7F0710)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F07B0, table: 4B7F0710)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0990, table: 4B7F0710)
+[21:20:10.502] caychay344: GỌI CompareTable_Quest(table: 4B7F0B48, table: 4B7F0710)
+[21:20:10.608] caychay344: hội thoại NPC [Cộng Point]:
+        - Khi rút point cho nhân vật, cần có ít nhất 1 điểm thuộc tính (mã -1, -1; loại text)
+        - Lưu Ý : Khi tiến hành rút điểm tiềm năng tuyệt đối không được lên cấp .  Khi âm điểm sẽ không thể phục hồi lại đươc . (mã -1, -1; loại text)
+        - Rút 10.000.000 điểm Cường Lực (mã 111114, 7350; loại id)
+        - Rút 10.000.000 điểm Nội Lực (mã 111114, 7351; loại id)
+        - Rút 10.000.000 điểm Thể Lực (mã 111114, 7352; loại id)
+        - Rút 10.000.000 điểm Trí Lực (mã 111114, 7353; loại id)
+        - Rút 10.000.000 điểm Thân Pháp (mã 111114, 7354; loại id)
+[21:20:11.915] caychay344: chỉ số: POINT_REMAIN 50000238 -> 50000239, SPR 316152 -> 316151
+[21:20:11.936] caychay344: hội thoại NPC [Cộng Point]:
+        - Kim Sa Vừa Giúp Các Hạ Rút Điểm Thành Công Rồi Nhé #4 (mã -1, -1; loại text)
+        - Các hạ mang thành công 1 điểm đã phân phối của Nội lực thuộc tính biến thành tiềm năng. Cẩn thận khi rút points . Âm points là còn đúng cái nịt #61 (mã -1, -1; loại text)
+[21:20:17.164] caychay344: GỌI OpenEquip(1)
+[21:20:17.164] caychay344: GỌI SelfEquip_Open()
+[21:20:17.164] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:17.164] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:17.164] caychay344: GỌI SetAcceptButtonState()
+[21:20:17.164] caychay344: GỌI Equip_RefreshEquip()
+[21:20:17.164] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:17.164] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:17.164] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:20:17.185] caychay344: MỞ cửa sổ SelfEquip
+[21:20:17.185] caychay344: ĐÓNG cửa sổ Quest
+[21:20:17.281] caychay344: đóng hội thoại NPC
+[21:20:19.158] caychay344: GỌI SelfEquip_CloseUI()
+[21:20:19.158] caychay344: GỌI SelfEquip_Close()
+[21:20:19.179] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:20:21.123] caychay35: GỌI PetButton_Show(1)
+[21:20:21.123] caychay35: GỌI PetButton_Show(1)
+[21:20:21.123] caychay35: GỌI PetButton_Show(1)
+[21:20:21.124] caychay35: GỌI PetButton_Show(2)
+[21:20:21.124] caychay35: GỌI PetButton_Show(2)
+[21:20:21.124] caychay35: GỌI PetButton_Show(2)
+[21:20:21.856] caychay344: GỌI OpenEquip(1)
+[21:20:21.856] caychay344: GỌI SelfEquip_Close()
+[21:20:21.856] caychay344: GỌI SelfEquip_CloseUI()
+[21:20:21.856] caychay344: GỌI SelfEquip_Close()
+[21:20:21.977] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:20:22.501] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E87E0)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8948)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8948)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8998)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8998)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E8998)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E88F8)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E88F8)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E88F8)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E88F8)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8B78)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8B78)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E8B78)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E8B78)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E8B78)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8A60)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8A60)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E8A60)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E8A60)
+[21:20:22.502] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E8A60)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E8A60)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E8BF0)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E8D58)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8D58, table: 4B7E9118)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8D58, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9118, table: 4B7E92A8)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8D58, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9118, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E92A8, table: 4B7E9050)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8D58, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9118, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E92A8, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9050, table: 4B7E9690)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88D0, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E87E0, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8948, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8998, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E88F8, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8B78, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8A60, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8BF0, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E8D58, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9118, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E92A8, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9050, table: 4B7E9460)
+[21:20:22.503] caychay344: GỌI CompareTable_Quest(table: 4B7E9690, table: 4B7E9460)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6490)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E67D8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E67D8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6698)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6698)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6698)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E68C8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E68C8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E68C8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E68C8)
+[21:20:22.504] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E65F8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E65F8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E65F8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E65F8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E65F8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6710)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E6AA8)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6AD0)
+[21:20:22.505] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E6AD0)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E6AD0)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AD0, table: 4E3E6D00)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AD0, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6D00, table: 4E3E6F08)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E6F58)
+[21:20:22.506] caychay344: GỌI CompareTable_Quest(table: 4E3E6AD0, table: 4E3E6F58)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6D00, table: 4E3E6F58)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6F08, table: 4E3E6F58)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6AD0, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6D00, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6F08, table: 4E3E72C8)
+[21:20:22.507] caychay344: GỌI CompareTable_Quest(table: 4E3E6F58, table: 4E3E72C8)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E65D0, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6490, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E67D8, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6698, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E68C8, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E65F8, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6710, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6AA8, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6AD0, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6D00, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6F08, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E6F58, table: 4E3E7570)
+[21:20:22.508] caychay344: GỌI CompareTable_Quest(table: 4E3E72C8, table: 4E3E7570)
+[21:20:22.529] caychay344: MỞ cửa sổ Quest
+[21:20:22.594] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:25.201] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:20:25.798] caychay344: GỌI QuestOption_Clicked()
+[21:20:25.798] caychay344: GỌI QuestFrameOptionClicked(-1, 111114, 7121)
+[21:20:25.897] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:20:26.467] caychay344: GỌI OpenEquip(0)
+[21:20:26.467] caychay344: GỌI SelfEquip_Open()
+[21:20:26.467] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:26.467] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:26.467] caychay344: GỌI SetAcceptButtonState()
+[21:20:26.467] caychay344: GỌI Equip_RefreshEquip()
+[21:20:26.467] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:26.468] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:26.468] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:20:26.489] caychay344: MỞ cửa sổ SelfEquip
+[21:20:26.489] caychay344: ĐÓNG cửa sổ Quest
+[21:20:26.568] caychay344: đóng hội thoại NPC
+[21:20:27.826] caychay344: GỌI OpenEquip(1)
+[21:20:27.827] caychay344: GỌI SelfEquip_Close()
+[21:20:27.827] caychay344: GỌI SelfEquip_CloseUI()
+[21:20:27.827] caychay344: GỌI SelfEquip_Close()
+[21:20:27.850] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:20:29.157] caychay344: MỞ cửa sổ Quest
+[21:20:29.240] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:29.805] caychay344: GỌI QuestOption_Clicked()
+[21:20:29.805] caychay344: GỌI QuestFrameOptionClicked(-1, 111114, 7111)
+[21:20:29.923] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543C0, table: 4BB543E8)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543C0, table: 4BB54B40)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543E8, table: 4BB54B40)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543C0, table: 4BB549D8)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543E8, table: 4BB549D8)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB54B40, table: 4BB549D8)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543C0, table: 4BB54848)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB543E8, table: 4BB54848)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB54B40, table: 4BB54848)
+[21:20:30.478] caychay344: GỌI CompareTable_Quest(table: 4BB549D8, table: 4BB54848)
+[21:20:32.498] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:20:32.519] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:20:33.056] caychay344: GỌI OpenEquip(0)
+[21:20:33.056] caychay344: GỌI SelfEquip_Open()
+[21:20:33.056] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:33.056] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:33.056] caychay344: GỌI SetAcceptButtonState()
+[21:20:33.056] caychay344: GỌI Equip_RefreshEquip()
+[21:20:33.056] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:33.056] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:33.056] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:20:33.077] caychay344: MỞ cửa sổ SelfEquip
+[21:20:33.077] caychay344: ĐÓNG cửa sổ Quest
+[21:20:33.153] caychay344: đóng hội thoại NPC
+[21:20:35.361] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:20:36.409] caychay344: GỌI OpenEquip(0)
+[21:20:36.409] caychay344: GỌI SelfEquip_Open()
+[21:20:36.409] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:36.409] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:36.409] caychay344: GỌI SetAcceptButtonState()
+[21:20:36.409] caychay344: GỌI Equip_RefreshEquip()
+[21:20:36.409] caychay344: GỌI SelfEquip_ShowVigor()
+[21:20:36.409] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:20:36.410] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:20:37.029] caychay344: GỌI OpenEquip(1)
+[21:20:37.029] caychay344: GỌI SelfEquip_Close()
+[21:20:37.029] caychay344: GỌI SelfEquip_CloseUI()
+[21:20:37.029] caychay344: GỌI SelfEquip_Close()
+[21:20:37.052] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:20:37.804] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:38.443] caychay344: MỞ cửa sổ Quest
+[21:20:39.155] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:20:42.495] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:20:43.830] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:44.482] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:20:45.067] caychay344: MỞ cửa sổ SelfEquip
+[21:20:45.067] caychay344: ĐÓNG cửa sổ Quest
+[21:20:45.155] caychay344: đóng hội thoại NPC
+[21:20:48.516] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:20:49.164] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D18A8)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D18D0)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D18D0)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1AD8)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1AD8)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1AD8)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1C90)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1C90)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1C90)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D1C90)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1D30)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1D30)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1D30)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D1D30)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D1D30)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D1F88)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D1D80)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D1D08)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D08, table: 4E4D2668)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1D08, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D2668, table: 4E4D2B18)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D2780)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D2780)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D2780)
+[21:20:49.165] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D08, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2668, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2B18, table: 4E4D2780)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D08, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2668, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2B18, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2780, table: 4E4D2988)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1C68, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D18A8, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D18D0, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1AD8, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1C90, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D30, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1F88, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D80, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D1D08, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2668, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2B18, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2780, table: 4E4D2CD0)
+[21:20:49.166] caychay344: GỌI CompareTable_Quest(table: 4E4D2988, table: 4E4D2CD0)
+[21:20:49.187] caychay344: MỞ cửa sổ Quest
+[21:20:49.272] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:20:49.834] caychay344: GỌI Clear_XSCRIPT()
+[21:20:49.835] caychay344: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[21:20:49.835] caychay344: GỌI Set_XSCRIPT_ScriptID(45060)
+[21:20:49.836] caychay344: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[21:20:49.836] caychay344: GỌI Set_XSCRIPT_Parameter(1, 40)
+[21:20:49.836] caychay344: GỌI Set_XSCRIPT_ParamCount(2)
+[21:20:49.836] caychay344: GỌI Send_XSCRIPT()
+[21:20:49.836] caychay344: GỌI City_Shop_SetCtl()
+[21:20:49.858] caychay344: MỞ cửa sổ Packet
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E290, table: 4E41E2B8)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E290, table: 4E41DF20)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E2B8, table: 4E41DF20)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E290, table: 4E41E560)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E2B8, table: 4E41E560)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41DF20, table: 4E41E560)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E290, table: 4E41E308)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E2B8, table: 4E41E308)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41DF20, table: 4E41E308)
+[21:20:51.836] caychay344: GỌI CompareTable_Quest(table: 4E41E560, table: 4E41E308)
+[21:20:51.945] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:20:54.604] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:20:56.547] caychay344: MỞ cửa sổ SelfEquip
+[21:20:56.548] caychay344: ĐÓNG cửa sổ Quest
+[21:20:56.644] caychay344: đóng hội thoại NPC
+[21:20:58.486] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:21:02.732] caychay344: GỌI SelfEquip_CloseUI()
+[21:21:02.732] caychay344: GỌI SelfEquip_Close()
+[21:21:02.753] caychay344: ĐÓNG cửa sổ Packet
+[21:21:02.753] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:04.136] caychay344: MỞ cửa sổ Quest
+[21:21:04.213] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:04.911] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:21:05.503] caychay344: GỌI QuestOption_Clicked()
+[21:21:05.503] caychay344: GỌI QuestFrameOptionClicked(-1, 111114, 7124)
+[21:21:05.618] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Thân Pháp Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:21:06.299] caychay344: chỉ số: POINT_REMAIN 50000239 -> 40000239, DEX 316148 -> 10316148
+[21:21:06.912] caychay344: GỌI OpenEquip(0)
+[21:21:06.912] caychay344: GỌI SelfEquip_Open()
+[21:21:06.912] caychay344: GỌI SelfEquip_ShowVigor()
+[21:21:06.912] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:21:06.912] caychay344: GỌI SetAcceptButtonState()
+[21:21:06.912] caychay344: GỌI Equip_RefreshEquip()
+[21:21:06.912] caychay344: GỌI SelfEquip_ShowVigor()
+[21:21:06.912] caychay344: GỌI SelfEquip_ShowEnergy()
+[21:21:06.913] caychay344: GỌI SelfEquip_SetTabColor(0)
+[21:21:06.955] caychay344: MỞ cửa sổ SelfEquip
+[21:21:06.955] caychay344: ĐÓNG cửa sổ Quest
+[21:21:07.061] caychay344: đóng hội thoại NPC
+[21:21:08.406] caychay344: GỌI OpenEquip(1)
+[21:21:08.406] caychay344: GỌI SelfEquip_Close()
+[21:21:08.407] caychay344: GỌI SelfEquip_CloseUI()
+[21:21:08.407] caychay344: GỌI SelfEquip_Close()
+[21:21:08.417] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:08.491] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:21:09.860] caychay344: MỞ cửa sổ SelfEquip
+[21:21:10.503] caychay35: GỌI PetButton_Show(1)
+[21:21:10.504] caychay35: GỌI PetButton_Show(1)
+[21:21:10.504] caychay35: GỌI PetButton_Show(1)
+[21:21:10.504] caychay35: GỌI PetButton_Show(2)
+[21:21:10.504] caychay35: GỌI PetButton_Show(2)
+[21:21:10.504] caychay35: GỌI PetButton_Show(2)
+[21:21:10.749] caychay32: GỌI PetButton_Show(1)
+[21:21:10.749] caychay32: GỌI PetButton_Show(1)
+[21:21:10.749] caychay32: GỌI PetButton_Show(1)
+[21:21:10.749] caychay32: GỌI PetButton_Show(2)
+[21:21:10.749] caychay32: GỌI PetButton_Show(2)
+[21:21:10.749] caychay32: GỌI PetButton_Show(2)
+[21:21:10.826] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:21:11.089] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:21:15.096] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:15.753] caychay344: MỞ cửa sổ Quest
+[21:21:15.829] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:17.068] caychay344: GỌI CompareTable_Quest(table: 4E46A088, table: 4E46A3D0)
+[21:21:17.068] caychay344: GỌI CompareTable_Quest(table: 4E46A088, table: 4E469FC0)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A3D0, table: 4E469FC0)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A088, table: 4E46A0D8)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A3D0, table: 4E46A0D8)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E469FC0, table: 4E46A0D8)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A088, table: 4E46A718)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A3D0, table: 4E46A718)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E469FC0, table: 4E46A718)
+[21:21:17.069] caychay344: GỌI CompareTable_Quest(table: 4E46A0D8, table: 4E46A718)
+[21:21:17.184] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:21:18.482] caychay344: chỉ số: POINT_REMAIN 40000239 -> 30000239, DEX 10316148 -> 20316148
+[21:21:18.503] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Thân Pháp Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:21:19.115] caychay344: MỞ cửa sổ SelfEquip
+[21:21:19.115] caychay344: ĐÓNG cửa sổ Quest
+[21:21:19.211] caychay344: đóng hội thoại NPC
+[21:21:20.560] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBAFD78)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBAFDA0)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBAFDA0)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBAFA30)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBAFA30)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBAFA30)
+[21:21:21.202] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBAFF80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBAFF80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBAFF80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBAFF80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB03E0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB03E0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB03E0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB03E0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB03E0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB0480)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB0B10)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB0D90)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0D90, table: 3FBB0DE0)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB0E80)
+[21:21:21.203] caychay344: GỌI CompareTable_Quest(table: 3FBB0D90, table: 3FBB0E80)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0DE0, table: 3FBB0E80)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0D90, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0DE0, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0E80, table: 3FBB12E0)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0D90, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0DE0, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0E80, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB12E0, table: 3FBB1B00)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA08, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFD78, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFDA0, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFA30, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBAFF80, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB03E0, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0480, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0B10, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0D90, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0DE0, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB0E80, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB12E0, table: 3FBB1BC8)
+[21:21:21.204] caychay344: GỌI CompareTable_Quest(table: 3FBB1B00, table: 3FBB1BC8)
+[21:21:21.225] caychay344: MỞ cửa sổ Quest
+[21:21:21.300] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:22.510] caychay344: GỌI QuestOption_Clicked()
+[21:21:22.510] caychay344: GỌI QuestFrameOptionClicked(-1, 111114, 7111)
+[21:21:22.615] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:21:23.950] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:21:24.521] caychay344: MỞ cửa sổ SelfEquip
+[21:21:24.521] caychay344: ĐÓNG cửa sổ Quest
+[21:21:24.596] caychay344: đóng hội thoại NPC
+[21:21:24.865] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:21:28.615] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:29.302] caychay344: MỞ cửa sổ Quest
+[21:21:29.356] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649968, table: 4E649C38)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649968, table: 4E649828)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649C38, table: 4E649828)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649968, table: 4E649C88)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649C38, table: 4E649C88)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649828, table: 4E649C88)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649968, table: 4E6498C8)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649C38, table: 4E6498C8)
+[21:21:30.633] caychay344: GỌI CompareTable_Quest(table: 4E649828, table: 4E6498C8)
+[21:21:30.634] caychay344: GỌI CompareTable_Quest(table: 4E649C88, table: 4E6498C8)
+[21:21:30.719] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:21:31.315] caychay344: GỌI QuestOption_Clicked()
+[21:21:31.315] caychay344: GỌI QuestFrameOptionClicked(-1, 111114, 7124)
+[21:21:31.410] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Thân Pháp Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:21:32.149] caychay344: chỉ số: POINT_REMAIN 30000239 -> 20000239, DEX 20316148 -> 30316148
+[21:21:32.170] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:33.720] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Thân Pháp Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:21:34.367] caychay344: MỞ cửa sổ SelfEquip
+[21:21:34.367] caychay344: ĐÓNG cửa sổ Quest
+[21:21:34.482] caychay344: chỉ số: POINT_REMAIN 20000239 -> 10000239, DEX 30316148 -> 40316148
+[21:21:34.503] caychay344: đóng hội thoại NPC
+[21:21:34.787] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:21:37.305] caychay344: GỌI OpenEquip(0)
+[21:21:37.305] caychay344: GỌI SelfEquip_Close()
+[21:21:37.305] caychay344: GỌI SelfEquip_CloseUI()
+[21:21:37.305] caychay344: GỌI SelfEquip_Close()
+[21:21:37.327] caychay344: ĐÓNG cửa sổ SelfEquip
+[21:21:38.699] caychay344: MỞ cửa sổ Quest
+[21:21:38.763] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:21:39.444] caychay344: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:21:40.736] caychay344: chỉ số: POINT_REMAIN 10000239 -> 239, DEX 40316148 -> 50316148
+[21:21:40.791] caychay344: đóng hội thoại NPC
+[21:21:41.433] caychay344: MỞ cửa sổ SelfEquip
+[21:21:41.433] caychay344: ĐÓNG cửa sổ Quest
+[21:21:49.301] caychay32: GỌI SelfEquip_ShowVigor()
+[21:21:49.301] caychay32: GỌI SelfEquip_ShowEnergy()
+[21:22:00.339] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:22:01.353] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:22:16.429] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:22:16.463] caychay35: GỌI PetButton_Show(1)
+[21:22:16.463] caychay35: GỌI PetButton_Show(1)
+[21:22:16.464] caychay35: GỌI PetButton_Show(1)
+[21:22:16.464] caychay35: GỌI PetButton_Show(2)
+[21:22:16.464] caychay35: GỌI PetButton_Show(2)
+[21:22:16.464] caychay35: GỌI PetButton_Show(2)
+[21:22:34.376] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:22:45.985] caychay32: MỞ cửa sổ SuperTooltip
+[21:22:48.681] caychay32: GỌI SelfEquip_Equip_Click(7, 0)
+[21:22:50.056] caychay32: GỌI SelfEquip_Equip_Click(7, 0)
+[21:22:50.056] caychay32: GỌI Clear_XSCRIPT()
+[21:22:50.056] caychay32: GỌI Set_XSCRIPT_Function_Name(DoAction)
+[21:22:50.056] caychay32: GỌI Set_XSCRIPT_ScriptID(45000)
+[21:22:50.056] caychay32: GỌI Set_XSCRIPT_Parameter(0, 1)
+[21:22:50.056] caychay32: GỌI Set_XSCRIPT_Parameter(1, 10024)
+[21:22:50.056] caychay32: GỌI Set_XSCRIPT_ParamCount(2)
+[21:22:50.056] caychay32: GỌI Send_XSCRIPT()
+[21:22:50.056] caychay32: GỌI Equip_RefreshEquip()
+[21:22:50.056] caychay32: GỌI OtherInfo_SetTabColor(4)
+[21:22:50.056] caychay32: GỌI Equip_RefreshEquip1()
+[21:22:50.057] caychay32: GỌI Packet_ChangeTabIndex(0)
+[21:22:50.078] caychay32: ĐÓNG cửa sổ SuperTooltip
+[21:22:50.099] caychay32: túi ô 14: thêm Hoàng Kim - Giới (mã 10162457) x1
+[21:22:50.121] caychay32: trang bị ô 6: mất Hoàng Kim - Giới (mã 10162457) x1
+[21:22:50.183] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:22:50.196] caychay35: GỌI PetButton_Show(1)
+[21:22:50.196] caychay35: GỌI PetButton_Show(1)
+[21:22:50.196] caychay35: GỌI PetButton_Show(1)
+[21:22:50.196] caychay35: GỌI PetButton_Show(2)
+[21:22:50.196] caychay35: GỌI PetButton_Show(2)
+[21:22:50.196] caychay35: GỌI PetButton_Show(2)
+[21:22:50.833] caychay32: chỉ số: STR 316277 -> 291277, SPR 14316278 -> 14291278, CON 650302 -> 625302, INT 650272 -> 625272, DEX 65648277 -> 65623277, MAXHP 18865408 -> 18448740, MAXMP 10848501 -> 10431833
+[21:22:51.413] caychay32: GỌI Packet_ItemBtnClicked(3, 5)
+[21:22:52.782] caychay32: GỌI Packet_ItemBtnClicked(3, 5)
+[21:22:52.804] caychay32: MỞ cửa sổ SuperTooltip
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(1)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.202] caychay35: GỌI PetButton_Show(2)
+[21:22:53.526] caychay32: GỌI Packet_ItemBtnClicked(3, 5)
+[21:22:53.526] caychay32: GỌI City_Shop_SetCtl()
+[21:22:53.526] caychay32: GỌI City_Shop_SetCtl()
+[21:22:53.526] caychay32: GỌI Packet_ItemBtnClicked(3, 5)
+[21:22:53.547] caychay32: ĐÓNG cửa sổ SuperTooltip
+[21:22:53.569] caychay32: túi ô 14: mất Hoàng Kim - Giới (mã 10162457) x1
+[21:22:53.590] caychay32: trang bị ô 6: thêm Hoàng Kim - Giới (mã 10162457) x1
+[21:22:53.611] caychay32: chỉ số: STR 291277 -> 316277, SPR 14291278 -> 14316278, CON 625302 -> 650302, INT 625272 -> 650272, DEX 65623277 -> 65648277, MAXHP 18448740 -> 18865408, MAXMP 10431833 -> 10848501
+[21:22:57.517] caychay32: MỞ cửa sổ SuperTooltip
+[21:22:58.200] caychay32: ĐÓNG cửa sổ SuperTooltip
+[21:22:58.897] caychay32: GỌI SelfEquip_CloseUI()
+[21:22:58.897] caychay32: GỌI SelfEquip_Close()
+[21:22:58.907] caychay32: ĐÓNG cửa sổ Packet
+[21:22:58.907] caychay32: ĐÓNG cửa sổ SelfEquip
+[21:23:00.217] caychay32: đi tới (146, 145)
+[21:23:01.513] caychay32: đi tới (151, 146)
+[21:23:01.681] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:23:01.762] caychay35: GỌI PetButton_Show(1)
+[21:23:01.762] caychay35: GỌI PetButton_Show(1)
+[21:23:01.762] caychay35: GỌI PetButton_Show(1)
+[21:23:01.762] caychay35: GỌI PetButton_Show(2)
+[21:23:01.762] caychay35: GỌI PetButton_Show(2)
+[21:23:01.762] caychay35: GỌI PetButton_Show(2)
+[21:23:02.172] caychay32: đi tới (154, 146)
+[21:23:02.818] caychay32: đi tới (149, 144)
+[21:23:03.253] caychay35: GỌI PetButton_Show(1)
+[21:23:03.253] caychay35: GỌI PetButton_Show(1)
+[21:23:03.253] caychay35: GỌI PetButton_Show(1)
+[21:23:03.253] caychay35: GỌI PetButton_Show(2)
+[21:23:03.253] caychay35: GỌI PetButton_Show(2)
+[21:23:03.253] caychay35: GỌI PetButton_Show(2)
+[21:23:03.500] caychay32: đi tới (152, 144)
+[21:23:04.857] caychay32: đi tới (155, 146)
+[21:23:05.517] caychay32: đi tới (158, 145)
+[21:23:06.183] caychay32: MỞ cửa sổ TargetBuff
+[21:23:06.183] caychay32: MỞ cửa sổ TargetFrame
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417AD878)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417ADA80)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417ADA80)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417ADB70)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417ADB70)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417ADB70)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417AE8E0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417AE8E0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417AE8E0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417AE8E0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417AFA38)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417AFA38)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417AFA38)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417AFA38)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417AFA38)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417AFC68)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B0FF0)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B2C10)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417B2C10, table: 417B3598)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B37C8)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B37C8)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B37C8)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B37C8)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B37C8)
+[21:23:06.812] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B37C8)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B37C8)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B37C8)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B2C10, table: 417B37C8)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B3598, table: 417B37C8)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B2C10, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B3598, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B37C8, table: 417B4010)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B2C10, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B3598, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B37C8, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B4010, table: 417B50F0)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD918, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AD878, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADA80, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417ADB70, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AE8E0, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFA38, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417AFC68, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B0FF0, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B2C10, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B3598, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B37C8, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B4010, table: 417B6B30)
+[21:23:06.813] caychay32: GỌI CompareTable_Quest(table: 417B50F0, table: 417B6B30)
+[21:23:06.813] caychay32: chọn mục tiêu Cộng Point
+[21:23:06.834] caychay32: MỞ cửa sổ Quest
+[21:23:06.918] caychay32: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:23:08.109] caychay32: GỌI QuestOption_Clicked()
+[21:23:08.109] caychay32: GỌI QuestFrameOptionClicked(-1, 111114, 4333)
+[21:23:08.958] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:23:09.455] caychay32: GỌI PetButton_Show(1)
+[21:23:09.455] caychay32: GỌI PetButton_Show(1)
+[21:23:09.455] caychay32: GỌI PetButton_Show(1)
+[21:23:09.455] caychay32: GỌI PetButton_Show(2)
+[21:23:09.455] caychay32: GỌI PetButton_Show(2)
+[21:23:09.455] caychay32: GỌI PetButton_Show(2)
+[21:23:09.564] caychay32: hội thoại NPC [Cộng Point]:
+        - Khi rút point cho nhân vật, cần có ít nhất 1 điểm thuộc tính (mã -1, -1; loại text)
+        - Lưu Ý : Khi tiến hành rút điểm tiềm năng tuyệt đối không được lên cấp .  Khi âm điểm sẽ không thể phục hồi lại đươc . (mã -1, -1; loại text)
+        - Rút 1.000.000 điểm Cường Lực (mã 111114, 2340; loại id)
+        - Rút 1.000.000 điểm Nội Lực (mã 111114, 2341; loại id)
+        - Rút 1.000.000 điểm Thể Lực (mã 111114, 2342; loại id)
+        - Rút 1.000.000 điểm Trí Lực (mã 111114, 2343; loại id)
+        - Rút 1.000.000 điểm Thân Pháp (mã 111114, 2344; loại id)
+[21:23:10.130] caychay32: ĐÓNG cửa sổ Quest
+[21:23:10.204] caychay32: đóng hội thoại NPC
+[21:23:10.880] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:23:12.077] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2BCC0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2C288)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2C288)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2E088)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2E088)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2E088)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2DD40)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2DD40)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2DD40)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2DD40)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2E268)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2E268)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2E268)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2E268)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD2E268)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD2E5B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD2EC68)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD2EEE8)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2EEE8, table: 4AD2ED30)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2EEE8, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2ED30, table: 4AD213B0)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD23408)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD23408)
+[21:23:12.078] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EEE8, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2ED30, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD213B0, table: 4AD23408)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EEE8, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2ED30, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD213B0, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD23408, table: 4AD23CA0)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2B798, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2BCC0, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2C288, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E088, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2DD40, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E268, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2E5B0, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EC68, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2EEE8, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD2ED30, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD213B0, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD23408, table: 4AD24920)
+[21:23:12.079] caychay32: GỌI CompareTable_Quest(table: 4AD23CA0, table: 4AD24920)
+[21:23:12.101] caychay32: MỞ cửa sổ Quest
+[21:23:12.175] caychay32: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:23:14.030] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:23:14.872] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:14.872] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:14.872] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:14.872] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:14.873] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:14.873] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:15.549] caychay32: hội thoại NPC [Cộng Point]:
+        - Khi rút point cho nhân vật, cần có ít nhất 1 điểm thuộc tính (mã -1, -1; loại text)
+        - Lưu Ý : Khi tiến hành rút điểm tiềm năng tuyệt đối không được lên cấp .  Khi âm điểm sẽ không thể phục hồi lại đươc . (mã -1, -1; loại text)
+        - Rút 10.000.000 điểm Cường Lực (mã 111114, 7350; loại id)
+        - Rút 10.000.000 điểm Nội Lực (mã 111114, 7351; loại id)
+        - Rút 10.000.000 điểm Thể Lực (mã 111114, 7352; loại id)
+        - Rút 10.000.000 điểm Trí Lực (mã 111114, 7353; loại id)
+        - Rút 10.000.000 điểm Thân Pháp (mã 111114, 7354; loại id)
+[21:23:17.395] caychay32: GỌI QuestOption_Clicked()
+[21:23:17.395] caychay32: GỌI QuestFrameOptionClicked(-1, 111114, 7351)
+[21:23:18.154] caychay32: hội thoại NPC [Cộng Point]:
+        - Kim Sa Vừa Giúp Các Hạ Rút Điểm Thành Công Rồi Nhé #4 (mã -1, -1; loại text)
+        - Các hạ mang thành công 10000000 điểm đã phân phối của Nội lực thuộc tính biến thành tiềm năng. Cẩn thận khi rút points . Âm points là còn đúng cái nịt #61 (mã -1, -1; loại text)
+[21:23:18.718] caychay32: GỌI OpenEquip(1)
+[21:23:18.718] caychay32: GỌI SelfEquip_Open()
+[21:23:18.718] caychay32: GỌI SelfEquip_ShowVigor()
+[21:23:18.718] caychay32: GỌI SelfEquip_ShowEnergy()
+[21:23:18.718] caychay32: GỌI SetAcceptButtonState()
+[21:23:18.718] caychay32: GỌI Equip_RefreshEquip()
+[21:23:18.718] caychay32: GỌI SelfEquip_ShowVigor()
+[21:23:18.718] caychay32: GỌI SelfEquip_ShowEnergy()
+[21:23:18.718] caychay32: GỌI SelfEquip_SetTabColor(0)
+[21:23:18.739] caychay32: MỞ cửa sổ SelfEquip
+[21:23:18.739] caychay32: ĐÓNG cửa sổ Quest
+[21:23:18.813] caychay32: chỉ số: POINT_REMAIN 260 -> 10000260, SPR 14316278 -> 4316278
+[21:23:18.835] caychay32: đóng hội thoại NPC
+[21:23:27.101] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:23:30.613] GaoDẻLâu: GỌI OpenEquip(0)
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_Open()
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_ShowVigor()
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_ShowEnergy()
+[21:23:30.613] GaoDẻLâu: GỌI SetAcceptButtonState()
+[21:23:30.613] GaoDẻLâu: GỌI Equip_RefreshEquip()
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_ShowVigor()
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_ShowEnergy()
+[21:23:30.613] GaoDẻLâu: GỌI SelfEquip_SetTabColor(0)
+[21:23:30.636] GaoDẻLâu: MỞ cửa sổ SelfEquip
+[21:23:30.636] GaoDẻLâu: ĐÓNG cửa sổ OtherInfo
+[21:23:38.655] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:23:39.406] caychay35: chọn mục tiêu Cộng Point
+[21:23:39.427] caychay35: MỞ cửa sổ TargetBuff
+[21:23:39.427] caychay35: MỞ cửa sổ TargetFrame
+[21:23:40.113] caychay35: đi tới (159, 142)
+[21:23:40.145] caychay35: MỞ cửa sổ SelfEquip
+[21:23:40.806] caychay35: đi tới (162, 142)
+[21:23:43.144] caychay35: MỞ cửa sổ Quest
+[21:23:43.144] caychay35: ĐÓNG cửa sổ SelfEquip
+[21:23:43.272] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] Q?HPÕèỵQ?@AÕèKO?xíỜẽẰO?ồừ\èỢO?ồừ\ŨQ?8WÕXGO?ùỜÀỌQ?ÀSÕử"O?ètỵĐ2O?ètỵ`ẠO?xíỜPÕO?ồừ\ÈỀO?È#õ~O?ùỜÀỈO?ồừ\ĐẢO?ỜóÕỔQ?HPÕỄQ?@AÕồộế3x-ởàỤế3@õẤ`ơỴ8.ỞẼơỴ8.ỞHồO?Ờó
+        - [thông tin] P?8.ỞhẲP?ẼUỞđP?ồwẦỶĐP?8.ỞĐơỴẼUỞ0áỬỴ8.Ởcề3Ị~ẩẴÕnơỴồwẦỶẽỶP?8.Ởèỗề3Ị~ẩẴÈP?ỊNỞụẪP?À*ỞỊìỬỴẠFỞxãỬỴụIỞửợỬỴ<ỞồỏẬ3Ờóà(Ẽ3ỜóPWO?ẼắẦ@.O?ỊƯẦ8>O?ẼẳẦđ;O?
+        - [thông tin] Ờ(ỎẬ3xíỜÙẬ3ụỮỜịŨẬ3đẻẴPỹẬ3X9ỏẴ(âẬ3È#õđƯẬ3ùỜỊÝẬ3ÈẻẴụụẬ3ồừ\xẼ3ồừ\Ồ[Ậ3ètỵèễ3x-ởỊ-ễ3ĐỹẤẼỪể3@õẤ)ễ3èẦ ẹẬ3ÈẻẴPâể3ĐỹẤà/ễ3hỏẤồễẬ3ùỜ `Ậ3ẼắẦxỀẬ3ỊƯẦÈ}Ậ3ẼẳẦ0ẸẬ3
+        - [thông tin] ẽẪẼ3XỊó@(ế3x-ởPQế3@õẤỒíẬ3ứhôẬ3`ậópảẬ3ỜóẼ3XỊóồ(Q?HPÕẠ?Q?@AÕp<ơỴ8WÕà7ơỴÀSÕụỀẨ3
+        - [thông tin] Q?ẼớấỶẽỎẨ3[YỶĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] 2
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] @AÕèKO?xíỜẽẰO?ồừ\èỢO?ồừ\XGO?ùỜŨQ?8WÕÀỌQ?ÀSÕử"O?ètỵ`ẠO?xíỜ~O?ùỜÀỈO?ồừ\Đ2O?ètỵĐẢO?ỜóÕỔQ?HPÕỄQ?@AÕồộế3x-ởàỤế3@õẤ
+        - [thông tin] P?8.ỞÕnơỴồwẦỶcề3Ị~ẩẴĐP?8.Ởèỗề3Ị~ẩẴẽỶP?8.ỞÈP?ỊNỞụẪP?À*ỞỊìỬỴẠFỞxãỬỴụIỞồỏẬ3Ờóà(Ẽ3ỜóửợỬỴ<ỞPWO?ẼắẦ@.O?ỊƯẦ8>O?ẼẳẦđ;O?
+        - [thông tin] đƯẬ3ùỜỊÝẬ3ÈẻẴụụẬ3ồừ\xẼ3ồừ\Ồ[Ậ3ètỵẠ]ễ3x-ởèễ3x-ởỊƯễ3ĐỹẤỊ-ễ3ĐỹẤồỐễ3@õẤẼỪể3@õẤỪễ3èẦ)ễ3èẦỊvễ3ĐỹẤPâể3ĐỹẤ8ấễ3hỏẤà/ễ3hỏẤ ẹẬ3ÈẻẴồễẬ3ùỜ `Ậ3ẼắẦxỀẬ3ỊƯẦÈ}Ậ3ẼẳẦ0ẸẬ3
+        - [thông tin] Ẽ3ỜóẽẪẼ3XỊó@(ế3x-ởPQế3@õẤỒíẬ3ứhôẬ3`ậópảẬ3ỜóẼ3XỊóồ(Q?HPÕẠ?Q?@AÕp<ơỴ8WÕà7ơỴÀSÕụỀẨ3
+        - [thông tin] ịẹấỶĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] 
+        - [thông tin] a
+        - [thông tin] 
+        - [thông tin] K
+        - [thông tin] ga_MiniMap_Icon5.dds" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+[21:23:43.696] caychay32: GỌI PetButton_Show(1)
+[21:23:43.696] caychay32: GỌI PetButton_Show(1)
+[21:23:43.696] caychay32: GỌI PetButton_Show(1)
+[21:23:43.696] caychay32: GỌI PetButton_Show(2)
+[21:23:43.696] caychay32: GỌI PetButton_Show(2)
+[21:23:43.696] caychay32: GỌI PetButton_Show(2)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:43.967] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:23:46.717] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:23:47.320] caychay32: ĐÓNG cửa sổ SelfEquip
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2CEA0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2CF90)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2CF90)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2CF40)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2CF40)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2CF40)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2CEF0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2CEF0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2CEF0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2CEF0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2D0D0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2D0D0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2D0D0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2D0D0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2D0D0)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2D4B8)
+[21:23:48.710] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2D4B8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2D4B8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2D4B8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2D4B8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC2D4B8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC2D4E0)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC2D418)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D418, table: 3DC2D2D8)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D418, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D2D8, table: 3DC2FD58)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D418, table: 3DC30118)
+[21:23:48.711] caychay32: GỌI CompareTable_Quest(table: 3DC2D2D8, table: 3DC30118)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2FD58, table: 3DC30118)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D418, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D2D8, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2FD58, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC30118, table: 3DC31BA8)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CE78, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CEA0, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CF90, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CF40, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2CEF0, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D0D0, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D4B8, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D4E0, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D418, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2D2D8, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC2FD58, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC30118, table: 3DC31A90)
+[21:23:48.712] caychay32: GỌI CompareTable_Quest(table: 3DC31BA8, table: 3DC31A90)
+[21:23:48.744] caychay32: MỞ cửa sổ Quest
+[21:23:48.839] caychay32: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA5D8, table: 46EFA588)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA5D8, table: 46EFAC68)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA588, table: 46EFAC68)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA5D8, table: 46EFADA8)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA588, table: 46EFADA8)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFAC68, table: 46EFADA8)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA5D8, table: 46EFAE70)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFA588, table: 46EFAE70)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFAC68, table: 46EFAE70)
+[21:23:52.193] caychay32: GỌI CompareTable_Quest(table: 46EFADA8, table: 46EFAE70)
+[21:23:52.289] caychay32: hội thoại NPC [Cộng Point]:
+        - Cộng point cho nhân vật, cần có ít nhất 10.000.000 điểm tiềm năng (mã -1, -1; loại text)
+        - Cộng 10.000.000 Cường Lực (mã 111114, 7120; loại id)
+        - Cộng 10.000.000 Nội Lực (mã 111114, 7121; loại id)
+        - Cộng 10.000.000 Thể Lực (mã 111114, 7122; loại id)
+        - Cộng 10.000.000 Trí Lực (mã 111114, 7123; loại id)
+        - Cộng 10.000.000 Thân Pháp (mã 111114, 7124; loại id)
+[21:23:54.249] caychay32: GỌI QuestOption_Clicked()
+[21:23:54.249] caychay32: GỌI QuestFrameOptionClicked(-1, 111114, 7121)
+[21:23:55.072] caychay32: hội thoại NPC [Cộng Point]:
+        - Cộng Thành Công 10.000.000 Điểm Nội Lực Rồi #96  Cố Lên Sắp Thành Siêu Vip Pro Rồi #122 (mã -1, -1; loại text)
+[21:23:55.683] caychay32: ĐÓNG cửa sổ Quest
+[21:23:55.745] caychay32: chỉ số: POINT_REMAIN 10000260 -> 260, SPR 4316278 -> 14316278
+[21:23:55.756] caychay32: đóng hội thoại NPC
+[21:23:56.326] caychay32: GỌI PetButton_Show(1)
+[21:23:56.326] caychay32: GỌI PetButton_Show(1)
+[21:23:56.326] caychay32: GỌI PetButton_Show(1)
+[21:23:56.326] caychay32: GỌI PetButton_Show(2)
+[21:23:56.326] caychay32: GỌI PetButton_Show(2)
+[21:23:56.326] caychay32: GỌI PetButton_Show(2)
+[21:23:56.347] caychay32: MỞ cửa sổ SelfEquip
+[21:23:57.244] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:23:57.755] caychay35: GỌI PetButton_Show(1)
+[21:23:57.755] caychay35: GỌI PetButton_Show(1)
+[21:23:57.755] caychay35: GỌI PetButton_Show(1)
+[21:23:57.755] caychay35: GỌI PetButton_Show(2)
+[21:23:57.755] caychay35: GỌI PetButton_Show(2)
+[21:23:57.755] caychay35: GỌI PetButton_Show(2)
+[21:23:58.085] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ,B0DỞ Ã*B pỞÀđ*B8.Ởồẵ*B8.Ở0ì*B8.ỞỊắQ?HPÕụsQ?@AÕửợỬỴ<ỞxãỬỴụIỞỊìỬỴẠFỞPể*BẼUỞĐơỴẼUỞ mQ?8WÕxỊQ?ÀSÕ@ÀO?ịỘóhỰO?`ậóàíO?PệóừO?ịỘó ơỴaỞ0àO?`ậó ởO?PệóèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜHẻẬ3ịỘóđẼ3ịỘóẠÈ ỄỞ òẬ3`ậóửỉẬ3Pệó
+        - [thông tin] PệóÈÊ ĐởỞđẤO?đẻẴ8ẬO?x1ẻẴẠẸO?đSỏẴÕỖO?ỒDE0ỞO?@'õxỎO?(iõồrO?ỒDEụtO?ỒDE(Ũ HỜỞ
+        - [thông tin] M pỞ(è HỜỞàưẬ3đSỏẴÕẼ3ỒDE8Ẽ3@'õXỶẼ3(iõ`Ẽ3ỒDE0Ẽ3ỒDE8ĐO?ịnóÕỹO?`ậóP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3Pệó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵỒẬ3ỒỀẦ(ỉQ?HPÕÈÓQ?@AÕử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] XỶẼ3(iõ`Ẽ3ỒDE0Ẽ3ỒDE8ĐO?ịnóÕỹO?`ậóP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3Pệó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵỒẬ3ỒỀẦ(ỉQ?HPÕÈÓQ?@AÕử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] Q?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] 2
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ,B0DỞ Ã*B pỞĐẴ ồwẦỶ ụ wỞhú ửWỞÈÌ ỊơỞỊắQ?HPÕụsQ?@AÕồủ ĐỖỞửợỬỴ<Ở(è HỜỞÀỵ ỒdỞPá ẽỔỞxãỬỴụIỞPể*BẼUỞỊìỬỴẠFỞ@ pỬỞ mQ?8WÕ@ÀO?ịỘóxỊQ?ÀSÕĐơỴẼUỞhỰO?`ậóàíO?PệóừO?ịỘó0àO?`ậó ởO?Pệó ơỴaỞèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệó
+        - [thông tin] ó ởO?Pệó ơỴaỞèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệó
+        - [thông tin] M pỞÙẬ3ụỮỜàưẬ3đSỏẴÕẼ3ỒDE8Ẽ3@'õXỶẼ3(iõ`Ẽ3ỒDE0Ẽ3ỒDEẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵ8ĐO?ịnóÕỹO?`ậó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3PệóẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵ(ỉQ?HPÕÈÓQ?@AÕỒẬ3ỒỀẦử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] O?Ồcỵ(^O?0hỵ8ĐO?ịnóÕỹO?`ậó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3PệóẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵ(ỉQ?HPÕÈÓQ?@AÕỒẬ3ỒỀẦử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] 
+        - [thông tin] a
+        - [thông tin] 
+        - [thông tin] K
+        - [thông tin] Ở
+[21:23:59.164] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ,B0DỞ Ã*B pỞX.+B8.Ở+B8.ỞPõ*B8.Ở,+B8.ỞỊắQ?HPÕụsQ?@AÕửợỬỴ<ỞxãỬỴụIỞPể*BẼUỞỊìỬỴẠFỞĐơỴẼUỞ mQ?8WÕ@ÀO?ịỘóxỊQ?ÀSÕhỰO?`ậóàíO?PệóxâO?Ờó ơỴaỞừO?ịỘó0àO?`ậó ởO?PệóèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệóẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵ
+        - [thông tin] Pệóẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵ
+        - [thông tin] õửẩẬ3đẻẴ8ÂẬ3đSỏẴẽơẬ3ỒDEHằẬ3@'õỒấẬ3(iõỒỗO?ịnó nO?`ậóửƠO?PệóUO?ụỮỜEO?èáỜửkO?ỒDE@wO?ỒDEàấO?XỊóÈÊ ĐởỞĐờẬ3èáỜ(Ũ HỜỞÙẬ3ụỮỜ
+        - [thông tin] 8ĐO?ịnóÕỹO?`ậóP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3Pệó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵồủ ĐỖỞPá ẽỔỞ(è HỜỞẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵỒẬ3ỒỀẦ(ỉQ?HPÕÈÓQ?@AÕử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] Q?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] 2
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 0DỞ Ã*B pỞ+B8.ỞX.+B8.Ở,+B8.ỞPõ*B8.ỞỊắQ?HPÕụsQ?@AÕửợỬỴ<ỞxãỬỴụIỞPể*BẼUỞỊìỬỴẠFỞĐơỴẼUỞÀảO?Ờó mQ?8WÕ@ÀO?ịỘóxỊQ?ÀSÕhỰO?`ậóàíO?PệóxâO?Ờó ơỴaỞừO?ịỘó0àO?`ậó ởO?PệóèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệó
+        - [thông tin] ỵụ+O?Ồcỵ(^O?0hỵHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệó
+        - [thông tin] M pỞàưẬ3đSỏẴÕẼ3ỒDE8Ẽ3@'õXỶẼ3(iõ`Ẽ3ỒDE0Ẽ3ỒDE(Ũ HỜỞ
+        - [thông tin]  pỬỞP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3Pệó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵồủ ĐỖỞPá ẽỔỞ(è HỜỞẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵỒẬ3ỒỀẦ(ỉQ?HPÕÈÓQ?@AÕử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕĐzQ?ÀịấỶ8ẨQ?ẼớấỶẽỎẨ3[YỶ:
+        - [thông tin] 
+        - [thông tin] a
+        - [thông tin] 
+        - [thông tin] K
+        - [thông tin] Ở
+[21:24:02.662] caychay35: GỌI PetButton_Show(1)
+[21:24:02.662] caychay35: GỌI PetButton_Show(1)
+[21:24:02.662] caychay35: GỌI PetButton_Show(1)
+[21:24:02.662] caychay35: GỌI PetButton_Show(2)
+[21:24:02.662] caychay35: GỌI PetButton_Show(2)
+[21:24:02.662] caychay35: GỌI PetButton_Show(2)
+[21:24:02.810] caychay32: GỌI PetButton_Show(1)
+[21:24:02.810] caychay32: GỌI PetButton_Show(1)
+[21:24:02.810] caychay32: GỌI PetButton_Show(1)
+[21:24:02.810] caychay32: GỌI PetButton_Show(2)
+[21:24:02.810] caychay32: GỌI PetButton_Show(2)
+[21:24:02.810] caychay32: GỌI PetButton_Show(2)
+[21:24:05.144] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ,B0DỞ Ã*B pỞX.+B8.Ở+B8.ỞPõ*B8.Ở,+B8.ỞỊắQ?HPÕụsQ?@AÕửợỬỴ<ỞxãỬỴụIỞPể*BẼUỞỊìỬỴẠFỞĐơỴẼUỞ mQ?8WÕ@ÀO?ịỘóxỊQ?ÀSÕhỰO?`ậóàíO?PệóxâO?Ờó ơỴaỞừO?ịỘó0àO?`ậó ởO?PệóèỬỴ0DỞồẴơỴ pỞhơỴHLỞỆO?èáỜ(ậO?ụỮỜHẻẬ3ịỘóđẼ3ịỘó òẬ3`ậóửỉẬ3Pệóẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵ
+        - [thông tin] Pệóẽ9O?BỵẼ0O?ụHỵ`7O?ỊMỵÕIO?èOỵụ+O?Ồcỵ(^O?0hỵ
+        - [thông tin] õửẩẬ3đẻẴ8ÂẬ3đSỏẴẽơẬ3ỒDEHằẬ3@'õỒấẬ3(iõỒỗO?ịnó nO?`ậóửƠO?PệóUO?ụỮỜEO?èáỜửkO?ỒDE@wO?ỒDEàấO?XỊóÈÊ ĐởỞĐờẬ3èáỜ(Ũ HỜỞÙẬ3ụỮỜ
+        - [thông tin] 8ĐO?ịnóÕỹO?`ậóP$Ẽ3ịnóịữẬ3`ậó@ũẬ3PệóÀẼ3ịnóẲẼ3`ậó"Ẽ3Pệó8yẬ3BỵụfẬ3ụHỵpRẬ3ỊMỵẠ{Ậ3èOỵỊỢẬ3ỒcỵHYẬ30hỵồủ ĐỖỞPá ẽỔỞ(è HỜỞẼkẬ3Bỵ(PẬ3ụHỵịTẬ3ỊMỵhbẬ3èOỵđvẬ3ỒcỵồdẬ30hỵỒẬ3ỒỀẦ(ỉQ?HPÕÈÓQ?@AÕử]Ậ3ũẤXửQ?8WÕ`ÈQ?ÀSÕ8=Q?HPÕđ:Q?@AÕ@-Q?8WÕàZQ?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] Q?ÀSÕồ(Q?HPÕẠ?Q?@AÕPVQ?8WÕẽ8Q?ÀSÕ8ẨQ?ẼớấỶồẸẨ3ẬYỶẽỎẨ3[YỶồ
+        - [thông tin] 2
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ="Common/tga_MiniMap_Icon5.dds" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] r" XPos="8" YPos="7" Width="90" Height="15" />
+        - [thông tin] 
+        - [thông tin] 55" Height="37" />
+        - [thông tin] e Name="Qingyuan_Hover" XPos="102" YPos="5" Width="72" Height="17" />
+        - [thông tin] usu_Normal" XPos="7" YPos="163" Width="76" Height="20" />
+        - [thông tin] Ở
+[21:24:14.960] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] Imagefile="Common/tga_MiniMap_Icon5.dds" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ogong_Hover" XPos="8" YPos="7" Width="90" Height="15" />
+        - [thông tin] 
+        - [thông tin] 3" Width="55" Height="37" />
+        - [thông tin] />
+        - [thông tin] ge Name="Gusu_Normal" XPos="7" YPos="163" Width="76" Height="20" />
+        - [thông tin] tiveHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ight="15" />
+        - [thông tin] 
+        - [thông tin] Sign55_Normal" XPos="194" YPos="141" Width="47" Height="50" />
+        - [thông tin] YPos="5" Width="72" Height="17" />
+        - [thông tin] dth="76" Height="20" />
+        - [thông tin] Ở
+[21:24:15.078] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:24:15.522] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:24:16.531] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:24:23.079] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:24:25.235] caychay35: hội thoại NPC [Cộng Point]:
+        - Cộng 1 Lần - 10.000 Điểm Points (mã 111114, 1111; loại id)
+        - Cộng 1 Lần - 50.000 Điểm Points (mã 111114, 1333; loại id)
+        - Cộng 1 Lần - 100.000 Điểm Points (mã 111114, 2333; loại id)
+        - Cộng 1 Lần - 500.000 Điểm Points (mã 111114, 6333; loại id)
+        - Cộng 1 Lần - 1.000.000 Điểm Points (mã 111114, 2111; loại id)
+        - Cộng 1 Lần - 2.000.000 Điểm Points (mã 111114, 3111; loại id)
+        - Cộng 1 Lần - 10.000.000 Điểm Points (mã 111114, 7111; loại id)
+        - Rút 1 Lần - 10.000 Điểm Points (mã 111114, 3333; loại id)
+        - Rút 1 Lần - 50.0000 Điểm Points (mã 111114, 4444; loại id)
+        - Rút 1 Lần - 100.0000 Điểm Points (mã 111114, 5444; loại id)
+        - Rút 1 Lần - 500.0000 Điểm Points (mã 111114, 6444; loại id)
+        - Rút 1 Lần - 1.000.000 Điểm Points (mã 111114, 4333; loại id)
+        - Rút 1 Lần - 2.000.000 Điểm Points (mã 111114, 5333; loại id)
+        - Rút 1 Lần - 10.000.000 Điểm Points (mã 111114, 7333; loại id)
+        - [thông tin] ?>
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] e="Sign54_Hover" XPos="190" YPos="3" Width="55" Height="37" />
+        - [thông tin] " YPos="5" Width="72" Height="17" />
+        - [thông tin] Width="92" Height="13" />
+        - [thông tin] 
+        - [thông tin] pƯạ!
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ạ!
+        - [thông tin] p}!ỸÕ!ỸÕ!Ỹ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] Imagefile="Common/tga_MiniMap_Icon5.dds" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ogong_Hover" XPos="8" YPos="7" Width="90" Height="15" />
+        - [thông tin] 
+        - [thông tin] 3" Width="55" Height="37" />
+        - [thông tin] />
+        - [thông tin] ge Name="Gusu_Normal" XPos="7" YPos="163" Width="76" Height="20" />
+        - [thông tin] tiveHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ight="15" />
+        - [thông tin] 
+        - [thông tin] Sign55_Normal" XPos="194" YPos="141" Width="47" Height="50" />
+        - [thông tin] YPos="5" Width="72" Height="17" />
+        - [thông tin] dth="76" Height="20" />
+        - [thông tin] s="1024" NativeVertRes="768" AutoScaled="true">
+[21:24:26.159] caychay35: đóng hội thoại NPC
+[21:24:26.771] caychay35: ĐÓNG cửa sổ Quest
+[21:24:33.640] caychay32: GỌI PetButton_Show(1)
+[21:24:33.640] caychay32: GỌI PetButton_Show(1)
+[21:24:33.640] caychay32: GỌI PetButton_Show(1)
+[21:24:33.640] caychay32: GỌI PetButton_Show(2)
+[21:24:33.640] caychay32: GỌI PetButton_Show(2)
+[21:24:33.640] caychay32: GỌI PetButton_Show(2)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:33.723] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:45.189] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(1)
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:50.541] GaoDẻLâu: GỌI PetButton_Show(2)
+[21:24:52.062] caychay344: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:24:52.331] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:25:05.428] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[21:25:11.551] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[21:25:13.891] GHI: dừng ghi

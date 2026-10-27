@@ -4,7 +4,7 @@ TỰ MỞ GAME VÀ ĐĂNG NHẬP.
 Game hay bị diss (tự tắt). LuongDangNhap mở lại game và đăng nhập cho một tài khoản (có cửa sổ cũ thì về chọn máy
 chủ EnterQuitWait(1), không tắt process trừ khi game đã chết):
     chạy Bin\\Game.exe -fl (đúng lệnh launcher "Vao Game - Update.exe" chạy khi bấm Start Game)
-    -> chờ game tải xong mới nạp DLL (nạp lúc game đang khởi động làm game văng)
+    -> chờ game tải xong mới nạp autohoc_lua / proxy (nạp Lua quá sớm làm game văng)
     -> bấm "Bước tiếp theo" ở màn hình sự kiện -> chọn máy chủ -> điền tài khoản, mật khẩu -> vào nhân vật -> nhập mã kiểm tra -> vào game.
 Tài khoản không ghi tên nhân vật thì tới màn hình chọn nhân vật sẽ chờ người chơi tự chọn
 (vào game rồi giao_dien tự ghi tên nhân vật đó cho lần đăng nhập sau).
@@ -37,6 +37,8 @@ from bang_ma_viscii import giai_ma, ma_hoa
 from cua_so_game import tim_cua_so_game
 from game_api import Game
 from lua_game import LoiLua
+import proxy_mang
+from gioi_han_client import thu_dong_hop_client_qua_nhieu
 
 # Tên cửa sổ lấy từ Config.axp/InterfaceEx.txt. Xét theo thứ tự: màn hình đứng trước che màn hình sau.
 CAC_MAN_HINH = (
@@ -68,14 +70,51 @@ CHU_DANG_ONLINE = "dang online"
 # Máy chủ bận lúc chọn nhân vật thì còn bấm Quay lại để đăng nhập lại từ đầu.
 CHU_LOI_MANG = "kiem tra lai duong mang"
 CHU_MAY_CHU_BAN = "may chu dang ban"
+CHU_LIEN_TIEP_THAT_BAI = "lien tiep that bai"
 GIAY_DONG_THONG_BAO_NGAY = 1
 # Sau mỗi lần gửi mã / đổi ảnh, hộp mã kiểm tra khóa nút 3 giây.
 GIAY_GIUA_HAI_LAN_NHAP_MA = 4
+# Giải OCR + chờ nhập tay: lâu hơn giay_toi_da_moi_buoc một bước thường.
+GIAY_GIAI_MA_DANG_NHAP_TOI_THIEU = 120
 MAU_MA_MAU = re.compile(r"#[cegCEG][0-9a-fA-F]{6}|#[a-zA-Z]")
 
 
 class LoiDangNhap(Exception):
     pass
+
+
+def _yeu_cau_proxy_broker_neu_can(ly_do, in_log):
+    """Proxifier + broker: đổi proxy khi login/game báo lỗi mạng."""
+    if proxy_mang.da_bat():
+        return
+    try:
+        import proxy_broker_ui
+
+        if not proxy_broker_ui.broker_dang_chay(None)[0]:
+            return
+        proxy_broker_ui.yeu_cau_failover(ly_do)
+        in_log(f"[Proxy Broker] Yêu cầu đổi proxy — {ly_do}")
+    except Exception:
+        pass
+
+
+def _loi_co_the_do_proxy(chu):
+    chu = bo_dau(chu or "")
+    return any(
+        tu in chu
+        for tu in (
+            "lien tiep that bai",
+            "kiem tra lai duong mang",
+            "ket noi that bai",
+            "mat ket noi",
+            "ngat ket noi",
+            "duong mang",
+            "proxy",
+            "10060",
+            "timeout",
+            "could not connect",
+        )
+    )
 
 
 class LoiSaiTaiKhoan(LoiDangNhap):
@@ -197,6 +236,16 @@ def nhap_ma_kiem_tra(lua, ma):
                           f"TextValidate_Input:SetText({chuoi_lua(ma)}) TextValidate_BtnCommitClick()"))
 
 
+def cho_nguoi_nhap_ma_kiem_tra(lua, nen_dung, giay_toi_da):
+    """Chờ người chơi nhập tay / hộp TextValidate đóng (không gửi mã cố định)."""
+    het_han = time.time() + giay_toi_da
+    while time.time() < het_han and not nen_dung():
+        if not dang_hien(lua, "TextValidate"):
+            return True
+        time.sleep(0.4)
+    return not dang_hien(lua, "TextValidate")
+
+
 def giai_hop_ma_kiem_tra(lua, nen_dung, giay_toi_da):
     """
     Đọc ảnh, giải và nhập mã tới khi hộp mã kiểm tra (TextValidate) đóng; ảnh khó đọc thì đổi ảnh khác.
@@ -247,6 +296,7 @@ GIAY_CHO_VE_CHON_MAY_CHU = 40
 
 
 def tat_game(pid):
+    proxy_mang.nha(pid)
     try:
         psutil.Process(pid).kill()
     except psutil.Error:
@@ -302,7 +352,7 @@ def thoat_ve_chon_may_chu(pid, in_log=None, nen_dung=None):
     tat_game(pid)
 
 
-def mo_game(thu_muc_game):
+def mo_game(thu_muc_game, ten_dang_nhap=None):
     """Mở Game.exe -fl, trả về pid của Game.exe."""
     duong_dan = os.path.join(thu_muc_game, "Bin", "Game.exe")
     if not os.path.isfile(duong_dan):
@@ -314,19 +364,25 @@ def mo_game(thu_muc_game):
             cai_dat_game.chuan_bi_thu_muc_game(thu_muc_game)
     except OSError:
         pass
-    return subprocess.Popen([duong_dan, "-fl"], cwd=os.path.dirname(duong_dan)).pid
+    proc = subprocess.Popen([duong_dan, "-fl"], cwd=os.path.dirname(duong_dan))
+    return proc.pid
 
 
-def cho_cua_so(pid, giay_cho, nen_dung):
+def cho_cua_so(pid, giay_cho, nen_dung, khi_co_cua_so=None):
     """Chờ tới khi game có cửa sổ và đã chạy đủ giay_cho giây. Trả về hwnd."""
     bat_dau = psutil.Process(pid).create_time()
+    da_goi_khi_co_cua_so = False
     while True:
         if nen_dung():
             raise LoiDangNhap("Đã dừng")
         if not con_chay(pid):
             raise LoiDangNhap("Game tự tắt lúc đang khởi động")
+        thu_dong_hop_client_qua_nhieu()
         tuoi = time.time() - bat_dau
         cac_cua_so = [c for c in tim_cua_so_game() if c["pid"] == pid]
+        if cac_cua_so and khi_co_cua_so and not da_goi_khi_co_cua_so:
+            da_goi_khi_co_cua_so = True
+            khi_co_cua_so()
         if cac_cua_so and tuoi >= giay_cho:
             return cac_cua_so[0]["hwnd"]
         if tuoi > giay_cho + 120:
@@ -425,6 +481,14 @@ def client_dang_dang_nhap(pid):
 def nha_cac_client(luong):
     with _KHOA_CLIENT:
         for pid in [p for p, l in _CHU_CLIENT.items() if l is luong]:
+            proxy_mang.nha(pid)
+            del _CHU_CLIENT[pid]
+
+
+def tha_client_dang_nhap(luong):
+    """Client đã vào game: bỏ giữ luồng nhưng giữ slot IP trong proxy_mang._gan."""
+    with _KHOA_CLIENT:
+        for pid in [p for p, l in _CHU_CLIENT.items() if l is luong]:
             del _CHU_CLIENT[pid]
 
 
@@ -486,28 +550,112 @@ class LuongDangNhap(threading.Thread):
         self.chi_co_mot_may_chu_thi_chon = False
         self.sai_rule = None
         self.sai_tai_khoan = False
+        self._da_gan_proxy = False
+        self._cho_retry_sau_diss = False
 
     def in_log(self, chu):
         ten = self.tai_khoan.get("nhan_vat") or self.tai_khoan["ten_dang_nhap"]
         self.hang_doi.put(("log", f"[Đăng nhập {ten}] {chu}"))
 
+    def _ket_noi_lua_truoc_proxy(self, game):
+        try:
+            game.lua.ket_noi()
+        except LoiLua as loi:
+            raise LoiDangNhap(str(loi)) from loi
+
+    def _gan_proxy_kenh(self):
+        """Gán slot IP + nạp DLL proxy (bat=0) — chưa patch WS2."""
+        if self._da_gan_proxy or not self.pid or not proxy_mang.da_bat():
+            return
+        self._da_gan_proxy = True
+        mo_ta = proxy_mang.gan_cho(self.pid)
+        if mo_ta:
+            ten = self.tai_khoan.get("nhan_vat") or self.tai_khoan["ten_dang_nhap"]
+            self.in_log(f"{ten}: {mo_ta}")
+    def _kich_hoat_proxy_khi_ui_login(self, game, man):
+        """Nạp DLL lúc splash; chỉ patch hook khi màn login đã ổn định."""
+        if man not in ("su_kien", "chon_may_chu", "dang_nhap", "chon_nhan_vat"):
+            return
+        if not self.pid or not proxy_mang.dang_di_proxy(self.pid):
+            return
+        if proxy_mang.da_kich_hoat_proxy(self.pid):
+            return
+        proxy_mang.chuan_bi_proxy_truoc_mang(self.pid, in_log=self.in_log)
+        if not getattr(self, "_proxy_cho_ui_on_dinh", False):
+            self.in_log("Màn đăng nhập — chờ 8 giây ổn định trước hook proxy…")
+            for _ in range(80):
+                if self.dung.is_set():
+                    raise LoiDangNhap("Đã dừng")
+                if not con_chay(self.pid):
+                    raise LoiDangNhap("Game đã tắt")
+                time.sleep(0.1)
+            self._proxy_cho_ui_on_dinh = True
+        self._kich_hoat_proxy_neu_can(sau_splash=True)
+
+    def _kich_hoat_proxy_neu_can(self, sau_splash=False):
+        if not self.pid or not proxy_mang.dang_di_proxy(self.pid):
+            return
+        if proxy_mang.da_kich_hoat_proxy(self.pid):
+            return
+        giay = int(self.cai_dat.get("giay_cho_proxy_hook") or 40)
+        try:
+            if sau_splash:
+                proxy_mang.kich_hoat_proxy_sau_splash(self.pid, giay_cho=giay, in_log=self.in_log)
+            else:
+                proxy_mang.kich_hoat_proxy_som(self.pid, giay_cho=giay, in_log=self.in_log)
+        except Exception as loi:
+            if isinstance(loi, LoiDangNhap):
+                raise
+            self.in_log(f"Proxy: {loi}")
+
+    def _gan_proxy_som(self):
+        """Client đã chạy (rảnh / dùng lại hwnd): gán kênh + bật proxy ngay."""
+        self._gan_proxy_kenh()
+        self._kich_hoat_proxy_neu_can(sau_splash=False)
     def kiem_tra_ds_nhan_vat(self, cac_ten):
         """Màn hình chọn nhân vật đã có danh sách; lớp con raise LoiSaiRuleNhanVat nếu tài khoản không dùng được."""
 
     def bao_trang_thai(self, mo_ta):
         self.hang_doi.put(("trang_thai_tai_khoan", self.tai_khoan["ten_dang_nhap"], mo_ta))
 
+    def nang_cap_sau_dang_nhap(self):
+        """
+        Vừa vào game: nhân vật chưa có trong nang_cap_da_xong.json thì nâng cấp (nang_cap_nhan_vat). Lỗi thì chỉ ghi
+        log, không tính là đăng nhập hỏng; lần đăng nhập sau làm tiếp các bước còn lại.
+        """
+        import nang_cap_nhan_vat  # nang_cap_nhan_vat import dang_nhap
+        try:
+            hwnd = next((c["hwnd"] for c in tim_cua_so_game() if c["pid"] == self.pid), None)
+            if not hwnd:
+                return
+            game = Game(hwnd)
+            tt = game.thong_tin()
+            if not tt or nang_cap_nhan_vat.da_lam(tt["ten"]):
+                return
+            self.bao_trang_thai("Nâng cấp nhân vật")
+            nang_cap_nhan_vat.nang_cap(game, tt["ten"], self.in_log, self.dung.is_set,
+                                       lambda chu: self.bao_trang_thai(f"Nâng cấp: {chu}"))
+        except Exception as loi:
+            if self.dung.is_set():
+                raise LoiDangNhap("Đã dừng")
+            self.in_log(f"Nâng cấp nhân vật chưa xong ({str(loi) or type(loi).__name__}), "
+                        "lần đăng nhập sau làm tiếp")
+
     def run(self):
         try:
             self._chay_cac_lan()
         finally:
-            nha_cac_client(self)
+            if self.thanh_cong:
+                tha_client_dang_nhap(self)
+            else:
+                nha_cac_client(self)
 
     def _chay_cac_lan(self):
         so_lan = self.cai_dat["so_lan_thu_toi_da"]
         for lan in range(1, so_lan + 1):
             try:
                 self.dang_nhap_mot_lan(lan, so_lan)
+                self.nang_cap_sau_dang_nhap()
                 self.thanh_cong = True
                 self.bao_trang_thai("Đã vào game")
                 return
@@ -529,18 +677,33 @@ class LuongDangNhap(threading.Thread):
                 return
             except (LoiDangNhap, LoiLua, OSError, psutil.Error) as loi:
                 self.in_log(f"Lần {lan}/{so_lan} thất bại: {loi}")
+                if _loi_co_the_do_proxy(str(loi)):
+                    _yeu_cau_proxy_broker_neu_can(str(loi)[:200], self.in_log)
+                if "Game đã tắt" in str(loi) or "Game tự tắt" in str(loi):
+                    self._cho_retry_sau_diss = True
             except Exception:
                 self.in_log(f"Lần {lan}/{so_lan} lỗi không mong đợi\n{traceback.format_exc()}")
             if self.dung.is_set():
                 return
             if self.pid:
+                if not con_chay(self.pid):
+                    proxy_mang.nha(self.pid)
                 thoat_ve_chon_may_chu(self.pid, self.in_log, self.dung.is_set)
                 if not con_chay(self.pid):
                     _go_pid_dang_nhap(self.tai_khoan["ten_dang_nhap"])
-            self.dung.wait(5)
+            giay_cho = 5
+            if self._cho_retry_sau_diss and proxy_mang.da_bat():
+                giay_cho = max(giay_cho, int(self.cai_dat.get("giay_cho_sau_diss_proxy") or 45))
+                self.in_log(f"Game vừa tắt giữa đăng nhập — chờ {giay_cho} giây trước lần thử lại "
+                            "(tránh 「Liên tiếp thất bại」)")
+                self._cho_retry_sau_diss = False
+            self.dung.wait(giay_cho)
         self.bao_trang_thai("Tạm dừng: thất bại nhiều lần")
 
     def dang_nhap_mot_lan(self, lan, so_lan):
+        self._da_gan_proxy = False
+        self._da_log_proxy_mo_moi = False
+        self._proxy_cho_ui_on_dinh = False
         tk, cd = self.tai_khoan, self.cai_dat
         hwnd = hwnd_dang_dang_nhap(tk["ten_dang_nhap"]) or tim_hwnd_theo_tai_khoan(tk["ten_dang_nhap"])
         if hwnd:
@@ -549,6 +712,8 @@ class LuongDangNhap(threading.Thread):
                 self.pid = game.lua.pid
                 giu_client(self.pid, self)
                 _gan_pid_dang_nhap(tk["ten_dang_nhap"], self.pid)
+                self._ket_noi_lua_truoc_proxy(game)
+                self._gan_proxy_som()
                 self.bao_trang_thai(f"Dùng lại game (lần {lan}/{so_lan})")
                 tt = None
                 try:
@@ -570,22 +735,34 @@ class LuongDangNhap(threading.Thread):
         if self.dung_client_ranh(lan, so_lan):
             return
         self.bao_trang_thai(f"Mở game (lần {lan}/{so_lan})")
-        self.pid = mo_game(cd["thu_muc_game"])
+        self.pid = mo_game(cd["thu_muc_game"], tk["ten_dang_nhap"])
         giu_client(self.pid, self)
         _gan_pid_dang_nhap(tk["ten_dang_nhap"], self.pid)
+        self._gan_proxy_kenh()
         self.in_log(f"Đã mở game (pid {self.pid}), "
                     f"chờ {cd['giay_cho_truoc_khi_nap_dll']} giây cho game tải xong")
         hwnd = cho_cua_so(self.pid, cd["giay_cho_truoc_khi_nap_dll"], self.dung.is_set)
-        self.dieu_khien(Game(hwnd))
+        if proxy_mang.dang_di_proxy(self.pid):
+            time.sleep(2)
+        game = Game(hwnd)
+        self._ket_noi_lua_truoc_proxy(game)
+        self.dieu_khien(game)
 
     def dung_client_ranh(self, lan, so_lan):
         """Còn client rảnh ở màn hình đăng nhập thì đăng nhập trên đó thay vì mở game mới. True nếu đã dùng."""
+        if proxy_mang.se_gan_proxy_tiep_theo():
+            if not getattr(self, "_da_log_proxy_mo_moi", False):
+                self._da_log_proxy_mo_moi = True
+                self.in_log("Acc proxy: mở game mới (không dùng client rảnh) — tránh socket cũ IP nhà")
+            return False
         hwnd = lay_client_ranh(self)
         if not hwnd:
             return False
         tk = self.tai_khoan["ten_dang_nhap"]
         game = Game(hwnd)
         self.pid = game.lua.pid
+        self._ket_noi_lua_truoc_proxy(game)
+        self._gan_proxy_som()
         self.in_log(f"Dùng client đang rảnh (pid {self.pid}), không mở game mới")
         self.bao_trang_thai(f"Dùng lại game (lần {lan}/{so_lan})")
         ve_dang_nhap_neu_tk_khac(game, tk, self.in_log)
@@ -605,6 +782,8 @@ class LuongDangNhap(threading.Thread):
             if self.dung.is_set():
                 raise LoiDangNhap("Đã dừng")
             if not con_chay(game.lua.pid):
+                if proxy_mang.da_bat() and self.pid and proxy_mang.dang_di_proxy(self.pid):
+                    self.in_log(f"Proxy khi game tắt: {proxy_mang.tom_tat_proxy(self.pid)}")
                 raise LoiDangNhap("Game đã tắt")
             bay_gio = time.time()
             if bay_gio > het_han:
@@ -613,6 +792,7 @@ class LuongDangNhap(threading.Thread):
                 man = man_hinh_hien_tai(game.lua)
             except LoiLua:
                 man = ""
+            self._kich_hoat_proxy_khi_ui_login(game, man)
             if man in dung_o and not (man == "chon_nhan_vat" and self.can_quay_lai):
                 return man
             if man == "dang_nhap":
@@ -623,8 +803,13 @@ class LuongDangNhap(threading.Thread):
                 self.bao_trang_thai(MO_TA_MAN_HINH[man].capitalize())
             elif not cho_nguoi_choi:
                 # Lúc đang tải (mới mở game, hoặc vào map) DLL có thể chưa đọc được game một lúc.
-                gioi_han = cd["giay_toi_da_moi_buoc"] * (2 if man == "" else 1)
-                if man not in ("vao_game", "thong_bao") and bay_gio - luc_doi > gioi_han:
+                if man == "ma_kiem_tra":
+                    gioi_han = max(cd["giay_toi_da_moi_buoc"], GIAY_GIAI_MA_DANG_NHAP_TOI_THIEU)
+                    het_han = max(het_han, bay_gio + gioi_han)
+                    luc_doi = bay_gio
+                else:
+                    gioi_han = cd["giay_toi_da_moi_buoc"] * (2 if man == "" else 1)
+                if man not in ("vao_game", "thong_bao", "ma_kiem_tra") and bay_gio - luc_doi > gioi_han:
                     raise LoiDangNhap(f"Kẹt ở bước {MO_TA_MAN_HINH[man]} quá {gioi_han} giây")
             if cho_nguoi_choi != self.cho_nguoi_choi:
                 self.cho_nguoi_choi = cho_nguoi_choi
@@ -640,11 +825,20 @@ class LuongDangNhap(threading.Thread):
                 if thong_bao != thong_bao_truoc:
                     thong_bao_truoc = thong_bao
                     self.in_log(f"Game báo: {thong_bao}")
+                    if proxy_mang.da_bat() and self.pid:
+                        goi_y = proxy_mang.mo_ta_trang_thai_hook(self.pid)
+                        if goi_y and ("that bai" in bo_dau(thong_bao) or "thu lai" in bo_dau(thong_bao)):
+                            self.in_log(goi_y)
                     if "khong dung" in bo_dau(thong_bao):
                         raise LoiSaiTaiKhoan(f"Game báo sai tài khoản hoặc mật khẩu ({tk['ten_dang_nhap']})")
                     if CHU_DANG_ONLINE in bo_dau(thong_bao):
                         self.in_log(f"Nhân vật còn kẹt online trên server, chờ {GIAY_DONG_THONG_BAO_DANG_ONLINE} giây "
                                     "(game khóa nút Đóng) rồi bấm Đóng để đăng nhập lại")
+                    chu_tb = bo_dau(thong_bao)
+                    if _loi_co_the_do_proxy(thong_bao) or CHU_LIEN_TIEP_THAT_BAI in chu_tb:
+                        _yeu_cau_proxy_broker_neu_can(thong_bao[:200], self.in_log)
+                    if "ngat ket noi" in chu_tb and self.pid and proxy_mang.dang_di_proxy(self.pid):
+                        self.in_log(f"Proxy lúc ngắt kết nối: {proxy_mang.tom_tat_proxy(self.pid)}")
             else:
                 thong_bao_truoc = None
 
@@ -654,6 +848,11 @@ class LuongDangNhap(threading.Thread):
                     if tt:
                         if tk.get("nhan_vat") and chuan_hoa(tt["ten"]) != chuan_hoa(tk["nhan_vat"]):
                             self.in_log(f"Chú ý: vào game bằng {tt['ten']}, không phải {tk['nhan_vat']}")
+                        if proxy_mang.da_bat() and self.pid and proxy_mang.dang_di_proxy(self.pid):
+                            tr = proxy_mang.doc_vung_proxy(self.pid) or {}
+                            self.in_log(
+                                f"Proxy sau vào game: hook={tr.get('cach_hook', 0)}, "
+                                f"kết nối qua proxy={tr.get('so_lan_ok', 0)}")
                         self.in_log(f"{tt['ten']} đã vào game [{tt['map']}]")
                         return man
                 elif bay_gio - luc_lam >= GIAY_LAM_LAI and self.lam_buoc(game.lua, man, bay_gio - luc_doi):
@@ -670,11 +869,24 @@ class LuongDangNhap(threading.Thread):
             self.in_log("Bấm Bước tiếp theo")
             return True
         if man == "chon_may_chu":
+            if self.pid and proxy_mang.da_bat():
+                proxy_mang.chuan_bi_proxy_truoc_mang(self.pid, in_log=self.in_log)
             ten = chon_may_chu(lua, cd["may_chu"], self.chi_co_mot_may_chu_thi_chon)
             if ten:
                 self.in_log(f"Chọn máy chủ {ten}")
+                if self.pid and proxy_mang.dang_di_proxy(self.pid):
+                    proxy_mang.cho_ket_noi_socks(
+                        self.pid, giay=18, in_log=self.in_log)
             return bool(ten)
         if man == "dang_nhap":
+            if self.pid and proxy_mang.da_bat() and proxy_mang.dang_di_proxy(self.pid):
+                if not proxy_mang.da_kich_hoat_proxy(self.pid):
+                    giay = int(cd.get("giay_cho_proxy_hook") or 35)
+                    proxy_mang.chuan_bi_dang_nhap_qua_proxy(self.pid, giay, in_log=self.in_log)
+                tr = proxy_mang.doc_vung_proxy(self.pid) or {}
+                if int(tr.get("so_lan_ok") or 0) < 1:
+                    self.in_log(
+                        f"Cảnh báo: chưa có kết nối SOCKS trước đăng nhập — {proxy_mang.tom_tat_proxy(self.pid)}")
             dang_nhap(lua, tk["ten_dang_nhap"], tk["mat_khau"])
             _gan_pid_dang_nhap(tk["ten_dang_nhap"], lua.pid)
             self.in_log(f"Đăng nhập tài khoản {tk['ten_dang_nhap']}")
@@ -722,15 +934,24 @@ class LuongDangNhap(threading.Thread):
         return False
 
     def giai_ma_kiem_tra(self, lua):
-        ma_co_dinh = self.cai_dat["ma_kiem_tra"]
         bat_dau = time.time()
+        giay = max(int(self.cai_dat["giay_toi_da_moi_buoc"]), GIAY_GIAI_MA_DANG_NHAP_TOI_THIEU)
         self.in_log("Giải mã kiểm tra")
         try:
-            so_lan_nhap = giai_hop_ma_kiem_tra(lua, self.dung.is_set, self.cai_dat["giay_toi_da_moi_buoc"])
+            so_lan_nhap = giai_hop_ma_kiem_tra(lua, self.dung.is_set, giay)
         except giai_captcha.LoiGiaiCaptcha as loi:
-            self.in_log(f"Không giải được mã kiểm tra ({loi}), nhập mã {ma_co_dinh}")
-            nhap_ma_kiem_tra(lua, ma_co_dinh)
-            return True
+            self.in_log(f"Không giải được mã kiểm tra ({loi}) — chờ nhập tay tối đa {giay} giây")
+            if cho_nguoi_nhap_ma_kiem_tra(lua, self.dung.is_set, giay):
+                self.in_log(f"Qua mã kiểm tra (nhập tay, {time.time() - bat_dau:.0f} giây)")
+                return True
+            return False
         if so_lan_nhap is not None:
             self.in_log(f"Qua mã kiểm tra (nhập {so_lan_nhap} lần, {time.time() - bat_dau:.0f} giây)")
-        return True
+            if proxy_mang.da_bat() and self.pid and proxy_mang.dang_di_proxy(self.pid):
+                self.in_log(f"Proxy sau captcha: {proxy_mang.tom_tat_proxy(self.pid)}")
+            return True
+        if not dang_hien(lua, "TextValidate"):
+            self.in_log(f"Qua mã kiểm tra (hộp đã đóng, {time.time() - bat_dau:.0f} giây)")
+            return True
+        self.in_log(f"Chưa qua mã kiểm tra sau {giay} giây (có thể nhập tay hoặc đổi ảnh trong game)")
+        return False

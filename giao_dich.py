@@ -96,6 +96,8 @@ class GiaoDich:
         self.dua, self.nhan = dua, nhan
         self.ten_dua, self.ten_nhan = ten_dua, ten_nhan
         self.in_log, self.nen_dung = in_log, nen_dung
+        # [(tên món, số lượng)] đã sang tay người nhận, cộng dồn sau mỗi lần giao dịch (kể cả khi lần sau lỗi).
+        self.chi_tiet = []
 
     def _cho(self, dieu_kien, giay):
         het_han = time.time() + giay
@@ -204,7 +206,11 @@ class GiaoDich:
                     bo_qua.append(o)
             con = [o for o in con if o not in lan_nay]
             tui_sau = doc_tui(self.dua.lua)
-            da_chuyen += sum(1 for o in da_dat if tui_sau.get(o) != tui_dau.get(o))
+            for o in da_dat:
+                if tui_sau.get(o) != tui_dau.get(o):
+                    _, so, ten = tui_dau[o]
+                    self.chi_tiet.append((ten, so))
+                    da_chuyen += 1
         for o in bo_qua:
             ma, so, ten = tui_dau[o]
             self.in_log(f"{self.ten_dua}: không giao dịch được {ten} x{so} (đã khóa?)")

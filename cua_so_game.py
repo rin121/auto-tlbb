@@ -53,6 +53,14 @@ def vung_client(hwnd):
     return x, y, rong, cao
 
 
+def chup_cua_so(hwnd):
+    """Chụp vùng client của HWND (game hoặc GAuto/ChickenAuto)."""
+    from PIL import ImageGrab
+
+    x, y, rong, cao = vung_client(hwnd)
+    return ImageGrab.grab(bbox=(x, y, x + rong, y + cao), all_screens=True)
+
+
 def dua_cua_so_len_truoc(hwnd):
     """Chụp ảnh theo vùng màn hình nên cửa sổ game phải nằm trên cùng, không bị che."""
     if win32gui.IsIconic(hwnd):

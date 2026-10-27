@@ -16,7 +16,7 @@ TeamMessageBox1 luôn hiện (chứa 5 khung hỏi), nên xét từng khung Team
 import time
 
 from bang_ma_viscii import giai_ma
-from dang_nhap import bo_ma_mau, trong_cua_so
+from dang_nhap import bo_dau, bo_ma_mau, trong_cua_so
 
 # (cửa sổ, hàm nút Duyệt, nút Duyệt, ô nội dung)
 CAC_HOP = (
@@ -30,6 +30,8 @@ CUA_SO_HOI_NHOM = "TeamMessageBox1"
 SO_KHUNG_HOI_NHOM = 5
 # Bấm Duyệt mà hộp không đóng thì chờ chừng này giây mới bấm lại, để không bấm liên tục vào một hộp bấm không ăn.
 GIAY_TRUOC_KHI_BAM_LAI = 3
+# Hộp hỏi thoát game (bấm X / Alt+F4 cửa sổ game): Duyệt là game tự tắt, không bao giờ tự bấm.
+CAC_CHU_KHONG_DUYET = ("roi bo the gioi",)
 MA_CON_HIEN = 'local con = "0" if {dieu_kien} then con = "1" end '
 
 MA_DOC_NOI_DUNG = 'local ok, chu = pcall(function() return {o}:GetText() end) if not ok or chu == nil then chu = "" end '
@@ -66,6 +68,18 @@ def ma_duyet_hop(cua_so, ham, nut, o_noi_dung):
         + 'return "da_duyet\\t" .. con .. "\\t" .. chu'))
 
 
+def ma_doc_hop(cua_so, o_noi_dung):
+    """Lua trả về nội dung hộp đang hiện (không bấm gì), "" nếu hộp đã đóng."""
+    return trong_cua_so(cua_so, (
+        f'if not IsWindowShow("{cua_so}") then return "" end '
+        + MA_DOC_NOI_DUNG.format(o=o_noi_dung) + 'return chu'))
+
+
+def khong_duoc_duyet(noi_dung):
+    chu = bo_dau(noi_dung)
+    return any(tu in chu for tu in CAC_CHU_KHONG_DUYET)
+
+
 def ma_duyet_khung_hoi_nhom(so):
     kiem_tra_hien = f'pcall(function() return TeamMessageBox{so}_Frame:IsVisible() end)'
     return trong_cua_so(CUA_SO_HOI_NHOM, (
@@ -89,14 +103,23 @@ class TuDuyet:
         self.lua = lua
         self.in_log = in_log
         self.da_bam = {}
+        self.da_bao_bo_qua = set()
 
     def kiem_tra(self, cho_ty_thi):
         """Duyệt mọi hộp đang hiện. Lỗi Lua thì ném LoiLua."""
         dang_hien = self.lua.chay(ma_hop_dang_hien(cho_ty_thi), so_lan_thu=1).decode("latin-1").split()
         self.da_bam = {ten: luc for ten, luc in self.da_bam.items() if ten in dang_hien}
+        self.da_bao_bo_qua &= set(dang_hien)
         theo_ten = {hop[0]: hop for hop in CAC_HOP + (HOP_TY_THI,)}
         for ten in dang_hien:
             if ten in theo_ten:
+                cua_so, _, _, o_noi_dung = theo_ten[ten]
+                noi_dung = bo_ma_mau(giai_ma(self.lua.chay(ma_doc_hop(cua_so, o_noi_dung), so_lan_thu=1)))
+                if khong_duoc_duyet(noi_dung):
+                    if ten not in self.da_bao_bo_qua:
+                        self.da_bao_bo_qua.add(ten)
+                        self.in_log(f"Không tự duyệt [{ten}] (hộp thoát game): {noi_dung.replace(chr(10), ' ')}")
+                    continue
                 ma = ma_duyet_hop(*theo_ten[ten])
             else:
                 ma = ma_duyet_khung_hoi_nhom(int(ten[len("TeamMessageBox"):]))

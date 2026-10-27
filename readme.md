@@ -104,3 +104,13 @@ powershell -ExecutionPolicy Bypass -File dong_goi\build_dung_thu.ps1 -SoNgay 3
 
   ## Build:
   - powershell -ExecutionPolicy Bypass -File "d:\Games\ThienLongCityCSClientFull2026\AutoHoc\dong_goi\build_va_deploy.ps1"
+
+
+# Win10/11
+powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1" -KhongWin7
+
+# Win7
+powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1" -ChiWin7
+
+# Cả hai (cần .venv + .venv_win7)
+powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1"

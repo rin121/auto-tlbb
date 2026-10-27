@@ -1,0 +1,1172 @@
+[20:03:34.342] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_pmp\ghi_pmp_20261027_200334.txt (mọi cửa sổ game)
+[20:03:34.382] GaoDẻLâu: vào map [Lạc Dương] (160, 199) máu 100% nội 100% | đội trưởng
+[20:03:34.401] caychay35: vào map [Lạc Dương] (160, 196) máu 100% nội 100%
+[20:03:34.414] caychay32: vào map [Lạc Dương] (157, 200) máu 69% nội 35%
+[20:03:34.419] caychay34: vào map [Lạc Dương] (157, 202) máu 62% nội 28%
+[20:03:34.931] GaoDẻLâu: đi tới (161, 196)
+[20:03:34.997] caychay35: đi tới (157, 200)
+[20:03:35.031] caychay34: đi tới (160, 200)
+[20:03:35.572] caychay32: đi tới (161, 198)
+[20:03:35.583] caychay35: đi tới (160, 199)
+[20:03:35.629] caychay34: đi tới (161, 197)
+[20:05:12.999] GaoDẻLâu: chọn mục tiêu Trình Thanh Sương (100% máu) tại (162, 196)
+[20:05:13.033] GaoDẻLâu: mở hội thoại NPC [Trình Thanh Sương]:
+        - #{PMF_20080521_01} (mã -1, -1; loại text)
+        - Sơ chiến Phiêu Miểu Phong (mã 402276, 1; loại id)
+        - Khiêu chiến Phiêu Miểu Phong (mã 402263, 1; loại id)
+        - #{INTERFACE_XML_1183} (mã 402289, 1; loại id)
+        - #{INTERFACE_XML_1184} (mã 402289, 2; loại id)
+        - Đổi danh hiệu Phiêu Miểu Phong (mã 402305, 10; loại id)
+        - #{PMF_090220_01} (mã 402305, 11; loại id)
+[20:05:15.864] GaoDẻLâu: đóng hội thoại NPC
+[20:05:15.885] GaoDẻLâu: thông báo: Dịch chuyển thành công!
+[20:05:16.396] GaoDẻLâu: bỏ chọn mục tiêu
+[20:05:17.224] GaoDẻLâu: vào map [Phiêu Miểu Phong] (124, 164) máu 0% nội 0% | đội trưởng
+[20:05:17.411] caychay35: vào map [Phiêu Miểu Phong] (124, 164) máu 0% nội 0%
+[20:05:17.505] caychay32: vào map [Phiêu Miểu Phong] (124, 164) máu 0% nội 0%
+[20:05:17.517] caychay34: vào map [Phiêu Miểu Phong] (124, 164) máu 0% nội 0%
+[20:05:18.208] GaoDẻLâu: máu 0% -> 100%
+[20:05:18.208] GaoDẻLâu: nội 0% -> 100%
+[20:05:18.208] GaoDẻLâu: lên thú
+[20:05:18.208] GaoDẻLâu: không còn là đội trưởng
+[20:05:18.390] caychay32: máu 0% -> 69%
+[20:05:18.391] caychay32: nội 0% -> 35%
+[20:05:18.443] caychay34: máu 0% -> 62%
+[20:05:18.443] caychay34: nội 0% -> 28%
+[20:05:18.637] caychay35: máu 0% -> 100%
+[20:05:18.637] caychay35: nội 0% -> 100%
+[20:05:18.637] caychay35: lên thú
+[20:05:18.773] GaoDẻLâu: đang theo đội
+[20:05:18.773] GaoDẻLâu: thành đội trưởng
+[20:05:18.984] caychay32: đang theo đội
+[20:05:19.037] caychay34: đang theo đội
+[20:05:19.271] caychay35: đang theo đội
+[20:05:19.725] caychay34: thấy Nga Mi Biến Dị tại (122, 163) máu 100%
+[20:05:19.897] GaoDẻLâu: đi tới (124, 158)
+[20:05:20.284] caychay34: đi tới (124, 160)
+[20:05:20.350] caychay34: Nga Mi Biến Dị biến mất (máu cuối 100%)
+[20:05:20.435] GaoDẻLâu: đi tới (124, 151)
+[20:05:20.467] GaoDẻLâu: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:05:20.479] caychay35: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:05:20.817] caychay32: đi tới (124, 157)
+[20:05:20.877] caychay34: đi tới (124, 152)
+[20:05:20.882] caychay32: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:05:20.951] caychay34: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:05:20.999] GaoDẻLâu: đi tới (124, 143)
+[20:05:21.035] caychay35: đi tới (124, 158)
+[20:05:21.404] caychay32: đi tới (124, 149)
+[20:05:21.498] caychay34: đi tới (124, 143)
+[20:05:21.543] GaoDẻLâu: đi tới (125, 136)
+[20:05:21.607] caychay35: đi tới (124, 151)
+[20:05:21.999] caychay32: đi tới (124, 139)
+[20:05:22.081] GaoDẻLâu: đi tới (125, 131)
+[20:05:22.082] caychay34: đi tới (125, 135)
+[20:05:22.126] GaoDẻLâu: thấy Nga Mi Biến Dị tại (124, 147) máu 100%
+[20:05:22.209] caychay35: đi tới (124, 141)
+[20:05:22.588] caychay32: đi tới (125, 133)
+[20:05:22.659] caychay34: đi tới (125, 132)
+[20:05:22.681] GaoDẻLâu: Nga Mi Biến Dị biến mất (máu cuối 100%)
+[20:05:22.847] caychay35: đi tới (125, 134)
+[20:05:24.927] GaoDẻLâu: đi tới (125, 125)
+[20:05:25.142] caychay34: đi tới (125, 128)
+[20:05:25.315] caychay35: đi tới (125, 131)
+[20:05:25.484] GaoDẻLâu: đi tới (125, 118)
+[20:05:25.666] caychay32: đi tới (125, 125)
+[20:05:25.719] caychay34: đi tới (125, 121)
+[20:05:25.945] caychay35: đi tới (125, 124)
+[20:05:26.047] GaoDẻLâu: đi tới (125, 112)
+[20:05:26.263] caychay32: đi tới (125, 119)
+[20:05:26.325] caychay34: đi tới (125, 113)
+[20:05:26.514] caychay35: đi tới (125, 118)
+[20:05:26.619] GaoDẻLâu: đi tới (124, 103)
+[20:05:26.844] caychay32: đi tới (125, 111)
+[20:05:26.898] caychay34: đi tới (124, 105)
+[20:05:27.085] caychay35: đi tới (125, 110)
+[20:05:27.181] GaoDẻLâu: đi tới (124, 96)
+[20:05:27.436] caychay32: đi tới (124, 102)
+[20:05:27.489] caychay34: đi tới (124, 98)
+[20:05:27.672] caychay35: đi tới (124, 103)
+[20:05:27.739] GaoDẻLâu: đi tới (121, 89)
+[20:05:27.773] GaoDẻLâu: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:28.011] caychay32: đi tới (124, 96)
+[20:05:28.031] caychay34: đi tới (123, 92)
+[20:05:28.077] caychay32: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:28.088] caychay34: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:28.273] caychay35: đi tới (124, 95)
+[20:05:28.292] GaoDẻLâu: đi tới (120, 86)
+[20:05:28.348] caychay35: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:28.605] caychay32: đi tới (122, 90)
+[20:05:28.645] caychay34: đi tới (120, 87)
+[20:05:28.862] GaoDẻLâu: chọn mục tiêu Cáp Đại Bá (100% máu) tại (121, 86)
+[20:05:28.873] GaoDẻLâu: mở hội thoại NPC [Cáp Đại Bá]:
+        - #{PMF_20080521_06} (mã -1, -1; loại text)
+        - Khiêu chiến (mã 402270, 1; loại id)
+[20:05:28.882] caychay35: đi tới (122, 89)
+[20:05:29.213] caychay32: đi tới (120, 87)
+[20:05:30.006] GaoDẻLâu: đóng hội thoại NPC
+[20:05:30.815] caychay35: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:05:31.143] GaoDẻLâu: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:05:31.145] caychay32: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:05:31.153] caychay34: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:05:32.102] caychay35: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:05:32.219] GaoDẻLâu: bỏ theo đội
+[20:05:32.276] GaoDẻLâu: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:05:32.276] GaoDẻLâu: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:05:32.282] caychay32: bỏ theo đội
+[20:05:32.321] caychay34: bỏ theo đội
+[20:05:32.359] caychay32: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:05:32.359] caychay32: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:05:32.359] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:05:32.360] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:05:32.424] caychay34: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:05:32.424] caychay34: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:05:32.424] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:05:32.424] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:05:32.626] caychay35: bỏ theo đội
+[20:05:32.701] caychay35: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:05:32.967] caychay34: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:05:32.979] caychay32: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:05:33.278] caychay35: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:05:33.366] GaoDẻLâu: xuống thú
+[20:05:33.399] GaoDẻLâu: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:05:33.399] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:05:33.967] GaoDẻLâu: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:05:34.163] caychay32: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:05:34.172] caychay34: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:05:34.486] caychay35: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:05:35.080] GaoDẻLâu: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:05:35.088] caychay35: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:05:35.287] caychay32: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:05:35.361] caychay34: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:05:36.172] GaoDẻLâu: thông báo: Cuộc chiến bắt đầu
+[20:05:36.253] caychay35: thông báo: Cuộc chiến bắt đầu
+[20:05:36.514] caychay32: thông báo: Cuộc chiến bắt đầu
+[20:05:36.526] caychay34: thông báo: Cuộc chiến bắt đầu
+[20:05:37.734] caychay32: Cáp Đại Bá biến mất (máu cuối 100%)
+[20:05:37.830] GaoDẻLâu: bỏ chọn mục tiêu
+[20:05:37.864] GaoDẻLâu: Cáp Đại Bá biến mất (máu cuối 100%)
+[20:05:37.962] caychay35: Cáp Đại Bá biến mất (máu cuối 100%)
+[20:05:38.242] caychay34: Cáp Đại Bá biến mất (máu cuối 100%)
+[20:05:39.566] caychay32: chọn mục tiêu Cáp Đại Bá (100% máu) tại (121, 88)
+[20:05:39.612] caychay32: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:39.739] caychay35: thấy Cáp Đại Bá tại (124, 86) máu 100%
+[20:05:39.941] caychay34: chọn mục tiêu Cáp Đại Bá (100% máu) tại (121, 84)
+[20:05:39.988] caychay34: thấy Cáp Đại Bá tại (123, 85) máu 100%
+[20:05:40.023] GaoDẻLâu: chọn mục tiêu Cáp Đại Bá (100% máu) tại (119, 85)
+[20:05:40.057] GaoDẻLâu: thấy Cáp Đại Bá tại (122, 85) máu 100%
+[20:05:40.924] caychay35: Cáp Đại Bá máu 100% -> 93%
+[20:05:41.165] caychay34: Cáp Đại Bá máu 100% -> 93%
+[20:05:41.180] GaoDẻLâu: Cáp Đại Bá máu 100% -> 93%
+[20:05:41.425] caychay32: Cáp Đại Bá máu 100% -> 93%
+[20:05:41.747] GaoDẻLâu: Cáp Đại Bá máu 93% -> 86%
+[20:05:41.753] caychay34: Cáp Đại Bá máu 93% -> 86%
+[20:05:42.025] caychay32: Cáp Đại Bá máu 93% -> 86%
+[20:05:42.189] caychay35: Cáp Đại Bá máu 93% -> 86%
+[20:05:43.782] caychay32: Cáp Đại Bá máu 86% -> 80%
+[20:05:43.919] caychay35: Cáp Đại Bá máu 86% -> 80%
+[20:05:44.132] caychay34: Cáp Đại Bá máu 86% -> 80%
+[20:05:44.364] caychay32: Cáp Đại Bá máu 80% -> 67%
+[20:05:44.504] caychay35: Cáp Đại Bá máu 80% -> 67%
+[20:05:44.508] GaoDẻLâu: Cáp Đại Bá máu 86% -> 67%
+[20:05:44.738] caychay34: Cáp Đại Bá máu 80% -> 59%
+[20:05:44.972] caychay32: Cáp Đại Bá máu 67% -> 59%
+[20:05:45.066] GaoDẻLâu: Cáp Đại Bá máu 67% -> 59%
+[20:05:45.109] caychay35: Cáp Đại Bá máu 67% -> 59%
+[20:05:45.339] caychay34: Cáp Đại Bá máu 59% -> 53%
+[20:05:45.550] caychay32: Cáp Đại Bá máu 59% -> 53%
+[20:05:45.625] GaoDẻLâu: Cáp Đại Bá máu 59% -> 53%
+[20:05:45.721] caychay35: Cáp Đại Bá máu 59% -> 53%
+[20:05:46.194] GaoDẻLâu: thông báo: #{ResultText_6}
+[20:05:46.357] caychay35: Cáp Đại Bá máu 53% -> 46%
+[20:05:46.491] caychay34: Cáp Đại Bá máu 53% -> 46%
+[20:05:46.714] caychay32: Cáp Đại Bá máu 53% -> 46%
+[20:05:46.767] GaoDẻLâu: Cáp Đại Bá máu 53% -> 46%
+[20:05:47.295] caychay32: Cáp Đại Bá máu 46% -> 38%
+[20:05:47.337] GaoDẻLâu: Cáp Đại Bá máu 46% -> 38%
+[20:05:47.537] caychay35: Cáp Đại Bá máu 46% -> 38%
+[20:05:47.674] caychay34: Cáp Đại Bá máu 46% -> 38%
+[20:05:47.920] GaoDẻLâu: Cáp Đại Bá máu 38% -> 30%
+[20:05:47.985] caychay32: Cáp Đại Bá máu 38% -> 30%
+[20:05:48.161] caychay35: Cáp Đại Bá máu 38% -> 30%
+[20:05:48.262] caychay34: Cáp Đại Bá máu 38% -> 27%
+[20:05:48.478] GaoDẻLâu: Cáp Đại Bá máu 30% -> 27%
+[20:05:48.603] caychay32: Cáp Đại Bá máu 30% -> 27%
+[20:05:48.760] caychay35: Cáp Đại Bá máu 30% -> 27%
+[20:05:49.040] GaoDẻLâu: Cáp Đại Bá máu 27% -> 20%
+[20:05:49.186] caychay32: Cáp Đại Bá máu 27% -> 20%
+[20:05:49.343] caychay35: Cáp Đại Bá máu 27% -> 20%
+[20:05:49.479] caychay34: Cáp Đại Bá máu 27% -> 12%
+[20:05:49.599] GaoDẻLâu: Cáp Đại Bá máu 20% -> 12%
+[20:05:49.775] caychay32: Cáp Đại Bá máu 20% -> 12%
+[20:05:49.963] caychay35: Cáp Đại Bá máu 20% -> 12%
+[20:05:50.570] caychay35: Cáp Đại Bá máu 12% -> 6%
+[20:05:50.715] caychay34: Cáp Đại Bá máu 12% -> 6%
+[20:05:50.725] GaoDẻLâu: Cáp Đại Bá máu 12% -> 6%
+[20:05:50.993] caychay32: Cáp Đại Bá máu 12% -> 6%
+[20:05:51.170] caychay35: Cáp Đại Bá máu 6% -> 2%
+[20:05:51.296] GaoDẻLâu: Cáp Đại Bá máu 6% -> 2%
+[20:05:51.321] caychay34: Cáp Đại Bá máu 6% -> 2%
+[20:05:51.575] caychay32: thông báo: #{FBSJ_081209_04}
+[20:05:51.575] caychay32: thông báo: Các hạ nhận được 4948189 điểm kinh nghiệm.
+[20:05:51.575] caychay32: thông báo: Trân Thú của các hạ nhận được 2524586 điểm kinh nghiệm.
+[20:05:51.577] caychay32: Cáp Đại Bá máu 6% -> 2%
+[20:05:51.747] caychay35: thông báo: #{FBSJ_081209_04}
+[20:05:51.747] caychay35: thông báo: Các hạ nhận được 5049173 điểm kinh nghiệm.
+[20:05:51.747] caychay35: thông báo: Trân Thú của các hạ nhận được 2524586 điểm kinh nghiệm.
+[20:05:51.838] GaoDẻLâu: thông báo: #{FBSJ_081209_04}
+[20:05:51.838] GaoDẻLâu: thông báo: #{ResultText_49}
+[20:05:51.838] GaoDẻLâu: thông báo: Các hạ đạt 3029503 điểm kinh nghiệm, đồng thời đạt 3029503 điểm thưởng kinh nghiệm
+[20:05:51.841] GaoDẻLâu: Cáp Đại Bá chết
+[20:05:51.922] caychay34: thông báo: #{FBSJ_081209_04}
+[20:05:51.922] caychay34: thông báo: Các hạ nhận được 5049173 điểm kinh nghiệm.
+[20:05:51.922] caychay34: thông báo: Trân Thú của các hạ nhận được 2524586 điểm kinh nghiệm.
+[20:05:51.926] caychay34: Cáp Đại Bá chết
+[20:05:52.214] caychay32: Cáp Đại Bá chết
+[20:05:52.351] caychay35: Cáp Đại Bá chết
+[20:05:56.610] caychay34: bỏ chọn mục tiêu
+[20:05:56.783] GaoDẻLâu: bỏ chọn mục tiêu
+[20:05:56.933] caychay32: bỏ chọn mục tiêu
+[20:05:59.585] GaoDẻLâu: lên thú
+[20:06:10.151] caychay34: đang theo đội
+[20:06:10.239] caychay34: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:06:10.287] GaoDẻLâu: đi tới (114, 88)
+[20:06:10.287] GaoDẻLâu: đang theo đội
+[20:06:10.316] GaoDẻLâu: thông báo: caychay34 tham gia đội ngũ đi theo
+[20:06:10.316] GaoDẻLâu: thông báo: caychay32 tham gia đội ngũ đi theo
+[20:06:10.316] GaoDẻLâu: thông báo: caychay35 tham gia đội ngũ đi theo
+[20:06:10.406] caychay32: đi tới (120, 85)
+[20:06:10.407] caychay32: đang theo đội
+[20:06:10.418] caychay35: đi tới (120, 85)
+[20:06:10.418] caychay35: đang theo đội
+[20:06:10.484] caychay32: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:06:10.513] caychay35: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:06:10.776] caychay34: đi tới (116, 87)
+[20:06:10.842] GaoDẻLâu: đi tới (108, 91)
+[20:06:10.998] caychay32: đi tới (115, 88)
+[20:06:11.047] caychay35: đi tới (116, 87)
+[20:06:11.378] caychay34: đi tới (110, 90)
+[20:06:11.394] GaoDẻLâu: đi tới (101, 94)
+[20:06:11.592] caychay32: đi tới (109, 91)
+[20:06:11.648] caychay35: đi tới (111, 90)
+[20:06:11.942] GaoDẻLâu: đi tới (95, 98)
+[20:06:12.027] caychay34: đi tới (103, 93)
+[20:06:12.147] caychay32: đi tới (102, 93)
+[20:06:12.218] caychay35: đi tới (105, 92)
+[20:06:12.493] GaoDẻLâu: đi tới (91, 104)
+[20:06:12.622] caychay34: đi tới (94, 99)
+[20:06:12.698] caychay32: đi tới (95, 98)
+[20:06:12.797] caychay35: đi tới (98, 95)
+[20:06:13.035] GaoDẻLâu: đi tới (87, 109)
+[20:06:13.229] caychay34: đi tới (89, 107)
+[20:06:13.290] caychay32: đi tới (90, 106)
+[20:06:13.375] caychay35: đi tới (92, 102)
+[20:06:13.600] GaoDẻLâu: đi tới (80, 111)
+[20:06:13.789] caychay34: đi tới (83, 111)
+[20:06:13.877] caychay32: đi tới (84, 111)
+[20:06:13.937] caychay35: đi tới (87, 110)
+[20:06:14.168] GaoDẻLâu: đi tới (73, 112)
+[20:06:14.378] caychay34: đi tới (75, 111)
+[20:06:14.456] caychay32: đi tới (77, 111)
+[20:06:14.529] caychay35: đi tới (79, 111)
+[20:06:14.730] GaoDẻLâu: đi tới (66, 114)
+[20:06:14.991] caychay34: đi tới (69, 113)
+[20:06:15.096] caychay32: đi tới (69, 113)
+[20:06:15.099] caychay35: đi tới (72, 112)
+[20:06:15.283] GaoDẻLâu: đi tới (59, 114)
+[20:06:15.574] caychay34: đi tới (63, 114)
+[20:06:15.697] caychay32: đi tới (63, 114)
+[20:06:15.708] caychay35: đi tới (65, 114)
+[20:06:15.867] GaoDẻLâu: đi tới (51, 113)
+[20:06:15.892] GaoDẻLâu: thấy Tang Thổ Công tại (41, 105) máu 100%
+[20:06:16.137] caychay34: đi tới (55, 114)
+[20:06:16.185] caychay34: thấy Tang Thổ Công tại (41, 105) máu 100%
+[20:06:16.276] caychay35: đi tới (60, 114)
+[20:06:16.292] caychay32: đi tới (57, 114)
+[20:06:16.337] caychay32: thấy Tang Thổ Công tại (41, 105) máu 100%
+[20:06:16.405] GaoDẻLâu: đi tới (47, 108)
+[20:06:16.735] caychay34: đi tới (47, 110)
+[20:06:16.844] caychay35: đi tới (53, 113)
+[20:06:16.859] caychay32: đi tới (49, 111)
+[20:06:16.911] caychay35: thấy Tang Thổ Công tại (41, 105) máu 100%
+[20:06:16.971] GaoDẻLâu: đi tới (42, 108)
+[20:06:17.293] caychay34: đi tới (43, 107)
+[20:06:17.434] caychay35: đi tới (47, 109)
+[20:06:17.453] caychay32: đi tới (44, 107)
+[20:06:17.519] GaoDẻLâu: chọn mục tiêu Tang Thổ Công (100% máu) tại (42, 107)
+[20:06:17.999] caychay35: đi tới (44, 107)
+[20:06:18.117] GaoDẻLâu: mở hội thoại NPC [Tang Thổ Công]:
+        - #{PMF_20080521_08} (mã -1, -1; loại text)
+        - Khiêu chiến (mã 402271, 1; loại id)
+[20:06:18.658] GaoDẻLâu: đóng hội thoại NPC
+[20:06:20.229] caychay34: bỏ theo đội
+[20:06:20.364] GaoDẻLâu: bỏ theo đội
+[20:06:20.434] caychay32: bỏ theo đội
+[20:06:20.439] caychay35: bỏ theo đội
+[20:06:21.502] GaoDẻLâu: xuống thú
+[20:06:25.115] caychay34: Tang Thổ Công biến mất (máu cuối 100%)
+[20:06:25.247] caychay35: Tang Thổ Công biến mất (máu cuối 100%)
+[20:06:25.260] caychay32: Tang Thổ Công biến mất (máu cuối 100%)
+[20:06:25.451] GaoDẻLâu: thấy Tang Thổ Công tại (41, 105) máu 100%
+[20:06:25.452] GaoDẻLâu: Tang Thổ Công biến mất (máu cuối 100%)
+[20:06:25.677] caychay34: chọn mục tiêu Tang Thổ Công (100% máu) tại (43, 106)
+[20:06:25.760] caychay34: thấy Tang Thổ Công tại (41, 105) máu 97%
+[20:06:25.805] caychay32: chọn mục tiêu Tang Thổ Công (97% máu) tại (44, 107)
+[20:06:25.862] caychay32: thấy Tang Thổ Công tại (41, 105) máu 97%
+[20:06:25.863] caychay35: thấy Tang Thổ Công tại (41, 105) máu 97%
+[20:06:25.999] GaoDẻLâu: Tang Thổ Công máu 100% -> 97%
+[20:06:26.560] GaoDẻLâu: Tang Thổ Công máu 97% -> 91%
+[20:06:27.016] caychay34: Tang Thổ Công máu 97% -> 91%
+[20:06:27.042] caychay35: Tang Thổ Công máu 97% -> 91%
+[20:06:27.066] caychay32: Tang Thổ Công máu 97% -> 91%
+[20:06:27.614] caychay35: Tang Thổ Công máu 91% -> 86%
+[20:06:27.617] caychay34: Tang Thổ Công máu 91% -> 86%
+[20:06:27.682] caychay32: Tang Thổ Công máu 91% -> 86%
+[20:06:27.686] GaoDẻLâu: Tang Thổ Công máu 91% -> 86%
+[20:06:28.142] caychay34: bỏ chọn mục tiêu
+[20:06:28.197] caychay35: Tang Thổ Công biến mất (máu cuối 86%)
+[20:06:28.205] caychay32: bỏ chọn mục tiêu
+[20:06:28.207] caychay34: Tang Thổ Công biến mất (máu cuối 86%)
+[20:06:28.210] GaoDẻLâu: bỏ chọn mục tiêu
+[20:06:28.242] GaoDẻLâu: thông báo: #{ResultText_8}
+[20:06:28.244] GaoDẻLâu: Tang Thổ Công biến mất (máu cuối 86%)
+[20:06:28.257] caychay32: thông báo: #{ResultText_8}
+[20:06:28.260] caychay32: Tang Thổ Công biến mất (máu cuối 86%)
+[20:06:28.838] caychay34: thông báo: #{ResultText_8}
+[20:06:32.507] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:06:32.626] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:06:33.256] GaoDẻLâu: chọn mục tiêu Bích lân cương thi (100% máu) tại (42, 107)
+[20:06:33.291] GaoDẻLâu: thấy Bích lân cương thi tại (41, 105) máu 100%
+[20:06:33.618] caychay35: thấy Bích lân cương thi tại (41, 105) máu 100%
+[20:06:33.694] caychay32: chọn mục tiêu Bích lân cương thi (100% máu) tại (44, 107)
+[20:06:33.760] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:06:33.760] caychay34: chọn mục tiêu Bích lân cương thi (100% máu) tại (43, 106)
+[20:06:33.763] caychay32: thấy Bích lân cương thi tại (41, 105) máu 100%
+[20:06:33.829] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:06:33.832] caychay34: thấy Bích lân cương thi tại (41, 105) máu 100%
+[20:06:33.848] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:06:46.717] GaoDẻLâu: Bích lân cương thi chết
+[20:06:46.812] caychay35: Bích lân cương thi chết
+[20:06:46.892] caychay32: Bích lân cương thi chết
+[20:06:47.251] caychay34: Bích lân cương thi chết
+[20:06:48.115] caychay32: thấy Tang Thổ Công tại (41, 105) máu 86%
+[20:06:48.355] GaoDẻLâu: chọn mục tiêu Tang Thổ Công (79% máu) tại (42, 107)
+[20:06:48.361] caychay34: chọn mục tiêu Tang Thổ Công (79% máu) tại (43, 106)
+[20:06:48.389] GaoDẻLâu: thấy Tang Thổ Công tại (41, 105) máu 79%
+[20:06:48.396] caychay34: thấy Tang Thổ Công tại (41, 105) máu 79%
+[20:06:48.590] caychay35: thấy Tang Thổ Công tại (41, 105) máu 79%
+[20:06:48.632] caychay32: chọn mục tiêu Tang Thổ Công (79% máu) tại (44, 107)
+[20:06:48.701] caychay32: Tang Thổ Công máu 86% -> 79%
+[20:06:49.520] GaoDẻLâu: Tang Thổ Công máu 79% -> 75%
+[20:06:49.691] caychay34: Tang Thổ Công máu 79% -> 75%
+[20:06:49.737] caychay35: Tang Thổ Công máu 79% -> 75%
+[20:06:49.870] caychay32: Tang Thổ Công máu 79% -> 75%
+[20:06:51.486] caychay35: Tang Thổ Công máu 75% -> 72%
+[20:06:51.518] caychay34: Tang Thổ Công máu 75% -> 72%
+[20:06:51.688] caychay32: Tang Thổ Công máu 75% -> 72%
+[20:06:51.882] GaoDẻLâu: Tang Thổ Công máu 75% -> 72%
+[20:06:52.591] caychay35: xuống thú
+[20:06:53.032] GaoDẻLâu: Tang Thổ Công máu 72% -> 69%
+[20:06:53.156] caychay35: chọn mục tiêu Tang Thổ Công (69% máu) tại (46, 108)
+[20:06:53.200] caychay35: Tang Thổ Công máu 72% -> 69%
+[20:06:53.422] caychay34: Tang Thổ Công máu 72% -> 69%
+[20:06:53.488] caychay32: Tang Thổ Công máu 72% -> 69%
+[20:06:54.333] caychay35: Tang Thổ Công máu 69% -> 66%
+[20:06:54.698] caychay34: Tang Thổ Công máu 69% -> 66%
+[20:06:54.703] caychay32: Tang Thổ Công máu 69% -> 66%
+[20:06:54.858] GaoDẻLâu: Tang Thổ Công máu 69% -> 65%
+[20:06:55.911] caychay34: Tang Thổ Công máu 66% -> 62%
+[20:06:55.936] caychay32: Tang Thổ Công máu 66% -> 62%
+[20:06:56.021] caychay35: Tang Thổ Công máu 66% -> 62%
+[20:06:56.137] GaoDẻLâu: Tang Thổ Công máu 65% -> 62%
+[20:06:57.181] caychay32: Tang Thổ Công biến mất (máu cuối 62%)
+[20:06:57.261] GaoDẻLâu: bỏ chọn mục tiêu
+[20:06:57.317] GaoDẻLâu: Tang Thổ Công biến mất (máu cuối 62%)
+[20:06:57.624] caychay34: bỏ chọn mục tiêu
+[20:06:57.668] caychay35: bỏ chọn mục tiêu
+[20:06:57.703] caychay34: Tang Thổ Công biến mất (máu cuối 62%)
+[20:06:57.709] caychay32: bỏ chọn mục tiêu
+[20:06:57.712] caychay35: Tang Thổ Công biến mất (máu cuối 62%)
+[20:06:58.267] caychay35: thông báo: #{ResultText_8}
+[20:07:02.474] caychay32: thấy Bích lân cương thi tại (42, 106) máu 100%
+[20:07:02.502] caychay35: thấy Bích lân cương thi tại (42, 106) máu 100%
+[20:07:02.671] caychay34: thấy Bích lân cương thi tại (42, 106) máu 100%
+[20:07:02.971] GaoDẻLâu: chọn mục tiêu Bích lân cương thi (100% máu) tại (42, 107)
+[20:07:03.005] caychay32: chọn mục tiêu Bích lân cương thi (100% máu) tại (44, 107)
+[20:07:03.006] GaoDẻLâu: thấy Bích lân cương thi tại (42, 106) máu 100%
+[20:07:03.023] caychay35: chọn mục tiêu Bích lân cương thi (100% máu) tại (46, 108)
+[20:07:03.217] caychay34: chọn mục tiêu Bích lân cương thi (100% máu) tại (43, 106)
+[20:07:17.546] caychay35: thấy Tang Thổ Công tại (42, 106) máu 58%
+[20:07:17.575] caychay32: thấy Tang Thổ Công tại (42, 106) máu 58%
+[20:07:17.710] GaoDẻLâu: thấy Tang Thổ Công tại (42, 106) máu 58%
+[20:07:17.752] caychay34: thấy Tang Thổ Công tại (42, 106) máu 58%
+[20:07:18.189] caychay32: Bích lân cương thi chết
+[20:07:18.203] caychay35: Bích lân cương thi chết
+[20:07:18.269] GaoDẻLâu: Bích lân cương thi chết
+[20:07:18.376] caychay34: Bích lân cương thi chết
+[20:07:18.726] caychay35: chọn mục tiêu Tang Thổ Công (58% máu) tại (46, 108)
+[20:07:19.319] caychay32: chọn mục tiêu Tang Thổ Công (58% máu) tại (44, 106)
+[20:07:19.414] GaoDẻLâu: chọn mục tiêu Tang Thổ Công (58% máu) tại (42, 107)
+[20:07:19.490] caychay34: chọn mục tiêu Tang Thổ Công (58% máu) tại (41, 105)
+[20:07:20.134] caychay34: Tang Thổ Công máu 58% -> 55%
+[20:07:20.581] GaoDẻLâu: Tang Thổ Công máu 58% -> 55%
+[20:07:20.623] caychay32: Tang Thổ Công máu 58% -> 55%
+[20:07:20.660] caychay35: Tang Thổ Công máu 58% -> 55%
+[20:07:21.702] GaoDẻLâu: Tang Thổ Công máu 55% -> 52%
+[20:07:21.853] caychay32: Tang Thổ Công máu 55% -> 52%
+[20:07:21.862] caychay35: Tang Thổ Công máu 55% -> 52%
+[20:07:21.923] caychay34: Tang Thổ Công máu 55% -> 52%
+[20:07:23.042] caychay32: Tang Thổ Công máu 52% -> 49%
+[20:07:23.060] caychay35: Tang Thổ Công máu 52% -> 49%
+[20:07:23.176] caychay34: Tang Thổ Công máu 52% -> 49%
+[20:07:23.415] GaoDẻLâu: Tang Thổ Công máu 52% -> 48%
+[20:07:24.319] caychay32: Tang Thổ Công máu 49% -> 46%
+[20:07:24.337] caychay35: Tang Thổ Công máu 49% -> 46%
+[20:07:24.395] caychay34: Tang Thổ Công máu 49% -> 46%
+[20:07:25.122] GaoDẻLâu: thông báo: #{ResultText_6}
+[20:07:25.125] GaoDẻLâu: Tang Thổ Công máu 48% -> 45%
+[20:07:25.501] caychay35: Tang Thổ Công máu 46% -> 43%
+[20:07:25.559] caychay32: Tang Thổ Công máu 46% -> 43%
+[20:07:25.588] caychay34: Tang Thổ Công máu 46% -> 43%
+[20:07:26.248] GaoDẻLâu: Tang Thổ Công máu 45% -> 41%
+[20:07:26.713] caychay35: Tang Thổ Công máu 43% -> 40%
+[20:07:26.717] caychay32: Tang Thổ Công máu 43% -> 40%
+[20:07:26.758] caychay34: Tang Thổ Công máu 43% -> 40%
+[20:07:27.402] GaoDẻLâu: Tang Thổ Công máu 41% -> 38%
+[20:07:27.998] caychay32: Tang Thổ Công máu 40% -> 37%
+[20:07:28.442] caychay35: bỏ chọn mục tiêu
+[20:07:28.464] caychay34: bỏ chọn mục tiêu
+[20:07:28.468] GaoDẻLâu: bỏ chọn mục tiêu
+[20:07:28.487] caychay35: Tang Thổ Công biến mất (máu cuối 40%)
+[20:07:28.520] GaoDẻLâu: thông báo: #{ResultText_168}
+[20:07:28.523] GaoDẻLâu: Tang Thổ Công biến mất (máu cuối 38%)
+[20:07:28.530] caychay34: Tang Thổ Công biến mất (máu cuối 40%)
+[20:07:28.556] caychay32: bỏ chọn mục tiêu
+[20:07:28.619] caychay32: thông báo: #{ResultText_8}
+[20:07:28.621] caychay32: Tang Thổ Công biến mất (máu cuối 37%)
+[20:07:29.082] GaoDẻLâu: thông báo: #{ResultText_8}
+[20:07:29.115] caychay34: thông báo: #{ResultText_8}
+[20:07:32.721] caychay32: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:32.892] caychay35: chọn mục tiêu Bích lân cương thi (100% máu) tại (46, 108)
+[20:07:32.932] GaoDẻLâu: chọn mục tiêu Bích lân cương thi (100% máu) tại (42, 105)
+[20:07:32.968] GaoDẻLâu: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:32.968] GaoDẻLâu: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:32.973] caychay34: chọn mục tiêu Bích lân cương thi (100% máu) tại (41, 105)
+[20:07:33.007] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:07:33.012] caychay34: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:33.012] caychay34: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:33.027] caychay35: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:33.027] caychay35: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:33.281] caychay32: chọn mục tiêu Bích lân cương thi (100% máu) tại (44, 106)
+[20:07:33.357] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:07:33.360] caychay32: thấy Bích lân cương thi tại (44, 107) máu 100%
+[20:07:35.212] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:07:35.227] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:07:35.400] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:07:36.333] GaoDẻLâu: Bích lân cương thi chết
+[20:07:36.429] caychay32: Bích lân cương thi chết
+[20:07:36.580] caychay34: Bích lân cương thi chết
+[20:07:36.591] caychay35: Bích lân cương thi chết
+[20:07:45.592] caychay32: Bích lân cương thi chết
+[20:07:45.764] caychay35: Bích lân cương thi chết
+[20:07:45.885] GaoDẻLâu: Bích lân cương thi chết
+[20:07:46.016] caychay34: Bích lân cương thi chết
+[20:07:48.343] caychay34: chọn mục tiêu Tang Thổ Công (37% máu) tại (41, 105)
+[20:07:48.389] caychay34: thấy Tang Thổ Công tại (46, 108) máu 37%
+[20:07:48.478] caychay32: chọn mục tiêu Tang Thổ Công (36% máu) tại (44, 106)
+[20:07:48.512] caychay32: thấy Tang Thổ Công tại (46, 108) máu 36%
+[20:07:48.663] GaoDẻLâu: chọn mục tiêu Tang Thổ Công (36% máu) tại (42, 105)
+[20:07:48.709] GaoDẻLâu: thấy Tang Thổ Công tại (46, 108) máu 36%
+[20:07:48.720] caychay35: chọn mục tiêu Tang Thổ Công (36% máu) tại (46, 108)
+[20:07:48.840] caychay35: thấy Tang Thổ Công tại (46, 108) máu 34%
+[20:07:48.994] caychay34: Tang Thổ Công máu 37% -> 34%
+[20:07:49.760] caychay32: Tang Thổ Công máu 36% -> 33%
+[20:07:49.836] GaoDẻLâu: Tang Thổ Công máu 36% -> 31%
+[20:07:50.002] caychay35: Tang Thổ Công máu 34% -> 31%
+[20:07:50.139] caychay34: Tang Thổ Công máu 34% -> 31%
+[20:07:50.367] caychay32: Tang Thổ Công máu 33% -> 29%
+[20:07:50.968] GaoDẻLâu: Tang Thổ Công máu 31% -> 28%
+[20:07:51.240] caychay35: Tang Thổ Công máu 31% -> 28%
+[20:07:51.315] caychay34: Tang Thổ Công máu 31% -> 28%
+[20:07:51.814] caychay35: Tang Thổ Công máu 28% -> 25%
+[20:07:51.893] caychay34: Tang Thổ Công máu 28% -> 25%
+[20:07:52.079] GaoDẻLâu: Tang Thổ Công máu 28% -> 25%
+[20:07:52.111] caychay32: Tang Thổ Công máu 29% -> 24%
+[20:07:53.053] caychay35: Tang Thổ Công máu 25% -> 21%
+[20:07:53.095] caychay34: Tang Thổ Công máu 25% -> 21%
+[20:07:53.189] GaoDẻLâu: Tang Thổ Công máu 25% -> 21%
+[20:07:53.356] caychay32: Tang Thổ Công máu 24% -> 21%
+[20:07:53.959] caychay32: Tang Thổ Công máu 21% -> 17%
+[20:07:54.243] caychay34: Tang Thổ Công máu 21% -> 17%
+[20:07:54.260] caychay35: Tang Thổ Công máu 21% -> 17%
+[20:07:54.335] GaoDẻLâu: Tang Thổ Công máu 21% -> 17%
+[20:07:54.532] caychay32: bỏ chọn mục tiêu
+[20:07:54.579] caychay32: Tang Thổ Công biến mất (máu cuối 17%)
+[20:07:54.778] caychay34: bỏ chọn mục tiêu
+[20:07:54.815] caychay34: Tang Thổ Công biến mất (máu cuối 17%)
+[20:07:54.854] caychay35: bỏ chọn mục tiêu
+[20:07:54.872] GaoDẻLâu: bỏ chọn mục tiêu
+[20:07:54.906] GaoDẻLâu: Tang Thổ Công biến mất (máu cuối 17%)
+[20:07:54.961] caychay35: Tang Thổ Công biến mất (máu cuối 17%)
+[20:07:59.251] caychay32: chọn mục tiêu Bích lân cương thi (100% máu) tại (44, 106)
+[20:07:59.317] caychay32: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.385] GaoDẻLâu: chọn mục tiêu Bích lân cương thi (100% máu) tại (42, 105)
+[20:07:59.416] caychay34: chọn mục tiêu Bích lân cương thi (100% máu) tại (41, 105)
+[20:07:59.420] GaoDẻLâu: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.420] GaoDẻLâu: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.473] caychay34: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.474] caychay34: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.627] caychay35: chọn mục tiêu Bích lân cương thi (100% máu) tại (46, 108)
+[20:07:59.681] caychay35: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.681] caychay35: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:07:59.895] caychay32: thấy Bích lân cương thi tại (43, 106) máu 100%
+[20:08:05.880] caychay32: Bích lân cương thi chết
+[20:08:05.964] caychay34: Bích lân cương thi chết
+[20:08:06.265] GaoDẻLâu: Bích lân cương thi chết
+[20:08:06.315] caychay35: Bích lân cương thi chết
+[20:08:08.893] caychay34: Bích lân cương thi chết
+[20:08:08.965] caychay32: Bích lân cương thi chết
+[20:08:09.108] GaoDẻLâu: Bích lân cương thi chết
+[20:08:09.319] caychay35: Bích lân cương thi chết
+[20:08:14.144] GaoDẻLâu: bỏ chọn mục tiêu
+[20:08:14.170] caychay34: bỏ chọn mục tiêu
+[20:08:14.351] caychay32: bỏ chọn mục tiêu
+[20:08:14.557] caychay35: bỏ chọn mục tiêu
+[20:08:14.718] GaoDẻLâu: thấy Tang Thổ Công tại (43, 106) máu 17%
+[20:08:14.770] caychay34: chọn mục tiêu Tang Thổ Công (17% máu) tại (41, 104)
+[20:08:14.867] caychay34: thấy Tang Thổ Công tại (43, 106) máu 17%
+[20:08:14.999] caychay32: chọn mục tiêu Tang Thổ Công (15% máu) tại (45, 105)
+[20:08:15.054] caychay32: thấy Tang Thổ Công tại (43, 106) máu 15%
+[20:08:15.112] caychay35: chọn mục tiêu Tang Thổ Công (15% máu) tại (46, 108)
+[20:08:15.135] caychay35: thấy Tang Thổ Công tại (43, 106) máu 15%
+[20:08:15.239] GaoDẻLâu: chọn mục tiêu Tang Thổ Công (15% máu) tại (43, 107)
+[20:08:15.827] GaoDẻLâu: Tang Thổ Công máu 17% -> 13%
+[20:08:16.088] caychay34: Tang Thổ Công máu 17% -> 11%
+[20:08:16.226] caychay32: Tang Thổ Công máu 15% -> 11%
+[20:08:16.310] caychay35: Tang Thổ Công máu 15% -> 11%
+[20:08:17.490] GaoDẻLâu: Tang Thổ Công máu 13% -> 9%
+[20:08:17.936] caychay32: Tang Thổ Công máu 11% -> 7%
+[20:08:18.085] caychay35: Tang Thổ Công máu 11% -> 7%
+[20:08:18.398] caychay34: Tang Thổ Công máu 11% -> 7%
+[20:08:19.167] GaoDẻLâu: Tang Thổ Công máu 9% -> 5%
+[20:08:19.609] caychay34: Tang Thổ Công máu 7% -> 4%
+[20:08:19.709] caychay32: Tang Thổ Công máu 7% -> 4%
+[20:08:19.887] caychay35: Tang Thổ Công máu 7% -> 4%
+[20:08:20.819] GaoDẻLâu: Tang Thổ Công máu 5% -> 1%
+[20:08:20.820] caychay34: Tang Thổ Công máu 4% -> 1%
+[20:08:20.920] caychay32: Tang Thổ Công máu 4% -> 1%
+[20:08:21.056] caychay35: Tang Thổ Công máu 4% -> 1%
+[20:08:21.430] caychay34: thông báo: #{FBSJ_081209_04}
+[20:08:21.430] caychay34: thông báo: Các hạ nhận được 50822610 điểm kinh nghiệm.
+[20:08:21.430] caychay34: thông báo: Trân Thú của các hạ nhận được 25411305 điểm kinh nghiệm.
+[20:08:21.435] caychay34: Tang Thổ Công chết
+[20:08:21.496] caychay32: thông báo: #{FBSJ_081209_04}
+[20:08:21.496] caychay32: thông báo: Các hạ nhận được 49806158 điểm kinh nghiệm.
+[20:08:21.496] caychay32: thông báo: Trân Thú của các hạ nhận được 25411305 điểm kinh nghiệm.
+[20:08:21.501] caychay32: Tang Thổ Công chết
+[20:08:21.641] caychay35: thông báo: #{FBSJ_081209_04}
+[20:08:21.641] caychay35: thông báo: Các hạ nhận được 50822610 điểm kinh nghiệm.
+[20:08:21.641] caychay35: thông báo: Trân Thú của các hạ nhận được 25411305 điểm kinh nghiệm.
+[20:08:21.644] caychay35: Tang Thổ Công chết
+[20:08:21.918] GaoDẻLâu: thông báo: #{FBSJ_081209_04}
+[20:08:21.918] GaoDẻLâu: thông báo: Các hạ đạt 30493567 điểm kinh nghiệm, đồng thời đạt 30493568 điểm thưởng kinh nghiệm
+[20:08:21.922] GaoDẻLâu: Tang Thổ Công chết
+[20:08:26.505] caychay34: bỏ chọn mục tiêu
+[20:08:26.662] caychay32: bỏ chọn mục tiêu
+[20:08:26.860] caychay35: bỏ chọn mục tiêu
+[20:08:26.891] GaoDẻLâu: bỏ chọn mục tiêu
+[20:08:28.591] GaoDẻLâu: lên thú
+[20:08:29.149] GaoDẻLâu: đang theo đội
+[20:08:29.163] caychay35: đang theo đội
+[20:08:29.180] GaoDẻLâu: thông báo: caychay34 tham gia đội ngũ đi theo
+[20:08:29.181] GaoDẻLâu: thông báo: caychay32 tham gia đội ngũ đi theo
+[20:08:29.181] GaoDẻLâu: thông báo: caychay35 tham gia đội ngũ đi theo
+[20:08:29.218] caychay35: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:08:29.409] caychay34: đang theo đội
+[20:08:29.448] caychay34: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:08:29.538] caychay32: đi tới (41, 105)
+[20:08:29.538] caychay32: đang theo đội
+[20:08:29.600] caychay32: thông báo: Bây giờ các hạ bắt đầu đi theo GaoDẻLâu
+[20:08:29.732] caychay35: đi tới (41, 105)
+[20:08:30.311] GaoDẻLâu: đi tới (42, 97)
+[20:08:30.587] caychay34: đi tới (42, 100)
+[20:08:30.669] caychay32: đi tới (42, 102)
+[20:08:30.875] GaoDẻLâu: đi tới (41, 90)
+[20:08:30.909] caychay35: đi tới (42, 102)
+[20:08:31.166] caychay34: đi tới (41, 93)
+[20:08:31.239] caychay32: đi tới (42, 96)
+[20:08:31.422] GaoDẻLâu: đi tới (41, 83)
+[20:08:31.522] caychay35: đi tới (41, 96)
+[20:08:31.717] caychay34: đi tới (41, 84)
+[20:08:31.830] caychay32: đi tới (41, 88)
+[20:08:31.989] GaoDẻLâu: đi tới (41, 76)
+[20:08:32.115] caychay35: đi tới (41, 89)
+[20:08:32.299] caychay34: đi tới (41, 76)
+[20:08:32.407] caychay32: đi tới (41, 79)
+[20:08:32.529] GaoDẻLâu: đi tới (45, 71)
+[20:08:32.693] caychay35: đi tới (41, 80)
+[20:08:32.873] caychay34: đi tới (43, 72)
+[20:08:32.970] caychay32: đi tới (42, 72)
+[20:08:33.096] GaoDẻLâu: đi tới (52, 69)
+[20:08:33.273] caychay35: đi tới (42, 72)
+[20:08:33.452] caychay34: đi tới (48, 70)
+[20:08:33.556] caychay32: đi tới (48, 70)
+[20:08:33.636] GaoDẻLâu: đi tới (59, 68)
+[20:08:33.867] caychay35: đi tới (50, 70)
+[20:08:34.021] caychay34: đi tới (54, 69)
+[20:08:34.113] caychay32: đi tới (54, 69)
+[20:08:34.201] GaoDẻLâu: đi tới (66, 66)
+[20:08:34.442] caychay35: đi tới (55, 69)
+[20:08:34.589] caychay34: đi tới (61, 67)
+[20:08:34.698] caychay32: đi tới (61, 67)
+[20:08:34.768] GaoDẻLâu: đi tới (73, 64)
+[20:08:35.028] caychay35: đi tới (60, 67)
+[20:08:35.178] caychay34: đi tới (70, 65)
+[20:08:35.284] caychay32: đi tới (70, 65)
+[20:08:35.320] GaoDẻLâu: đi tới (80, 63)
+[20:08:35.574] caychay35: đi tới (67, 66)
+[20:08:35.763] caychay34: đi tới (78, 63)
+[20:08:35.871] caychay32: đi tới (77, 64)
+[20:08:35.879] GaoDẻLâu: đi tới (87, 60)
+[20:08:36.136] caychay35: đi tới (76, 64)
+[20:08:36.347] caychay34: đi tới (85, 61)
+[20:08:36.434] GaoDẻLâu: đi tới (94, 57)
+[20:08:36.450] caychay32: đi tới (84, 61)
+[20:08:36.718] caychay35: đi tới (84, 61)
+[20:08:36.911] caychay34: đi tới (90, 59)
+[20:08:36.987] GaoDẻLâu: đi tới (100, 54)
+[20:08:37.029] caychay32: đi tới (89, 59)
+[20:08:37.277] caychay35: đi tới (90, 59)
+[20:08:37.508] caychay34: đi tới (99, 55)
+[20:08:37.552] GaoDẻLâu: đi tới (107, 51)
+[20:08:37.585] GaoDẻLâu: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:37.629] caychay32: đi tới (97, 56)
+[20:08:37.849] caychay35: đi tới (97, 56)
+[20:08:38.074] caychay34: đi tới (106, 52)
+[20:08:38.108] caychay34: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:38.108] GaoDẻLâu: đi tới (114, 50)
+[20:08:38.108] GaoDẻLâu: chọn mục tiêu Ô Lão Đại (100% máu) tại (114, 50)
+[20:08:38.187] caychay32: đi tới (105, 52)
+[20:08:38.252] caychay32: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:38.436] caychay35: đi tới (105, 52)
+[20:08:38.521] caychay35: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:38.653] caychay34: đi tới (114, 50)
+[20:08:38.677] GaoDẻLâu: đi tới (117, 49)
+[20:08:38.791] caychay32: đi tới (113, 50)
+[20:08:39.034] caychay35: đi tới (114, 50)
+[20:08:39.258] GaoDẻLâu: mở hội thoại NPC [Ô Lão Đại]:
+        - #{PMF_20080521_10} (mã -1, -1; loại text)
+        - Khiêu chiến (mã 402272, 1; loại id)
+[20:08:40.405] GaoDẻLâu: đóng hội thoại NPC
+[20:08:40.998] caychay35: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:08:41.018] GaoDẻLâu: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:08:41.172] caychay34: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:08:41.196] caychay32: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:08:41.605] GaoDẻLâu: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:08:41.618] caychay35: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:08:41.710] caychay34: bỏ theo đội
+[20:08:41.722] caychay32: bỏ theo đội
+[20:08:41.743] caychay34: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:08:41.743] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:08:41.743] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:08:41.774] caychay32: thông báo: Thoát khỏi trạng thái đi theo đội
+[20:08:41.774] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:08:41.774] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:08:42.126] GaoDẻLâu: bỏ theo đội
+[20:08:42.143] caychay35: bỏ theo đội
+[20:08:42.169] GaoDẻLâu: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:08:42.217] caychay35: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:08:42.313] caychay34: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:08:42.408] caychay32: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:08:42.700] GaoDẻLâu: xuống thú
+[20:08:42.731] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:08:43.028] caychay32: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:08:43.327] GaoDẻLâu: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:08:43.473] caychay35: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:08:43.527] caychay34: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:08:44.087] caychay35: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:08:44.169] caychay34: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:08:44.215] caychay32: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:08:44.501] GaoDẻLâu: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:08:45.107] GaoDẻLâu: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:08:45.218] caychay35: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:08:45.393] caychay34: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:08:45.395] caychay32: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:08:46.303] GaoDẻLâu: thông báo: Cuộc chiến bắt đầu
+[20:08:46.393] caychay35: thông báo: Cuộc chiến bắt đầu
+[20:08:46.561] caychay34: thông báo: Cuộc chiến bắt đầu
+[20:08:46.606] caychay32: thông báo: Cuộc chiến bắt đầu
+[20:08:46.987] caychay35: Ô Lão Đại biến mất (máu cuối 100%)
+[20:08:47.134] caychay34: Ô Lão Đại biến mất (máu cuối 100%)
+[20:08:47.218] caychay32: Ô Lão Đại biến mất (máu cuối 100%)
+[20:08:47.529] GaoDẻLâu: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:47.529] GaoDẻLâu: Ô Lão Đại biến mất (máu cuối 100%)
+[20:08:47.536] caychay35: chọn mục tiêu Ô Lão Đại (100% máu) tại (116, 51)
+[20:08:47.624] caychay35: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:47.659] caychay34: chọn mục tiêu Ô Lão Đại (100% máu) tại (116, 49)
+[20:08:47.693] caychay34: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:47.769] caychay32: chọn mục tiêu Ô Lão Đại (100% máu) tại (115, 50)
+[20:08:47.824] caychay32: thấy Ô Lão Đại tại (117, 49) máu 100%
+[20:08:48.130] GaoDẻLâu: Ô Lão Đại máu 100% -> 91%
+[20:08:48.244] caychay35: Ô Lão Đại máu 100% -> 91%
+[20:08:48.272] caychay34: Ô Lão Đại máu 100% -> 91%
+[20:08:48.405] caychay32: Ô Lão Đại máu 100% -> 91%
+[20:08:49.294] GaoDẻLâu: Ô Lão Đại máu 91% -> 83%
+[20:08:49.510] caychay35: Ô Lão Đại máu 91% -> 83%
+[20:08:49.622] caychay32: Ô Lão Đại máu 91% -> 83%
+[20:08:49.867] GaoDẻLâu: Ô Lão Đại máu 83% -> 75%
+[20:08:49.971] caychay34: Ô Lão Đại máu 91% -> 75%
+[20:08:50.144] caychay35: Ô Lão Đại máu 83% -> 75%
+[20:08:50.267] caychay32: Ô Lão Đại máu 83% -> 75%
+[20:08:50.530] caychay34: Ô Lão Đại máu 75% -> 66%
+[20:08:50.803] caychay35: Ô Lão Đại máu 75% -> 66%
+[20:08:50.886] caychay32: Ô Lão Đại máu 75% -> 66%
+[20:08:51.020] GaoDẻLâu: Ô Lão Đại máu 75% -> 66%
+[20:08:51.599] GaoDẻLâu: Ô Lão Đại máu 66% -> 58%
+[20:08:51.763] caychay34: Ô Lão Đại máu 66% -> 58%
+[20:08:52.013] caychay35: Ô Lão Đại máu 66% -> 58%
+[20:08:52.065] caychay32: Ô Lão Đại máu 66% -> 58%
+[20:08:52.177] GaoDẻLâu: Ô Lão Đại máu 58% -> 50%
+[20:08:52.370] caychay34: Ô Lão Đại máu 58% -> 50%
+[20:08:52.604] caychay35: Ô Lão Đại máu 58% -> 50%
+[20:08:52.656] caychay32: Ô Lão Đại máu 58% -> 50%
+[20:08:53.214] caychay35: Ô Lão Đại máu 50% -> 42%
+[20:08:53.230] caychay32: Ô Lão Đại máu 50% -> 42%
+[20:08:53.336] GaoDẻLâu: Ô Lão Đại máu 50% -> 42%
+[20:08:53.637] caychay34: Ô Lão Đại máu 50% -> 42%
+[20:08:53.881] caychay32: Ô Lão Đại máu 42% -> 34%
+[20:08:53.896] GaoDẻLâu: Ô Lão Đại máu 42% -> 34%
+[20:08:54.300] caychay34: Ô Lão Đại máu 42% -> 34%
+[20:08:54.451] caychay35: Ô Lão Đại máu 42% -> 34%
+[20:08:55.042] GaoDẻLâu: Ô Lão Đại máu 34% -> 26%
+[20:08:55.125] caychay32: Ô Lão Đại máu 34% -> 26%
+[20:08:55.150] caychay35: Ô Lão Đại máu 34% -> 26%
+[20:08:55.514] caychay34: Ô Lão Đại máu 34% -> 18%
+[20:08:55.611] GaoDẻLâu: Ô Lão Đại máu 26% -> 18%
+[20:08:55.726] caychay32: Ô Lão Đại máu 26% -> 18%
+[20:08:55.772] caychay35: Ô Lão Đại máu 26% -> 18%
+[20:08:56.735] caychay34: Ô Lão Đại máu 18% -> 9%
+[20:08:56.758] GaoDẻLâu: Ô Lão Đại máu 18% -> 9%
+[20:08:56.989] caychay32: Ô Lão Đại máu 18% -> 9%
+[20:08:57.047] caychay35: Ô Lão Đại máu 18% -> 9%
+[20:08:57.598] caychay32: Ô Lão Đại máu 9% -> 1%
+[20:08:57.626] caychay35: Ô Lão Đại máu 9% -> 1%
+[20:08:57.937] GaoDẻLâu: Ô Lão Đại chết
+[20:08:57.968] caychay34: Ô Lão Đại chết
+[20:08:58.196] caychay32: Ô Lão Đại chết
+[20:08:58.218] caychay35: Ô Lão Đại chết
+[20:09:00.724] GaoDẻLâu: bỏ chọn mục tiêu
+[20:09:00.973] caychay34: bỏ chọn mục tiêu
+[20:09:01.135] caychay32: bỏ chọn mục tiêu
+[20:09:01.170] caychay35: bỏ chọn mục tiêu
+[20:09:02.192] caychay34: thấy Ô Lão Đại tại (116, 48) máu 100%
+[20:09:02.393] caychay32: thấy Ô Lão Đại tại (115, 48) máu 100%
+[20:09:02.512] GaoDẻLâu: thấy Ô Lão Đại tại (115, 47) máu 100%
+[20:09:02.539] caychay35: thấy Ô Lão Đại tại (115, 47) máu 100%
+[20:09:03.633] GaoDẻLâu: lên thú
+[20:09:05.180] caychay34: đang theo đội
+[20:09:05.252] caychay32: đang theo đội
+[20:09:05.326] GaoDẻLâu: đi tới (118, 52)
+[20:09:05.326] GaoDẻLâu: đang theo đội
+[20:09:05.469] caychay35: đi tới (116, 48)
+[20:09:05.469] caychay35: đang theo đội
+[20:09:05.879] GaoDẻLâu: đi tới (118, 58)
+[20:09:06.370] caychay34: đi tới (117, 55)
+[20:09:06.401] caychay32: đi tới (118, 52)
+[20:09:06.433] GaoDẻLâu: đi tới (125, 58)
+[20:09:06.458] GaoDẻLâu: Ô Lão Đại biến mất (máu cuối 100%)
+[20:09:06.658] caychay35: đi tới (118, 52)
+[20:09:06.943] caychay34: đi tới (120, 58)
+[20:09:06.971] GaoDẻLâu: đi tới (132, 57)
+[20:09:06.999] caychay34: Ô Lão Đại biến mất (máu cuối 100%)
+[20:09:07.049] caychay32: đi tới (118, 57)
+[20:09:07.115] caychay32: Ô Lão Đại biến mất (máu cuối 100%)
+[20:09:07.242] caychay35: đi tới (118, 56)
+[20:09:07.329] caychay35: Ô Lão Đại biến mất (máu cuối 100%)
+[20:09:07.550] GaoDẻLâu: đi tới (140, 57)
+[20:09:07.583] caychay34: đi tới (127, 58)
+[20:09:07.632] caychay32: đi tới (124, 58)
+[20:09:07.858] caychay35: đi tới (122, 58)
+[20:09:08.120] GaoDẻLâu: đi tới (147, 56)
+[20:09:08.142] GaoDẻLâu: thấy Phù Mẫn Nghi tại (159, 54) máu 100%
+[20:09:08.200] caychay34: đi tới (134, 57)
+[20:09:08.228] caychay32: đi tới (131, 58)
+[20:09:08.420] caychay35: đi tới (128, 58)
+[20:09:08.667] GaoDẻLâu: đi tới (153, 55)
+[20:09:08.809] caychay34: đi tới (141, 56)
+[20:09:08.852] caychay32: đi tới (138, 57)
+[20:09:08.856] caychay34: thấy Phù Mẫn Nghi tại (159, 54) máu 100%
+[20:09:08.976] caychay35: đi tới (135, 57)
+[20:09:09.394] caychay34: đi tới (148, 56)
+[20:09:09.445] caychay32: đi tới (145, 56)
+[20:09:09.519] caychay32: thấy Phù Mẫn Nghi tại (159, 54) máu 100%
+[20:09:09.571] caychay35: đi tới (141, 56)
+[20:09:09.615] caychay35: thấy Phù Mẫn Nghi tại (159, 54) máu 100%
+[20:09:09.758] GaoDẻLâu: đi tới (156, 54)
+[20:09:09.758] GaoDẻLâu: chọn mục tiêu Phù Mẫn Nghi (100% máu) tại (156, 54)
+[20:09:09.945] caychay34: đi tới (154, 55)
+[20:09:10.031] caychay32: đi tới (151, 55)
+[20:09:10.150] caychay35: đi tới (148, 56)
+[20:09:10.317] GaoDẻLâu: mở hội thoại NPC [Phù Mẫn Nghi]:
+        - #{PMF_20080521_12} (mã -1, -1; loại text)
+        - Khiêu chiến Bất bình đạo nhân cùng Trác Bất Phàm (mã 402273, 1; loại id)
+[20:09:10.637] caychay32: đi tới (154, 55)
+[20:09:10.760] caychay35: đi tới (153, 55)
+[20:09:10.866] GaoDẻLâu: đóng hội thoại NPC
+[20:09:11.442] GaoDẻLâu: đi tới (149, 51)
+[20:09:11.719] caychay34: đi tới (152, 53)
+[20:09:12.001] GaoDẻLâu: đi tới (143, 47)
+[20:09:12.295] caychay34: đi tới (147, 50)
+[20:09:12.422] caychay32: đi tới (150, 52)
+[20:09:12.563] GaoDẻLâu: đi tới (139, 41)
+[20:09:12.676] caychay35: đi tới (150, 52)
+[20:09:12.880] caychay34: đi tới (143, 45)
+[20:09:12.986] caychay32: đi tới (145, 49)
+[20:09:13.123] GaoDẻLâu: đi tới (134, 36)
+[20:09:13.123] GaoDẻLâu: bỏ chọn mục tiêu
+[20:09:13.148] GaoDẻLâu: Phù Mẫn Nghi biến mất (máu cuối 100%)
+[20:09:13.303] caychay35: đi tới (146, 49)
+[20:09:13.440] caychay34: đi tới (139, 40)
+[20:09:13.484] caychay34: Phù Mẫn Nghi biến mất (máu cuối 100%)
+[20:09:13.534] caychay32: đi tới (142, 44)
+[20:09:13.669] GaoDẻLâu: đi tới (127, 33)
+[20:09:13.864] caychay35: đi tới (142, 44)
+[20:09:14.009] caychay34: đi tới (134, 36)
+[20:09:14.093] caychay32: đi tới (138, 39)
+[20:09:14.117] caychay32: Phù Mẫn Nghi biến mất (máu cuối 100%)
+[20:09:14.214] GaoDẻLâu: đi tới (123, 32)
+[20:09:14.462] caychay35: đi tới (137, 39)
+[20:09:14.526] caychay35: Phù Mẫn Nghi biến mất (máu cuối 100%)
+[20:09:14.551] caychay34: đi tới (128, 34)
+[20:09:14.653] caychay32: đi tới (132, 35)
+[20:09:15.071] caychay35: đi tới (132, 35)
+[20:09:15.118] caychay34: đi tới (124, 32)
+[20:09:15.209] caychay32: đi tới (126, 33)
+[20:09:15.657] caychay35: đi tới (126, 33)
+[20:09:17.408] caychay35: bỏ theo đội
+[20:09:17.468] caychay34: bỏ theo đội
+[20:09:17.559] GaoDẻLâu: bỏ theo đội
+[20:09:17.642] caychay32: bỏ theo đội
+[20:09:18.681] GaoDẻLâu: xuống thú
+[20:09:27.541] caychay35: chọn mục tiêu Trác Bất Phàm (100% máu) tại (126, 33)
+[20:09:27.586] caychay35: thấy Trác Bất Phàm tại (121, 31) máu 100%
+[20:09:27.705] GaoDẻLâu: chọn mục tiêu Trác Bất Phàm (100% máu) tại (123, 32)
+[20:09:27.705] caychay34: chọn mục tiêu Trác Bất Phàm (100% máu) tại (124, 32)
+[20:09:27.750] GaoDẻLâu: thấy Trác Bất Phàm tại (121, 31) máu 100%
+[20:09:27.750] GaoDẻLâu: thấy Bất Bình Đạo Nhân tại (129, 31) máu 100%
+[20:09:27.762] caychay34: thấy Bất Bình Đạo Nhân tại (129, 31) máu 100%
+[20:09:27.762] caychay34: thấy Trác Bất Phàm tại (121, 31) máu 100%
+[20:09:27.890] caychay32: chọn mục tiêu Trác Bất Phàm (100% máu) tại (125, 32)
+[20:09:27.948] caychay32: thấy Bất Bình Đạo Nhân tại (129, 31) máu 100%
+[20:09:27.949] caychay32: thấy Trác Bất Phàm tại (121, 31) máu 100%
+[20:09:28.206] caychay35: thấy Bất Bình Đạo Nhân tại (129, 31) máu 100%
+[20:09:28.574] caychay32: Trác Bất Phàm máu 100% -> 91%
+[20:09:28.792] caychay35: Trác Bất Phàm máu 100% -> 91%
+[20:09:28.896] GaoDẻLâu: Trác Bất Phàm máu 100% -> 91%
+[20:09:29.011] caychay34: Trác Bất Phàm máu 100% -> 91%
+[20:09:29.345] caychay35: Trác Bất Phàm máu 91% -> 82%
+[20:09:29.472] GaoDẻLâu: Trác Bất Phàm máu 91% -> 82%
+[20:09:29.559] caychay34: Trác Bất Phàm máu 91% -> 82%
+[20:09:29.787] caychay32: Trác Bất Phàm máu 91% -> 82%
+[20:09:29.938] caychay35: Trác Bất Phàm máu 82% -> 74%
+[20:09:30.043] GaoDẻLâu: Trác Bất Phàm máu 82% -> 74%
+[20:09:30.134] caychay34: Trác Bất Phàm máu 82% -> 74%
+[20:09:30.375] caychay32: Trác Bất Phàm máu 82% -> 70%
+[20:09:30.547] caychay35: Trác Bất Phàm máu 74% -> 70%
+[20:09:30.623] GaoDẻLâu: Trác Bất Phàm máu 74% -> 70%
+[20:09:30.740] caychay34: Trác Bất Phàm máu 74% -> 70%
+[20:09:30.980] caychay32: Trác Bất Phàm máu 70% -> 63%
+[20:09:31.160] caychay35: Trác Bất Phàm máu 70% -> 63%
+[20:09:31.192] GaoDẻLâu: Trác Bất Phàm máu 70% -> 63%
+[20:09:31.346] caychay34: Trác Bất Phàm máu 70% -> 63%
+[20:09:31.770] GaoDẻLâu: Trác Bất Phàm máu 63% -> 55%
+[20:09:31.782] caychay35: Trác Bất Phàm máu 63% -> 55%
+[20:09:31.951] caychay34: Trác Bất Phàm máu 63% -> 55%
+[20:09:32.192] caychay32: Trác Bất Phàm máu 63% -> 55%
+[20:09:32.339] caychay35: Trác Bất Phàm máu 55% -> 46%
+[20:09:32.346] GaoDẻLâu: Trác Bất Phàm máu 55% -> 46%
+[20:09:32.561] caychay34: Trác Bất Phàm máu 55% -> 46%
+[20:09:32.839] caychay32: Trác Bất Phàm máu 55% -> 46%
+[20:09:32.976] caychay35: Trác Bất Phàm máu 46% -> 39%
+[20:09:33.170] caychay34: Trác Bất Phàm máu 46% -> 39%
+[20:09:33.442] caychay32: Trác Bất Phàm máu 46% -> 39%
+[20:09:33.484] GaoDẻLâu: Trác Bất Phàm máu 46% -> 39%
+[20:09:34.368] caychay34: Trác Bất Phàm máu 39% -> 28%
+[20:09:34.638] caychay32: Trác Bất Phàm máu 39% -> 28%
+[20:09:34.648] GaoDẻLâu: Trác Bất Phàm máu 39% -> 28%
+[20:09:34.772] caychay35: Trác Bất Phàm máu 39% -> 28%
+[20:09:34.975] caychay34: Trác Bất Phàm máu 28% -> 19%
+[20:09:35.219] GaoDẻLâu: Trác Bất Phàm máu 28% -> 19%
+[20:09:35.263] caychay32: Trác Bất Phàm máu 28% -> 19%
+[20:09:35.343] caychay35: Trác Bất Phàm máu 28% -> 19%
+[20:09:35.645] caychay34: Trác Bất Phàm máu 19% -> 12%
+[20:09:35.786] GaoDẻLâu: Trác Bất Phàm máu 19% -> 12%
+[20:09:35.815] caychay32: Trác Bất Phàm máu 19% -> 12%
+[20:09:35.996] caychay35: Trác Bất Phàm máu 19% -> 10%
+[20:09:36.609] caychay35: Trác Bất Phàm máu 10% -> 1%
+[20:09:36.829] caychay34: Trác Bất Phàm máu 12% -> 1%
+[20:09:36.921] GaoDẻLâu: Trác Bất Phàm máu 12% -> 1%
+[20:09:37.037] caychay32: Trác Bất Phàm máu 12% -> 1%
+[20:09:37.232] caychay35: thông báo: #{FBSJ_081209_04}
+[20:09:37.232] caychay35: thông báo: Các hạ nhận được 725981 điểm kinh nghiệm.
+[20:09:37.232] caychay35: thông báo: Trân Thú của các hạ nhận được 435588 điểm kinh nghiệm.
+[20:09:37.236] caychay35: Trác Bất Phàm chết
+[20:09:37.437] caychay34: thông báo: #{FBSJ_081209_04}
+[20:09:37.437] caychay34: thông báo: Các hạ nhận được 725981 điểm kinh nghiệm.
+[20:09:37.438] caychay34: thông báo: Trân Thú của các hạ nhận được 435588 điểm kinh nghiệm.
+[20:09:37.443] caychay34: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:37.443] caychay34: Trác Bất Phàm chết
+[20:09:37.477] GaoDẻLâu: thông báo: #{FBSJ_081209_04}
+[20:09:37.477] GaoDẻLâu: thông báo: Các hạ đạt 435588 điểm kinh nghiệm, đồng thời đạt 435588 điểm thưởng kinh nghiệm
+[20:09:37.480] GaoDẻLâu: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:37.480] GaoDẻLâu: Trác Bất Phàm chết
+[20:09:37.653] caychay32: thông báo: #{FBSJ_081209_04}
+[20:09:37.653] caychay32: thông báo: Các hạ nhận được 711461 điểm kinh nghiệm.
+[20:09:37.653] caychay32: thông báo: Trân Thú của các hạ nhận được 435588 điểm kinh nghiệm.
+[20:09:37.656] caychay32: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:37.657] caychay32: Trác Bất Phàm chết
+[20:09:37.824] caychay35: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:38.570] GaoDẻLâu: chọn mục tiêu Nhậm Bình Sinh (100% máu) tại (123, 32)
+[20:09:38.623] caychay34: chọn mục tiêu Nhậm Bình Sinh (100% máu) tại (124, 32)
+[20:09:38.769] caychay32: chọn mục tiêu Bất Bình Đạo Nhân (100% máu) tại (125, 32)
+[20:09:39.201] GaoDẻLâu: thông báo: Các hạ đạt 5398911 điểm kinh nghiệm, đồng thời đạt 5398911 điểm thưởng kinh nghiệm
+[20:09:39.258] caychay34: thông báo: Các hạ nhận được 10797823 điểm kinh nghiệm.
+[20:09:39.258] caychay34: thông báo: Trân Thú của các hạ nhận được 53989115 điểm kinh nghiệm.
+[20:09:39.444] caychay32: thông báo: Các hạ nhận được 5398911 điểm kinh nghiệm.
+[20:09:39.444] caychay32: thông báo: Trân Thú của các hạ nhận được 53989115 điểm kinh nghiệm.
+[20:09:39.525] caychay35: chọn mục tiêu Bất Bình Đạo Nhân (100% máu) tại (124, 31)
+[20:09:39.568] caychay35: thông báo: Các hạ nhận được 5398911 điểm kinh nghiệm.
+[20:09:39.568] caychay35: thông báo: Trân Thú của các hạ nhận được 53989115 điểm kinh nghiệm.
+[20:09:39.720] GaoDẻLâu: chọn mục tiêu Bất Bình Đạo Nhân (98% máu) tại (123, 32)
+[20:09:39.766] GaoDẻLâu: Nhậm Bình Sinh chết
+[20:09:39.782] caychay34: chọn mục tiêu Bất Bình Đạo Nhân (98% máu) tại (124, 32)
+[20:09:39.840] caychay34: Nhậm Bình Sinh chết
+[20:09:40.062] caychay32: Nhậm Bình Sinh chết
+[20:09:40.157] caychay35: Nhậm Bình Sinh chết
+[20:09:40.336] GaoDẻLâu: Bất Bình Đạo Nhân máu 100% -> 92%
+[20:09:40.495] caychay34: Bất Bình Đạo Nhân máu 100% -> 92%
+[20:09:40.645] caychay32: Bất Bình Đạo Nhân máu 100% -> 92%
+[20:09:40.789] caychay35: Bất Bình Đạo Nhân máu 100% -> 92%
+[20:09:41.101] caychay34: Bất Bình Đạo Nhân máu 92% -> 85%
+[20:09:41.264] caychay32: Bất Bình Đạo Nhân máu 92% -> 85%
+[20:09:41.461] caychay35: Bất Bình Đạo Nhân máu 92% -> 85%
+[20:09:41.467] GaoDẻLâu: Bất Bình Đạo Nhân máu 92% -> 85%
+[20:09:41.866] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:09:41.871] caychay32: Bất Bình Đạo Nhân máu 85% -> 77%
+[20:09:42.045] GaoDẻLâu: Bất Bình Đạo Nhân máu 85% -> 77%
+[20:09:42.061] caychay35: Bất Bình Đạo Nhân máu 85% -> 77%
+[20:09:42.306] caychay34: Bất Bình Đạo Nhân máu 85% -> 77%
+[20:09:42.500] caychay32: Bất Bình Đạo Nhân máu 77% -> 71%
+[20:09:42.616] GaoDẻLâu: Bất Bình Đạo Nhân máu 77% -> 71%
+[20:09:42.683] caychay35: Bất Bình Đạo Nhân máu 77% -> 71%
+[20:09:42.875] caychay34: Bất Bình Đạo Nhân máu 77% -> 71%
+[20:09:43.057] caychay32: Bất Bình Đạo Nhân máu 71% -> 64%
+[20:09:43.190] GaoDẻLâu: Bất Bình Đạo Nhân máu 71% -> 64%
+[20:09:43.268] caychay35: Bất Bình Đạo Nhân máu 71% -> 64%
+[20:09:43.456] caychay34: Bất Bình Đạo Nhân máu 71% -> 64%
+[20:09:43.763] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:09:43.766] GaoDẻLâu: Bất Bình Đạo Nhân máu 64% -> 60%
+[20:09:43.770] caychay32: Bất Bình Đạo Nhân máu 64% -> 60%
+[20:09:43.862] caychay35: Bất Bình Đạo Nhân máu 64% -> 60%
+[20:09:44.029] caychay34: Bất Bình Đạo Nhân máu 64% -> 60%
+[20:09:44.327] GaoDẻLâu: Bất Bình Đạo Nhân máu 60% -> 52%
+[20:09:44.407] caychay32: Bất Bình Đạo Nhân máu 60% -> 52%
+[20:09:44.502] caychay35: Bất Bình Đạo Nhân máu 60% -> 52%
+[20:09:44.639] caychay34: Bất Bình Đạo Nhân máu 60% -> 52%
+[20:09:44.893] GaoDẻLâu: Bất Bình Đạo Nhân máu 52% -> 48%
+[20:09:45.015] caychay32: Bất Bình Đạo Nhân máu 52% -> 48%
+[20:09:45.125] caychay35: Bất Bình Đạo Nhân máu 52% -> 48%
+[20:09:45.223] caychay34: Bất Bình Đạo Nhân máu 52% -> 44%
+[20:09:45.483] GaoDẻLâu: Bất Bình Đạo Nhân máu 48% -> 44%
+[20:09:45.653] caychay32: Bất Bình Đạo Nhân máu 48% -> 44%
+[20:09:45.758] caychay35: Bất Bình Đạo Nhân máu 48% -> 44%
+[20:09:46.045] GaoDẻLâu: Bất Bình Đạo Nhân máu 44% -> 36%
+[20:09:46.281] caychay32: Bất Bình Đạo Nhân máu 44% -> 36%
+[20:09:46.363] caychay35: Bất Bình Đạo Nhân máu 44% -> 36%
+[20:09:46.460] caychay34: Bất Bình Đạo Nhân máu 44% -> 36%
+[20:09:46.613] GaoDẻLâu: Bất Bình Đạo Nhân máu 36% -> 31%
+[20:09:46.847] caychay32: Bất Bình Đạo Nhân máu 36% -> 31%
+[20:09:47.006] caychay35: Bất Bình Đạo Nhân máu 36% -> 31%
+[20:09:47.043] caychay34: Bất Bình Đạo Nhân máu 36% -> 26%
+[20:09:47.185] GaoDẻLâu: Bất Bình Đạo Nhân máu 31% -> 26%
+[20:09:47.452] caychay32: Bất Bình Đạo Nhân máu 31% -> 26%
+[20:09:47.641] caychay35: Bất Bình Đạo Nhân máu 31% -> 20%
+[20:09:47.692] caychay34: Bất Bình Đạo Nhân máu 26% -> 20%
+[20:09:47.762] GaoDẻLâu: Bất Bình Đạo Nhân máu 26% -> 20%
+[20:09:48.112] caychay32: Bất Bình Đạo Nhân máu 26% -> 18%
+[20:09:48.782] caychay32: Bất Bình Đạo Nhân máu 18% -> 11%
+[20:09:48.900] caychay35: Bất Bình Đạo Nhân máu 20% -> 11%
+[20:09:48.910] GaoDẻLâu: Bất Bình Đạo Nhân máu 20% -> 11%
+[20:09:48.914] caychay34: Bất Bình Đạo Nhân máu 20% -> 11%
+[20:09:49.388] caychay32: Bất Bình Đạo Nhân máu 11% -> 3%
+[20:09:49.479] GaoDẻLâu: Bất Bình Đạo Nhân máu 11% -> 3%
+[20:09:49.536] caychay35: Bất Bình Đạo Nhân máu 11% -> 3%
+[20:09:49.542] caychay34: Bất Bình Đạo Nhân máu 11% -> 3%
+[20:09:49.997] caychay32: Bất Bình Đạo Nhân chết
+[20:09:50.078] GaoDẻLâu: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:50.078] GaoDẻLâu: Bất Bình Đạo Nhân chết
+[20:09:50.111] caychay34: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:50.111] caychay34: Bất Bình Đạo Nhân chết
+[20:09:50.151] caychay35: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:50.151] caychay35: Bất Bình Đạo Nhân chết
+[20:09:50.579] caychay32: thấy Nhậm Bình Sinh tại (125, 36) máu 100%
+[20:09:51.179] GaoDẻLâu: chọn mục tiêu Nhậm Bình Sinh (100% máu) tại (123, 32)
+[20:09:51.267] caychay34: chọn mục tiêu Nhậm Bình Sinh (100% máu) tại (123, 32)
+[20:09:51.281] caychay35: chọn mục tiêu Nhậm Bình Sinh (100% máu) tại (124, 31)
+[20:09:51.720] caychay32: chọn mục tiêu Nhậm Bình Sinh (0% máu) tại (125, 33)
+[20:09:51.765] caychay32: Nhậm Bình Sinh chết
+[20:09:51.805] GaoDẻLâu: Nhậm Bình Sinh chết
+[20:09:51.917] caychay34: Nhậm Bình Sinh chết
+[20:09:51.970] caychay35: Nhậm Bình Sinh chết
+[20:09:53.551] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:09:53.670] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:09:54.010] GaoDẻLâu: đi tới (118, 33)
+[20:09:54.256] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:09:54.562] GaoDẻLâu: đi tới (114, 34)
+[20:09:55.126] GaoDẻLâu: đi tới (109, 35)
+[20:09:55.671] GaoDẻLâu: đi tới (105, 35)
+[20:09:55.671] GaoDẻLâu: bỏ chọn mục tiêu
+[20:09:55.704] GaoDẻLâu: thấy Ô Lão Đại tại (95, 39) máu 100%
+[20:09:56.223] GaoDẻLâu: đi tới (100, 36)
+[20:09:56.797] caychay35: bỏ chọn mục tiêu
+[20:09:56.986] caychay32: bỏ chọn mục tiêu
+[20:09:57.129] caychay34: bỏ chọn mục tiêu
+[20:09:57.329] GaoDẻLâu: chọn mục tiêu Ô Lão Đại (100% máu) tại (98, 37)
+[20:09:57.340] GaoDẻLâu: mở hội thoại NPC [Ô Lão Đại]:
+        - #{PMF_20080521_19} (mã -1, -1; loại text)
+        - Quyết chiến Lý Thu Thủy? (mã 402275, 1; loại id)
+[20:09:58.473] GaoDẻLâu: đóng hội thoại NPC
+[20:09:58.986] caychay34: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:09:59.031] GaoDẻLâu: đi tới (103, 37)
+[20:09:59.052] GaoDẻLâu: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:09:59.285] caychay35: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:09:59.345] caychay32: thông báo: Cuộc chiến 5 giây sau sẽ bắt đầu
+[20:09:59.574] GaoDẻLâu: đi tới (107, 37)
+[20:09:59.967] caychay32: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:10:00.127] GaoDẻLâu: đi tới (112, 37)
+[20:10:00.128] GaoDẻLâu: bỏ chọn mục tiêu
+[20:10:00.159] GaoDẻLâu: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:10:00.161] GaoDẻLâu: Ô Lão Đại biến mất (máu cuối 100%)
+[20:10:00.197] caychay34: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:10:00.515] caychay35: thông báo: Cuộc chiến 4 giây sau sẽ bắt đầu
+[20:10:00.683] GaoDẻLâu: đi tới (116, 35)
+[20:10:01.104] caychay35: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:10:01.172] caychay32: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:10:01.237] GaoDẻLâu: đi tới (121, 34)
+[20:10:01.259] GaoDẻLâu: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:10:01.393] caychay34: thông báo: Cuộc chiến 3 giây sau sẽ bắt đầu
+[20:10:02.008] caychay34: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:10:02.292] caychay35: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:10:02.342] GaoDẻLâu: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:10:02.375] caychay32: thông báo: Cuộc chiến 2 giây sau sẽ bắt đầu
+[20:10:03.183] caychay34: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:10:03.447] GaoDẻLâu: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:10:03.460] caychay35: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:10:03.589] caychay32: thông báo: Cuộc chiến 1 giây sau sẽ bắt đầu
+[20:10:04.039] caychay35: thông báo: Cuộc chiến bắt đầu
+[20:10:04.162] caychay32: thông báo: Cuộc chiến bắt đầu
+[20:10:04.371] caychay34: thông báo: Cuộc chiến bắt đầu
+[20:10:04.554] GaoDẻLâu: thông báo: Cuộc chiến bắt đầu
+[20:10:05.293] caychay32: chọn mục tiêu Lý Thu Thuỷ (100% máu) tại (125, 33)
+[20:10:05.379] caychay32: thấy Lý Thu Thuỷ tại (125, 36) máu 100%
+[20:10:05.493] caychay34: chọn mục tiêu Lý Thu Thuỷ (100% máu) tại (123, 32)
+[20:10:05.559] caychay34: thấy Lý Thu Thuỷ tại (125, 36) máu 100%
+[20:10:05.642] GaoDẻLâu: chọn mục tiêu Lý Thu Thuỷ (100% máu) tại (123, 34)
+[20:10:05.677] GaoDẻLâu: thấy Lý Thu Thuỷ tại (124, 35) máu 100%
+[20:10:05.749] caychay35: chọn mục tiêu Lý Thu Thuỷ (100% máu) tại (124, 31)
+[20:10:05.868] caychay35: thấy Lý Thu Thuỷ tại (124, 35) máu 97%
+[20:10:05.978] caychay32: Lý Thu Thuỷ máu 100% -> 97%
+[20:10:06.178] caychay34: Lý Thu Thuỷ máu 100% -> 97%
+[20:10:06.223] GaoDẻLâu: Lý Thu Thuỷ máu 100% -> 97%
+[20:10:06.566] caychay35: Lý Thu Thuỷ máu 97% -> 91%
+[20:10:06.655] caychay32: Lý Thu Thuỷ máu 97% -> 91%
+[20:10:06.781] GaoDẻLâu: Lý Thu Thuỷ máu 97% -> 91%
+[20:10:06.787] caychay34: thông báo: #{ResultText_159}
+[20:10:06.789] caychay34: Lý Thu Thuỷ máu 97% -> 91%
+[20:10:07.230] caychay35: Lý Thu Thuỷ máu 91% -> 85%
+[20:10:07.231] caychay32: Lý Thu Thuỷ máu 91% -> 85%
+[20:10:07.316] caychay34: đi tới (124, 28)
+[20:10:07.339] GaoDẻLâu: Lý Thu Thuỷ máu 91% -> 85%
+[20:10:07.392] caychay34: Lý Thu Thuỷ máu 91% -> 81%
+[20:10:07.808] caychay35: Lý Thu Thuỷ máu 85% -> 81%
+[20:10:07.811] caychay32: Lý Thu Thuỷ máu 85% -> 81%
+[20:10:07.892] GaoDẻLâu: Lý Thu Thuỷ máu 85% -> 81%
+[20:10:07.996] caychay34: Lý Thu Thuỷ máu 81% -> 77%
+[20:10:08.411] caychay32: Lý Thu Thuỷ máu 81% -> 77%
+[20:10:08.421] caychay35: Lý Thu Thuỷ máu 81% -> 77%
+[20:10:08.444] GaoDẻLâu: Lý Thu Thuỷ máu 81% -> 77%
+[20:10:08.560] caychay34: đi tới (129, 31)
+[20:10:09.000] GaoDẻLâu: Lý Thu Thuỷ máu 77% -> 70%
+[20:10:09.036] caychay35: Lý Thu Thuỷ máu 77% -> 70%
+[20:10:09.038] caychay32: Lý Thu Thuỷ máu 77% -> 70%
+[20:10:09.214] caychay34: Lý Thu Thuỷ máu 77% -> 63%
+[20:10:09.551] GaoDẻLâu: Lý Thu Thuỷ máu 70% -> 63%
+[20:10:09.649] caychay35: Lý Thu Thuỷ máu 70% -> 63%
+[20:10:09.652] caychay32: Lý Thu Thuỷ máu 70% -> 63%
+[20:10:10.692] GaoDẻLâu: Lý Thu Thuỷ máu 63% -> 56%
+[20:10:10.887] caychay32: Lý Thu Thuỷ máu 63% -> 56%
+[20:10:10.915] caychay35: Lý Thu Thuỷ máu 63% -> 56%
+[20:10:10.953] caychay34: Lý Thu Thuỷ máu 63% -> 56%
+[20:10:11.262] GaoDẻLâu: Lý Thu Thuỷ máu 56% -> 49%
+[20:10:11.497] caychay32: Lý Thu Thuỷ máu 56% -> 49%
+[20:10:11.515] caychay35: Lý Thu Thuỷ máu 56% -> 49%
+[20:10:11.557] caychay34: Lý Thu Thuỷ máu 56% -> 49%
+[20:10:12.057] caychay32: Lý Thu Thuỷ máu 49% -> 41%
+[20:10:12.115] caychay35: Lý Thu Thuỷ máu 49% -> 41%
+[20:10:12.165] caychay34: Lý Thu Thuỷ máu 49% -> 41%
+[20:10:12.380] GaoDẻLâu: Lý Thu Thuỷ máu 49% -> 41%
+[20:10:12.783] caychay35: Lý Thu Thuỷ máu 41% -> 34%
+[20:10:12.785] caychay34: Lý Thu Thuỷ máu 41% -> 34%
+[20:10:12.934] GaoDẻLâu: Lý Thu Thuỷ máu 41% -> 34%
+[20:10:13.271] caychay32: Lý Thu Thuỷ máu 41% -> 34%
+[20:10:13.882] caychay34: đi tới (128, 31)
+[20:10:13.936] caychay32: Lý Thu Thuỷ máu 34% -> 26%
+[20:10:13.985] caychay35: Lý Thu Thuỷ máu 34% -> 26%
+[20:10:13.986] caychay34: Lý Thu Thuỷ máu 34% -> 26%
+[20:10:14.064] GaoDẻLâu: Lý Thu Thuỷ máu 34% -> 26%
+[20:10:14.539] caychay32: Lý Thu Thuỷ máu 26% -> 21%
+[20:10:14.580] caychay34: Lý Thu Thuỷ máu 26% -> 21%
+[20:10:14.585] caychay35: Lý Thu Thuỷ máu 26% -> 21%
+[20:10:14.623] GaoDẻLâu: Lý Thu Thuỷ máu 26% -> 21%
+[20:10:15.707] caychay32: Lý Thu Thuỷ máu 21% -> 12%
+[20:10:15.732] GaoDẻLâu: Lý Thu Thuỷ máu 21% -> 12%
+[20:10:15.779] caychay35: Lý Thu Thuỷ máu 21% -> 12%
+[20:10:15.789] caychay34: Lý Thu Thuỷ máu 21% -> 12%
+[20:10:16.377] caychay34: Lý Thu Thuỷ máu 12% -> 3%
+[20:10:16.840] GaoDẻLâu: Lý Thu Thuỷ máu 12% -> 3%
+[20:10:16.870] caychay32: Lý Thu Thuỷ máu 12% -> 3%
+[20:10:16.906] caychay35: thông báo: Các hạ nhận được 65343397 điểm kinh nghiệm.
+[20:10:16.909] caychay35: Lý Thu Thuỷ máu 12% -> 3%
+[20:10:16.938] caychay34: thông báo: Các hạ nhận được 65343397 điểm kinh nghiệm.
+[20:10:17.387] GaoDẻLâu: thông báo: Các hạ đạt 39206039 điểm kinh nghiệm, đồng thời đạt 39206040 điểm thưởng kinh nghiệm
+[20:10:17.389] GaoDẻLâu: Lý Thu Thuỷ chết
+[20:10:17.428] caychay32: thông báo: Các hạ nhận được 64036530 điểm kinh nghiệm.
+[20:10:17.432] caychay32: Lý Thu Thuỷ chết
+[20:10:17.497] caychay35: Lý Thu Thuỷ chết
+[20:10:17.561] caychay34: Lý Thu Thuỷ chết
+[20:10:22.097] caychay32: bỏ chọn mục tiêu
+[20:10:22.222] caychay34: bỏ chọn mục tiêu
+[20:10:22.248] caychay35: bỏ chọn mục tiêu
+[20:10:22.420] GaoDẻLâu: bỏ chọn mục tiêu
+[20:10:43.376] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:10:45.009] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:10:50.470] GaoDẻLâu: vào map [Đại Lý] (160, 157) máu 0% nội 0% | đội trưởng
+[20:10:52.229] GaoDẻLâu: máu 0% -> 100%
+[20:10:52.229] GaoDẻLâu: nội 0% -> 100%
+[20:10:52.229] GaoDẻLâu: không còn là đội trưởng
+[20:10:52.836] GaoDẻLâu: thành đội trưởng
+[20:10:53.001] caychay34: vào map [Đại Lý] (160, 157) máu 61% nội 28%
+[20:10:53.754] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:10:54.112] GaoDẻLâu: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:10:54.798] caychay34: thông báo: T? v?t rẽằc sắậ ho?t eẩÌng sau 60 giay
+[20:10:57.939] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:10:57.939] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:10:58.872] caychay32: vào map [Đại Lý] (160, 157) máu 0% nội 0%
+[20:10:59.326] caychay35: vào map [Đại Lý] (160, 157) máu 100% nội 100%
+[20:10:59.589] caychay32: máu 0% -> 69%
+[20:10:59.589] caychay32: nội 0% -> 35%
+[20:11:44.778] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:11:46.006] GaoDẻLâu: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:11:53.820] caychay32: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:11:58.147] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c HP
+[20:11:59.331] caychay34: thông báo: Kh?ng tẽểm thắèy vắìt ph|m hắãi ph?c MP
+[20:12:15.681] GHI: dừng ghi

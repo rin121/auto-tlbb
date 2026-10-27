@@ -95,6 +95,23 @@ def cac_module_32bit(handle_tien_trinh):
     return ket_qua
 
 
+def _cho_module_trong_tien_trinh(handle_tien_trinh, ten_module, lan_thu=200, giay_buoc=0.05):
+    """
+    Game mở CREATE_SUSPENDED chưa nạp kernel32 — chờ trước khi inject DLL.
+    """
+    khoa = (ten_module or "").lower()
+    for _ in range(lan_thu):
+        try:
+            cac_module = cac_module_32bit(handle_tien_trinh)
+        except OSError:
+            time.sleep(giay_buoc)
+            continue
+        if khoa in cac_module:
+            return cac_module[khoa]
+        time.sleep(giay_buoc)
+    raise LoiLua(f"tiến trình game chưa nạp {ten_module} (chờ inject DLL quá lâu)")
+
+
 def rva_ham_xuat(duong_dan_dll, ten_ham):
     pe = pefile.PE(duong_dan_dll, fast_load=True)
     pe.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_EXPORT"]])
@@ -132,7 +149,7 @@ def nap_dll(pid):
     return nap_dll_duong_dan(pid, DUONG_DAN_DLL, TEN_DLL)
 
 
-def nap_dll_duong_dan(pid, duong_dan_dll, ten_dll):
+def nap_dll_duong_dan(pid, duong_dan_dll, ten_dll, cho_kernel_lan_thu=200, cho_kernel_giay_buoc=0.05):
     """Nạp một DLL 32-bit vào tiến trình game (nếu chưa nạp). Trả về True nếu vừa nạp."""
     handle = mo_tien_trinh(pid)
     try:
@@ -140,7 +157,9 @@ def nap_dll_duong_dan(pid, duong_dan_dll, ten_dll):
         if ten_dll in cac_module:
             return False
 
-        dia_chi_loadlibrary = cac_module["kernel32.dll"] + rva_ham_xuat(
+        dia_chi_kernel = _cho_module_trong_tien_trinh(
+            handle, "kernel32.dll", lan_thu=cho_kernel_lan_thu, giay_buoc=cho_kernel_giay_buoc)
+        dia_chi_loadlibrary = dia_chi_kernel + rva_ham_xuat(
             r"C:\Windows\SysWOW64\kernel32.dll", "LoadLibraryA")
 
         duong_dan = duong_dan_dll.encode("mbcs") + b"\0"
@@ -204,6 +223,10 @@ class LuaGame:
         struct.pack_into("<i", self._vung, vi_tri, gia_tri)
 
     def ket_noi(self):
+        # DLL không bao giờ gỡ khỏi game và mỗi LuaGame gắn với một pid: đã mở vùng nhớ chung thì khỏi duyệt lại
+        # danh sách module của game (vài trăm lời gọi Win32) ở mỗi lệnh Lua.
+        if self._vung is not None:
+            return
         try:
             nap_dll(self.pid)
         except LoiLua:
@@ -247,7 +270,10 @@ class LuaGame:
                     time.sleep(0.01)
 
                 ma_loi = self._doc_so(VI_TRI_MA_LOI)
-                ket_qua = bytes(self._vung[VI_TRI_KET_QUA:VI_TRI_KET_QUA + KICH_THUOC_CHUOI]).split(b"\0", 1)[0]
+                ket_thuc = self._vung.find(b"\0", VI_TRI_KET_QUA, VI_TRI_KET_QUA + KICH_THUOC_CHUOI)
+                if ket_thuc < 0:
+                    ket_thuc = VI_TRI_KET_QUA + KICH_THUOC_CHUOI
+                ket_qua = self._vung[VI_TRI_KET_QUA:ket_thuc]
                 self._ghi_so(VI_TRI_TRANG_THAI, RANH)
 
                 if ma_loi == 0:

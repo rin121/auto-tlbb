@@ -41,7 +41,8 @@ MAC_DINH_CHUNG = {"giay_cho_game_khoi_dong": 90, "bat_moi_nhom": False, "truong_
                   "thu_tu_tab": [], "thu_tu_nhan_vat": [], "cao_bang": {},
                   "so_nguoi_mot_nhom": 4, "xv_chi_sat_tinh": False,
                   "xv_so_round": 3, "xv_test": False, "xv_chuyen_do": True, "xv_ngay_moi": True,
-                  "xv_truong_nhom": []}
+                  "xv_truong_nhom": [], "xv_tien_trinh": {},
+                  "proxy": {"bat": False, "so_acc_moi_ip": 4, "danh_sach": ""}}
 DUONG_DAN_TAI_KHOAN = os.path.join(THU_MUC_APP, "tai_khoan.json")
 MAC_DINH_TAI_KHOAN = {
     "bat_tu_dang_nhap": False,
@@ -57,7 +58,6 @@ MAC_DINH_TAI_KHOAN = {
     "giay_giua_moi_dot": 2,
     "tai_khoan_pho_ban": [],
     "tai_khoan_train": [],
-    "tai_khoan": [],
     # Tab "Tạo nhân vật": tài khoản mới cần tạo nhân vật + nhận đồ tân thủ; da_xong {tài khoản: [nhân vật đã nhận đồ]};
     # ten_thuc {tài khoản: {tên định đặt: tên đã tạo}} khi tên định đặt không tạo được (trùng) phải thêm số.
     "tao_nhan_vat_moi": {"danh_sach": "", "so_nhan_vat": 3, "nhan_do_tan_thu": True,
@@ -185,8 +185,46 @@ if _tb_cau_hinh:
     _THONG_BAO_PHUC_HOI.append(_tb_cau_hinh)
 
 
+_khoa_ghi = threading.Lock()
+_ban_moi_nhat = 0
+_ban_da_ghi = 0
+
+
+def _chup_ban_luu():
+    """Gọi khi đang giữ _khoa: chụp nội dung cau_hinh.json cần ghi kèm số thứ tự bản."""
+    global _ban_moi_nhat
+    _ban_moi_nhat += 1
+    return _ban_moi_nhat, dinh_dang_json(_du_lieu)
+
+
+def _ghi_ban_luu(ban):
+    """
+    Ghi ra đĩa sau khi đã nhả _khoa (fsync + .bak file ~1MB mất vài chục ms, các luồng auto không phải chờ).
+    Luồng khác đã ghi bản mới hơn thì bỏ qua, để file không bị bản cũ ghi đè.
+    """
+    global _ban_da_ghi
+    so, chu = ban
+    with _khoa_ghi:
+        if so <= _ban_da_ghi:
+            return
+        _ghi_json_an_toan(DUONG_DAN, chu)
+        _ban_da_ghi = so
+
+
 def _luu():
-    _ghi_json_an_toan(DUONG_DAN, dinh_dang_json(_du_lieu))
+    _ghi_ban_luu(_chup_ban_luu())
+
+
+def _sao_chep(gia_tri):
+    """Như copy.deepcopy nhưng nhanh hơn nhiều với dữ liệu JSON (luồng auto đọc cài đặt liên tục)."""
+    loai = type(gia_tri)
+    if loai is dict:
+        return {k: _sao_chep(v) for k, v in gia_tri.items()}
+    if loai is list:
+        return [_sao_chep(v) for v in gia_tri]
+    if gia_tri is None or loai in (str, int, float, bool):
+        return gia_tri
+    return copy.deepcopy(gia_tri)
 
 
 def _them_map_khi_bi_pk(cai_dat):
@@ -270,6 +308,36 @@ MAC_DINH_PHO_BAN_PMP = {"bat": False, "so_vong": 0, "to_doi": False,
                                     "st_vong": 0, "st_het": False}}
 
 
+# Sự kiện Ác Tặc (su_kien_ac_tac.py): map_uu_tien là các map đã chọn theo thứ tự đi, thu_tu_map là thứ tự hiện trong
+# danh sách (cả map chưa chọn); route "moi" = [ACTAC] GAuto (nhanh), "cu" = [ACTACKIEUCU] (chậm mà không sót).
+CAC_MAP_AC_TAC = ["Vô Lượng Sơn", "Kiếm Các", "Tây Hồ", "Đôn Hoàng", "Thái Hồ", "Tung Sơn"]
+# chay_pathpoints / cho_party / tu_tim: GAuto tab Ác Tặc — cboxATRunPP (thường tắt), cboxChoParty, cboxIsTrungAc (Tự tìm).
+# Tắt pathpoints = «Chạy tìm»: quét lỏng quanh mốc ACTAC, không đi từng điểm cố định.
+MAC_DINH_AC_TAC = {"bat": False, "bo_khung_02h": False, "route": "moi", "ten_quai": "Ác Tặc",
+                   "ten_npc": "Ác Tặc Tạo Phản", "dong_khieu": "chẳng lẽ",
+                   "chay_pathpoints": False, "cho_party": True, "tu_tim": True,
+                   "dung_gauto": False, "duong_dan_gauto": "", "phut_gauto": 30,
+                   "map_uu_tien": list(CAC_MAP_AC_TAC), "thu_tu_map": list(CAC_MAP_AC_TAC)}
+
+
+def _them_ac_tac(cai_dat):
+    """Sự kiện Ác Tặc (tab "Phó bản"), mặc định tắt. Bản đầu ghi nhầm Kính Hồ: đổi sang Tây Hồ."""
+    if "ac_tac" not in cai_dat:
+        cai_dat["ac_tac"] = copy.deepcopy(MAC_DINH_AC_TAC)
+        return True
+    doi = False
+    for khoa in ("map_uu_tien", "thu_tu_map"):
+        ds = cai_dat["ac_tac"].get(khoa)
+        if isinstance(ds, list) and "Kính Hồ" in ds:
+            cai_dat["ac_tac"][khoa] = ["Tây Hồ" if m == "Kính Hồ" else m for m in ds]
+            doi = True
+    for khoa, gia_tri in MAC_DINH_AC_TAC.items():
+        if khoa not in cai_dat["ac_tac"]:
+            cai_dat["ac_tac"][khoa] = gia_tri
+            doi = True
+    return doi
+
+
 def _them_pho_ban_pmp(cai_dat):
     """Tự đi phó bản Phiêu Miễu Phong (tab Phó bản), mặc định tắt."""
     sua = False
@@ -300,28 +368,64 @@ def _them_xv_chung(du_lieu):
     return sua
 
 
+def _them_proxy_chung(du_lieu):
+    if "proxy" in du_lieu:
+        return False
+    du_lieu["proxy"] = copy.deepcopy(MAC_DINH_CHUNG["proxy"])
+    return True
+
+
+def _dong_bo_ac_tac_mac_dinh(du_lieu):
+    """Ác Tặc lưu chung mac_dinh: nếu mac_dinh chưa bật mà có nhân vật đã bật thì copy cài đặt sang."""
+    md = du_lieu["mac_dinh"]
+    if (md.get("ac_tac") or {}).get("bat"):
+        return False
+    for cai_dat in du_lieu["nhan_vat"].values():
+        at = cai_dat.get("ac_tac") or {}
+        if at.get("bat"):
+            md["ac_tac"] = copy.deepcopy(at)
+            return True
+    return False
+
+
+def _ac_tac_mac_dinh_chay_tim_gauto(du_lieu):
+    """Một lần: mac_dinh bật pathpoints (mặc định cũ) → tắt để khớp GAuto «Chạy tìm», không «Chạy pathpoints»."""
+    md = du_lieu["mac_dinh"]
+    at = md.get("ac_tac")
+    if not at or at.get("_gauto_chay_tim") or not at.get("chay_pathpoints"):
+        return False
+    at = dict(at)
+    at["chay_pathpoints"] = False
+    at["_gauto_chay_tim"] = True
+    md["ac_tac"] = at
+    return True
+
+
 if any([_them_map_khi_bi_pk(_du_lieu["mac_dinh"]), _them_bat_chuyen_sinh(_du_lieu["mac_dinh"]),
-        _them_xv_chung(_du_lieu)]
+        _them_xv_chung(_du_lieu), _them_proxy_chung(_du_lieu)]
        + [_them_cong_diem(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
        + [_them_pho_ban_pmp(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
+       + [_them_ac_tac(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
        + [_them_map_khi_bi_pk(cai_dat) for cai_dat in _du_lieu["nhan_vat"].values()]
        + [_them_bat_chuyen_sinh(cai_dat) for cai_dat in _du_lieu["nhan_vat"].values()]
        + [_doi_sang_hang_tui(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
-       + [_tat_chi_in_khong_bam(cai_dat) for cai_dat in _du_lieu["nhan_vat"].values()]):
+       + [_tat_chi_in_khong_bam(cai_dat) for cai_dat in _du_lieu["nhan_vat"].values()]
+       + [_dong_bo_ac_tac_mac_dinh(_du_lieu), _ac_tac_mac_dinh_chay_tim_gauto(_du_lieu)]):
     _luu()
 
 
 def chung():
     with _khoa:
-        gia_tri = copy.deepcopy(MAC_DINH_CHUNG)
-        gia_tri.update({k: copy.deepcopy(v) for k, v in _du_lieu.items() if k not in CAC_KHOA_KHONG_PHAI_CHUNG})
+        gia_tri = _sao_chep(MAC_DINH_CHUNG)
+        gia_tri.update({k: _sao_chep(v) for k, v in _du_lieu.items() if k not in CAC_KHOA_KHONG_PHAI_CHUNG})
         return gia_tri
 
 
 def dat_chung(gia_tri):
     with _khoa:
-        _du_lieu.update(copy.deepcopy(gia_tri))
-        _luu()
+        _du_lieu.update(_sao_chep(gia_tri))
+        ban = _chup_ban_luu()
+    _ghi_ban_luu(ban)
 
 
 def cac_nhan_vat():
@@ -331,27 +435,34 @@ def cac_nhan_vat():
 
 def cua_nhan_vat(ten):
     """Cài đặt của một nhân vật. Chưa có thì tạo từ "mac_dinh"."""
+    ban = None
     with _khoa:
         if ten not in _du_lieu["nhan_vat"]:
-            _du_lieu["nhan_vat"][ten] = copy.deepcopy(_du_lieu["mac_dinh"])
-            _luu()
-        return copy.deepcopy(_du_lieu["nhan_vat"][ten])
+            _du_lieu["nhan_vat"][ten] = _sao_chep(_du_lieu["mac_dinh"])
+            ban = _chup_ban_luu()
+        gia_tri = _sao_chep(_du_lieu["nhan_vat"][ten])
+    if ban:
+        _ghi_ban_luu(ban)
+    return gia_tri
 
 
 def dat_nhan_vat(ten, cai_dat):
     with _khoa:
-        _du_lieu["nhan_vat"][ten] = copy.deepcopy(cai_dat)
-        _luu()
+        _du_lieu["nhan_vat"][ten] = _sao_chep(cai_dat)
+        ban = _chup_ban_luu()
+    _ghi_ban_luu(ban)
 
 
 def sua_nhan_vat(ten, ham):
     """ham(cài đặt) sửa thẳng cài đặt đã lưu của nhân vật, trong cùng một lần khóa (luồng auto cập nhật bộ đếm)."""
     with _khoa:
         if ten not in _du_lieu["nhan_vat"]:
-            _du_lieu["nhan_vat"][ten] = copy.deepcopy(_du_lieu["mac_dinh"])
+            _du_lieu["nhan_vat"][ten] = _sao_chep(_du_lieu["mac_dinh"])
         ham(_du_lieu["nhan_vat"][ten])
-        _luu()
-        return copy.deepcopy(_du_lieu["nhan_vat"][ten])
+        ban = _chup_ban_luu()
+        gia_tri = _sao_chep(_du_lieu["nhan_vat"][ten])
+    _ghi_ban_luu(ban)
+    return gia_tri
 
 
 def cap_nhat_tat_ca_nhan_vat(ham):
@@ -359,25 +470,42 @@ def cap_nhat_tat_ca_nhan_vat(ham):
     ham(cài đặt) sửa từng nhân vật; trả về True nếu có thay đổi.
     Chỉ ghi cau_hinh.json một lần (dùng khi dọn cờ hàng loạt lúc mở app).
     """
+    ban = None
     with _khoa:
         doi = False
         for cai_dat in _du_lieu["nhan_vat"].values():
             if ham(cai_dat):
                 doi = True
         if doi:
-            _luu()
-        return doi
+            ban = _chup_ban_luu()
+    if ban:
+        _ghi_ban_luu(ban)
+    return doi
+
+
+def thay_tat_ca_nhan_vat(ham):
+    """
+    Như lặp cua_nhan_vat + dat_nhan_vat cho mọi nhân vật nhưng chỉ ghi cau_hinh.json một lần:
+    ham(tên, bản sao cài đặt) trả về cài đặt mới. ham chạy khi đang giữ khóa nên không được gọi lại cau_hinh.
+    """
+    with _khoa:
+        nhan_vat = _du_lieu["nhan_vat"]
+        for ten in list(nhan_vat):
+            nhan_vat[ten] = _sao_chep(ham(ten, _sao_chep(nhan_vat[ten])))
+        ban = _chup_ban_luu()
+    _ghi_ban_luu(ban)
 
 
 def mac_dinh():
     with _khoa:
-        return copy.deepcopy(_du_lieu["mac_dinh"])
+        return _sao_chep(_du_lieu["mac_dinh"])
 
 
 def dat_mac_dinh(cai_dat):
     with _khoa:
-        _du_lieu["mac_dinh"] = copy.deepcopy(cai_dat)
-        _luu()
+        _du_lieu["mac_dinh"] = _sao_chep(cai_dat)
+        ban = _chup_ban_luu()
+    _ghi_ban_luu(ban)
 
 
 KHOA_TK_PHO_BAN = "tai_khoan_pho_ban"
@@ -467,17 +595,19 @@ def doc_tai_khoan():
             lam_chuoi=_chu_tai_khoan)
         if tb:
             _THONG_BAO_PHUC_HOI.append(tb)
+        # Chuẩn hóa trên dữ liệu đọc từ file (chưa trộn mặc định), chỉ ghi lại khi file thật sự là dạng cũ.
+        can_luu = chuan_hoa_danh_sach_tai_khoan(du_lieu)
         if not la_thu_muc_game(du_lieu.get("thu_muc_game")):
             thu_muc = tim_thu_muc_game()
             if thu_muc:
                 du_lieu["thu_muc_game"] = thu_muc
-                _luu_tai_khoan(du_lieu)
+                can_luu = True
+        if can_luu:
+            _luu_tai_khoan(du_lieu)
         gia_tri = copy.deepcopy(MAC_DINH_TAI_KHOAN)
         gia_tri.update(du_lieu)
         gia_tri["tao_nhan_vat_moi"] = copy.deepcopy(
             dict(MAC_DINH_TAI_KHOAN["tao_nhan_vat_moi"], **du_lieu.get("tao_nhan_vat_moi", {})))
-        if chuan_hoa_danh_sach_tai_khoan(gia_tri):
-            _luu_tai_khoan(copy.deepcopy(gia_tri))
         return gia_tri
 
 

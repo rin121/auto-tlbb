@@ -75,12 +75,15 @@ CAC_BUOC_VAO = (
 # tay 23:20). dan_doi: lên thú + Theo đội trước khi chạy tới NPC (boss thì đội viên đã đứng sẵn ở điểm đánh, đội
 # trưởng đi một mình). giu_theo: chọn khiêu chiến khi cả đội còn theo, dẫn tới điểm đánh rồi mới bỏ theo
 # (các ải khác cũng chỉ bỏ theo sau khi đã chọn khiêu chiến).
-Ai = namedtuple("Ai", "ten npc xy dong diem_danh cac_quai duong duong_danh dan_doi giu_theo")
+# an_than: quái ẩn thân giữa trận (biến mất khi còn máu, ~15-20 giây sau hiện lại đúng chỗ, máu giữ nguyên); lúc ẩn
+# cả đội đứng chờ không đánh, chỉ tính chết khi thấy xác (ghi tay GaoDẻLâu 27/10/2026 sau khi server tăng máu boss).
+Ai = namedtuple("Ai", "ten npc xy dong diem_danh cac_quai duong duong_danh dan_doi giu_theo an_than",
+                defaults=(False,))
 CAC_AI = (
     Ai("ải 1", "Cáp Đại Bá", (124, 86), (402270, 1), (124, 86), ("Cáp Đại Bá",),
        (), (), True, False),
     Ai("ải 2", "Tang Thổ Công", (41, 105), (402271, 1), (41, 105), ("Tang Thổ Công",),
-       ((98, 96), (88, 109), (55, 113)), (), True, False),
+       ((98, 96), (88, 109), (55, 113)), (), True, False, True),
     Ai("ải 3", "Ô Lão Đại", (117, 49), (402272, 1), (117, 49), ("Ô Lão Đại",),
        ((40, 66), (98, 60)), (), True, False),
     Ai("ải 4", "Phù Mẫn Nghi", (159, 54), (402273, 1), (124, 34),
@@ -110,6 +113,11 @@ GIAY_DANH_MOT_AI = 120
 # Đứng trong ải PMP không thấy quái / NPC để đánh: về Đại Lý chạy lại vòng (không tính xong vòng).
 GIAY_TREO_PMP_KHONG_QUAI = 30
 SO_LAN_CHAY_LAI_PMP_TREO = 5
+# Ải quái ẩn thân: cả trận ~2 phút, mỗi lần ẩn ~15-20 giây. Máu quái còn giảm thì gia hạn thêm GIAY_DANH_MOT_AI.
+GIAY_DANH_AI_AN_THAN = 300
+GIAY_TREO_AI_AN_THAN = 60
+# Quái ẩn thân biến mất mà lần cuối thấy còn ít máu hơn mức này (0..1) thì coi như đã chết (không kịp thấy xác).
+MAU_COI_NHU_CHET = 0.03
 # Game đếm ~5 giây sau khiêu chiến rồi NPC mới hóa quái; chưa thấy sống thì không được coi là đã chết.
 GIAY_CHO_QUAI_XUAT_HIEN = 8
 # Chọn khiêu chiến xong chờ chừng này rồi mới bỏ theo đội.
@@ -1758,6 +1766,10 @@ class PhoBanPMP:
             ht = self._hoi_thoai()
             if ht is not None:
                 muc_tieu, cac_dong = ht
+                if getattr(self, "che_do", None) == "ac_tac" and any(
+                        loai == "id" and (chu or "").strip() for loai, _, _, chu in cac_dong):
+                    if not khoa_npc or chuan_hoa(muc_tieu or "") == khoa_npc:
+                        return True
                 for _, _, _, chu in cac_dong:
                     if self.che_do == "pmp" and self._la_bao_het_pmp_thuong(chu):
                         raise _HetLuot(chu)
@@ -2154,10 +2166,13 @@ class PhoBanPMP:
         id_truoc = set(id_truoc)
         da_thay = {}   # tên -> đã thấy sống (quái đánh, không phải NPC lúc nói chuyện)
         da_chet = {}   # tên -> lúc chết
+        mau_cuoi = {}  # tên -> máu (0..1) lần cuối thấy sống
+        dang_an = set()
         da_dat_vung = False
         bat_dau_danh = False
         luc_cho = time.time()
-        het_han = luc_cho + GIAY_DANH_MOT_AI
+        het_han = luc_cho + (GIAY_DANH_AI_AN_THAN if ai.an_than else GIAY_DANH_MOT_AI)
+        giay_treo = GIAY_TREO_AI_AN_THAN if ai.an_than else GIAY_TREO_PMP_KHONG_QUAI
         luc_bao = 0.0
         luc_co_quai = time.time()
         while True:
@@ -2166,11 +2181,18 @@ class PhoBanPMP:
             for chu in self._doc_thong_bao():
                 if chu.strip() == THONG_BAO_BAT_DAU_DANH:
                     bat_dau_danh = True
-            can_giet, song, _ = self._quai_ai(ai)
-            if song or any(ten in can_giet for ten, _ in self._quanh()):
+            can_giet, song, xac = self._quai_ai(ai)
+            quanh = list(self._quanh())
+            if song or any(ten in can_giet for ten, _ in quanh):
                 luc_co_quai = bay_gio
-            elif bay_gio - luc_co_quai >= GIAY_TREO_PMP_KHONG_QUAI:
+            elif bay_gio - luc_co_quai >= giay_treo:
                 raise _TreoPMP()
+            if ai.an_than:
+                for ten, d in quanh:
+                    if ten in can_giet and d.hp > 0 and d.id in song:
+                        if ten in mau_cuoi and d.hp < mau_cuoi[ten] - 0.005:
+                            het_han = max(het_han, bay_gio + GIAY_DANH_MOT_AI)
+                        mau_cuoi[ten] = d.hp
             chap_id_cu = bat_dau_danh or bay_gio - luc_cho >= GIAY_CHO_QUAI_XUAT_HIEN
             for ma_id, ten in song.items():
                 if ma_id in id_truoc and not chap_id_cu:
@@ -2184,8 +2206,18 @@ class PhoBanPMP:
             for ten in list(da_thay):
                 if any(t == ten for t in song.values()):
                     da_chet.pop(ten, None)
-                elif ten not in da_chet:
+                    if ten in dang_an:
+                        dang_an.discard(ten)
+                        self.in_log(f"{self.ten}: PMP {ai.ten}: {ten} hiện lại "
+                                    f"({round(mau_cuoi.get(ten, 0) * 100)}% máu), đánh tiếp")
+                elif ten in da_chet:
+                    continue
+                elif not ai.an_than or ten in xac.values() or mau_cuoi.get(ten, 1) <= MAU_COI_NHU_CHET:
                     da_chet[ten] = bay_gio
+                elif ten not in dang_an:
+                    dang_an.add(ten)
+                    self.in_log(f"{self.ten}: PMP {ai.ten}: {ten} ẩn thân "
+                                f"(còn {round(mau_cuoi.get(ten, 1) * 100)}% máu), cả đội đứng chờ hiện lại")
             if can_giet <= set(da_thay) and can_giet <= set(da_chet):
                 if bay_gio - max(da_chet.values()) >= GIAY_SAU_CON_CUOI and not song:
                     self.in_log(f"{self.ten}: PMP {ai.ten}: đã giết {', '.join(ai.cac_quai)}")
@@ -2197,11 +2229,13 @@ class PhoBanPMP:
                 self._giu_thu()
                 if chua_ra:
                     self._mo_ta(f"{ai.ten}: chờ {', '.join(chua_ra)} xuất hiện")
+                elif dang_an:
+                    self._mo_ta(f"{ai.ten}: {', '.join(sorted(dang_an))} ẩn thân, chờ hiện lại")
                 else:
                     self._mo_ta(f"{ai.ten}: đánh {', '.join(chua_chet)}")
             if bay_gio >= het_han:
                 thieu = chua_ra or chua_chet
-                raise LoiPhoBan(f"{ai.ten} quá {GIAY_DANH_MOT_AI} giây chưa "
+                raise LoiPhoBan(f"{ai.ten} quá {round(het_han - luc_cho)} giây chưa "
                                 f"{'thấy' if chua_ra else 'giết'} {', '.join(thieu)}")
             time.sleep(0.3)
 

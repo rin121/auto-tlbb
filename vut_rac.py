@@ -200,6 +200,45 @@ def _huy(bo_nho, lua, o):
         raise
 
 
+def vut_theo_ma(lua, ten, cac_ma, in_log, nen_dung=lambda: False):
+    """Vứt mọi món trong túi có mã (DefineID) thuộc cac_ma. Trả về danh sách tên món đã vứt."""
+    ma_cua_o = {}
+    for dong in lua.chay('local s = "" for i = 0, 99 do local a = PlayerPackage:EnumItem("base", i) '
+                         'if a and a:GetID() ~= 0 then s = s .. i .. "|" .. a:GetDefineID() .. "\\n" end end '
+                         'return s').split(b"\n"):
+        if dong:
+            o, ma = dong.split(b"|")
+            ma_cua_o[int(o)] = int(float(ma))
+    cac_o = [o for o, ma in ma_cua_o.items() if ma in cac_ma]
+    if not cac_o:
+        return []
+    bo_nho = BoNho(lua.pid)
+    try:
+        kiem_tra_ban_game(bo_nho, lua)
+        ds = _ds_tui(lua)
+        mang = _mang_tui(bo_nho)
+        da_vut = []
+        for o in cac_o:
+            if nen_dung():
+                break
+            mon = bo_nho.so(mang + 4 * o)
+            if not mon:
+                continue
+            ten_mon = ds.get(o, (0, f"ô {o + 1}"))[1]
+            _huy(bo_nho, lua, o)
+            het_han = time.time() + GIAY_CHO_HUY
+            while bo_nho.so(mang + 4 * o) == mon and time.time() < het_han:
+                time.sleep(0.1)
+            if bo_nho.so(mang + 4 * o) == mon:
+                in_log(f"{ten}: không vứt được {ten_mon} (ô {o + 1})")
+                continue
+            in_log(f"{ten}: đã vứt {ten_mon} (ô {o + 1})")
+            da_vut.append(ten_mon)
+        return da_vut
+    finally:
+        bo_nho.dong()
+
+
 def vut_rac(lua, ten, in_log, chi_xem=False, nen_dung=lambda: False, sao_toi_thieu=0):
     """
     Tìm (và vứt, nếu chi_xem=False) rác của nhân vật ten: trang bị Chưa giám định, và trang bị dưới

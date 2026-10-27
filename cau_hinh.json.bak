@@ -1,0 +1,2210 @@
+{
+    "giay_giua_moi_lan_kiem_tra": 2,
+    "giay_cho_toi_da": 30,
+    "giay_nghi_sau_khi_toi_map": 5,
+    "so_lan_thu_toi_da": 3,
+    "mac_dinh": {
+        "bat_auto": false,
+        "chi_in_khong_bam": false,
+        "vat_pham": {
+            "tlc_hoa_diem_son": {
+                "cac_o": [[5, 1], [5, 2], [5, 3]],
+                "ma_loai": 30008007
+            },
+            "tlc_han_huyet_linh": {
+                "cac_o": [[6, 1], [6, 2]],
+                "ma_loai": 30008007
+            },
+            "hop_qua_chuyen_sinh": {
+                "cac_o": [[1, 1]],
+                "ma_loai": 39910207
+            },
+            "tlc_cao_xuong_me_cung": {
+                "cac_o": [[6, 3], [6, 4], [6, 5]],
+                "ma_loai": 30008007
+            }
+        },
+        "chuyen_sinh": {
+            "level": 130,
+            "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+            "dich_chuyen_truoc_chuyen_sinh": false,
+            "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+            "hang_vat_pham_truoc_chuyen_sinh": 5
+        },
+        "moc_level": [
+            {
+                "level": 90,
+                "map": "Hạn huyết lĩnh",
+                "map_khi_bi_pk": "Cao Xương Mê Cung",
+                "dang_dung_map_pk": false,
+                "hang_vat_pham_dich_chuyen": 6,
+                "hang_vat_pham_khi_bi_pk": 6
+            },
+            {
+                "level": 30,
+                "map": "Hỏa Diệm Sơn",
+                "hang_vat_pham_dich_chuyen": 5
+            }
+        ],
+        "bat_chuyen_sinh": false,
+        "auto_cong_diem": {
+            "bat": false,
+            "cac_chi_so": [],
+            "tu_dung_hop_point": false
+        },
+        "pho_ban_pmp": {
+            "bat": false,
+            "so_vong": 0,
+            "o_ve_thanh": 10,
+            "hom_nay": {
+                "ngay": "",
+                "so_vong": 0,
+                "het_luot": false
+            },
+            "chi_sat_tinh": false
+        }
+    },
+    "nhan_vat": {
+        "MỹNhânNgư": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "CuaKỳCục": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "AnhViCá": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "AnhSam": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "GaoCọpTrắn": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "GaoCáMặp": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "GaoDẻLâu": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "GaoBúpBồ": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay10": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay100": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1000": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay11": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay111": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1111": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay12": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay122": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1222": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay13": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay133": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1333": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay14": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay144": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1444": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay15": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay155": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1555": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay16": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay166": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1666": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay17": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay177": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "caychay1777": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "kduy124": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "kduy1244": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        },
+        "kduy12444": {
+            "bat_auto": false,
+            "chi_in_khong_bam": false,
+            "vat_pham": {
+                "tlc_hoa_diem_son": {
+                    "cac_o": [[5, 1], [5, 2], [5, 3]],
+                    "ma_loai": 30008007
+                },
+                "tlc_han_huyet_linh": {
+                    "cac_o": [[6, 1], [6, 2]],
+                    "ma_loai": 30008007
+                },
+                "hop_qua_chuyen_sinh": {
+                    "cac_o": [[1, 1]],
+                    "ma_loai": 39910207
+                },
+                "tlc_cao_xuong_me_cung": {
+                    "cac_o": [[6, 3], [6, 4], [6, 5]],
+                    "ma_loai": 30008007
+                }
+            },
+            "chuyen_sinh": {
+                "level": 130,
+                "vat_pham_chuyen_sinh": "hop_qua_chuyen_sinh",
+                "dich_chuyen_truoc_chuyen_sinh": false,
+                "map_truoc_chuyen_sinh": "Hỏa Diệm Sơn",
+                "hang_vat_pham_truoc_chuyen_sinh": 5
+            },
+            "moc_level": [
+                {
+                    "level": 90,
+                    "map": "Hạn huyết lĩnh",
+                    "map_khi_bi_pk": "Cao Xương Mê Cung",
+                    "dang_dung_map_pk": false,
+                    "hang_vat_pham_dich_chuyen": 6,
+                    "hang_vat_pham_khi_bi_pk": 6
+                },
+                {
+                    "level": 30,
+                    "map": "Hỏa Diệm Sơn",
+                    "hang_vat_pham_dich_chuyen": 5
+                }
+            ],
+            "bat_chuyen_sinh": false,
+            "auto_cong_diem": {
+                "bat": false,
+                "cac_chi_so": [],
+                "tu_dung_hop_point": false
+            },
+            "pho_ban_pmp": {
+                "bat": false,
+                "so_vong": 0,
+                "o_ve_thanh": 10,
+                "hom_nay": {
+                    "ngay": "",
+                    "so_vong": 0,
+                    "het_luot": false
+                },
+                "chi_sat_tinh": false
+            }
+        }
+    },
+    "so_nguoi_mot_nhom": 4,
+    "xv_chi_sat_tinh": false,
+    "xv_so_round": 3,
+    "xv_test": false,
+    "xv_chuyen_do": true,
+    "xv_ngay_moi": true
+}

@@ -20,6 +20,7 @@ import subprocess
 import sys
 import threading
 import types
+import zlib
 from collections import Counter
 
 from PIL import Image, ImageChops, ImageFilter
@@ -38,8 +39,9 @@ RONG_O = RONG // SO_CHU_SO
 LE_O = 4
 VIEN_O = 8
 DO_PHONG_O = 3
-CAC_CO_LOC = (7, 9, 11)
-CAC_DO_PHONG = (2, 3)
+# Thử cỡ lọc 9 trước (thường ổn nhất), mở rộng nếu chưa đủ phiếu.
+CAC_CO_LOC = (9, 7, 11)
+CAC_DO_PHONG = (3, 2)
 DOM_NHO_NHAT = 6
 # ddddocr đọc không giới hạn ký tự, hay nhầm chữ số thành chữ cái trông giống.
 DOI_KY_TU = str.maketrans({"O": "0", "o": "0", "D": "0", "Q": "0", "U": "0", "u": "0",
@@ -48,6 +50,7 @@ DOI_KY_TU = str.maketrans({"O": "0", "o": "0", "D": "0", "Q": "0", "U": "0", "u"
                            "b": "6", "G": "6", "T": "7", "B": "8", "g": "9", "q": "9"})
 
 _khoa = threading.Lock()
+_khoa_khoi_tao_ocr = threading.Lock()
 _ocr = None
 
 
@@ -120,17 +123,31 @@ def _thu_muc_auto_chay():
     return os.path.dirname(os.path.abspath(__file__))
 
 
+def _cac_bo_ocr_py():
+    """ocr_py cạnh exe, hoặc win7\\ocr_py (bản đóng gói Win11 vẫn kèm bộ này cho captcha)."""
+    goc = _thu_muc_auto_chay()
+    for phan in ("ocr_py", os.path.join("win7", "ocr_py")):
+        thu_muc = os.path.join(goc, phan)
+        py = os.path.join(thu_muc, "python.exe")
+        script = os.path.join(thu_muc, "giai_ocr.py")
+        if os.path.isfile(py) and os.path.isfile(script):
+            yield thu_muc, py, script
+
+
 def _duong_ocr_py():
+    for bo in _cac_bo_ocr_py():
+        return bo
     thu_muc = os.path.join(_thu_muc_auto_chay(), "ocr_py")
     return thu_muc, os.path.join(thu_muc, "python.exe"), os.path.join(thu_muc, "giai_ocr.py")
 
 
 def _nen_dung_ocr_subprocess():
+    """Win7 (hoặc AUTOHOC_OCR_SUBPROCESS=1) dùng ocr_py\\ riêng. Win10+ dùng ddddocr trong exe — không vì có win7\\ocr_py."""
     if os.environ.get("AUTOHOC_OCR_SUBPROCESS") == "1":
         return True
     if platform.system() == "Windows" and platform.release() == "7":
         return True
-    return os.path.isfile(_duong_ocr_py()[1])
+    return False
 
 
 def kiem_tra_ocr_win7():
@@ -175,7 +192,11 @@ def doc_anh(pid):
 
 def _lay_ocr():
     global _ocr
-    if _ocr is None:
+    if _ocr is not None:
+        return _ocr
+    with _khoa_khoi_tao_ocr:
+        if _ocr is not None:
+            return _ocr
         if _nen_dung_ocr_subprocess():
             _ocr = _lay_ocr_subprocess()
             return _ocr
@@ -187,15 +208,37 @@ def _lay_ocr():
                 f"onnxruntime không chạy được ({loi}). "
                 "Win7: dùng win7\\AutoHoc.exe bản mới, cài VC++ 2015–2022 x64."
             ) from None
+        except zlib.error as loi:
+            raise LoiGiaiCaptcha(
+                f"không nạp onnxruntime trong AutoHoc.exe ({loi}). "
+                "Thử copy thư mục win7\\ocr_py cạnh AutoHoc.exe hoặc chạy lại bản build mới."
+            ) from None
         try:
             import ddddocr
         except ImportError as loi:
             raise LoiGiaiCaptcha(f"thiếu thư viện ddddocr ({loi})") from None
+        except zlib.error as loi:
+            raise LoiGiaiCaptcha(
+                f"không nạp ddddocr trong AutoHoc.exe ({loi}). "
+                "Dùng win7\\ocr_py (tiến trình riêng) hoặc build lại AutoHoc.exe."
+            ) from None
         try:
             _ocr = ddddocr.DdddOcr(show_ad=False)
+            try:
+                _ocr.set_ranges("0123456789")
+            except Exception:
+                pass
         except Exception as loi:
             raise LoiGiaiCaptcha(f"không khởi tạo ddddocr/onnx ({loi})") from None
     return _ocr
+
+
+def lam_nong_ocr():
+    """Nạp model OCR sớm (gọi nền khi mở AutoHoc) — tránh chờ lâu ở lần giải mã đầu."""
+    try:
+        _lay_ocr()
+    except LoiGiaiCaptcha:
+        pass
 
 
 def _bo_dom_nho(anh):
@@ -237,27 +280,43 @@ def _doc_so(ocr, anh, do_phong):
     return "".join(c for c in ocr.classification(bo_dem.getvalue()).translate(DOI_KY_TU) if c in "0123456789")
 
 
+def _bo_phieu_o(net, phieu, ocr):
+    """Đọc từng ô 32px — thường chính xác hơn ảnh nguyên; gọi khi đã có ocr."""
+    for vi_tri in range(SO_CHU_SO):
+        trai = max(0, vi_tri * RONG_O - LE_O)
+        phai = min(RONG, (vi_tri + 1) * RONG_O + LE_O)
+        o = Image.new("L", (phai - trai + 2 * VIEN_O, CAO + 2 * VIEN_O), 255)
+        o.paste(net.crop((trai, 0, phai, CAO)), (VIEN_O, VIEN_O))
+        with _khoa:
+            so = _doc_so(ocr, o, DO_PHONG_O)
+        if len(so) == 1:
+            phieu[vi_tri][so] += 1
+
+
+def _ket_qua_tu_phieu(phieu):
+    if not all(phieu):
+        return None
+    return "".join(p.most_common(1)[0][0] for p in phieu)
+
+
 def giai(anh):
     """Trả về mã 4 chữ số đọc được từ 576 byte ảnh, None nếu ảnh khó đọc."""
     anh_goc = Image.frombytes("1", (RONG, CAO), anh).convert("L")
     phieu = [Counter() for _ in range(SO_CHU_SO)]
-    with _khoa:
-        ocr = _lay_ocr()
-        for co_loc in CAC_CO_LOC:
-            net = _net_chu_so(anh_goc, co_loc)
-            for do_phong in CAC_DO_PHONG:
+    ocr = _lay_ocr()
+    for co_loc in CAC_CO_LOC:
+        net = _net_chu_so(anh_goc, co_loc)
+        _bo_phieu_o(net, phieu, ocr)
+        ket = _ket_qua_tu_phieu(phieu)
+        if ket:
+            return ket
+        for do_phong in CAC_DO_PHONG:
+            with _khoa:
                 so = _doc_so(ocr, net, do_phong)
-                if len(so) == SO_CHU_SO:
-                    for vi_tri, chu_so in enumerate(so):
-                        phieu[vi_tri][chu_so] += 1
-            for vi_tri in range(SO_CHU_SO):
-                trai = max(0, vi_tri * RONG_O - LE_O)
-                phai = min(RONG, (vi_tri + 1) * RONG_O + LE_O)
-                o = Image.new("L", (phai - trai + 2 * VIEN_O, CAO + 2 * VIEN_O), 255)
-                o.paste(net.crop((trai, 0, phai, CAO)), (VIEN_O, VIEN_O))
-                so = _doc_so(ocr, o, DO_PHONG_O)
-                if len(so) == 1:
-                    phieu[vi_tri][so] += 1
-    if not all(phieu):
-        return None
-    return "".join(p.most_common(1)[0][0] for p in phieu)
+            if len(so) == SO_CHU_SO:
+                for vi_tri, chu_so in enumerate(so):
+                    phieu[vi_tri][chu_so] += 1
+            ket = _ket_qua_tu_phieu(phieu)
+            if ket:
+                return ket
+    return _ket_qua_tu_phieu(phieu)
