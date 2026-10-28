@@ -1,7 +1,7 @@
 """
 Nút "Giao dịch ngay" khi không chạy xoay vòng: nhân vật đang chạy trong auto cùng nhóm game với một trưởng nhóm cũng
-đang trong auto thì tạm dừng auto, chạy tới trưởng nhóm giao đồ mới nhặt (so với túi lúc auto thấy nhân vật vào game),
-xong bật lại auto như cũ.
+đang trong auto, túi có đồ mới nhặt (so với ảnh túi gốc trong ngày, giao_dich.anh_tui_goc) thì tạm dừng auto, chạy tới
+trưởng nhóm giao đồ, xong bật lại auto như cũ. Không ai có đồ mới thì bỏ qua, không tạm dừng auto.
 """
 import threading
 import traceback
@@ -87,10 +87,28 @@ class LuongGiaoDichNgay(threading.Thread):
         except (LoiLua, OSError, ValueError):
             return None
 
+    def _co_do_moi(self, dv):
+        """Xem túi trước khi tạm dừng auto: đội viên có đồ mới (so với ảnh túi gốc trong ngày) không."""
+        if dv.anh_tui is None or dv.anh_tui_cua != dv.ten:
+            self.in_log(f"{dv.ten}: auto chưa chụp túi lúc vào game, chưa biết đồ nào mới nhặt — bỏ qua")
+            return False
+        try:
+            cac_o = o_do_moi(dv.game.lua, dv.anh_tui)
+        except (LoiLua, OSError):
+            return False
+        if not cac_o:
+            self.in_log(f"{dv.ten}: không có đồ mới trong túi, khỏi giao dịch")
+        return bool(cac_o)
+
     def _chay(self):
         cac_doi = chia_doi(self.cac_luong, self._doc_thanh_vien)
         if not cac_doi:
             self.in_log("Không có đội viên nào đang cùng nhóm (trong game) với trưởng nhóm cũng đang chạy trong auto")
+            return
+        cac_doi = [(truong, [dv for dv in doi_vien if self._co_do_moi(dv)]) for truong, doi_vien in cac_doi]
+        cac_doi = [(truong, doi_vien) for truong, doi_vien in cac_doi if doi_vien]
+        if not cac_doi:
+            self.in_log("Không đội viên nào có đồ mới trong túi, bỏ qua (không tạm dừng auto)")
             return
         thanh_vien = [luong for truong, doi_vien in cac_doi for luong in [truong, *doi_vien]]
         self.in_log("Tạm dừng auto để giao dịch: " + "; ".join(
@@ -110,9 +128,6 @@ class LuongGiaoDichNgay(threading.Thread):
             self.in_log("Xong, bật lại auto như trước khi giao dịch")
 
     def _chuyen_do(self, dv, truong):
-        if dv.anh_tui is None or dv.anh_tui_cua != dv.ten:
-            self.in_log(f"{dv.ten}: auto chưa chụp túi lúc vào game, chưa biết đồ nào mới nhặt — bỏ qua")
-            return
         for lan in range(1, SO_LAN_THU + 1):
             try:
                 cac_o = o_do_moi(dv.game.lua, dv.anh_tui)

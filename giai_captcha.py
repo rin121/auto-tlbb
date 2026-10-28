@@ -27,6 +27,9 @@ from PIL import Image, ImageChops, ImageFilter
 
 from lua_game import doc_bo_nho, kernel32, mo_tien_trinh
 
+# Nạp sẵn plugin PIL (PNG...) ngay khi mở app: Image.save nạp muộn lúc giải mã, exe bị thay khi đang chạy thì lỗi.
+Image.init()
+
 CON_TRO_DATAPOOL = 0x645AE0
 LECH_ANH = 0x4A5E8
 RONG, CAO = 128, 36

@@ -210,6 +210,7 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 self._kiem_tra()
                 buoc()
                 danh_dau_buoc(self.ten, so, self.duong_dan)
+            self.roi_cong_point()
             danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
             self.in_log(f"{self.ten}: đã nâng cấp xong nhân vật")
 

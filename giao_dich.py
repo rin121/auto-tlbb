@@ -11,13 +11,20 @@ Hàm Lua của game (Exchange.lua, ContexMenu.lua, MainMenuBar.lua):
     Đồng ý       : Trade_Accept_Button_Clicked() khi cả hai đã khóa; xong thì cửa sổ Exchange tự đóng.
     Hủy          : Exchange_Cancel().
 Hai người cách nhau quá 6 thì cửa sổ tự đóng, nên đội viên chạy tới sát trưởng nhóm trước.
-Đồ mới nhặt = (túi, mã) có số lượng nhiều hơn lúc chụp túi trước phó bản. Không chuyển tiền.
+Đồ mới nhặt = (túi, mã) có số lượng nhiều hơn ảnh túi gốc trong ngày (anh_tui_goc: lần đầu thấy nhân vật trong ngày,
+lưu ra DUONG_DAN_ANH_TUI để dừng / chạy lại / vào lại game vẫn biết đồ đã nhặt trước đó). Không chuyển tiền.
 """
+import json
 import math
+import os
+import threading
 import time
+from datetime import date
 
+from auto_chuyen_sinh import chuan_hoa
 from bang_ma_viscii import giai_ma
 from dang_nhap import chuoi_lua, trong_cua_so
+from thu_muc import THU_MUC_APP
 
 CAC_TUI = ("base", "material")
 SO_O_GIAO_DICH = 5
@@ -67,6 +74,45 @@ def chup_tui(lua):
     for (ten_tui, _), (ma, so, _) in doc_tui(lua).items():
         tong[(ten_tui, ma)] = tong.get((ten_tui, ma), 0) + so
     return tong
+
+
+DUONG_DAN_ANH_TUI = os.path.join(THU_MUC_APP, "anh_tui_goc.json")
+_khoa_anh_tui = threading.Lock()
+
+
+def _doc_file_anh_tui(duong_dan):
+    try:
+        with open(duong_dan, encoding="utf-8") as f:
+            du_lieu = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    return du_lieu if isinstance(du_lieu, dict) else {}
+
+
+def anh_tui_goc(ten, lua, duong_dan=None, hom_nay=None):
+    """
+    Ảnh túi gốc hôm nay của nhân vật ten: đã lưu (cùng ngày) thì dùng lại, chưa thì chụp túi bây giờ và lưu.
+    Dừng / bắt đầu lại / vào lại game không chụp lại, nên đồ nhặt trước đó vẫn được tính là đồ mới.
+    """
+    duong_dan = duong_dan or DUONG_DAN_ANH_TUI
+    ngay = (hom_nay or date.today()).isoformat()
+    khoa = chuan_hoa(ten)
+    with _khoa_anh_tui:
+        du_lieu = _doc_file_anh_tui(duong_dan)
+        muc = du_lieu.get(khoa)
+        if isinstance(muc, dict) and muc.get("ngay") == ngay:
+            return {(t, int(m)): int(s) for t, m, s in muc.get("tui", [])}
+        anh = chup_tui(lua)
+        du_lieu = {k: v for k, v in du_lieu.items() if isinstance(v, dict) and v.get("ngay") == ngay}
+        du_lieu[khoa] = {"ngay": ngay, "tui": [[t, m, s] for (t, m), s in sorted(anh.items())]}
+        tam = f"{duong_dan}.{os.getpid()}.tmp"
+        try:
+            with open(tam, "w", encoding="utf-8") as f:
+                json.dump(du_lieu, f, ensure_ascii=False)
+            os.replace(tam, duong_dan)
+        except OSError:
+            pass
+        return anh
 
 
 def o_do_moi(lua, anh_truoc):

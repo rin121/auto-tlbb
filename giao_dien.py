@@ -82,7 +82,7 @@ from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC
                             cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai, mo_ta_lich, ten_map_chuan,
                             ve_thanh_neu_o_map_ac_tac)
 import gauto_ac_tac
-from giao_dich import chup_tui
+from giao_dich import anh_tui_goc
 from giao_dich_ngay import LuongGiaoDichNgay
 from moi_nhom import SO_NGUOI_TOI_DA, doc_nhom, doc_xung_quanh, xu_ly_nhom
 from nhat_do import NhatDo
@@ -1185,7 +1185,7 @@ class LuongNhanVat(threading.Thread):
                 self.tai_khoan = tt["tai_khoan"] or None
                 self.mon_phai = tt["mon_phai"]
                 if self.anh_tui_cua != self.ten:
-                    self.anh_tui, self.anh_tui_cua = chup_tui(self.game.lua), self.ten
+                    self.anh_tui, self.anh_tui_cua = anh_tui_goc(self.ten, self.game.lua), self.ten
                 if map_truoc is not None and tt["map"] != map_truoc:
                     self.in_log(f"{self.ten} đã tới [{tt['map']}]")
                 map_truoc = self.map_hien_tai = tt["map"]

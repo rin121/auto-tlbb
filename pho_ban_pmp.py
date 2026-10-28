@@ -1983,13 +1983,16 @@ class PhoBanPMP:
             self.in_log(f"{self.ten}: PMP chưa bỏ được theo đội / xuống thú / quản chế, vẫn thử dùng kỹ năng Về thành")
         if not self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)):
             raise LoiPhoBan("nhân vật không có kỹ năng Quay về Đại Lý thành")
-        if cu and self._cho(lambda: (lambda t: t and khoang_cach((t["x"], t["y"]), cu) > KHOANG_VE_THANH_DOI_CHO)(
-                self._tt()), GIAY_CHO_VE_THANH):
+        da_doi = bool(cu and self._cho(
+            lambda: (lambda t: t and khoang_cach((t["x"], t["y"]), cu) > KHOANG_VE_THANH_DOI_CHO)(self._tt()),
+            GIAY_CHO_VE_THANH))
+        if da_doi:
             self.in_log(f"{self.ten}: PMP đã dùng Về thành {MAP_DAI_LY}")
         else:
             self.in_log(f"{self.ten}: PMP dùng Về thành mà chưa thấy đổi chỗ, vẫn thử lại")
         if self.doi:
             self.doi.xoa_lenh_gom()
+        return da_doi
 
     @staticmethod
     def _thu_ve_thanh_mot(game, ten, in_log=None):

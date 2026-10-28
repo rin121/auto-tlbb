@@ -44,8 +44,8 @@ from dang_nhap import (CONG_MO_GAME, LoiDangNhap, LoiSaiRuleNhanVat, LoiSaiTaiKh
 from game_api import Game
 from giai_captcha import LoiGiaiCaptcha
 from lua_game import LoiLua
-from pho_ban_pmp import (GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MA_DA_MANG, SO_LAN_DUNG_TOI_DA, SO_LAN_THU_MANG,
-                         LoiPhoBan, PhoBanPMP)
+from pho_ban_pmp import (GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MA_DA_MANG, MAP_DAI_LY, SO_LAN_DUNG_TOI_DA,
+                         SO_LAN_THU_MANG, LoiPhoBan, PhoBanPMP)
 from tao_nhan_vat import giai_ma_kiem_tra
 from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 
@@ -176,6 +176,7 @@ class NhanDoTanThu(PhoBanPMP):
         self.trang_thai = {}
         self.che_do = "tan_thu"
         self.het_han_vong = time.time() + GIAY_MOT_NHAN_VAT
+        self.da_toi_cong_point = False
 
     def _mo_ta(self, chu):
         self.bao_trang_thai(f"{self.ten}: {chu}")
@@ -187,6 +188,8 @@ class NhanDoTanThu(PhoBanPMP):
         """Mở hội thoại NPC rồi chọn lần lượt các dòng (dòng sau phải hiện ra mới chọn)."""
         ten_npc, xy = npc
         self._mo_ta(f"tới NPC {ten_npc}")
+        if npc == NPC_CONG_POINT:
+            self.da_toi_cong_point = True
         self._mo_hoi_thoai(ten_npc, xy, cac_dong[0], dan_doi=False)
         for i, dong in enumerate(cac_dong):
             if i and not self._cho(lambda: (lambda ht: ht and any((s, e) == dong for _, s, e, _ in ht[1]))(
@@ -207,6 +210,7 @@ class NhanDoTanThu(PhoBanPMP):
         self._mang(MA_TRANG_BI_TAN_THU)
         self._dung_hop_point()
         self._cong_noi_luc()
+        self.roi_cong_point()
         self._can_khon_ho()
         self._thu_cuoi()
         self.hoi_mau()
@@ -220,6 +224,26 @@ class NhanDoTanThu(PhoBanPMP):
         if loi:
             raise LoiPhoBan("chưa xong: " + ", ".join(loi))
         self.in_log(f"{self.ten}: đã nhận xong đồ tân thủ")
+
+    def roi_cong_point(self):
+        """
+        Đứng ở NPC Cộng Point có góc lag, chạy đi là bị giật về: tăng point xong thì dùng Về thành Đại Lý (thử lại
+        tới khi thấy đổi chỗ). Không ghé NPC Cộng Point thì thôi.
+        """
+        if not self.da_toi_cong_point:
+            return
+        self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+        for lan in range(1, SO_LAN_THU_MANG + 1):
+            self._kiem_tra()
+            self._mo_ta(f"tăng point xong, Về thành {MAP_DAI_LY}" + (f" (lần {lan})" if lan > 1 else ""))
+            try:
+                if self._ve_thanh_tai_dai_ly():
+                    self.da_toi_cong_point = False
+                    return
+            except LoiPhoBan as loi:
+                self.in_log(f"{self.ten}: tăng point xong mà không Về thành được: {loi}")
+                return
+        self.in_log(f"{self.ten}: dùng Về thành {SO_LAN_THU_MANG} lần vẫn chưa rời NPC Cộng Point")
 
     def hoi_mau(self):
         """Máu / nội lực chưa đầy thì tới NPC Di Chuyển mở hội thoại (game hồi đầy), rồi đóng hội thoại."""

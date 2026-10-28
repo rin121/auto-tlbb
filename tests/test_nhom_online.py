@@ -145,5 +145,50 @@ class TestBatDauLaiKhiNhomDangOnline(unittest.TestCase):
                          ["caychay11", "caychay12", "caychay13", "caychay14"])
 
 
+class TestXepLaiDangNhapLoi(unittest.TestCase):
+    """XV-14: đăng nhập lỗi (mã kiểm tra, game treo...) thì xếp lại cuối hàng chờ, không bỏ hẳn cả ngày."""
+
+    DS = [{"ten_dang_nhap": f"caychay{i}"} for i in (48, 49, 50, 69)]
+
+    def test_xep_cuoi_hang_va_gioi_han_so_lan(self):
+        a, b, c, d = self.DS
+        hang, thu_lai = [d], {}
+        self.assertEqual(xv.xep_lai_dang_nhap_loi(hang, [a, b], 0, thu_lai), [a, b])
+        self.assertEqual(hang, [d, a, b])
+        for _ in range(xv.SO_LAN_XEP_LAI_DANG_NHAP):
+            hang.clear()
+            xv.xep_lai_dang_nhap_loi(hang, [a], 0, thu_lai)
+        self.assertEqual(hang, [])
+        self.assertEqual(thu_lai["caychay48|0"], xv.SO_LAN_XEP_LAI_DANG_NHAP)
+        self.assertEqual(xv.xep_lai_dang_nhap_loi(hang, [a], 1, thu_lai), [a])
+
+    def test_da_trong_hang_thi_khong_them(self):
+        a = self.DS[0]
+        hang, thu_lai = [a], {}
+        self.assertEqual(xv.xep_lai_dang_nhap_loi(hang, [a], 0, thu_lai), [])
+        self.assertEqual(hang, [a])
+        self.assertEqual(thu_lai, {})
+
+    def test_luong_xep_lai_sau_round(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, False, False)
+        a, b, c, d = self.DS
+        luong._xv_ds_map = xv._map_tk_theo_ten(self.DS)
+        luong.tk_sai_rule = {"caychay50"}
+        luong._bo_dang_nhap = [xv.ThanhVien(a), xv.ThanhVien(c)]
+        hang_cho = [[d], [], []]
+        with patch.object(xv, "ten_round", lambda tk, r: tk):
+            luong._xep_lai_dang_nhap_loi(hang_cho, 0)
+        self.assertEqual(hang_cho[0], [d, a])
+        self.assertEqual(luong._bo_dang_nhap, [])
+
+    def test_tien_trinh_nho_so_lan_thu_lai(self):
+        luu = {}
+        with patch.object(xv.cau_hinh, "dat_chung", lambda d: luu.update(d)), \
+                patch.object(xv.cau_hinh, "chung", lambda: luu):
+            xv.luu_xv_tien_trinh(2, [list(self.DS), [], []], False, False, 3, thu_lai={"caychay48|0": 1})
+            tt = xv.doc_xv_tien_trinh(self.DS, False, False, 3)
+        self.assertEqual(tt["thu_lai"], {"caychay48|0": 1})
+
+
 if __name__ == "__main__":
     unittest.main()

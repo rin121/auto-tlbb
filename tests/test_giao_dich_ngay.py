@@ -63,6 +63,7 @@ class TestGiaoDichNgay(unittest.TestCase):
         def chuyen_do(tv, truong, mo_ta):
             luc_giao.append((tv.ten, truong.ten, self.nv(tv.ten)["bat_auto"], set(self.luong.pid_dieu_khien)))
         with patch.object(self.luong, "_tv_dang_choi", return_value=True), \
+                patch.object(self.luong, "_doi_vien_co_do", side_effect=lambda ds, mo_ta: ds), \
                 patch.object(self.luong, "_tap_trung") as tap_trung, \
                 patch.object(self.luong, "_chuyen_do", side_effect=chuyen_do):
             self.luong._giao_dich_giua_chung(self.thanh_vien, self.truong, "Nhóm 1 round 1")
@@ -77,12 +78,40 @@ class TestGiaoDichNgay(unittest.TestCase):
 
     def test_loi_giua_chung_van_bat_lai_auto(self):
         with patch.object(self.luong, "_tv_dang_choi", return_value=True), \
+                patch.object(self.luong, "_doi_vien_co_do", side_effect=lambda ds, mo_ta: ds), \
                 patch.object(self.luong, "_tap_trung", side_effect=RuntimeError("x")):
             with self.assertRaises(RuntimeError):
                 self.luong._giao_dich_giua_chung(self.thanh_vien, self.truong, "Nhóm 1 round 1")
         self.assertTrue(self.nv("Truong")["bat_auto"])
         self.assertTrue(self.nv("DV1")["pho_ban_pmp"]["bat"])
         self.assertEqual(self.luong.pid_dieu_khien, set())
+
+    def _co_game(self, *cac_tv):
+        for tv in cac_tv:
+            tv.game = SimpleNamespace(lua=SimpleNamespace(pid=tv.pid))
+            tv.anh_tui = {("base", 1): 1}
+
+    def test_khong_ai_co_do_thi_khong_dung_pho_ban(self):
+        self._co_game(self.dv1, self.dv2)
+        with patch.object(self.luong, "_tv_dang_choi", return_value=True), \
+                patch.object(xv, "o_do_moi", return_value=[]), \
+                patch.object(self.luong, "_tam_dung_auto") as tam_dung, \
+                patch.object(self.luong, "_tap_trung") as tap_trung, \
+                patch.object(self.luong, "_chuyen_do") as chuyen_do:
+            self.luong._giao_dich_giua_chung(self.thanh_vien, self.truong, "Nhóm 1 round 1")
+        tam_dung.assert_not_called()
+        tap_trung.assert_not_called()
+        chuyen_do.assert_not_called()
+
+    def test_chi_doi_vien_co_do_moi_giao_dich(self):
+        self._co_game(self.dv1, self.dv2)
+        with patch.object(self.luong, "_tv_dang_choi", return_value=True), \
+                patch.object(xv, "o_do_moi", side_effect=lambda lua, anh: [("base", 5)] if lua.pid == 3 else []), \
+                patch.object(self.luong, "_tap_trung") as tap_trung, \
+                patch.object(self.luong, "_chuyen_do") as chuyen_do:
+            self.luong._giao_dich_giua_chung(self.thanh_vien, self.truong, "Nhóm 1 round 1")
+        self.assertEqual(tap_trung.call_args[0][0], [self.dv2])
+        self.assertEqual([c.args[0] for c in chuyen_do.call_args_list], [self.dv2])
 
     def test_khong_co_doi_vien_trong_game_thi_bo_qua(self):
         with patch.object(self.luong, "_tv_dang_choi", side_effect=lambda tv: tv is self.truong), \
@@ -236,6 +265,21 @@ class TestGiaoDichNgayKhongXoayVong(unittest.TestCase):
             luong._chay()
         self.assertEqual([c.args[2] for c in gd.call_args_list], ["DV2"])
 
+    def test_khong_ai_co_do_thi_khong_tam_dung_auto(self):
+        luong = self.tao_luong()
+        with patch.object(gdn, "GiaoDich") as gd, patch.object(gdn, "o_do_moi", return_value=[]), \
+                patch.object(gdn, "tam_dung_auto") as tam_dung:
+            luong._chay()
+        gd.assert_not_called()
+        tam_dung.assert_not_called()
+
+    def test_chi_doi_vien_co_do_thi_giao(self):
+        luong = self.tao_luong()
+        with patch.object(gdn, "GiaoDich") as gd, \
+                patch.object(gdn, "o_do_moi", side_effect=lambda lua, anh: [("base", 5)] if lua.pid == 3 else []):
+            luong._chay()
+        self.assertEqual([c.args[2] for c in gd.call_args_list], ["DV2"])
+
     def test_loi_giao_dich_van_bat_lai_auto(self):
         luong = self.tao_luong()
         with patch.object(gdn, "o_do_moi", side_effect=RuntimeError("x")):
@@ -243,6 +287,39 @@ class TestGiaoDichNgayKhongXoayVong(unittest.TestCase):
                 luong._chay()
         self.assertTrue(self.nv("Truong")["bat_auto"])
         self.assertEqual(luong.pid_dieu_khien, set())
+
+
+class TestAnhTuiGoc(unittest.TestCase):
+    """Ảnh túi gốc lưu theo ngày: dừng / chạy lại / vào lại game không chụp lại, đồ nhặt trước đó vẫn là đồ mới."""
+
+    def setUp(self):
+        import os
+        import tempfile
+        self.thu_muc = tempfile.mkdtemp()
+        self.file = os.path.join(self.thu_muc, "anh_tui_goc.json")
+        self.tui = {("base", 0): (100, 1, "Hộp"), ("base", 1): (200, 2, "Đá")}
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.thu_muc, ignore_errors=True)
+
+    def _anh(self, ten, ngay):
+        import giao_dich
+        from datetime import date
+        with patch.object(giao_dich, "doc_tui", lambda lua: dict(self.tui)):
+            return giao_dich.anh_tui_goc(ten, None, self.file, date(*ngay))
+
+    def test_chup_lan_dau_roi_dung_lai_trong_ngay(self):
+        dau = self._anh("DV1", (2026, 10, 28))
+        self.assertEqual(dau, {("base", 100): 1, ("base", 200): 2})
+        self.tui[("base", 2)] = (300, 5, "Đồ PMP")
+        self.assertEqual(self._anh("dv1", (2026, 10, 28)), dau)
+        self.assertNotEqual(self._anh("DV2", (2026, 10, 28)), dau)
+
+    def test_sang_ngay_moi_thi_chup_lai(self):
+        self._anh("DV1", (2026, 10, 28))
+        self.tui[("base", 2)] = (300, 5, "Đồ PMP")
+        self.assertIn(("base", 300), self._anh("DV1", (2026, 10, 29)))
 
 
 if __name__ == "__main__":

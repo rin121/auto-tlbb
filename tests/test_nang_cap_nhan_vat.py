@@ -177,6 +177,70 @@ class TestVeDaiLyTruoc(unittest.TestCase):
         self.assertFalse(ncnv.da_lam("caychay24", self.file))
 
 
+class TestVeThanhSauCongPoint(unittest.TestCase):
+    """NC-10: NPC Cộng Point có góc lag (chạy đi bị giật về) — tăng point xong thì Về thành Đại Lý."""
+
+    def setUp(self):
+        self.thu_muc = tempfile.mkdtemp()
+        self.file = os.path.join(self.thu_muc, "nang_cap_da_xong.json")
+        self.goi = []
+        self.ve_duoc_sau = 1
+
+        class LuaGia:
+            def chay(self, ma):
+                return b""
+
+        class GameGia:
+            lua = LuaGia()
+        self.nc = ncnv.tao_nang_cap(GameGia(), "caychay24", lambda chu: None, lambda: False,
+                                    lambda chu: None, self.file)
+        self.nc._tt = lambda: {"ten": "caychay24"}
+        self.nc._map = lambda: "Đại Lý"
+        self.nc._noi_chuyen = lambda npc, cac_dong: setattr(self.nc, "da_toi_cong_point", True)
+        self.nc._ve_thanh_tai_dai_ly = self._ve_thanh
+        for so in range(1, 7):
+            setattr(self.nc, f"buoc_{so}", lambda so=so: self.goi.append(so))
+        self.nc.buoc_6 = lambda: (self.goi.append(6), self.nc._noi_chuyen(None, ()))
+
+    def tearDown(self):
+        shutil.rmtree(self.thu_muc, ignore_errors=True)
+
+    def _ve_thanh(self):
+        self.goi.append("ve_thanh")
+        return self.goi.count("ve_thanh") >= self.ve_duoc_sau
+
+    def test_cong_point_xong_thi_ve_thanh(self):
+        self.nc.chay()
+        self.assertEqual(self.goi, [1, 2, 3, 4, 5, 6, "ve_thanh"])
+        self.assertFalse(self.nc.da_toi_cong_point)
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+
+    def test_ve_thanh_chua_doi_cho_thi_thu_lai(self):
+        self.ve_duoc_sau = 2
+        self.nc.chay()
+        self.assertEqual(self.goi, [1, 2, 3, 4, 5, 6, "ve_thanh", "ve_thanh"])
+
+    def test_khong_toi_npc_cong_point_thi_khong_ve_thanh(self):
+        self.nc.buoc_6 = lambda: self.goi.append(6)
+        self.nc.chay()
+        self.assertEqual(self.goi, [1, 2, 3, 4, 5, 6])
+
+    def test_nhan_do_tan_thu_cong_noi_luc_xong_thi_ve_thanh(self):
+        import nhan_vat_moi
+        diem = [25_000_000]
+
+        def noi_chuyen(npc, cac_dong):
+            self.assertEqual(npc, nhan_vat_moi.NPC_CONG_POINT)
+            self.nc.da_toi_cong_point = True
+            diem[0] -= nhan_vat_moi.DIEM_MOI_LAN_CONG
+        self.nc._noi_chuyen = noi_chuyen
+        self.nc.game.diem_tiem_nang = lambda: diem[0]
+        nhan_vat_moi.NhanDoTanThu._cong_noi_luc(self.nc)
+        self.nc.roi_cong_point()
+        self.assertEqual(diem[0], 5_000_000)
+        self.assertEqual(self.goi, ["ve_thanh"])
+
+
 class TestMangKhiGameCham(unittest.TestCase):
     """NC-09: máy ảo lag — mang đồ phải kiểm tra lại, chưa lên người thì làm lại, không bấm trùng khi game trả lời trễ."""
 
