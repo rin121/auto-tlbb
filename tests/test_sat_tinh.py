@@ -223,5 +223,78 @@ class TestSatTinhDaRaThem(unittest.TestCase):
         self.assertFalse(self._pb()._sat_tinh_da_ra())
 
 
+class TestDaVaoLoiDaiKhiDangGom(unittest.TestCase):
+    """xeko1: NPC đã đưa cả đội vào lôi đài (game đổi map chậm) — không báo lỗi, dắt đội tới chỗ đánh."""
+
+    def _pb(self, map_sau):
+        inst = PhoBanPMP(MagicMock(), lambda *_: None)
+        inst.ten, inst.doi, inst.trang_thai = "xeko1", None, {}
+        inst.bao_doi = lambda: None
+        inst.het_han_vong = 10 ** 12
+        trang = {"map": pb.MAP_LAC_DUONG}
+        inst._map = lambda: trang["map"]
+        inst._gom_doi_neu_lech_map = lambda: None
+        inst._sua_dem = lambda ten_ds, **kw: [{"pho_ban_pmp": {}}]
+        self.danh = []
+        inst._danh_sat_tinh = lambda: self.danh.append(trang["map"])
+
+        def vao():
+            trang["map"] = map_sau
+            raise pb._TruongSaiMap(map_sau, pb.MAP_LAC_DUONG)
+        inst._vao_sat_tinh = vao
+        return inst
+
+    def test_da_o_loi_dai_thi_danh_tiep(self):
+        self._pb(pb.MAP_SAT_TINH)._vong_sat_tinh(_pmp())
+        self.assertEqual(self.danh, [pb.MAP_SAT_TINH])
+
+    def test_sai_map_khac_van_bao_loi(self):
+        with self.assertRaises(pb._TruongSaiMap):
+            self._pb(pb.MAP_DAI_LY)._vong_sat_tinh(_pmp())
+        self.assertEqual(self.danh, [])
+
+
+class TestKetDiChuyenThiVeThanh(unittest.TestCase):
+    """chaiko5: không mở được hội thoại Di Chuyển sau 90 giây — dùng Về thành Đại Lý rồi thử lại."""
+
+    def _pb(self, map_o, toi_sau_ve_thanh):
+        inst = PhoBanPMP(MagicMock(), lambda *_: None)
+        inst.ten, inst.doi, inst.trang_thai = "chaiko5", None, {}
+        trang = {"map": map_o}
+        inst._map = lambda: trang["map"]
+        self.goi_npc = 0
+        self.ve_thanh = 0
+
+        def mo(*a, **kw):
+            self.goi_npc += 1
+            raise pb._KhongMoDuocHoiThoai("không mở được hội thoại Di Chuyển sau 90 giây")
+
+        def ve():
+            self.ve_thanh += 1
+            if toi_sau_ve_thanh:
+                trang["map"] = pb.MAP_LAC_DUONG
+        inst._mo_hoi_thoai = mo
+        inst._ve_thanh_tai_dai_ly = ve
+        return inst
+
+    def test_ket_o_dai_ly_thi_ve_thanh_roi_thu_lai(self):
+        inst = self._pb(pb.MAP_DAI_LY, True)
+        inst._vao(pb.BUOC_DI_CHUYEN_LAC_DUONG)
+        self.assertEqual((self.goi_npc, self.ve_thanh), (1, 1))
+
+    def test_ket_mai_thi_bao_loi_sau_so_lan_thu(self):
+        inst = self._pb(pb.MAP_DAI_LY, False)
+        with self.assertRaises(pb._KhongMoDuocHoiThoai):
+            inst._vao(pb.BUOC_DI_CHUYEN_LAC_DUONG)
+        self.assertEqual((self.goi_npc, self.ve_thanh), (pb.SO_LAN_THU, pb.SO_LAN_THU - 1))
+
+    def test_khong_o_dai_ly_thi_khong_ve_thanh(self):
+        inst = self._pb(pb.MAP_LAC_DUONG, False)
+        buoc = (pb.MAP_LAC_DUONG, "Trình Thanh Sương", (1, 1), ((1, 1),), pb.MAP_PMP)
+        with self.assertRaises(pb._KhongMoDuocHoiThoai):
+            inst._vao(buoc)
+        self.assertEqual(self.ve_thanh, 0)
+
+
 if __name__ == "__main__":
     unittest.main()

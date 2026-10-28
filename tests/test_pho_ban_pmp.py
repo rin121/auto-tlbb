@@ -146,6 +146,57 @@ class TestTapHopVaVeThanh(unittest.TestCase):
         self.assertIn("kẹt", ly)
 
 
+class TestQuanChe(unittest.TestCase):
+    """Thân thể bị quản chế: di chuyển cho hết hiệu ứng rồi mới dùng Về thành."""
+
+    BUFF_QUAN_CHE = "Buff0_16\tKhông Th\xfas?dụng bất Có chiêu thức nào"
+
+    def test_nhan_ra_quan_che(self):
+        self.assertTrue(pb.bi_quan_che([("Buff0_16", "")]))
+        self.assertTrue(pb.bi_quan_che([("Khac", "Không thể sử dụng bất kỳ chiêu thức nào")]))
+        self.assertFalse(pb.bi_quan_che([("Buff1_1", "Chấn Nhiếp: giảm tốc độ di chuyển xuống 15%"),
+                                         ("Medicine2_12", "Càn Khôn Hồ")]))
+        self.assertFalse(pb.bi_quan_che([]))
+
+    def _game(self, so_lan_doc_con_quan_che):
+        game = MagicMock()
+        game.thong_tin.return_value = {"x": 119.6, "y": 33.2}
+        lenh = []
+        dem = {"doc": 0}
+
+        def chay(ma):
+            if ma == pb.MA_DS_BUFF_ICON:
+                dem["doc"] += 1
+                if dem["doc"] <= so_lan_doc_con_quan_che:
+                    return self.BUFF_QUAN_CHE.encode("utf-8") + b"\n"
+                return b"Buff1_1\tCh\n"
+            lenh.append(ma)
+            return b""
+        game.lua.chay.side_effect = chay
+        return game, lenh
+
+    def test_khong_quan_che_thi_khong_di_chuyen(self):
+        game, lenh = self._game(0)
+        with patch.object(pb, "giai_ma", lambda b: b.decode("utf-8")):
+            self.assertTrue(pb.thoat_quan_che(game))
+        self.assertEqual(lenh, [])
+
+    def test_quan_che_thi_chay_toi_khi_het(self):
+        game, lenh = self._game(3)
+        log = []
+        with patch.object(pb, "giai_ma", lambda b: b.decode("utf-8")):
+            self.assertTrue(pb.thoat_quan_che(game, log.append, "caychay22"))
+        self.assertEqual(lenh, ["AutoRunToTarget(123, 33)"])
+        self.assertIn("caychay22: đã hết quản chế", log)
+
+    def test_van_con_thi_thu_cac_huong_roi_bao_false(self):
+        game, lenh = self._game(10 ** 6)
+        with patch.object(pb, "giai_ma", lambda b: b.decode("utf-8")), \
+                patch.object(pb, "GIAY_THOAT_QUAN_CHE", 0.4):
+            self.assertFalse(pb.thoat_quan_che(game))
+        self.assertEqual(len(lenh), len(pb.DIEM_THOAT_QUAN_CHE))
+
+
 class TestXyGomDoiVien(unittest.TestCase):
     def test_uu_tien_vi_tri_truong_tren_map(self):
         doi = pb.DoiPMP("t", {})

@@ -2,6 +2,7 @@
 NÂNG CẤP NHÂN VẬT: tự chạy mỗi khi đăng nhập xong một nhân vật chưa nâng cấp (LuongDangNhap.nang_cap_sau_dang_nhap,
 tab Tài khoản / xoay vòng; nhân vật mới tạo thì sau khi nhận đồ tân thủ). Kịch bản ghi từ một lần chơi tay caychay344
 (ghi_thao_tac/ghi_20261027_211657.txt):
+    0. Chưa ở Đại Lý thì dùng kỹ năng Quay về Đại Lý thành trước (NPC GIFTCODE / Cộng Point đều ở Đại Lý).
     1. Túi: Xếp (Packet_PackUp_Clicked). Túi có Bách Bảo Nang / Rương 9 sao thì tháo bộ thường ở ô trang bị 9 / 10
        (nút ô "Khác" của bảng nhân vật :DoSubAction() = chuột phải) rồi mang bộ 9 sao. Không có thì bỏ qua.
     2. Tiệm KNB: Nhiệt Mại Thương Phẩm -> Thần Khí Tân Thủ, mua món đầu; Tiệm Trân Thú -> Trân Thú Sơ Cấp, mua
@@ -54,7 +55,7 @@ MA_HOANG_KIM = {
     10162459: "Hoàng Kim - Uyển",
 }
 MA_DO_CU = {10100000, 10141030, 10141040} | set(range(10162420, 10162430))
-GIAY_MOT_NHAN_VAT = 20 * 60
+GIAY_MOT_NHAN_VAT = 30 * 60
 GIAY_CHO_SHOP_DOI = 8
 GIAY_CHO_CODE = 6
 
@@ -176,7 +177,7 @@ def can_cong_noi_luc(noi_luc, diem, diem_moi_lan):
 def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
     """NangCapNhanVat (lớp con NhanDoTanThu, import muộn vì nhan_vat_moi cũng import module này)."""
     from nhan_vat_moi import NhanDoTanThu, NPC_CONG_POINT, DONG_CONG_10_TRIEU, DONG_NOI_LUC, DIEM_MOI_LAN_CONG
-    from pho_ban_pmp import GIAY_CHO_GAME_TRA_LOI, LoiPhoBan
+    from pho_ban_pmp import GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MAP_DAI_LY, SO_LAN_THU_MANG, LoiPhoBan, la_dai_ly
     from tu_dung_vat_pham import LoiVatPham, TiemKNB
     from vut_rac import LoiVutRac, vut_theo_ma
 
@@ -201,6 +202,7 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
             xong = cac_buoc_da_xong(self.ten, self.duong_dan)
             self.in_log(f"{self.ten}: bắt đầu nâng cấp nhân vật"
                         + (f" (đã xong bước {', '.join(map(str, sorted(xong)))})" if xong else ""))
+            self._ve_dai_ly_truoc()
             for so, buoc in enumerate((self.buoc_1, self.buoc_2, self.buoc_3, self.buoc_4, self.buoc_5,
                                        self.buoc_6), 1):
                 if so in xong:
@@ -210,6 +212,16 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 danh_dau_buoc(self.ten, so, self.duong_dan)
             danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
             self.in_log(f"{self.ten}: đã nâng cấp xong nhân vật")
+
+        # 0. NPC GIFTCODE / Cộng Point và các bước đều ở Đại Lý.
+        def _ve_dai_ly_truoc(self):
+            m = self._map()
+            if la_dai_ly(m):
+                return
+            self._kiem_tra()
+            self.in_log(f"{self.ten}: đang ở [{m}], về {MAP_DAI_LY} trước khi nâng cấp")
+            self._mo_ta(f"về {MAP_DAI_LY}")
+            self._ve_thanh()
 
         # 1. Xếp túi, thay Bách Bảo Nang / Rương 9 sao.
         def buoc_1(self):
@@ -222,16 +234,23 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
             if not can:
                 self.in_log(f"{self.ten}: túi không có Bách Bảo Nang / Rương 9 sao cần mang, bỏ qua bước 1")
                 return
-            for o, nut, ma_9, ten_mon in can:
-                cu = self._trang_bi().get(o)
-                if cu:
-                    self._mo_ta(f"tháo {cu[1]}")
-                    self.game.lua.chay(MA_THAO.replace("{o}", str(o)).replace("{nut}", nut))
-                    if self._cho(lambda: self._trang_bi().get(o) != cu, GIAY_CHO_GAME_TRA_LOI):
-                        self.in_log(f"{self.ten}: đã tháo {cu[1]}")
-                    else:
-                        self.in_log(f"{self.ten}: tháo {cu[1]} không được, thử mang thẳng {ten_mon} 9 sao")
-                self._mang({ma_9: f"{ten_mon} 9 sao"})
+            for _ in range(SO_LAN_THU_MANG):
+                for o, nut, ma_9, ten_mon in can:
+                    self._kiem_tra()
+                    cu = self._trang_bi().get(o)
+                    if cu:
+                        self._mo_ta(f"tháo {cu[1]}")
+                        self.game.lua.chay(MA_THAO.replace("{o}", str(o)).replace("{nut}", nut))
+                        if self._cho(lambda: self._trang_bi().get(o) != cu, GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
+                            self.in_log(f"{self.ten}: đã tháo {cu[1]}")
+                        else:
+                            self.in_log(f"{self.ten}: tháo {cu[1]} không được, thử mang thẳng {ten_mon} 9 sao")
+                    self._mang({ma_9: f"{ten_mon} 9 sao"})
+                can = can_thay_bach_bao(self._tui_ten(), self._trang_bi())
+                if not can:
+                    self.in_log(f"{self.ten}: đã mang Bách Bảo Nang / Rương 9 sao")
+                    return
+            raise LoiPhoBan(f"chưa mang được {', '.join(f'{t} 9 sao' for *_, t in can)}")
 
         # 2. Mua Thần Khí Tân Thủ + trứng Nga Mi Biến Dị, mang thần khí, dùng trứng.
         def _mua_mon(self, tiem, tiem_ten, nhom, ten_can=None, da_co=lambda ten_mon: False):
@@ -249,7 +268,7 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                               if chuan_hoa(t) == chuan_hoa(ten_can) and "diem tang" in bo_dau(gia)), None)
                     return (o, ds[o][0]) if o else None
                 return mon_dau_tien(ds)
-            tim = self._cho(mon, GIAY_CHO_SHOP_DOI)
+            tim = self._cho(mon, GIAY_CHO_SHOP_DOI + GIAY_CHO_LAG)
             if not tim:
                 raise LoiVatPham(f"{tiem_ten} -> {nhom}: danh sách món chưa hiện ({tiem.doc()['mon']})")
             o, ten_mon = tim
@@ -260,7 +279,7 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 return ten_mon
             self._mo_ta(f"mua {ten_mon}")
             tiem.bam_mua(o)
-            if not self._cho(trong_tui, GIAY_CHO_GAME_TRA_LOI):
+            if not self._cho(trong_tui, GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
                 raise LoiVatPham(f"bấm mua {ten_mon} mà túi không có (hết Điểm Tặng?)")
             self.in_log(f"{self.ten}: đã mua {ten_mon}")
             return ten_mon
@@ -282,63 +301,116 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 tiem.dong()
             if ten_vu_khi:
                 ma = next((ma for ma, t in self._tui_ten().values() if chuan_hoa(t) == chuan_hoa(ten_vu_khi)), None)
-                if ma:
-                    self._mang({ma: ten_vu_khi})
-            for _ in range(3):
+                if ma and self._mang({ma: ten_vu_khi}):
+                    raise LoiPhoBan(f"chưa mang được {ten_vu_khi}")
+
+            def so_trung():
+                return sum(1 for _, t in self._tui_ten().values() if chuan_hoa(t) == chuan_hoa(TIEM_TRUNG[2]))
+            for lan in range(1, SO_LAN_THU_MANG + 1):
+                self._kiem_tra()
                 o = next((o for o, (_, t) in sorted(self._tui_ten().items())
                           if chuan_hoa(t) == chuan_hoa(TIEM_TRUNG[2])), None)
                 if o is None:
                     return
-                self._mo_ta(f"dùng {TIEM_TRUNG[2]}")
+                con = so_trung()
+                self._mo_ta(f"dùng {TIEM_TRUNG[2]}" + (f" (lần {lan})" if lan > 1 else ""))
                 self._chuot_phai(o)
-                if self._cho(lambda: self._tui_ten().get(o, (0, ""))[1] != TIEM_TRUNG[2], GIAY_CHO_GAME_TRA_LOI):
+                if self._cho(lambda: so_trung() < con, GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
                     self.in_log(f"{self.ten}: đã dùng {TIEM_TRUNG[2]}")
                     return
+                self.in_log(f"{self.ten}: dùng {TIEM_TRUNG[2]} chưa được (lần {lan}/{SO_LAN_THU_MANG})")
             self.in_log(f"{self.ten}: dùng {TIEM_TRUNG[2]} không được (đủ trân thú rồi?)")
 
         # 3. Nhập 4 giftcode ở NPC GIFTCODE.
         def buoc_3(self):
             ten_npc, xy = NPC_GIFTCODE
             for code in GIFTCODE:
-                self._kiem_tra()
-                self._mo_ta(f"nhập giftcode {code}")
-                self._mo_hoi_thoai(ten_npc, xy, DONG_NHAP_CODE, dan_doi=False)
-                self._chon(DONG_NHAP_CODE)
-                if not self._cho(lambda: dang_hien(self.game.lua, "NewbieCardActivation"), GIAY_CHO_GAME_TRA_LOI):
-                    raise LoiPhoBan(f"chọn \"Nhập Mã GiftCode\" mà không hiện ô nhập code ({self._chu_hoi_thoai()})")
-                tui = self._tui_ten()
-                self.game.lua.chay(trong_cua_so("NewbieCardActivation",
-                                                f"NewUserCard({chuoi_lua(code)}, 0) NewUserCard_Close()"))
-                if self._cho(lambda: self._tui_ten() != tui, GIAY_CHO_CODE):
-                    self.in_log(f"{self.ten}: đã nhập giftcode {code}")
+                for lan in range(1, SO_LAN_THU_MANG + 1):
+                    if self._nhap_code(ten_npc, xy, code, lan):
+                        break
                 else:
-                    bao = " / ".join(self._doc_thong_bao()[-2:]) or self._chu_hoi_thoai()
-                    self.in_log(f"{self.ten}: giftcode {code} không nhận thêm gì ({bao or 'đã nhập rồi?'})")
-                self.game.lua.chay('if IsWindowShow("NewbieCardActivation") then '
-                                   'CloseWindow("NewbieCardActivation", true) end')
+                    self.in_log(f"{self.ten}: giftcode {code} nhập {SO_LAN_THU_MANG} lần game không trả lời, bỏ qua")
             self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+
+        def _nhap_code(self, ten_npc, xy, code, lan):
+            """Một lần nhập code. True nếu game đã trả lời (túi đổi hoặc có thông báo), False thì nhập lại."""
+            self._kiem_tra()
+            self._mo_ta(f"nhập giftcode {code}" + (f" (lần {lan})" if lan > 1 else ""))
+            self._mo_hoi_thoai(ten_npc, xy, DONG_NHAP_CODE, dan_doi=False)
+            self._chon(DONG_NHAP_CODE)
+            if not self._cho(lambda: dang_hien(self.game.lua, "NewbieCardActivation"),
+                             GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
+                self.in_log(f"{self.ten}: chọn \"Nhập Mã GiftCode\" mà chưa hiện ô nhập code "
+                            f"({self._chu_hoi_thoai()}), thử lại")
+                self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+                return False
+            tui = self._tui_ten()
+            self._doc_thong_bao()
+            bao = []
+
+            def tra_loi():
+                bao.extend(self._doc_thong_bao())
+                return self._tui_ten() != tui or bao
+            self.game.lua.chay(trong_cua_so("NewbieCardActivation",
+                                            f"NewUserCard({chuoi_lua(code)}, 0) NewUserCard_Close()"))
+            co = self._cho(tra_loi, GIAY_CHO_CODE + GIAY_CHO_LAG)
+            if co and bao and self._tui_ten() == tui:
+                self._cho(lambda: self._tui_ten() != tui, GIAY_CHO_GAME_TRA_LOI)
+            self.game.lua.chay('if IsWindowShow("NewbieCardActivation") then '
+                               'CloseWindow("NewbieCardActivation", true) end')
+            if self._tui_ten() != tui:
+                self.in_log(f"{self.ten}: đã nhập giftcode {code}")
+                return True
+            if bao:
+                self.in_log(f"{self.ten}: giftcode {code} không nhận thêm gì ({' / '.join(bao[-2:])})")
+                return True
+            self.in_log(f"{self.ten}: giftcode {code} chưa thấy game trả lời (lần {lan}/{SO_LAN_THU_MANG})")
+            return False
 
         # 4. Mang Hoàng Kim, vứt đồ cũ, dùng Hộp Point.
         def buoc_4(self):
-            self._mang(hoang_kim_can_mang(self._tui_ten(), self._trang_bi()))
-            self._mo_ta("vứt đồ cũ")
-            try:
-                vut_theo_ma(self.game.lua, self.ten, MA_DO_CU, self.in_log, self.nen_dung)
-            except LoiVutRac as loi:
-                self.in_log(f"{self.ten}: không vứt được đồ cũ: {loi}")
+            for _ in range(SO_LAN_THU_MANG):
+                can = hoang_kim_can_mang(self._tui_ten(), self._trang_bi())
+                if not can:
+                    break
+                self._mang(can)
+            can = hoang_kim_can_mang(self._tui_ten(), self._trang_bi())
+            if can:
+                raise LoiPhoBan(f"chưa mang được {', '.join(can.values())}")
+            for _ in range(SO_LAN_THU_MANG):
+                if not any(ma in MA_DO_CU for ma, _ in self._tui_ten().values()):
+                    break
+                self._mo_ta("vứt đồ cũ")
+                try:
+                    vut_theo_ma(self.game.lua, self.ten, MA_DO_CU, self.in_log, self.nen_dung)
+                except LoiVutRac as loi:
+                    self.in_log(f"{self.ten}: không vứt được đồ cũ: {loi}")
+                    break
+                self._cho(lambda: not any(ma in MA_DO_CU for ma, _ in self._tui_ten().values()), GIAY_CHO_LAG)
+            con = [t for ma, t in self._tui_ten().values() if ma in MA_DO_CU]
+            if con:
+                self.in_log(f"{self.ten}: còn đồ cũ chưa vứt được: {', '.join(con)}")
             self._dung_hop_point()
 
         # 5. Rút 10.000.000 điểm Nội Lực, 2 lần.
         def buoc_5(self):
-            for lan in range(1, SO_LAN_RUT_NOI_LUC + 1):
+            da_rut = that_bai = 0
+            while da_rut < SO_LAN_RUT_NOI_LUC and that_bai < SO_LAN_THU_CONG:
+                self._kiem_tra()
+                lan = da_rut + 1
                 diem = self.game.diem_tiem_nang()
                 self._mo_ta(f"rút 10.000.000 điểm Nội Lực (lần {lan})")
                 self._noi_chuyen(NPC_CONG_POINT, (DONG_RUT_10_TRIEU, DONG_RUT_NOI_LUC))
-                if self._cho(lambda: self.game.diem_tiem_nang() > diem, GIAY_CHO_GAME_TRA_LOI * 2):
+                if self._cho(lambda: self.game.diem_tiem_nang() > diem, GIAY_CHO_GAME_TRA_LOI * 2 + GIAY_CHO_LAG):
+                    da_rut += 1
                     self.in_log(f"{self.ten}: đã rút Nội Lực lần {lan}, điểm tiềm năng {diem} -> "
                                 f"{self.game.diem_tiem_nang()}")
                 else:
-                    self.in_log(f"{self.ten}: rút Nội Lực lần {lan} không được ({self._chu_hoi_thoai()})")
+                    that_bai += 1
+                    self.in_log(f"{self.ten}: rút Nội Lực lần {lan} chưa thấy cộng điểm "
+                                f"({that_bai}/{SO_LAN_THU_CONG}) ({self._chu_hoi_thoai()})")
+            if da_rut < SO_LAN_RUT_NOI_LUC:
+                self.in_log(f"{self.ten}: chỉ rút được Nội Lực {da_rut}/{SO_LAN_RUT_NOI_LUC} lần")
 
         # 6. Cộng 10.000.000 Nội Lực (chưa max), còn lại vào Thân Pháp.
         def _cong_npc(self, dong_thuoc_tinh, ten_thuoc_tinh):
@@ -347,7 +419,7 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 self._mo_ta(f"cộng 10.000.000 {ten_thuoc_tinh}")
                 self._noi_chuyen(NPC_CONG_POINT, (DONG_CONG_10_TRIEU, dong_thuoc_tinh))
                 if self._cho(lambda: self.game.diem_tiem_nang() <= diem - DIEM_MOI_LAN_CONG,
-                             GIAY_CHO_GAME_TRA_LOI * 2):
+                             GIAY_CHO_GAME_TRA_LOI * 2 + GIAY_CHO_LAG):
                     self.in_log(f"{self.ten}: đã cộng 10.000.000 {ten_thuoc_tinh}, còn "
                                 f"{self.game.diem_tiem_nang()} điểm")
                     return True
@@ -368,13 +440,15 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 if not self._cong_npc(DONG_CONG_THAN_PHAP, "Thân Pháp"):
                     raise LoiPhoBan(f"cộng Thân Pháp {SO_LAN_THU_CONG} lần không được")
             self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
-            le = self.game.diem_tiem_nang()
-            if le > 0:
+            for lan in range(1, SO_LAN_THU_CONG + 1):
+                le = self.game.diem_tiem_nang()
+                if le <= 0:
+                    return
                 self.game.cong_diem_tiem_nang({"dex": le})
-                if self._cho(lambda: self.game.diem_tiem_nang() < le, GIAY_CHO_GAME_TRA_LOI):
+                if self._cho(lambda: self.game.diem_tiem_nang() < le, GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
                     self.in_log(f"{self.ten}: đã cộng {le} điểm lẻ vào Thân Pháp")
-                else:
-                    self.in_log(f"{self.ten}: cộng {le} điểm lẻ vào Thân Pháp không được")
+                    return
+                self.in_log(f"{self.ten}: cộng {le} điểm lẻ vào Thân Pháp chưa được (lần {lan}/{SO_LAN_THU_CONG})")
 
     return NangCapNhanVat()
 

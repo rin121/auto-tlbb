@@ -590,7 +590,7 @@ class LuongNhanVat(threading.Thread):
             if bay_gio - self.luc_ve_thanh_theo_doi >= GIAY_RETRY_VE_THANH_THEO_DOI:
                 self.luc_ve_thanh_theo_doi = bay_gio
                 self.in_log(f"{self.ten}: PMP — thử lại về {MAP_DAI_LY} (sau boss)")
-                chuan_bi_ve_thanh(self.game)
+                chuan_bi_ve_thanh(self.game, self.in_log, self.ten)
                 self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH))
             return
         gom_truong = la_doi_vien and doi.gom_truong and not self.dang_theo_doi
@@ -627,7 +627,7 @@ class LuongNhanVat(threading.Thread):
             return
         self.luc_ve_thanh_theo_doi = bay_gio
         self.in_log(f"{self.ten}: PMP — tự về {MAP_DAI_LY} ({ly_do_ve})")
-        chuan_bi_ve_thanh(self.game)
+        chuan_bi_ve_thanh(self.game, self.in_log, self.ten)
         self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH))
 
     # ---------- Ác Tặc ----------

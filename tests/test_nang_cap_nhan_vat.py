@@ -133,6 +133,107 @@ class TestNangCapLogic(unittest.TestCase):
         self.assertIn("Packet_PackUp_Clicked()", ncnv.MA_XEP_TUI)
 
 
+class TestVeDaiLyTruoc(unittest.TestCase):
+    """NC-08: chưa ở Đại Lý thì về Đại Lý trước rồi mới làm các bước."""
+
+    def setUp(self):
+        self.thu_muc = tempfile.mkdtemp()
+        self.file = os.path.join(self.thu_muc, "nang_cap_da_xong.json")
+        self.goi = []
+
+        class GameGia:
+            lua = object()
+        self.nc = ncnv.tao_nang_cap(GameGia(), "caychay24", lambda chu: None, lambda: False,
+                                    lambda chu: None, self.file)
+        self.nc._tt = lambda: {"ten": "caychay24"}
+        self.nc._ve_thanh = lambda: self.goi.append("ve_thanh")
+        for so in range(1, 7):
+            setattr(self.nc, f"buoc_{so}", lambda so=so: self.goi.append(so))
+
+    def tearDown(self):
+        shutil.rmtree(self.thu_muc, ignore_errors=True)
+
+    def test_o_map_khac_thi_ve_dai_ly_truoc(self):
+        self.nc._map = lambda: "Lạc Dương"
+        self.nc.chay()
+        self.assertEqual(self.goi, ["ve_thanh", 1, 2, 3, 4, 5, 6])
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+
+    def test_dang_o_dai_ly_thi_khong_ve(self):
+        self.nc._map = lambda: "Đại Lý"
+        self.nc.chay()
+        self.assertEqual(self.goi, [1, 2, 3, 4, 5, 6])
+
+    def test_ve_khong_duoc_thi_khong_lam_buoc_nao(self):
+        from pho_ban_pmp import LoiPhoBan
+        self.nc._map = lambda: "Tô Châu"
+
+        def loi():
+            raise LoiPhoBan("nhân vật không có kỹ năng Quay về Đại Lý thành")
+        self.nc._ve_thanh = loi
+        with self.assertRaises(LoiPhoBan):
+            self.nc.chay()
+        self.assertEqual(self.goi, [])
+        self.assertFalse(ncnv.da_lam("caychay24", self.file))
+
+
+class TestMangKhiGameCham(unittest.TestCase):
+    """NC-09: máy ảo lag — mang đồ phải kiểm tra lại, chưa lên người thì làm lại, không bấm trùng khi game trả lời trễ."""
+
+    def setUp(self):
+        from unittest import mock
+        import pho_ban_pmp
+
+        class LuaGia:
+            def chay(self, ma):
+                return b""
+
+        class GameGia:
+            lua = LuaGia()
+        self.cac_patch = [mock.patch.object(pho_ban_pmp, "GIAY_CHO_GAME_TRA_LOI", 0.2),
+                          mock.patch.object(pho_ban_pmp, "GIAY_CHO_LAG", 1.5),
+                          mock.patch.object(pho_ban_pmp, "dang_hien", lambda lua, ten: False)]
+        for p in self.cac_patch:
+            p.start()
+        self.nc = ncnv.tao_nang_cap(GameGia(), "caychay24", lambda chu: None, lambda: False, lambda chu: None,
+                                    os.path.join(tempfile.gettempdir(), "khong_dung.json"))
+        self.tui = {3: (10162450, 1), 5: (30004622, 2)}
+        self.so_click = 0
+        self.doc_sau_click = 0
+        self.mat_sau = None
+        self.nc._tui = self._tui
+        self.nc._chuot_phai = self._click
+
+    def tearDown(self):
+        for p in self.cac_patch:
+            p.stop()
+
+    def _click(self, o):
+        self.so_click += 1
+        self.doc_sau_click = 0
+
+    def _tui(self):
+        self.doc_sau_click += 1
+        if self.mat_sau and self.so_click >= self.mat_sau[0] and self.doc_sau_click >= self.mat_sau[1]:
+            self.tui.pop(3, None)
+        return dict(self.tui)
+
+    def test_game_tra_loi_tre_thi_cho_khong_bam_lai(self):
+        self.mat_sau = (1, 4)
+        self.assertEqual(self.nc._mang({10162450: "Hoàng Kim - Khôi"}), {})
+        self.assertEqual(self.so_click, 1)
+
+    def test_lan_dau_khong_an_thi_mang_lai(self):
+        self.mat_sau = (2, 1)
+        self.assertEqual(self.nc._mang({10162450: "Hoàng Kim - Khôi"}), {})
+        self.assertEqual(self.so_click, 2)
+
+    def test_khong_mang_duoc_thi_thu_toi_da_roi_bao_con_lai(self):
+        self.assertEqual(self.nc._mang({10162450: "Hoàng Kim - Khôi"}), {10162450: "Hoàng Kim - Khôi"})
+        import pho_ban_pmp
+        self.assertEqual(self.so_click, pho_ban_pmp.SO_LAN_THU_MANG)
+
+
 class TestNangCapSauDangNhap(unittest.TestCase):
     """LuongDangNhap.nang_cap_sau_dang_nhap: tự nâng cấp khi vừa vào game (NC-06)."""
 

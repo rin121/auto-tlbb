@@ -474,7 +474,7 @@ def ve_thanh_neu_o_map_ac_tac(game, tt, state, in_log, ten):
         return True
     state["luc_ve_thanh"] = bay_gio
     in_log(f"{ten}: {MO_TA} — xong, về {MAP_DAI_LY}")
-    chuan_bi_ve_thanh(game)
+    chuan_bi_ve_thanh(game, in_log, ten)
     game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH))
     return True
 
@@ -579,7 +579,7 @@ class AcTacRunner(PhoBanPMP):
         self._mo_ta(f"về {MAP_DAI_LY}")
         map_dau = self._map()
         for _ in range(SO_LAN_THU):
-            chuan_bi_ve_thanh(self.game)
+            chuan_bi_ve_thanh(self.game, self.in_log, self.ten)
             # Vừa sang map, bảng kỹ năng có thể chưa nạp xong: thử lại vài giây rồi mới coi là không có kỹ năng.
             if not self._cho(lambda: self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)),
                              GIAY_CHO_KY_NANG, buoc=1):

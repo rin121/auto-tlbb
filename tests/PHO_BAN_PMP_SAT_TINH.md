@@ -32,6 +32,9 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | ID | Bước | Kỳ vọng |
 |----|------|---------|
 | PMP-01 | Map lạ, bật auto PMP | Tự về Đại Lý (F / kỹ năng về thành) |
+| PMP-01c | Ở Đại Lý chạy tới NPC Di Chuyển 90 giây mà không mở được hội thoại (kẹt đường) | Log «không mở được hội thoại Di Chuyển…, dùng kỹ năng Về thành Đại Lý rồi thử lại», dùng Về thành rồi chạy lại tới Di Chuyển; không nghỉ 5 phút (chỉ báo lỗi khi kẹt cả 3 lần) |
+| ST-LD | Sát Tinh: NPC đã đưa cả đội vào Lôi đài sinh tử nhưng game đổi map chậm (luồng còn gom ở Lạc Dương) | Log «Sát Tinh đội đã vào Lôi đài sinh tử, dắt đội tới chỗ đánh», đội trưởng dẫn đội tới giữa lôi đài và đánh bình thường; không còn lỗi «đội trưởng đang ở [Lôi đài sinh tử], không phải Lạc Dương» |
+| PMP-01b | Nhân vật bị «Thân thể bị quản chế» (buff Buff0_16 «Không thể sử dụng bất kỳ chiêu thức nào», đứng yên còn mãi) cần về thành | Log «thân thể bị quản chế, di chuyển cho hết…», nhân vật chạy vài bước, «đã hết quản chế», rồi dùng Về thành về Đại Lý |
 | PMP-02 | Đại Lý, HP &lt; 50% | Tới NPC Di Chuyển, hồi máu, đóng Quest |
 | PMP-03 | Đại Lý → Lạc Dương | Di Chuyển → Bản đồ thành → Lạc Dương |
 | PMP-04 | Lạc Dương → PMP | Trịnh Thanh Sương → vào ải, đánh 4 ải + boss |
@@ -72,6 +75,8 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | XV-07 | Xoay vòng **đang chạy** nhưng đang đăng nhập / lập nhóm, bấm **Giao dịch ngay** | Báo bấm lại sau, không làm gì |
 | XV-08 | Nhóm kẹt (đang đi PMP / Sát Tinh hoặc chờ lập nhóm mãi), bấm **Nhóm tiếp theo** → Có | Đang phó bản: tắt auto, về Đại Lý (hoặc ở lại Lạc Dương), log đủ / thiếu thành viên, đội viên còn trong game giao đồ cho trưởng, rồi sang round / nhóm kế tiếp. Đang chờ lập nhóm: bỏ round, sang round / nhóm kế tiếp |
 | XV-09 | Xoay vòng **không** chạy; 2–6 nhân vật đã trong game (có hoặc chưa cùng PT), bấm **Test nhóm online** → Có | Hộp xác nhận liệt kê đúng các nhân vật đang online (không có acc chính / acc train), trưởng nhóm = trưởng PT trong game (chưa PT thì tài khoản số nhỏ nhất). Không đăng xuất / đăng nhập lại ai; lập nhóm, đi 1 lượt PMP (bật «Chỉ Sát Tinh» thì 1 lượt Sát Tinh), về thành, giao dịch (nếu bật) rồi dừng, game vẫn mở; tiến trình xoay vòng đã lưu không bị đổi |
+| XV-10 | Xoay vòng đang đi phó bản (vd. nhóm 3 round 2, đang ở step 3 PMP) → **Dừng** → **Bắt đầu** lại | Log «Nhóm đang trong game còn lượt: … (round 2) — đi tiếp, không đăng xuất / đăng nhập lại»; không ai bị về chọn máy chủ; các nhân vật log «Đã vào game nhân vật …, bỏ qua đăng nhập»; đội trưởng log «đang trong [Phiêu Miểu Phong], đi tiếp step đang dở» và «đang trong phó bản ở step 3/5 …», đi tiếp từ step 3 (không về thành). Đang trong Lôi đài sinh tử thì đánh nốt Sát Tinh |
+| XV-11 | Nhóm đang online đã hết lượt hôm nay → Bắt đầu lại | Không ưu tiên nhóm đó; đi nhóm / round kế tiếp theo tiến trình đã lưu |
 | GD-01 | **Không** bật xoay vòng; trưởng + đội viên cùng nhóm game, đều đang trong auto (vd. đang đi PMP), bấm **Giao dịch ngay** | Tạm tắt auto cả nhóm, đội viên chạy tới trưởng giao đồ mới nhặt (so với túi lúc auto thấy nhân vật vào game), xong bật lại auto / phó bản như cũ |
 | GD-02 | Không bật xoay vòng, không có nhóm nào (hoặc trưởng nhóm không có trong auto) | Log «Không có đội viên nào đang cùng nhóm…», không tắt auto ai |
 
@@ -86,6 +91,8 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | NC-05 | Nhân vật đã có trong file | Nút test log «đã nâng cấp từ trước, bỏ qua»; đăng nhập lại không nâng cấp nữa |
 | NC-06 | Đăng nhập (tab Tài khoản hoặc xoay vòng) nhân vật chưa có trong file | Vào game xong, trạng thái «Nâng cấp…», làm 6 bước rồi mới báo «Đã vào game»; lỗi giữa chừng chỉ ghi log «lần đăng nhập sau làm tiếp», vẫn tính là đăng nhập được |
 | NC-07 | Tạo nhân vật mới (tab Tạo nhân vật / xoay vòng tạo round) | Nhận đồ tân thủ xong thì nâng cấp luôn rồi mới về chọn máy chủ |
+| NC-08 | Nhân vật chưa nâng cấp đang đứng ở map khác Đại Lý (Lạc Dương, Tô Châu…) | Log «đang ở [map], về Đại Lý trước khi nâng cấp», dùng kỹ năng Quay về Đại Lý thành rồi mới làm bước 1; đang ở Đại Lý thì làm luôn |
+| NC-09 | Chạy trên máy ảo Win7 (lag) | Mang Bách Bảo 9 sao / thần khí / 10 Hoàng Kim không sót món nào (log «chưa mang được … (lần k/3)» rồi «đã mang»); mua, dùng trứng, giftcode, rút / cộng điểm không bị làm 2 lần do game trả lời trễ; còn sót thì bước đó báo lỗi, lần đăng nhập sau làm tiếp |
 
 ### Cài đặt & file
 

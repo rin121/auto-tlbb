@@ -209,9 +209,42 @@ def doc_xv_tien_trinh(ds, che_do_test, chi_sat_tinh, so_round):
     if not any(hang_cho):
         return None
     dang_round = tt.get("dang_round")
+    r_dang = None
     if dang_round is not None:
         _hoan_tac_dang_round(hang_cho, dang_round, _map_tk_theo_ten(ds))
-    return {"so_nhom": int(tt.get("so_nhom") or 0), "hang_cho": hang_cho}
+        try:
+            r_dang = int(dang_round["r"])
+        except (KeyError, TypeError, ValueError):
+            r_dang = None
+    return {"so_nhom": int(tt.get("so_nhom") or 0), "hang_cho": hang_cho, "r_dang": r_dang}
+
+
+def chon_round_online(ds, ten_online, so_round, da_xong=None, ten_cua=None):
+    """
+    Bấm Bắt đầu lại khi nhóm vẫn trong game: (r, [tài khoản]) của round có nhiều nhân vật đang online và chưa hết
+    lượt hôm nay nhất (bằng nhau thì round nhỏ hơn), theo thứ tự ds. Không có thì (None, []).
+    """
+    da_xong = da_xong or da_xong_hom_nay
+    ten_cua = ten_cua or ten_round
+    khoa = {chuan_hoa(t) for t in ten_online if t}
+    theo_r = {}
+    for tk in ds:
+        for r in range(so_round):
+            ten = ten_cua(tk["ten_dang_nhap"], r)
+            if chuan_hoa(ten) in khoa and not da_xong(ten):
+                theo_r.setdefault(r, []).append(tk)
+    if not theo_r:
+        return None, []
+    r = max(theo_r, key=lambda r: (len(theo_r[r]), -r))
+    return r, theo_r[r]
+
+
+def dua_len_dau_hang(hang, cac_tk):
+    """Đưa cac_tk lên đầu hàng chờ (giữ thứ tự cac_tk); chưa có trong hàng thì thêm vào."""
+    for tk in reversed(cac_tk):
+        if tk in hang:
+            hang.remove(tk)
+        hang.insert(0, tk)
 
 
 def _hoan_tac_dang_round(hang_cho, dang_round, ds_map):
@@ -638,6 +671,24 @@ class LuongXoayVong(threading.Thread):
             return True
         return False
 
+    @staticmethod
+    def _ten_dang_online():
+        """Tên các nhân vật đang trong game (bỏ acc chính / acc train)."""
+        giu = hwnd_giu_khi_xoay_vong()
+        ds = []
+        for cua_so in tim_cua_so_game():
+            if cua_so["hwnd"] in giu:
+                continue
+            try:
+                tt = Game(cua_so["hwnd"]).thong_tin()
+            except (LoiLua, OSError):
+                continue
+            except Exception:
+                continue
+            if tt and tt["ten"]:
+                ds.append(tt["ten"])
+        return ds
+
     def _tat_cac_game(self):
         for hwnd in self.cac_hwnd:
             try:
@@ -673,14 +724,28 @@ class LuongXoayVong(threading.Thread):
         # Mỗi round một hàng chờ tài khoản theo số tăng dần; mỗi nhóm lấy N acc đầu hàng còn phải đi round đó, nên
         # acc đã xong / bị loại (sai rule) không chiếm chỗ, nhóm luôn ghép đủ N người.
         tt = doc_xv_tien_trinh(ds, self.che_do_test, self.chi_sat_tinh, so_round)
+        r_dau = None
+        giu_so_nhom = False
         if tt:
             hang_cho = tt["hang_cho"]
             so_nhom = tt["so_nhom"]
             con_lai = sum(len(h) for h in hang_cho)
             self.in_log(f"Tiếp tục tiến trình đã lưu: đã đi {so_nhom} nhóm, còn {con_lai} lượt acc×round trong hàng chờ")
+            if tt.get("r_dang") is not None and 0 <= tt["r_dang"] < so_round:
+                r_dau, giu_so_nhom = tt["r_dang"], so_nhom > 0
         else:
             hang_cho = _hang_cho_mac_dinh(ds, so_round)
             so_nhom = 0
+        hop_le = [tk for tk in ds if tk["ten_dang_nhap"].lower() not in self.tk_sai_rule]
+        r_on, tk_on = chon_round_online(hop_le, self._ten_dang_online(), so_round)
+        if tk_on:
+            tk_on = tk_on[:n_mot_nhom]
+            dua_len_dau_hang(hang_cho[r_on], tk_on)
+            if r_on != r_dau:
+                giu_so_nhom = False
+            r_dau = r_on
+            self.in_log(f"Nhóm đang trong game còn lượt: {', '.join(ten_round(tk['ten_dang_nhap'], r_on) for tk in tk_on)}"
+                        f" (round {r_on + 1}) — đi tiếp, không đăng xuất / đăng nhập lại")
         self._xv_ds_map = _map_tk_theo_ten(ds)
         self._xv_hang_cho = hang_cho
         self._xv_so_nhom = so_nhom
@@ -689,10 +754,13 @@ class LuongXoayVong(threading.Thread):
         while any(hang_cho):
             if self._neu_qua_ngay(ngay):
                 return True
-            so_nhom += 1
+            if not giu_so_nhom:
+                so_nhom += 1
+            giu_so_nhom = False
             self._xv_so_nhom = so_nhom
             ca_nhom = []
-            for r in range(so_round):
+            r_bat_dau, r_dau = r_dau or 0, None
+            for r in range(r_bat_dau, so_round):
                 if self._neu_qua_ngay(ngay):
                     return True
                 choi = []

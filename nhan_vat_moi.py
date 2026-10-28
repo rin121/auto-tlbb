@@ -44,7 +44,8 @@ from dang_nhap import (CONG_MO_GAME, LoiDangNhap, LoiSaiRuleNhanVat, LoiSaiTaiKh
 from game_api import Game
 from giai_captcha import LoiGiaiCaptcha
 from lua_game import LoiLua
-from pho_ban_pmp import GIAY_CHO_GAME_TRA_LOI, MA_DA_MANG, SO_LAN_DUNG_TOI_DA, LoiPhoBan, PhoBanPMP
+from pho_ban_pmp import (GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MA_DA_MANG, SO_LAN_DUNG_TOI_DA, SO_LAN_THU_MANG,
+                         LoiPhoBan, PhoBanPMP)
 from tao_nhan_vat import giai_ma_kiem_tra
 from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 
@@ -245,7 +246,8 @@ class NhanDoTanThu(PhoBanPMP):
             self.in_log(f"{self.ten}: đã ở môn phái khác (mã {tt['mon_phai']}), không vào Thiên Long")
             return
         self._noi_chuyen(NPC_TAN_THU, (DONG_VAO_PHAI, DONG_THIEN_LONG))
-        if not self._cho(lambda: (self._tt() or {}).get("mon_phai") == MON_PHAI_THIEN_LONG, GIAY_CHO_GAME_TRA_LOI):
+        if not self._cho(lambda: (self._tt() or {}).get("mon_phai") == MON_PHAI_THIEN_LONG,
+                         GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
             raise LoiPhoBan(f"chọn Thiên Long mà chưa vào phái ({self._chu_hoi_thoai()})")
         self.in_log(f"{self.ten}: đã gia nhập Thiên Long")
 
@@ -254,7 +256,7 @@ class NhanDoTanThu(PhoBanPMP):
         if tien >= TIEN_VANG_TAN_THU:
             return
         self._noi_chuyen(NPC_TAN_THU, (DONG_VANG,))
-        if self._cho(lambda: self._tien() > tien, GIAY_CHO_GAME_TRA_LOI):
+        if self._cho(lambda: self._tien() > tien, GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
             self.in_log(f"{self.ten}: đã nhận Vàng + ĐT, tiền {tien} -> {self._tien()}")
         else:
             self.in_log(f"{self.ten}: chọn \"Tôi muốn nhận Vàng + ĐT\" mà tiền không đổi ({self._chu_hoi_thoai()})")
@@ -263,11 +265,13 @@ class NhanDoTanThu(PhoBanPMP):
         if self.game.lua.chay(MA_DA_MANG_KHOI) == b"1" or self._so_luong(MA_GOI_TAN_THU):
             return
         self._noi_chuyen(NPC_TAN_THU, (DONG_NHAN_TRANG_BI,))
-        if not self._cho(lambda: self._so_luong(MA_GOI_TAN_THU), GIAY_CHO_GAME_TRA_LOI * 2):
+        if not self._cho(lambda: self._so_luong(MA_GOI_TAN_THU), GIAY_CHO_GAME_TRA_LOI * 2 + GIAY_CHO_LAG):
             raise LoiPhoBan(f"chọn \"Nhận Trang Bị Tân Thủ\" mà không nhận được đồ ({self._chu_hoi_thoai()})")
         self.in_log(f"{self.ten}: đã nhận trang bị tân thủ")
 
     def _dung_hop_point(self):
+        """Dùng hết Hộp Point; game chậm thì chờ thêm GIAY_CHO_LAG, thử lại SO_LAN_THU_MANG lần mới báo lỗi."""
+        that_bai = 0
         for _ in range(SO_LAN_DUNG_TOI_DA):
             self._kiem_tra()
             tui = self._tui()
@@ -278,20 +282,34 @@ class NhanDoTanThu(PhoBanPMP):
             diem = self.game.diem_tiem_nang()
             self._mo_ta(f"dùng Hộp Point Tân Thủ Lễ Bao (còn {con})")
             self._chuot_phai(cac_o[0])
-            if not self._cho(lambda: self._so_luong({MA_HOP_POINT}) < con, GIAY_CHO_GAME_TRA_LOI):
-                raise LoiPhoBan(f"dùng Hộp Point Tân Thủ Lễ Bao không được ({self._chu_hoi_thoai()})")
-            self._cho(lambda: self.game.diem_tiem_nang() > diem, GIAY_CHO_GAME_TRA_LOI)
+            if not (self._cho(lambda: self._so_luong({MA_HOP_POINT}) < con, GIAY_CHO_GAME_TRA_LOI)
+                    or self._cho(lambda: self._so_luong({MA_HOP_POINT}) < con, GIAY_CHO_LAG)):
+                that_bai += 1
+                if that_bai >= SO_LAN_THU_MANG:
+                    raise LoiPhoBan(f"dùng Hộp Point Tân Thủ Lễ Bao {that_bai} lần không được "
+                                    f"({self._chu_hoi_thoai()})")
+                self.in_log(f"{self.ten}: dùng Hộp Point chưa thấy mất hộp (lần {that_bai}/{SO_LAN_THU_MANG}), thử lại")
+                continue
+            that_bai = 0
+            self._cho(lambda: self.game.diem_tiem_nang() > diem, GIAY_CHO_LAG)
             self.in_log(f"{self.ten}: đã dùng 1 Hộp Point Tân Thủ Lễ Bao, điểm tiềm năng {diem} -> "
                         f"{self.game.diem_tiem_nang()}")
 
     def _cong_noi_luc(self):
-        for _ in range(SO_LAN_CONG_TOI_DA):
+        that_bai = 0
+        for _ in range(SO_LAN_CONG_TOI_DA + SO_LAN_THU_MANG):
             diem = self.game.diem_tiem_nang()
             if diem < DIEM_MOI_LAN_CONG:
                 return
             self._noi_chuyen(NPC_CONG_POINT, (DONG_CONG_10_TRIEU, DONG_NOI_LUC))
-            if not self._cho(lambda: self.game.diem_tiem_nang() <= diem - DIEM_MOI_LAN_CONG, GIAY_CHO_GAME_TRA_LOI):
-                raise LoiPhoBan(f"cộng 10.000.000 Nội Lực không được ({self._chu_hoi_thoai()})")
+            if not (self._cho(lambda: self.game.diem_tiem_nang() <= diem - DIEM_MOI_LAN_CONG, GIAY_CHO_GAME_TRA_LOI)
+                    or self._cho(lambda: self.game.diem_tiem_nang() <= diem - DIEM_MOI_LAN_CONG, GIAY_CHO_LAG)):
+                that_bai += 1
+                if that_bai >= SO_LAN_THU_MANG:
+                    raise LoiPhoBan(f"cộng 10.000.000 Nội Lực {that_bai} lần không được ({self._chu_hoi_thoai()})")
+                self.in_log(f"{self.ten}: cộng Nội Lực chưa thấy trừ điểm (lần {that_bai}/{SO_LAN_THU_MANG}), thử lại")
+                continue
+            that_bai = 0
             self.in_log(f"{self.ten}: đã cộng 10.000.000 điểm Nội Lực, còn {self.game.diem_tiem_nang()} điểm")
 
     def _can_khon_ho(self):

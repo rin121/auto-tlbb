@@ -109,6 +109,7 @@ KHOANG_LUI_KHOI_NPC = 6
 GIAY_MO_HOI_THOAI = 15
 GIAY_CHO_DOI_MAP = 20
 GIAY_CHO_VE_THANH = 40
+KHOANG_VE_THANH_DOI_CHO = 5
 GIAY_DANH_MOT_AI = 120
 # Đứng trong ải PMP không thấy quái / NPC để đánh: về Đại Lý chạy lại vòng (không tính xong vòng).
 GIAY_TREO_PMP_KHONG_QUAI = 30
@@ -190,11 +191,21 @@ TIEM_THU_CUOI = "Quảng Trường Hình Tượng"
 MON_THU_CUOI = ("Thú Cưỡi Tân Thủ", "Cưỡi: Đà Điểu", 10158130)
 MON_KY_THUAT = ("Kỵ Thuật", "Kỵ Thuật: Đà Điểu", 31001228)
 GIAY_CHO_GAME_TRA_LOI = 5
+# Máy chậm / máy ảo: game trả lời trễ. Chưa thấy kết quả thì chờ thêm rồi mới thao tác lại (tránh làm 2 lần).
+GIAY_CHO_LAG = 12
+SO_LAN_THU_MANG = 3
 GIAY_DUNG_KY_THUAT = 15  # có thanh vận công trước khi mất món
 SO_LAN_DUNG_TOI_DA = 40
 SO_LAN_DUNG_KY_THUAT = 10
 # Đang theo đội (cả đội trưởng đã bấm Theo đội) thì game không cho dùng kỹ năng; StopFollow vài trăm ms mới có hiệu lực.
 GIAY_CHO_BO_THEO_DOI = 3.0
+# "Thân thể bị quản chế" (icon Buff0_16, "Không thể sử dụng bất kỳ chiêu thức nào"): còn 3 giây mãi tới khi di chuyển.
+ICON_QUAN_CHE = "Buff0_16"
+DIEM_THOAT_QUAN_CHE = ((4, 0), (-4, 0), (0, 4), (0, -4))
+GIAY_THOAT_QUAN_CHE = 6
+MA_DS_BUFF_ICON = ('local s = "" for i = 0, Player:GetBuffNumber() - 1 do '
+                   's = s .. tostring(Player:GetBuffIconNameByIndex(i)) .. "\\t" '
+                   '.. tostring(Player:GetBuffToolTipsByIndex(i)) .. "\\n" end return s')
 
 
 def bo_theo_doi(game, giay=GIAY_CHO_BO_THEO_DOI):
@@ -227,9 +238,53 @@ def xuong_thu(game, giay=GIAY_CHO_BO_THEO_DOI):
         time.sleep(0.3)
 
 
-def chuan_bi_ve_thanh(game):
-    """Bỏ theo đội và xuống thú trước khi dùng kỹ năng Về thành. True nếu đã sẵn sàng."""
-    return bo_theo_doi(game) & xuong_thu(game)
+def bi_quan_che(cac_buff):
+    """[(icon, chữ tooltip)] có hiệu ứng "Thân thể bị quản chế" (không dùng được chiêu nào, đứng yên thì không hết)."""
+    return any(icon == ICON_QUAN_CHE or "chieu thuc nao" in bo_dau(chu) for icon, chu in cac_buff)
+
+
+def _doc_buff(game):
+    cac_buff = []
+    for dong in giai_ma(game.lua.chay(MA_DS_BUFF_ICON)).split("\n"):
+        if "\t" in dong:
+            icon, chu = dong.split("\t", 1)
+            cac_buff.append((icon, chu))
+    return cac_buff
+
+
+def thoat_quan_che(game, in_log=None, ten=""):
+    """
+    Bị quản chế thì không dùng được Về thành; hiệu ứng chỉ hết khi nhân vật di chuyển. Chạy lần lượt ra các điểm
+    quanh chỗ đứng tới khi mất hiệu ứng. True nếu không (còn) bị quản chế.
+    """
+    try:
+        if not bi_quan_che(_doc_buff(game)):
+            return True
+        tt = game.thong_tin()
+        if not tt:
+            return False
+        if in_log:
+            in_log(f"{ten}: thân thể bị quản chế, di chuyển cho hết rồi mới Về thành")
+        x, y = int(tt["x"]), int(tt["y"])
+        for dx, dy in DIEM_THOAT_QUAN_CHE:
+            game.lua.chay(f"AutoRunToTarget({x + dx}, {y + dy})")
+            het_han = time.time() + GIAY_THOAT_QUAN_CHE
+            while time.time() < het_han:
+                time.sleep(0.3)
+                if not bi_quan_che(_doc_buff(game)):
+                    if in_log:
+                        in_log(f"{ten}: đã hết quản chế")
+                    return True
+        if in_log:
+            in_log(f"{ten}: di chuyển mà vẫn còn quản chế")
+        return False
+    except LoiLua:
+        return False
+
+
+def chuan_bi_ve_thanh(game, in_log=None, ten=""):
+    """Bỏ theo đội, xuống thú, hết quản chế trước khi dùng kỹ năng Về thành. True nếu đã sẵn sàng."""
+    return bo_theo_doi(game) & xuong_thu(game) & thoat_quan_che(game, in_log, ten)
 
 # Khung Quest hiện danh sách dòng (QUEST_EVENTLIST) hoặc chữ thông tin (QUEST_INFO, vd. "đã 20 lần khiêu chiến").
 # Bọc Quest_OnEvent để biết lần mở gần nhất là loại nào; chưa bọc được thì đọc cả chữ thông tin.
@@ -314,6 +369,10 @@ class _HetGioLanThu(Exception):
 
 class LoiPhoBan(Exception):
     pass
+
+
+class _KhongMoDuocHoiThoai(LoiPhoBan):
+    """Chạy tới NPC quá GIAY_CHAY_TOI_NPC giây mà chưa mở được hội thoại (kẹt đường / NPC chưa hiện)."""
 
 
 class _TruongSaiMap(LoiPhoBan):
@@ -1630,28 +1689,43 @@ class PhoBanPMP:
         return " / ".join(chu for loai, _, _, chu in ht[1] if loai in ("text", "info")) if ht else ""
 
     def _mang(self, cac_mon):
-        """Mang (như chuột phải) mọi món trong cac_mon {mã: tên} đang có trong túi."""
-        bo_qua = set()
+        """
+        Mang (như chuột phải) mọi món trong cac_mon {mã: tên} đang có trong túi. Đã mang = số món mã đó trong túi giảm
+        (không xét ô: món cũ tháo ra có thể rơi vào đúng ô vừa trống). Game trả lời chậm thì chờ thêm GIAY_CHO_LAG rồi
+        mới chuột phải lại; mỗi mã thử SO_LAN_THU_MANG lần. Trả về {mã: tên} còn trong túi chưa mang được.
+        """
+        so_lan = {}
         for _ in range(SO_LAN_DUNG_TOI_DA):
             self._kiem_tra()
             tui = self._tui()
-            o = next((o for o, (ma, _) in sorted(tui.items()) if ma in cac_mon and o not in bo_qua), None)
+            o = next((o for o, (ma, _) in sorted(tui.items())
+                      if ma in cac_mon and so_lan.get(ma, 0) < SO_LAN_THU_MANG), None)
             if o is None:
-                return
+                break
             ma, _ = tui[o]
-            self._mo_ta(f"mang {cac_mon[ma]}")
+            so_lan[ma] = so_lan.get(ma, 0) + 1
+            con = self._so_luong({ma})
+
+            def da_mang():
+                return self._so_luong({ma}) < con
+            self._mo_ta(f"mang {cac_mon[ma]}" + (f" (lần {so_lan[ma]})" if so_lan[ma] > 1 else ""))
             self._chuot_phai(o)
-            doi = self._cho(lambda: self._tui().get(o) != tui[o] or dang_hien(self.game.lua, "MessageBox_Self"),
-                            GIAY_CHO_GAME_TRA_LOI)
-            if doi and self._tui().get(o) == tui[o]:
+            doi = self._cho(lambda: da_mang() or dang_hien(self.game.lua, "MessageBox_Self"), GIAY_CHO_GAME_TRA_LOI)
+            if doi and not da_mang():
                 # Hộp "Trang bị sẽ bị khóa sau khi mang": bấm OK như người chơi (MessageBox_OnOKClick -> EquipItem).
                 self.game.lua.chay(trong_cua_so("MessageBox_Self", "MessageBox_Self_OK_Clicked()"))
-                doi = self._cho(lambda: self._tui().get(o) != tui[o], GIAY_CHO_GAME_TRA_LOI)
+                doi = self._cho(da_mang, GIAY_CHO_GAME_TRA_LOI)
+            if not doi:
+                doi = self._cho(da_mang, GIAY_CHO_LAG)
             if doi:
                 self.in_log(f"{self.ten}: đã mang {cac_mon[ma]}")
             else:
-                bo_qua.add(o)
-                self.in_log(f"{self.ten}: không mang được {cac_mon[ma]} (ô {o + 1})")
+                self.in_log(f"{self.ten}: chưa mang được {cac_mon[ma]} (lần {so_lan[ma]}/{SO_LAN_THU_MANG})")
+        self.game.lua.chay('if IsWindowShow("MessageBox_Self") then CloseWindow("MessageBox_Self", true) end')
+        con_lai = {ma: cac_mon[ma] for ma, _ in self._tui().values() if ma in cac_mon}
+        if con_lai:
+            self.in_log(f"{self.ten}: không mang được {', '.join(con_lai.values())}")
+        return con_lai
 
     def _thu_cuoi(self):
         """
@@ -1844,7 +1918,7 @@ class PhoBanPMP:
             if bay_gio >= het_han:
                 if bo_qua_neu_khong_co and npc is None:
                     return False
-                raise LoiPhoBan(f"không mở được hội thoại {ten_npc} sau {GIAY_CHAY_TOI_NPC} giây")
+                raise _KhongMoDuocHoiThoai(f"không mở được hội thoại {ten_npc} sau {GIAY_CHAY_TOI_NPC} giây")
             time.sleep(0.4)
 
     def _chon(self, dong):
@@ -1884,8 +1958,9 @@ class PhoBanPMP:
         self._mo_ta("về thành")
         map_dau = self._map()
         for _ in range(SO_LAN_THU):
-            if not chuan_bi_ve_thanh(self.game):
-                self.in_log(f"{self.ten}: PMP chưa bỏ được theo đội / xuống thú, vẫn thử dùng kỹ năng Về thành")
+            if not chuan_bi_ve_thanh(self.game, self.in_log, self.ten):
+                self.in_log(f"{self.ten}: PMP chưa bỏ được theo đội / xuống thú / quản chế, vẫn thử dùng kỹ năng "
+                            "Về thành")
             if not self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)):
                 raise LoiPhoBan("nhân vật không có kỹ năng Quay về Đại Lý thành")
             moi = self._cho(lambda: (lambda m: m if m and m != map_dau else None)(self._map()), GIAY_CHO_VE_THANH)
@@ -1900,13 +1975,29 @@ class PhoBanPMP:
         raise LoiPhoBan(f"dùng kỹ năng Về thành {SO_LAN_THU} lần mà vẫn chưa về thành "
                         f"({'; '.join(self.thong_bao[-3:])})")
 
+    def _ve_thanh_tai_dai_ly(self):
+        """Đang ở Đại Lý mà kẹt không tới được NPC: vẫn dùng kỹ năng Về thành để về chỗ xuất hiện, chạy lại từ đó."""
+        tt = self._tt()
+        cu = (tt["x"], tt["y"]) if tt else None
+        if not chuan_bi_ve_thanh(self.game, self.in_log, self.ten):
+            self.in_log(f"{self.ten}: PMP chưa bỏ được theo đội / xuống thú / quản chế, vẫn thử dùng kỹ năng Về thành")
+        if not self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)):
+            raise LoiPhoBan("nhân vật không có kỹ năng Quay về Đại Lý thành")
+        if cu and self._cho(lambda: (lambda t: t and khoang_cach((t["x"], t["y"]), cu) > KHOANG_VE_THANH_DOI_CHO)(
+                self._tt()), GIAY_CHO_VE_THANH):
+            self.in_log(f"{self.ten}: PMP đã dùng Về thành {MAP_DAI_LY}")
+        else:
+            self.in_log(f"{self.ten}: PMP dùng Về thành mà chưa thấy đổi chỗ, vẫn thử lại")
+        if self.doi:
+            self.doi.xoa_lenh_gom()
+
     @staticmethod
     def _thu_ve_thanh_mot(game, ten, in_log=None):
         """Một lần bấm Quay về Đại Lý (bỏ theo đội / xuống thú trước)."""
         try:
-            if not chuan_bi_ve_thanh(game):
+            if not chuan_bi_ve_thanh(game, in_log, ten):
                 if in_log:
-                    in_log(f"{ten}: PMP chưa bỏ được theo đội / xuống thú, vẫn thử Về thành")
+                    in_log(f"{ten}: PMP chưa bỏ được theo đội / xuống thú / quản chế, vẫn thử Về thành")
             return bool(game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)))
         except LoiLua:
             return False
@@ -2036,7 +2127,14 @@ class PhoBanPMP:
             if self.doi and chuan_hoa(self._map() or "") == chuan_hoa(map_o) and gom_doi():
                 return
             self._mo_ta(f"tới {ten_npc}")
-            self._mo_hoi_thoai(ten_npc, xy, cac_dong[0], giu_theo=True)
+            try:
+                self._mo_hoi_thoai(ten_npc, xy, cac_dong[0], giu_theo=True)
+            except _KhongMoDuocHoiThoai as loi:
+                if lan >= SO_LAN_THU or not la_dai_ly(map_o) or not la_dai_ly(self._map()):
+                    raise
+                self.in_log(f"{self.ten}: PMP {loi}, dùng kỹ năng Về thành {MAP_DAI_LY} rồi thử lại")
+                self._ve_thanh_tai_dai_ly()
+                continue
             het = self._chu_het_luot()
             if het:
                 self._het_luot(het)
@@ -2412,6 +2510,9 @@ class PhoBanPMP:
     def _vao_sat_tinh(self):
         map_o, ten_npc, xy, (dong_1, dong_2), map_toi = BUOC_VAO_SAT_TINH
         for lan in range(1, SO_LAN_THU + 1):
+            if la_sat_tinh(self._map()):
+                self.in_log(f"{self.ten}: Sát Tinh đã ở [{MAP_SAT_TINH}]")
+                return
             if self.doi:
                 self._cho_doi_gan_xy(xy, map_o, ten_npc)
             self._mo_ta(f"Sát Tinh: tới NPC {ten_npc}")
@@ -2449,6 +2550,8 @@ class PhoBanPMP:
             if lan < SO_LAN_THU and self.doi:
                 self._cho_doi_gan_xy(xy, map_o, ten_npc)
                 time.sleep(GIAY_CHO_GOM_DOI_RETRY)
+        if self._cho(lambda: la_sat_tinh(self._map()), GIAY_CHO_GAME_TRA_LOI):
+            return
         lech = self._doi_vien_lech_map()
         if lech:
             raise _TreoPMP(f"{ten_npc} chưa đưa đi vì đội viên không cùng map ({lech})")
@@ -2598,17 +2701,24 @@ class PhoBanPMP:
             self._cho_doi_vien(buoc_di[4])
             self._cho_load_map(buoc_di[4])
         if la_lac_duong(self._map()):
-            if self.doi:
-                bat_tap_hop(self.doi, MAP_LAC_DUONG)
-                self.doi.dat_buoc(giai_doan="gom_sat_tinh")
-                self.doi.npc_gom = (MAP_LAC_DUONG, TEN_NPC_SAT_TINH, XY_NPC_SAT_TINH)
-                try:
-                    self._tap_hop_doi(MAP_LAC_DUONG)
-                finally:
-                    tat_tap_hop(self.doi)
-            self._vao_sat_tinh()
-            if self.doi:
-                self.doi.npc_gom = None
+            try:
+                if self.doi:
+                    bat_tap_hop(self.doi, MAP_LAC_DUONG)
+                    self.doi.dat_buoc(giai_doan="gom_sat_tinh")
+                    self.doi.npc_gom = (MAP_LAC_DUONG, TEN_NPC_SAT_TINH, XY_NPC_SAT_TINH)
+                    try:
+                        self._tap_hop_doi(MAP_LAC_DUONG)
+                    finally:
+                        tat_tap_hop(self.doi)
+                self._vao_sat_tinh()
+            except _TruongSaiMap as loi:
+                # Game đổi map chậm: NPC đã đưa cả đội vào lôi đài trong lúc luồng còn gom ở Lạc Dương.
+                if not la_sat_tinh(loi.map_dang_o) and not la_sat_tinh(self._map()):
+                    raise
+                self.in_log(f"{self.ten}: Sát Tinh đội đã vào {MAP_SAT_TINH}, dắt đội tới chỗ đánh")
+            finally:
+                if self.doi:
+                    self.doi.npc_gom = None
         if not la_sat_tinh(self._map()):
             raise LoiPhoBan(f"đang ở [{self._map()}], không phải {MAP_SAT_TINH}")
         self._danh_sat_tinh()
@@ -2665,12 +2775,13 @@ class PhoBanPMP:
                 self._theo_doi(XY_NPC_PMP)
         if chuan_hoa(self._map() or "") != chuan_hoa(MAP_PMP):
             raise LoiPhoBan(f"đang ở [{self._map()}], không phải {MAP_PMP}")
+        so0 = self._ai_tiep_theo()
         if self.doi:
             self.doi.npc_gom = None
-            self._theo_doi(CAC_AI[0].xy, dan_doi=True)
-        so0 = self._ai_tiep_theo()
+            self._theo_doi(CAC_AI[so0 - 1].xy, dan_doi=True)
         if so0 > 1:
-            self.in_log(f"{self.ten}: PMP đang ở {CAC_AI[so0 - 1].ten}, bỏ qua ải trước")
+            self.in_log(f"{self.ten}: PMP đang trong phó bản ở step {so0}/{len(CAC_AI)} {CAC_AI[so0 - 1].ten}, "
+                        "đi tiếp từ step này (bỏ qua ải trước)")
         for so, ai in enumerate(CAC_AI, 1):
             if so < so0:
                 continue
@@ -2710,6 +2821,9 @@ class PhoBanPMP:
             self._doc_thong_bao()
             dem = hom_nay(pmp)
             chi_st = pmp.get("chi_sat_tinh")
+            m = self._map()
+            if la_map_trong_pho_ban(m):
+                self.in_log(f"{self.ten}: đang trong [{m}], đi tiếp step đang dở (không về thành)")
 
             if chi_st:
                 # Chỉ Sát Tinh: đang ở lôi đài thì đánh tiếp, còn không thì vào Sát Tinh.
@@ -2720,8 +2834,9 @@ class PhoBanPMP:
             # PMP rồi Sát Tinh: còn lượt PMP thường thì không nhảy Sát Tinh.
             if con_luot_pmp_thuong(pmp, dem):
                 if la_sat_tinh(self._map()):
-                    self.in_log(f"{self.ten}: còn lượt PMP thường, về thành trước khi vào Phiêu Miểu Phong")
-                    self._ve_thanh()
+                    self.in_log(f"{self.ten}: đang trong {MAP_SAT_TINH}, đánh nốt Sát Tinh rồi mới đi PMP thường")
+                    self._vong_sat_tinh(pmp)
+                    return
                 lan_treo = 0
                 while con_luot_pmp_thuong(pmp, hom_nay(pmp)):
                     try:
