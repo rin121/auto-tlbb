@@ -92,7 +92,8 @@ from xoay_vong import (SO_NGUOI_MOT_NHOM_TOI_DA, SO_ROUND_TOI_DA, LuongXoayVong,
                        nhom_dang_online, xoa_xv_tien_trinh)
 from tao_nhan_vat import dang_hoi_ma_kiem_tra, giai_ma_kiem_tra
 from tu_dung_vat_pham import TuDungCanKhonHo, TuDungX2
-from tu_duyet import LoiTuDuyet, TuDuyet
+from tang_cap import GIAY_GIUA_MOI_LAN as GIAY_GIUA_MOI_LAN_TANG_CAP, thu_tang_cap
+from tu_duyet import LoiTuDuyet, TuDuyet, bat_theo_doi_tren_cung, vua_o_tren_cung
 from tran_thu import TuXuatChien
 from vut_rac import LoiVutRac, vut_rac
 from thu_muc import THU_MUC_APP
@@ -221,7 +222,8 @@ CAC_KHOA_CHIEN_DAU_CHUNG = ("ban_kinh", "dung_f1", "lua_quai", "so_quai_lua", "d
                             "dung_skill_pet", "cac_phim_skill", "uu_tien_nguoi_choi", "xuong_thu", "nhat_do",
                             "an_don", "phan_tram_an_don", "xuat_chien_tran_thu", "hoan_hi_toi_thieu")
 CAC_O_TICH_CHIEN_DAU = ("bat", "quanh_diem", "dung_f1", "lua_quai", "danh_theo_key", "dung_skill_pet",
-                        "uu_tien_nguoi_choi", "xuong_thu", "nhat_do", "buff_mau", "an_don", "xuat_chien_tran_thu")
+                        "uu_tien_nguoi_choi", "xuong_thu", "nhat_do", "buff_mau", "an_don", "xuat_chien_tran_thu",
+                        "tu_tang_cap")
 # Thành viên hỏi mục tiêu của Key thì Key đọc mục tiêu của mình trong GIAY_KEY_DOC_MUC_TIEU giây tới;
 # tin mục tiêu cũ hơn GIAY_TIN_KEY_CON_DUNG thì coi như không biết Key đang đánh gì.
 GIAY_KEY_DOC_MUC_TIEU = 3
@@ -886,13 +888,27 @@ class LuongNhanVat(threading.Thread):
 
     def vong_tu_duyet(self):
         """Xem popup mỗi giây ở luồng phụ, không phải chờ vòng auto chính (có thể đang chờ dịch chuyển)."""
-        tu_duyet = TuDuyet(self.game.lua, lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"))
+        bat_theo_doi_tren_cung()
+        tu_duyet = TuDuyet(self.game.lua, lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"),
+                           lambda: vua_o_tren_cung(self.hwnd))
         mat_ket_noi = XuLyMatKetNoi(self.game.lua,
                                     lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"))
         loi_cuoi = loi_mat_ket_noi_cuoi = None
-        luc_xem_mat_ket_noi = 0.0
+        luc_xem_mat_ket_noi = luc_xem_tang_cap = 0.0
+        cap_da_bam = None
         while not self.dung.is_set() and win32gui.IsWindow(self.hwnd):
             chung = cau_hinh.chung()
+            if self.da_noi and self.ten and self.dang_trong_game \
+                    and time.time() - luc_xem_tang_cap >= GIAY_GIUA_MOI_LAN_TANG_CAP \
+                    and cai_dat_chien_dau(cau_hinh.cua_nhan_vat(self.ten))["tu_tang_cap"]:
+                luc_xem_tang_cap = time.time()
+                try:
+                    cap = thu_tang_cap(self.game.lua)
+                    if cap is not None and cap != cap_da_bam:
+                        self.in_log(f"{self.ten}: đủ kinh nghiệm, tự tăng cấp {cap} -> {cap + 1}")
+                    cap_da_bam = cap if cap is not None else cap_da_bam
+                except LoiLua:
+                    pass
             if self.da_noi and time.time() - luc_xem_mat_ket_noi >= GIAY_GIUA_MOI_LAN_XEM_MAT_KET_NOI \
                     and not self.dang_tu_dang_nhap(self.game.lua.pid):
                 luc_xem_mat_ket_noi = time.time()
@@ -2201,6 +2217,14 @@ class UngDung:
                               "không bật Tự động đánh.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
 
+        khung = ttk.LabelFrame(tab, text="Tăng cấp", padding=8)
+        khung.pack(fill="x", pady=(6, 0))
+        ttk.Checkbutton(khung, text="Tự Động Tăng Cấp", variable=self.bien_cd["tu_tang_cap"],
+                        command=self.luu_chien_dau).pack(anchor="w")
+        ttk.Label(khung, text="Đủ kinh nghiệm thì tự bấm Thăng cấp (như nút ở bảng nhân vật Alt+C). Mặc định bật cho "
+                              "mọi nhân vật; chạy cả khi không tích ô Auto / không bật Tự động đánh.",
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
+
         khung = ttk.LabelFrame(tab, text="Khi bật PK đội / PK cá nhân", padding=8)
         khung.pack(fill="x", pady=(6, 0))
         ttk.Checkbutton(khung, text="Bật PK: có người chơi thì đánh người trước quái, cả nhóm đánh theo trưởng nhóm",
@@ -2362,8 +2386,10 @@ class UngDung:
                                                     else "TẮT tự xuất chiến trân thú")
                         + (" - chưa tích ô Auto nên chưa chạy" if cd["xuat_chien_tran_thu"] and not cai_dat["bat_auto"]
                            else ""))
+        if cd["tu_tang_cap"] != cu["tu_tang_cap"]:
+            self.in_log(f"{self.ten_dang_sua}: {'BẬT' if cd['tu_tang_cap'] else 'TẮT'} tự động tăng cấp")
         rieng = ("buff_mau", "phan_tram_buff", "an_don", "phan_tram_an_don", "xuat_chien_tran_thu",
-                 "hoan_hi_toi_thieu")
+                 "hoan_hi_toi_thieu", "tu_tang_cap")
         if dict(cd, **{khoa: cu[khoa] for khoa in rieng}) == cu:
             return
         chi_tiet = [f"bán kính {cd['ban_kinh']}"]

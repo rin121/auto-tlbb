@@ -51,6 +51,30 @@ class TestTuDuyetHopThoatGame(unittest.TestCase):
         lua, _ = self._chay(CHU_NGAN_LUONG)
         self.assertEqual(lua.so_lan_bam, 1)
 
+    def test_nguoi_dung_vua_tat_cua_so_thi_duyet_hop_thoat(self):
+        lua, log = LuaGia(CHU_THOAT), []
+        td = tu_duyet.TuDuyet(lua, log.append, lambda: True)
+        td.kiem_tra(False)
+        self.assertEqual(lua.so_lan_bam, 1)
+        self.assertTrue(log[0].startswith("Tự duyệt [MessageBox_Self]"))
+
+    def test_hop_thoat_tu_hien_o_game_nen_bam_vao_sau_van_khong_duyet(self):
+        tren_cung = [False]
+        lua, log = LuaGia(CHU_THOAT), []
+        td = tu_duyet.TuDuyet(lua, log.append, lambda: tren_cung[0])
+        td.kiem_tra(False)
+        tren_cung[0] = True
+        td.kiem_tra(False)
+        self.assertEqual(lua.so_lan_bam, 0)
+        self.assertIn("Không tự duyệt", log[0])
+
+    def test_vua_o_tren_cung(self):
+        tu_duyet._luc_tren_cung[123] = tu_duyet.time.time() - 3
+        tu_duyet._luc_tren_cung[456] = tu_duyet.time.time() - tu_duyet.GIAY_NGUOI_DUNG_TAT - 5
+        self.assertTrue(tu_duyet.vua_o_tren_cung(123))
+        self.assertFalse(tu_duyet.vua_o_tren_cung(456))
+        self.assertFalse(tu_duyet.vua_o_tren_cung(789))
+
     def test_khong_duoc_duyet(self):
         self.assertTrue(tu_duyet.khong_duoc_duyet(CHU_THOAT))
         self.assertTrue(tu_duyet.khong_duoc_duyet("#cff0000Các hạ quyết RỜI BỎ thế giới?"))

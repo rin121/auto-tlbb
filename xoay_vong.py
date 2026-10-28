@@ -30,6 +30,7 @@ import win32process
 
 import bao_cao_giao_dich
 import cau_hinh
+import so_tui_do
 from auto_chuyen_sinh import chuan_hoa
 from cua_so_game import tim_cua_so_game
 from chien_dau import KY_NANG_VE_THANH, ma_dung_ky_nang_theo_dinh_nghia
@@ -37,7 +38,8 @@ from dang_nhap import (LoiDangNhap, LoiSaiRuleNhanVat, LuongDangNhap, _gan_pid_d
                        man_hinh_hien_tai, tai_khoan_cua_pid, tat_game, trong_cua_so,
                        thoat_ve_chon_may_chu)
 from game_api import Game
-from giao_dich import GIAY_GUI_LAI_VI_TRI, KHOANG_CACH_GIAO_DICH, GiaoDich, LoiGiaoDich, anh_tui_goc, o_do_moi
+from giao_dich import (GIAY_GUI_LAI_VI_TRI, KHOANG_CACH_GIAO_DICH, GiaoDich, LoiGiaoDich, anh_tui_goc, doc_tui,
+                       o_do_moi)
 from giao_dich_ngay import bat_lai_auto, tam_dung_auto
 from lua_game import LoiLua
 from moi_nhom import doc_nhom
@@ -991,6 +993,8 @@ class LuongXoayVong(threading.Thread):
         """Cả nhóm đã trong game (tv.game, tv.ten): lập nhóm, đi phó bản, về thành, giao dịch."""
         truong, doi_vien = thanh_vien[0], thanh_vien[1:]
         self._ghi_truong_nhom(truong)
+        for tv in thanh_vien:
+            so_tui_do.ghi_chua_ro(tv.tk, tv.ten)
         self.pid_dieu_khien = {tv.pid for tv in thanh_vien}
         khoa_doi = [chuan_hoa(tv.ten) for tv in thanh_vien]
         for tv in thanh_vien:
@@ -1006,6 +1010,7 @@ class LuongXoayVong(threading.Thread):
         self.bao_trang_thai(f"{mo_ta}: chờ {truong.ten} mời nhóm")
         if not self._cho_du_nhom_truoc_pb(mo_ta, truong, thanh_vien, khoa_doi):
             self.in_log(f"{mo_ta}: chưa lập được nhóm {len(thanh_vien)} người, bỏ qua round")
+            self._ghi_so_tui(thanh_vien, mo_ta)
             return [tv for tv in thanh_vien if tv.game]
 
         dich = self._bat_pho_ban(thanh_vien, truong)
@@ -1043,8 +1048,24 @@ class LuongXoayVong(threading.Thread):
             self._tap_trung(doi_giao, truong, mo_ta)
             for tv in doi_giao:
                 self._chuyen_do(tv, truong, mo_ta)
+        self._ghi_so_tui(thanh_vien, mo_ta)
         self.in_log(f"{mo_ta}: xong")
         return thanh_vien
+
+    def _ghi_so_tui(self, thanh_vien, mo_ta):
+        """Sổ túi đồ cho Giao dịch cho acc chính: số ô đồ còn lại của từng người sau khi giao cho trưởng nhóm."""
+        co_do = []
+        for tv in thanh_vien:
+            if not (tv.game and tv.ten):
+                continue
+            try:
+                muc = so_tui_do.ghi_so_o(tv.tk, tv.ten, doc_tui(tv.game.lua))
+            except (LoiLua, OSError):
+                continue
+            if muc.get("so_o"):
+                co_do.append(f"{tv.ten} {muc['so_o']} ô")
+        if co_do:
+            self.in_log(f"{mo_ta}: sổ túi đồ ghi còn đồ giao cho acc chính: {', '.join(co_do)}")
 
     @staticmethod
     def _ghi_truong_nhom(truong):

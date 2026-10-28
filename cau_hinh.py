@@ -33,7 +33,7 @@ MAC_DINH_CHUNG = {"giay_cho_game_khoi_dong": 90, "bat_moi_nhom": False, "truong_
                   "bat_moi_nhan_vat_auto": True, "danh_sach_moi": [], "dong_minh": [],
                   "bat_vut_rac": False, "giay_giua_moi_lan_vut_rac": 60,
                   "vut_trang_bi_duoi_sao": True, "so_sao_toi_thieu": 9,
-                  "tu_nhap_ma_tao_nhan_vat": True, "tu_duyet_popup": False, "tu_nhan_ty_thi": False,
+                  "tu_nhap_ma_tao_nhan_vat": True, "tu_duyet_popup": True, "tu_nhan_ty_thi": False,
                   "tu_dung_x2": False, "tu_dung_can_khon_ho": False, "tu_thoat_khi_mat_ket_noi": True,
                   "chat_the_gioi": False, "noi_dung_chat_the_gioi": "", "giay_chat_the_gioi": 300,
                   "nhan_vat_chat_the_gioi": "",
@@ -375,6 +375,15 @@ def _them_proxy_chung(du_lieu):
     return True
 
 
+def _bat_tu_duyet_mot_lan(du_lieu):
+    """Một lần: bật Tự duyệt popup (mặc định mới là bật); sau đó người dùng tắt thì giữ tắt."""
+    if du_lieu.get("_da_bat_tu_duyet"):
+        return False
+    du_lieu["tu_duyet_popup"] = True
+    du_lieu["_da_bat_tu_duyet"] = True
+    return True
+
+
 def _dong_bo_ac_tac_mac_dinh(du_lieu):
     """Ác Tặc lưu chung mac_dinh: nếu mac_dinh chưa bật mà có nhân vật đã bật thì copy cài đặt sang."""
     md = du_lieu["mac_dinh"]
@@ -402,7 +411,7 @@ def _ac_tac_mac_dinh_chay_tim_gauto(du_lieu):
 
 
 if any([_them_map_khi_bi_pk(_du_lieu["mac_dinh"]), _them_bat_chuyen_sinh(_du_lieu["mac_dinh"]),
-        _them_xv_chung(_du_lieu), _them_proxy_chung(_du_lieu)]
+        _them_xv_chung(_du_lieu), _them_proxy_chung(_du_lieu), _bat_tu_duyet_mot_lan(_du_lieu)]
        + [_them_cong_diem(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
        + [_them_pho_ban_pmp(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]
        + [_them_ac_tac(cai_dat) for cai_dat in [_du_lieu["mac_dinh"], *_du_lieu["nhan_vat"].values()]]

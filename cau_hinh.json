@@ -3291,5 +3291,7 @@
         "bat": false,
         "so_acc_moi_ip": 4,
         "danh_sach": ""
-    }
+    },
+    "tu_duyet_popup": true,
+    "_da_bat_tu_duyet": true
 }

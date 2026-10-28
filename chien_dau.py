@@ -97,6 +97,7 @@ MAC_DINH = {
     "phan_tram_an_don": 50,
     "xuat_chien_tran_thu": False,
     "hoan_hi_toi_thieu": 80,
+    "tu_tang_cap": True,
 }
 CHE_DO_PK_DANH_NGUOI = (1, 3)  # PK cá nhân, PK đội
 MON_PHAI_NGA_MY = 4
