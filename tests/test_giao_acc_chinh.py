@@ -80,5 +80,44 @@ class TestBoQuaCungTaiKhoanKhongCoDo(unittest.TestCase):
         self.assertFalse(gac.bo_qua_cung_tai_khoan(self.DS[3], "caychay199", khong_co, truong))
 
 
+class TestChayToiNpcTanThu(unittest.TestCase):
+    """GAC-03: lệnh chạy tới NPC Tân Thủ bị game bỏ (vừa Về thành) thì gửi lại, không đứng yên tới hết giờ."""
+
+    class _Lua:
+        def __init__(self):
+            self.lenh = []
+
+        def chay(self, ma):
+            self.lenh.append(ma)
+            return b""
+
+    def _luong(self, cac_vi_tri):
+        import threading
+        luong = gac.LuongGiaoAccChinh.__new__(gac.LuongGiaoAccChinh)
+        luong.dung = threading.Event()
+        vi_tri = iter(cac_vi_tri)
+        luong._doc = lambda game: next(vi_tri)
+        luong._ve_dai_ly = lambda game, ten: None
+        return luong
+
+    def test_gui_lai_lenh_chay_khi_chua_toi(self):
+        dung_yen = {"x": 100, "y": 100, "map": "Đại Lý"}
+        toi = {"x": 160, "y": 167, "map": "Đại Lý"}
+        luong = self._luong([dung_yen, dung_yen, dung_yen, toi])
+        game = type("G", (), {"lua": self._Lua()})()
+        with patch.object(gac, "GIAY_GUI_LAI_CHAY", 0), patch.object(gac, "la_dai_ly", lambda m: True):
+            luong._chay_toi(game, "caychay144", (160, 166))
+        self.assertEqual(game.lua.lenh, ["AutoRunToTarget(160, 168)"] * 3)
+
+    def test_het_gio_van_bao_loi(self):
+        dung_yen = {"x": 100, "y": 100, "map": "Đại Lý"}
+        luong = self._luong([dung_yen] * 1000)
+        game = type("G", (), {"lua": self._Lua()})()
+        with patch.object(gac, "GIAY_CHAY_TOI", 0.2), patch.object(gac, "la_dai_ly", lambda m: True):
+            with self.assertRaises(gac.LoiGiaoAccChinh):
+                luong._chay_toi(game, "caychay144", (160, 166))
+        self.assertTrue(game.lua.lenh)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -145,6 +145,45 @@ class TestBatDauLaiKhiNhomDangOnline(unittest.TestCase):
                          ["caychay11", "caychay12", "caychay13", "caychay14"])
 
 
+class TestTuNhom1KhongGiuNhomOnline(unittest.TestCase):
+    """XV-20: qua 0h / Làm mới danh sách / Chạy lại từ đầu thì đi từ nhóm 1 round 1, không giữ nhóm đang online."""
+
+    DS = [{"ten_dang_nhap": f"caychay{i}"} for i in (14, 16, 24, 25)]
+
+    def _mot_luot(self, tu_nhom_1):
+        with patch.object(xv, "cac_tai_khoan_dang_tich", return_value=list(self.DS)):
+            luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, True, True, tu_nhom_1=tu_nhom_1)
+        online = MagicMock(return_value=(1, [self.DS[2], self.DS[3]]))
+        with patch.object(xv.cau_hinh, "dat_chung", lambda d: None), \
+                patch.object(xv, "so_nguoi_mot_nhom", return_value=2), \
+                patch.object(xv, "da_xong_hom_nay", return_value=False), \
+                patch.object(xv, "doc_xv_tien_trinh", return_value=None), \
+                patch.object(xv, "chon_round_online", online), \
+                patch.object(luong, "_ten_dang_online", return_value=["caychay244", "caychay255"]), \
+                patch.object(luong, "_neu_qua_ngay", return_value=True):
+            luong._mot_luot(xv.date.today())
+        return luong, online
+
+    def test_tu_nhom_1_bo_qua_nhom_online(self):
+        luong, online = self._mot_luot(True)
+        online.assert_not_called()
+        self.assertEqual([t["ten_dang_nhap"] for t in luong._xv_hang_cho[1]],
+                         ["caychay14", "caychay16", "caychay24", "caychay25"])
+        self.assertFalse(luong.tu_nhom_1)
+
+    def test_bat_dau_thuong_van_giu_nhom_online(self):
+        luong, online = self._mot_luot(False)
+        online.assert_called_once()
+        self.assertEqual([t["ten_dang_nhap"] for t in luong._xv_hang_cho[1]][:2], ["caychay24", "caychay25"])
+
+    def test_qua_0h_bat_tu_nhom_1(self):
+        with patch.object(xv, "cac_tai_khoan_dang_tich", return_value=list(self.DS)):
+            luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, True, True)
+            with patch.object(luong, "_cho", lambda *a, **k: None), patch.object(xv, "xoa_xv_tien_trinh"):
+                luong._xu_ly_qua_ngay(xv.date.today())
+        self.assertTrue(luong.tu_nhom_1)
+
+
 class TestXepLaiDangNhapLoi(unittest.TestCase):
     """XV-14: đăng nhập lỗi (mã kiểm tra, game treo...) thì xếp lại cuối hàng chờ, không bỏ hẳn cả ngày."""
 

@@ -49,6 +49,7 @@ SO_O_MOT_LAN = 5
 SO_LAN_THU_GIAO_DICH = 3
 KHOANG_CACH_DUNG_CHO = 3
 GIAY_CHAY_TOI = 90
+GIAY_GUI_LAI_CHAY = 5
 GIAY_CHO_VE_DAI_LY = 90
 GIAY_GIUA_HAI_LAN_VE_THANH = 15
 GIAY_CHO_CUA_SO = 6
@@ -593,12 +594,19 @@ class LuongGiaoAccChinh(threading.Thread):
         raise LoiGiaoAccChinh(f"{ten} chưa về được Đại Lý")
 
     def _chay_toi(self, game, ten, xy):
+        lan_gui = [0.0]
+
         def toi():
             tt = self._doc(game)
-            return tt and math.hypot(tt["x"] - xy[0], tt["y"] - xy[1]) <= KHOANG_CACH_DUNG_CHO
-        if toi():
-            return
-        game.lua.chay(f"AutoRunToTarget({int(xy[0])}, {int(xy[1]) + 2})")
+            if tt and math.hypot(tt["x"] - xy[0], tt["y"] - xy[1]) <= KHOANG_CACH_DUNG_CHO:
+                return True
+            # Lệnh chạy bị game bỏ khi đang tải map sau Về thành / bị chặn đường: gửi lại định kỳ.
+            if tt and time.time() - lan_gui[0] >= GIAY_GUI_LAI_CHAY:
+                if not la_dai_ly(tt["map"]):
+                    self._ve_dai_ly(game, ten)
+                lan_gui[0] = time.time()
+                game.lua.chay(f"AutoRunToTarget({int(xy[0])}, {int(xy[1]) + 2})")
+            return False
         if not self._cho(toi, GIAY_CHAY_TOI):
             raise LoiGiaoAccChinh(f"{ten} chạy {GIAY_CHAY_TOI} giây chưa tới ({xy[0]}, {xy[1]})")
 
@@ -652,7 +660,10 @@ class LuongGiaoAccChinh(threading.Thread):
             return True
         self.in_log(f"{ten}: có {len(cac_o)} ô đồ, giao dịch cho {ten_chinh}")
         self._ve_dai_ly(game, ten)
-        self._chay_toi(game, ten, NPC_TAN_THU[1])
+        try:
+            self._chay_toi(game, ten, NPC_TAN_THU[1])
+        except LoiGiaoAccChinh as loi:
+            self.in_log(f"{loi} — vẫn giao dịch (tự chạy lại gần {ten_chinh})")
         lan_loi = 0
         while cac_o:
             self._kiem_tra_dung()

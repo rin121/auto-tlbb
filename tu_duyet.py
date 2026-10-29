@@ -1,7 +1,8 @@
 """
 TỰ DUYỆT POPUP: hộp hỏi xác nhận hiện lên thì tự bấm nút Duyệt, bằng chính hàm của nút đó trong giao diện game
 (Data\\Interface.axp), không click chuột:
-    MessageBox_Self   : MessageBox_Self_OK_Clicked()     mang trang bị sẽ khóa, tiêu hủy vật phẩm, thoát game, mất kết nối,
+    MessageBox_Self   : MessageBox_Self_OK_Clicked()     mang trang bị sẽ khóa, tiêu hủy vật phẩm, thoát game (kể cả
+                                                         «rời bỏ thế giới» khi bấm X / đóng từ taskbar), mất kết nối,
                                                          phóng sinh, bỏ nhiệm vụ, bang hội, PK, mua bán, hỏi từ script server...
     MessageBox_Other  : MessageBox_Other_OK_Clicked()    mời vào nhóm, xin vào nhóm, Kéo, mời cưỡi chung
     TeamMessageBox1-5 : TeamMessageBoxN_OK_Clicked()     đội viên mời người khác vào nhóm, hỏi đội trưởng
@@ -13,13 +14,10 @@ Hàm của nút dùng "this" (cửa sổ đang chạy script) để tự đóng 
 (<Tên>_Env), trong_cua_so() trỏ vào bảng đó nên "this" đúng cửa sổ. Bảng riêng không có "this" thì không bấm.
 TeamMessageBox1 luôn hiện (chứa 5 khung hỏi), nên xét từng khung TeamMessageBoxN_Frame có đang hiện không.
 """
-import threading
 import time
 
-import win32gui
-
 from bang_ma_viscii import giai_ma
-from dang_nhap import bo_dau, bo_ma_mau, trong_cua_so
+from dang_nhap import bo_ma_mau, trong_cua_so
 
 # (cửa sổ, hàm nút Duyệt, nút Duyệt, ô nội dung)
 CAC_HOP = (
@@ -33,11 +31,6 @@ CUA_SO_HOI_NHOM = "TeamMessageBox1"
 SO_KHUNG_HOI_NHOM = 5
 # Bấm Duyệt mà hộp không đóng thì chờ chừng này giây mới bấm lại, để không bấm liên tục vào một hộp bấm không ăn.
 GIAY_TRUOC_KHI_BAM_LAI = 3
-# Hộp hỏi thoát game (bấm X / Alt+F4 cửa sổ game): Duyệt là game tự tắt. Chỉ tự bấm khi người dùng vừa tắt
-# chính cửa sổ đó (cửa sổ nằm trên cùng trong GIAY_NGUOI_DUNG_TAT giây); hộp tự hiện ở game chạy nền thì không bấm.
-CAC_CHU_KHONG_DUYET = ("roi bo the gioi",)
-GIAY_NGUOI_DUNG_TAT = 10
-GIAY_GIUA_MOI_LAN_XEM_TREN_CUNG = 0.1
 MA_CON_HIEN = 'local con = "0" if {dieu_kien} then con = "1" end '
 
 MA_DOC_NOI_DUNG = 'local ok, chu = pcall(function() return {o}:GetText() end) if not ok or chu == nil then chu = "" end '
@@ -74,18 +67,6 @@ def ma_duyet_hop(cua_so, ham, nut, o_noi_dung):
         + 'return "da_duyet\\t" .. con .. "\\t" .. chu'))
 
 
-def ma_doc_hop(cua_so, o_noi_dung):
-    """Lua trả về nội dung hộp đang hiện (không bấm gì), "" nếu hộp đã đóng."""
-    return trong_cua_so(cua_so, (
-        f'if not IsWindowShow("{cua_so}") then return "" end '
-        + MA_DOC_NOI_DUNG.format(o=o_noi_dung) + 'return chu'))
-
-
-def khong_duoc_duyet(noi_dung):
-    chu = bo_dau(noi_dung)
-    return any(tu in chu for tu in CAC_CHU_KHONG_DUYET)
-
-
 def ma_duyet_khung_hoi_nhom(so):
     kiem_tra_hien = f'pcall(function() return TeamMessageBox{so}_Frame:IsVisible() end)'
     return trong_cua_so(CUA_SO_HOI_NHOM, (
@@ -102,60 +83,21 @@ class LoiTuDuyet(Exception):
     pass
 
 
-_luc_tren_cung = {}
-_khoa_theo_doi = threading.Lock()
-_dang_theo_doi = False
-
-
-def _theo_doi_tren_cung():
-    while True:
-        try:
-            hwnd = win32gui.GetForegroundWindow()
-        except Exception:
-            hwnd = 0
-        if hwnd:
-            _luc_tren_cung[hwnd] = time.time()
-        time.sleep(GIAY_GIUA_MOI_LAN_XEM_TREN_CUNG)
-
-
-def bat_theo_doi_tren_cung():
-    """Một luồng chung ghi lúc mỗi cửa sổ nằm trên cùng (luồng tự duyệt mỗi game chậm hơn, dễ lỡ cú bấm X)."""
-    global _dang_theo_doi
-    with _khoa_theo_doi:
-        if not _dang_theo_doi:
-            _dang_theo_doi = True
-            threading.Thread(target=_theo_doi_tren_cung, daemon=True).start()
-
-
-def vua_o_tren_cung(hwnd, giay=GIAY_NGUOI_DUNG_TAT):
-    return time.time() - _luc_tren_cung.get(hwnd, 0.0) <= giay
-
-
 class TuDuyet:
     """Mỗi cửa sổ game một đối tượng; gọi kiem_tra() định kỳ."""
 
-    def __init__(self, lua, in_log, nguoi_dung_vua_tat=None):
+    def __init__(self, lua, in_log):
         self.lua = lua
         self.in_log = in_log
-        self.nguoi_dung_vua_tat = nguoi_dung_vua_tat or (lambda: False)
         self.da_bam = {}
-        self.da_bao_bo_qua = set()
 
     def kiem_tra(self, cho_ty_thi):
         """Duyệt mọi hộp đang hiện. Lỗi Lua thì ném LoiLua."""
         dang_hien = self.lua.chay(ma_hop_dang_hien(cho_ty_thi), so_lan_thu=1).decode("latin-1").split()
         self.da_bam = {ten: luc for ten, luc in self.da_bam.items() if ten in dang_hien}
-        self.da_bao_bo_qua &= set(dang_hien)
         theo_ten = {hop[0]: hop for hop in CAC_HOP + (HOP_TY_THI,)}
         for ten in dang_hien:
             if ten in theo_ten:
-                cua_so, _, _, o_noi_dung = theo_ten[ten]
-                noi_dung = bo_ma_mau(giai_ma(self.lua.chay(ma_doc_hop(cua_so, o_noi_dung), so_lan_thu=1)))
-                if khong_duoc_duyet(noi_dung) and (ten in self.da_bao_bo_qua or not self.nguoi_dung_vua_tat()):
-                    if ten not in self.da_bao_bo_qua:
-                        self.da_bao_bo_qua.add(ten)
-                        self.in_log(f"Không tự duyệt [{ten}] (hộp thoát game): {noi_dung.replace(chr(10), ' ')}")
-                    continue
                 ma = ma_duyet_hop(*theo_ten[ten])
             else:
                 ma = ma_duyet_khung_hoi_nhom(int(ten[len("TeamMessageBox"):]))

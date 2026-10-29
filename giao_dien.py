@@ -40,7 +40,7 @@ import time
 import tkinter as tk
 import traceback
 from datetime import date
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, messagebox, simpledialog, ttk
 from tkinter import font as tkfont
 
 import psutil
@@ -93,7 +93,7 @@ from xoay_vong import (SO_NGUOI_MOT_NHOM_TOI_DA, SO_ROUND_TOI_DA, LuongXoayVong,
 from tao_nhan_vat import dang_hoi_ma_kiem_tra, giai_ma_kiem_tra
 from tu_dung_vat_pham import TuDungCanKhonHo, TuDungX2
 from tang_cap import GIAY_GIUA_MOI_LAN as GIAY_GIUA_MOI_LAN_TANG_CAP, thu_tang_cap
-from tu_duyet import LoiTuDuyet, TuDuyet, bat_theo_doi_tren_cung, vua_o_tren_cung
+from tu_duyet import LoiTuDuyet, TuDuyet
 from tran_thu import TuXuatChien
 from vut_rac import LoiVutRac, vut_rac
 from thu_muc import THU_MUC_APP
@@ -767,8 +767,8 @@ class LuongNhanVat(threading.Thread):
             try:
                 hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
                 gauto_ac_tac.tat_ac_tac(hwnd_ql, self.ten, self.ac_tac.gauto_chi_so, self.ac_tac.gauto_dong_cache)
-            except gauto_ac_tac.LoiGautoAcTac:
-                pass
+            except gauto_ac_tac.LoiGautoAcTac as loi:
+                self.in_log(f"{self.ten}: GAuto Ác Tặc: không bỏ tích được Ác Tặc trên GAuto ({loi}) — bỏ tích tay")
             self.ac_tac.khung_xong = khung
             self.ac_tac.gauto_khung = None
             self.ac_tac.gauto_het_luc = 0.0
@@ -798,7 +798,9 @@ class LuongNhanVat(threading.Thread):
                     hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
                     tieu_de_ql = gauto_ac_tac.tom_tat_cua_so(hwnd_ql)
                     chi_so = gauto_ac_tac.tim_chi_so_dong_theo_ten(hwnd_ql, self.ten, self.ac_tac.gauto_dong_cache)
-                    gauto_ac_tac.dat_cai_dat_ac_tac(hwnd_ql, at, self.ten, chi_so, self.ac_tac.gauto_dong_cache)
+                    gauto_ac_tac.dat_cai_dat_ac_tac(
+                        hwnd_ql, at, self.ten, chi_so, self.ac_tac.gauto_dong_cache, ten_map=map_dich,
+                        in_log=lambda chu: self.in_log(f"{self.ten}: GAuto Ác Tặc: {chu}"))
                     self.ac_tac.gauto_khung = khung
                     self.ac_tac.khung = khung
                     self.ac_tac.gauto_chi_so = chi_so
@@ -888,9 +890,7 @@ class LuongNhanVat(threading.Thread):
 
     def vong_tu_duyet(self):
         """Xem popup mỗi giây ở luồng phụ, không phải chờ vòng auto chính (có thể đang chờ dịch chuyển)."""
-        bat_theo_doi_tren_cung()
-        tu_duyet = TuDuyet(self.game.lua, lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"),
-                           lambda: vua_o_tren_cung(self.hwnd))
+        tu_duyet = TuDuyet(self.game.lua, lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"))
         mat_ket_noi = XuLyMatKetNoi(self.game.lua,
                                     lambda chu: self.in_log(f"{self.ten or f'Game {self.game.lua.pid}'}: {chu}"))
         loi_cuoi = loi_mat_ket_noi_cuoi = None
@@ -2641,13 +2641,14 @@ class UngDung:
         ttk.Label(dong_g2, text="Đường dẫn GAuto (.exe)").pack(side="left")
         ttk.Entry(dong_g2, textvariable=self.bien_at_duong_dan_gauto, width=40).pack(side="left", padx=4)
         ttk.Button(dong_g2, text="Chọn...", command=self.chon_duong_dan_gauto).pack(side="left")
+        ttk.Button(dong_g2, text="Test GAuto", command=self.test_gauto).pack(side="left", padx=(4, 0))
         ttk.Label(dong_g2, text="Phút / khung").pack(side="left", padx=(8, 0))
         ttk.Spinbox(dong_g2, from_=5, to=120, width=4, textvariable=self.bien_at_phut_gauto,
                     command=self.luu_ac_tac).pack(side="left", padx=4)
-        ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập nhân vật trước. Tới giờ AutoHoc đưa đội trưởng tới map đầu trong "
-                              "danh sách ☑ (vd. Kiếm Các), rồi chỉ bật Ác Tặc GAuto cho dòng đội trưởng trong bảng "
-                              "(vd. caychay28). Mỗi khung chạy GAuto tối đa «Phút / khung». Đội viên theo AutoHoc, không "
-                              "bật GAuto. Tắt «Chạy pathpoints» = chạy tìm như GAuto.",
+        ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập đội trưởng trước; GAuto tự chạy quyền Admin nên "
+                              "AutoHoc cũng phải chạy quyền Admin. Tới giờ AutoHoc đưa đội tới map đầu danh sách ☑, chọn "
+                              "map đó trên GAuto (bấm chuột thật ~1 giây) rồi tích Ác Tặc cho dòng đội trưởng; hết «Phút "
+                              "/ khung» thì bỏ tích, đi tiếp phó bản. GAuto không có Tây Hồ. Bấm «Test GAuto» để thử.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(2, 0))
         ttk.Label(dong, text="Tên quái (cách nhau dấu phẩy)").pack(side="left", padx=(12, 0))
         ttk.Entry(dong, textvariable=self.bien_at_ten_quai, width=20).pack(side="left", padx=4)
@@ -2808,6 +2809,19 @@ class UngDung:
                 luong.dung.set()
         self.nut_giao_acc_chinh.configure(text="Dừng")
 
+    def xoay_vong_sau_giao_acc_chinh(self):
+        """Giao acc chính xong: chờ luồng giao thoát hẳn (trả client, bật lại phó bản) rồi tự bấm Bắt đầu xoay vòng."""
+        if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
+            self.root.after(500, self.xoay_vong_sau_giao_acc_chinh)
+            return
+        if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
+            return
+        if not cac_tai_khoan_dang_tich():
+            self.in_log("[Giao acc chính] Xong — chưa tích XV tài khoản nào nên không tự xoay vòng phó bản")
+            return
+        self.in_log("[Giao acc chính] Xong — tự bắt đầu lại xoay vòng phó bản")
+        self.bat_tat_xoay_vong()
+
     def luu_cai_dat_xoay_vong(self):
         """Ghi tab Xoay vòng vào cau_hinh.json (gọi khi đổi ô / checkbox và khi thoát AutoHoc)."""
         try:
@@ -2828,7 +2842,7 @@ class UngDung:
         if not (self.luong_xoay_vong and self.luong_xoay_vong.is_alive()):
             xoa_xv_tien_trinh()
             self.in_log("[Xoay vòng] Chạy lại từ nhóm 1, tài khoản đầu tiên trong danh sách")
-            self.bat_tat_xoay_vong()
+            self.bat_tat_xoay_vong(tu_nhom_1=True)
             return
         if not messagebox.askyesno("Xoay vòng", "Dừng xoay vòng đang chạy rồi bắt đầu lại từ nhóm 1, tài khoản đầu "
                                                 "tiên trong danh sách? Nhân vật đã hết lượt hôm nay được bỏ qua."):
@@ -2843,7 +2857,7 @@ class UngDung:
                 self.root.after(500, cho_dung)
                 return
             xoa_xv_tien_trinh()
-            self.bat_tat_xoay_vong()
+            self.bat_tat_xoay_vong(tu_nhom_1=True)
         cho_dung()
 
     def lam_moi_danh_sach_xoay_vong(self):
@@ -2869,7 +2883,7 @@ class UngDung:
             xoa_xv_tien_trinh()
             self.in_log(f"[Xoay vòng] Làm mới danh sách: đã xóa lịch sử phó bản hôm nay của {len(ds)} nhân vật, "
                         "bắt đầu lại từ nhóm 1")
-            self.bat_tat_xoay_vong()
+            self.bat_tat_xoay_vong(tu_nhom_1=True)
 
         if dang_chay:
             self.luong_xoay_vong.dung.set()
@@ -2952,7 +2966,7 @@ class UngDung:
                 luong.dung.set()
         self.nut_xoay_vong.configure(text="Dừng")
 
-    def bat_tat_xoay_vong(self):
+    def bat_tat_xoay_vong(self, tu_nhom_1=False):
         if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
             dat_phien_xoay_vong(False)
             self.luong_xoay_vong.dung.set()
@@ -2991,7 +3005,8 @@ class UngDung:
                 return
         self.luong_xoay_vong = LuongXoayVong(self.hang_doi, int(self.bien_xv_so_round.get()),
                                              self.bien_xv_test.get(), self.bien_xv_chuyen_do.get(),
-                                             self.bien_xv_ngay_moi.get(), self.bien_xv_chi_sat_tinh.get())
+                                             self.bien_xv_ngay_moi.get(), self.bien_xv_chi_sat_tinh.get(),
+                                             tu_nhom_1=tu_nhom_1)
         dat_phien_xoay_vong(True)
         self.luong_xoay_vong.start()
         cac_tk = self.luong_xoay_vong.cac_tai_khoan()
@@ -4466,6 +4481,46 @@ class UngDung:
             self.bien_at_duong_dan_gauto.set(duong)
             self.luu_ac_tac()
 
+    def test_gauto(self):
+        """Chạy thử điều khiển GAuto từng bước (log ở khung Nhật ký), không cần tới giờ Ác Tặc."""
+        duong = self.bien_at_duong_dan_gauto.get().strip()
+        if not duong:
+            messagebox.showwarning("Test GAuto", "Chọn đường dẫn GAuto_2025.exe trước (nút Chọn...)", parent=self.root)
+            return
+        ten = simpledialog.askstring("Test GAuto", "Tên nhân vật (đội trưởng) trong bảng GAuto để test\n"
+                                                   "(để trống = dòng đang chọn trong GAuto)", parent=self.root)
+        if ten is None:
+            return
+        cac_map = [m for m in self.at_thu_tu if m in self.at_da_chon]
+        bat_thu = messagebox.askyesno(
+            "Test GAuto", f"Chọn map «{cac_map[0] if cac_map else '?'}» (map đầu danh sách AutoHoc) trên GAuto bằng chuột, "
+                          "tích thử ô «Ác Tặc» 3 giây rồi bỏ tích?\nTrong lúc chọn map (~1 giây) đừng động chuột.\n\n"
+                          "Không = chỉ đọc, không bấm gì trên GAuto.", parent=self.root)
+
+        def chay():
+            log = lambda chu: self.hang_doi.put(("log", chu))  # noqa: E731
+            try:
+                gauto_ac_tac.test_gauto(duong, ten.strip(), log, bat_thu, cac_map_autohoc=cac_map)
+            except gauto_ac_tac.LoiGautoAcTac as loi:
+                log(f"Test GAuto: LỖI — {loi}")
+                if str(loi) == gauto_ac_tac.THONG_BAO_CAN_ADMIN:
+                    self.root.after(0, self.hoi_chay_lai_quyen_admin)
+            except Exception:
+                log(f"Test GAuto: lỗi không mong đợi\n{traceback.format_exc()}")
+
+        threading.Thread(target=chay, daemon=True).start()
+
+    def hoi_chay_lai_quyen_admin(self):
+        if not messagebox.askyesno("Test GAuto", "GAuto chạy quyền Admin nên AutoHoc cũng phải chạy quyền Admin mới "
+                                                 "điều khiển được.\n\nĐóng AutoHoc và mở lại bằng quyền Admin ngay "
+                                                 "(Windows sẽ hỏi xác nhận)?", parent=self.root):
+            return
+        if not gauto_ac_tac.chay_lai_quyen_admin():
+            messagebox.showerror("Test GAuto", "Không mở lại được AutoHoc quyền Admin (đã bấm No ở hộp Windows?) — "
+                                               "chuột phải AutoHoc.exe → Run as administrator", parent=self.root)
+            return
+        self.thoat()
+
     def chon_thu_muc_game(self):
         """Chọn file Game.exe của máy đang dùng; thư mục game là thư mục chứa Bin."""
         hien_tai = self.bien_dang_nhap["thu_muc_game"].get().strip()
@@ -4969,6 +5024,8 @@ class UngDung:
                 if not (self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive()) \
                         or noi_dung[0].startswith(("Xong", "Đã dừng", "Dừng:", "Lỗi")):
                     self.nut_giao_acc_chinh.configure(text="Bắt đầu")
+                if noi_dung[0].startswith("Xong"):
+                    self.xoay_vong_sau_giao_acc_chinh()
             elif loai == "trang_thai_tao_nv":
                 self.nhan_tao_nv.configure(text=noi_dung[0])
                 if not (self.luong_tao_nv and self.luong_tao_nv.is_alive()) or noi_dung[0] in ("Xong", "Đã dừng"):

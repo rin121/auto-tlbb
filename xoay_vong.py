@@ -491,9 +491,11 @@ def nhom_dang_online():
 
 class LuongXoayVong(threading.Thread):
     def __init__(self, hang_doi, so_round, che_do_test, chuyen_do, chay_lai_ngay_moi=True, chi_sat_tinh=False,
-                 nhom_online=None):
+                 nhom_online=None, tu_nhom_1=False):
         super().__init__(daemon=True)
         self.hang_doi = hang_doi
+        # tu_nhom_1: Làm mới danh sách / Chạy lại từ đầu / qua 0h — đi từ nhóm 1 round 1, không giữ nhóm đang online.
+        self.tu_nhom_1 = tu_nhom_1
         self.so_round = max(1, min(SO_ROUND_TOI_DA, so_round))
         # nhom_online: [ThanhVien đã trong game] — đi thử 1 lượt với các nhân vật đó, không đăng xuất / đăng nhập.
         self.nhom_online = nhom_online
@@ -685,6 +687,7 @@ class LuongXoayVong(threading.Thread):
         self._cho(lambda: False, GIAY_CHO_SAU_NUA_DEM)
         self.ds_tai_khoan = cac_tai_khoan_dang_tich()
         xoa_xv_tien_trinh()
+        self.tu_nhom_1 = True
         self.in_log(f"Qua 0h: làm mới danh sách ({len(self.ds_tai_khoan)} tài khoản phó bản), chạy lại từ nhóm 1")
 
     def _neu_qua_ngay(self, ngay):
@@ -764,7 +767,11 @@ class LuongXoayVong(threading.Thread):
             so_nhom = 0
             self._xv_thu_lai = {}
         hop_le = [tk for tk in ds if tk["ten_dang_nhap"].lower() not in self.tk_sai_rule]
-        r_on, tk_on = chon_round_online(hop_le, self._ten_dang_online(), so_round)
+        if self.tu_nhom_1:
+            self.tu_nhom_1 = False
+            r_on, tk_on = None, []
+        else:
+            r_on, tk_on = chon_round_online(hop_le, self._ten_dang_online(), so_round)
         if tk_on:
             tk_on = tk_on[:n_mot_nhom]
             dua_len_dau_hang(hang_cho[r_on], tk_on)
