@@ -184,6 +184,37 @@ class TestTuNhom1KhongGiuNhomOnline(unittest.TestCase):
         self.assertTrue(luong.tu_nhom_1)
 
 
+class TestDamBaoNhomPb(unittest.TestCase):
+    """Đang chuyển map (GAuto vào Tặc Khấu doanh địa): đọc PT một lần, không báo «nhóm chưa đúng» khi đủ người."""
+
+    def _chay(self, cac_lan_doc):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, False, False)
+        luong.in_log = MagicMock()
+        nhom = []
+        for tk, ten in ((TK[0], "caychay32"), (TK[1], "caychay34")):
+            tv = xv.ThanhVien(tk)
+            tv.ten, tv.game = ten, MagicMock()
+            nhom.append(tv)
+        doc = iter(cac_lan_doc)
+        with patch.object(xv, "doc_nhom", lambda lua: {"thanh_vien": next(doc)}), \
+                patch.object(luong, "_tv_dang_choi", return_value=True), \
+                patch.object(luong, "_roi_nhom_neu_sai") as roi, \
+                patch.object(luong, "_lam_moi_cau_hinh_moi_nhom") as moi:
+            luong._dam_bao_nhom_pb("Nhóm 6 round 2", nhom[0], nhom, ["caychay32", "caychay34"])
+        return luong, roi, moi
+
+    def test_du_nhom_thi_khong_lam_gi(self):
+        luong, roi, moi = self._chay([["caychay32", "caychay34"], [], []])
+        luong.in_log.assert_not_called()
+        roi.assert_not_called()
+        moi.assert_not_called()
+
+    def test_thieu_nguoi_thi_moi_lai(self):
+        luong, _, moi = self._chay([["caychay32"]])
+        self.assertIn("thiếu caychay34", luong.in_log.call_args[0][0])
+        moi.assert_called_once()
+
+
 class TestXepLaiDangNhapLoi(unittest.TestCase):
     """XV-14: đăng nhập lỗi (mã kiểm tra, game treo...) thì xếp lại cuối hàng chờ, không bỏ hẳn cả ngày."""
 

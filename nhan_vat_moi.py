@@ -136,6 +136,28 @@ def ghi_da_xong(tai_khoan, ten):
         cau_hinh.luu_tai_khoan(cai_dat)
 
 
+def dong_bo_da_xong(tai_khoan, cac_ten):
+    """
+    Sổ «đã tạo + nhận đồ» và tên thay thế ghi nhân vật mà tài khoản không còn (bị xóa / server reset): bỏ đi để tạo lại
+    và nhận đồ tân thủ cho nhân vật mới. Trả về các tên đã bỏ.
+    """
+    cai_dat = cau_hinh.doc_tai_khoan()
+    tao = cai_dat["tao_nhan_vat_moi"]
+    khoa = tai_khoan.lower()
+    con = lambda ten: any(cung_ten(ten, c) for c in cac_ten)  # noqa: E731
+    cu = tao["da_xong"].get(khoa, [])
+    bo = [t for t in cu if not con(t)]
+    thuc = tao["ten_thuc"].get(khoa, {})
+    bo_thuc = [k for k, v in thuc.items() if not con(v)]
+    if not bo and not bo_thuc:
+        return []
+    tao["da_xong"][khoa] = [t for t in cu if con(t)]
+    for k in bo_thuc:
+        del thuc[k]
+    cau_hinh.luu_tai_khoan(cai_dat)
+    return bo
+
+
 def ten_thuc(tai_khoan, ten):
     """Tên nhân vật đã tạo thay cho tên định đặt ten (trùng tên phải thêm số), chưa ghi thì là chính ten."""
     ds = cau_hinh.doc_tai_khoan()["tao_nhan_vat_moi"]["ten_thuc"].get(tai_khoan.lower(), {})
@@ -479,6 +501,9 @@ class LuongTaoNhanVat(LuongDangNhap):
             cac_ten = ds_nhan_vat(game.lua)
             if self.tuy_chon.get("dung_ten"):
                 self.kiem_tra_ds_nhan_vat(cac_ten)
+                bo = dong_bo_da_xong(tk, cac_ten)
+                if bo:
+                    self.in_log(f"Sổ ghi đã tạo {', '.join(bo)} nhưng tài khoản không còn, tạo lại + nhận đồ tân thủ")
             if self.tuy_chon["nhan_do_tan_thu"]:
                 chua = [ten for ten in cac_ten if not any(cung_ten(ten, t) for t in da_xong(tk))]
                 if chua:

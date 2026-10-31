@@ -47,7 +47,8 @@ from nhan_vat_moi import LuongTaoNhanVat, NhanDoTanThu, cac_ten_nhan_vat, da_xon
 from pho_ban_pmp import (GIAY_MOT_VONG, MAP_DAI_LY, MAP_LAC_DUONG, cai_dat_pmp, chuan_bi_ve_thanh, dang_chay_vong,
                          dat_chan_vong_moi, dat_phien_xoay_vong, hom_nay, la_dai_ly, la_lac_duong,
                          la_map_trong_pho_ban)
-from su_kien_ac_tac import MO_TA as MO_TA_AC_TAC, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung
+from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung,
+                            nguoi_nhan_khung)
 
 SO_TAI_KHOAN_MOT_NHOM = 4  # mặc định; số thật lấy từ cau_hinh.chung()["so_nguoi_mot_nhom"]
 SO_NGUOI_MOT_NHOM_TOI_DA = 6
@@ -391,6 +392,7 @@ class LuongVaoNhanVat(LuongDangNhap):
                 pass
         # Quy tắc tên (caychay10 -> caychay100...) chỉ áp cho acc phó bản, không áp cho acc chính.
         self.kiem_tra_rule_ten = kiem_tra_rule_ten
+        self.tao_khi_thieu = kiem_tra_rule_ten
 
     def kiem_tra_ds_nhan_vat(self, cac_ten):
         if not self.kiem_tra_rule_ten:
@@ -1098,21 +1100,14 @@ class LuongXoayVong(threading.Thread):
                     tt = None
                 if tt and chuan_hoa(tt["ten"]) == chuan_hoa(tv.ten):
                     self.in_log(f"{tv.ten}: dùng lại client đang online, không đăng nhập lại")
-        cac_luong = []
-        for tv in thanh_vien:
-            luong = LuongVaoNhanVat(dict(tv.tai_khoan, nhan_vat=tv.ten), cai_dat, self.hang_doi, tv.hwnd)
-            cac_luong.append((tv, luong))
-            self.cac_luong_con.append(luong)
-            luong.start()
-        while any(l.is_alive() for _, l in cac_luong):
-            if self.dung.is_set():
-                for _, l in cac_luong:
-                    l.dung.set()
-            time.sleep(1)
-        self._kiem_tra_dung()
+        cac_luong = self._chay_luong_vao(thanh_vien, cai_dat)
+        thieu = [(tv, l) for tv, l in cac_luong if not l.thanh_cong and l.thieu_nhan_vat is not None]
+        if thieu:
+            self._tao_nhan_vat_thieu(thieu)
+            lai = dict(self._chay_luong_vao([tv for tv, _ in thieu], cau_hinh.doc_tai_khoan()))
+            cac_luong = [(tv, lai.get(tv, l)) for tv, l in cac_luong]
         con = []
         for tv, luong in cac_luong:
-            self.cac_luong_con.remove(luong)
             if luong.thanh_cong and luong.game:
                 tv.game, tv.hwnd = luong.game, luong.game.lua.hwnd
                 con.append(tv)
@@ -1131,6 +1126,57 @@ class LuongXoayVong(threading.Thread):
                 self._nha_client(tv, next((c["hwnd"] for c in tim_cua_so_game()
                                            if luong.pid and c["pid"] == luong.pid), None))
         return con
+
+    def _chay_luong_vao(self, thanh_vien, cai_dat):
+        """Đăng nhập cùng lúc các thành viên vào nhân vật round của họ; trả về [(thành viên, luồng đã xong)]."""
+        cac_luong = []
+        for tv in thanh_vien:
+            luong = LuongVaoNhanVat(dict(tv.tai_khoan, nhan_vat=tv.ten), cai_dat, self.hang_doi, tv.hwnd)
+            cac_luong.append((tv, luong))
+            self.cac_luong_con.append(luong)
+            luong.start()
+        while any(l.is_alive() for _, l in cac_luong):
+            if self.dung.is_set():
+                for _, l in cac_luong:
+                    l.dung.set()
+            time.sleep(1)
+        for _, luong in cac_luong:
+            self.cac_luong_con.remove(luong)
+        self._kiem_tra_dung()
+        return cac_luong
+
+    def _tao_nhan_vat_thieu(self, thieu):
+        """
+        Sổ ghi đã tạo nhưng tài khoản không có nhân vật round (bị xóa / server reset): tạo lại + nhận đồ tân thủ ngay
+        trên client đó (giữ game ở màn chọn nhân vật cho lần đăng nhập lại).
+        """
+        cai_dat = cau_hinh.doc_tai_khoan()
+        cac_luong = []
+        for tv, luong_vao in thieu:
+            ten = cac_ten_nhan_vat(tv.tk, SO_ROUND_TOI_DA)
+            r = next((i for i in range(SO_ROUND_TOI_DA) if chuan_hoa(ten_round(tv.tk, i)) == chuan_hoa(tv.ten)), 0)
+            self.in_log(f"{tv.tk}: không có nhân vật {tv.ten} (đang có: "
+                        f"{', '.join(luong_vao.thieu_nhan_vat) or 'không có nhân vật nào'}) — tạo {', '.join(ten[:r + 1])} "
+                        "+ nhận đồ tân thủ")
+            hwnd = next((c["hwnd"] for c in tim_cua_so_game() if luong_vao.pid and c["pid"] == luong_vao.pid), tv.hwnd)
+            luong = LuongTaoNhanVat([tv.tai_khoan], cai_dat, {"so_nhan_vat": r + 1, "nhan_do_tan_thu": True,
+                                                                "dung_ten": True},
+                                    self.hang_doi, hwnd=hwnd, giu_game=True)
+            cac_luong.append((tv, luong))
+            self.cac_luong_con.append(luong)
+            luong.start()
+        while any(l.is_alive() for _, l in cac_luong):
+            if self.dung.is_set():
+                for _, l in cac_luong:
+                    l.dung.set()
+            self.pid_dieu_khien |= {l.pid for _, l in cac_luong if l.pid}
+            time.sleep(1)
+        for tv, luong in cac_luong:
+            self.cac_luong_con.remove(luong)
+            tv.hwnd = luong.game.lua.hwnd if luong.pid and luong.game and con_chay(luong.pid) else None
+            if luong.sai_rule:
+                self._danh_dau_sai_rule(tv.tk, luong.sai_rule)
+        self._kiem_tra_dung()
 
     def _nha_client(self, tv, hwnd):
         """Thành viên bị bỏ: client (nếu còn) đưa vào danh sách dùng lại, thành viên không giữ nó nữa."""
@@ -1183,9 +1229,16 @@ class LuongXoayVong(threading.Thread):
         """Giữa chừng phó bản: acc diss / vào lại thì ghép lại PT với trưởng nhóm round."""
         if len(thanh_vien) <= 1 or not self._tv_dang_choi(truong):
             return
-        if self._du_nhom(truong, thanh_vien):
+        # Đọc danh sách PT một lần: đọc nhiều lần lúc đang chuyển map (vd GAuto vào Tặc Khấu doanh địa) thì lần đầu
+        # có thể trống, lần sau đủ — báo «nhóm chưa đúng» sai.
+        try:
+            ds = doc_nhom(truong.game.lua)["thanh_vien"]
+        except (LoiLua, OSError, ValueError):
             return
-        thieu = self._thieu_nhom(truong, thanh_vien)
+        trong = [chuan_hoa(t) for t in ds]
+        if trong and trong[0] == chuan_hoa(truong.ten) and all(chuan_hoa(tv.ten) in trong for tv in thanh_vien):
+            return
+        thieu = [tv for tv in thanh_vien if chuan_hoa(tv.ten) not in trong]
         bay_gio = time.time()
         if bay_gio - getattr(self, "_luc_log_thieu_nhom", 0) >= 30:
             self._luc_log_thieu_nhom = bay_gio
@@ -1193,12 +1246,8 @@ class LuongXoayVong(threading.Thread):
                 ten_thieu = ", ".join(tv.ten for tv in thieu)
                 self.in_log(f"{mo_ta}: nhóm chưa đủ, thiếu {ten_thieu} — bật mời lại")
             else:
-                try:
-                    ds = doc_nhom(truong.game.lua)["thanh_vien"]
-                    tr_pt = ds[0] if ds else "?"
-                except (LoiLua, OSError, ValueError):
-                    tr_pt = "?"
-                self.in_log(f"{mo_ta}: nhóm chưa đúng (trưởng PT {tr_pt}, cần {truong.ten}) — rời PT để ghép lại")
+                self.in_log(f"{mo_ta}: nhóm chưa đúng (trưởng PT {ds[0] if ds else '?'}, cần {truong.ten}) "
+                            "— rời PT để ghép lại")
         for tv in thanh_vien:
             if self._tv_dang_choi(tv):
                 self._roi_nhom_neu_sai(tv, khoa_doi, self.in_log)
@@ -1321,12 +1370,17 @@ class LuongXoayVong(threading.Thread):
                 self.yeu_cau_giao_dich.clear()
                 self._giao_dich_giua_chung(thanh_vien, truong, mo_ta)
             # Khung Ác Tặc: luồng nhân vật tự bỏ dở phó bản đi Ác Tặc rồi quay lại, ở đây chỉ chờ (không tính kẹt).
-            khung_at = khung_hien_tai(cai_dat_ac_tac())
-            if khung_at is not None and cai_dat_ac_tac()["bat"] \
-                    and khung_at != khung_at_da_bao:
+            at = cai_dat_ac_tac()
+            khung_at = khung_hien_tai(at)
+            nhom_at = nguoi_nhan_khung(khung_at) if khung_at is not None else None
+            if khung_at is not None and at["bat"] and nhom_at and khung_at != khung_at_da_bao:
                 khung_at_da_bao = khung_at
-                self.in_log(f"{mo_ta}: khung {MO_TA_AC_TAC} {mo_ta_khung(khung_at)} — nhóm đi {MO_TA_AC_TAC}, "
-                            "xong / hết giờ thì đi tiếp phó bản")
+                if chuan_hoa(nhom_at) == chuan_hoa(truong.ten):
+                    self.in_log(f"{mo_ta}: khung {MO_TA_AC_TAC} {mo_ta_khung(khung_at, at)} — nhóm đi "
+                                f"{MO_TA_AC_TAC}, hết giờ thì đi tiếp phó bản")
+                else:
+                    self.in_log(f"{mo_ta}: khung {MO_TA_AC_TAC} {mo_ta_khung(khung_at, at)} đã do nhóm "
+                                f"{nhom_at} đi — nhóm này tiếp tục phó bản")
             self._dam_bao_nhom_pb(mo_ta, truong, thanh_vien, khoa_doi)
             # Game bị tắt / diss giữa chừng: luồng tự đăng nhập bỏ qua tài khoản xoay vòng, nên tự vào lại ở đây.
             for tv in thanh_vien:

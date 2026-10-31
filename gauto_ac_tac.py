@@ -52,6 +52,10 @@ GIAY_CHO_CHON_MSAA = 1.5
 GIAY_CHO_THA_XUONG = 1.5
 GIAY_GIUA_PHIM_TAB = 0.35
 GIAY_CHO_O_TICH = 2.0
+# Tích ô đầu dòng (bật auto) thì GAuto nạp lại cài đặt nhân vật vài giây sau, xóa ô tích đặt trước lúc đó.
+GIAY_CHO_GAUTO_NAP = 5
+# Sau khi tích «Ác Tặc», canh thêm chừng này giây phòng GAuto nạp lại muộn xóa mất ô vừa tích.
+GIAY_CANH_NAP_LAI = 8
 
 
 class LoiGautoAcTac(Exception):
@@ -421,16 +425,21 @@ def da_tich(hwnd_o):
         return o.da_tich()
 
 
-def dat_o(hwnd_o, bat, ten):
-    with _msaa(hwnd_o) as o:
-        if o.da_tich() == bat:
-            return False
-        o.bam()
+def dat_o_chuot(hwnd, hwnd_o, bat, ten):
+    """
+    Tích / bỏ tích ô hwnd_o trong khung Ác Tặc bằng chuột thật: tích qua MSAA thì ô hiện ☑ nhưng GAuto không chạy
+    Ác Tặc (phải bấm tay lại mới chạy). True nếu đã bấm.
+    """
+    if da_tich(hwnd_o) == bat:
+        return False
+    l, t, r, b = win32gui.GetWindowRect(hwnd_o)
+    with _muon_chuot(hwnd, f"{'tích' if bat else 'bỏ tích'} ô «{ten}»"):
+        _bam_chuot(hwnd, (l + min(8, (r - l) // 2), (t + b) // 2), f"ô «{ten}»")
         het = time.time() + GIAY_CHO_O_TICH
-        while o.da_tich() != bat and time.time() < het:
+        while da_tich(hwnd_o) != bat and time.time() < het:
             time.sleep(0.1)
-        if o.da_tich() != bat:
-            raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô «{ten}» trên GAuto")
+    if da_tich(hwnd_o) != bat:
+        raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô «{ten}» trên GAuto")
     return True
 
 
@@ -507,6 +516,34 @@ def _bam_dong_chuot(hwnd, vi_tri):
         time.sleep(0.3)
 
 
+def _diem_o_dau_dong(vi_tri):
+    """Tâm ô tích đầu dòng (bật / tắt auto GAuto cho nhân vật) trong khung dòng của bảng nhân vật."""
+    l, t, _, h = vi_tri
+    return l + max(8, h // 2), t + h // 2
+
+
+def dat_dau_dong(hwnd, cac_ten, bat):
+    """
+    Tích / bỏ tích ô đầu dòng của các nhân vật cac_ten có trong bảng GAuto, bằng chuột thật (MSAA không đổi được ô
+    này). Trả về tên các dòng đã đổi.
+    """
+    can = [(i, ten) for i, ten, _, tich in danh_sach_nhan_vat(hwnd)
+           if tich != bat and any(_khop_ten(ten, t) for t in cac_ten)]
+    if not can:
+        return []
+    da_doi = []
+    with _msaa(_bang_nhan_vat(hwnd)) as o, _muon_chuot(hwnd, "tích ô đầu dòng nhân vật"):
+        for i, ten in can:
+            _bam_chuot(hwnd, _diem_o_dau_dong(o.vi_tri(i)), "bảng nhân vật")
+            het = time.time() + GIAY_CHO_O_TICH
+            while o.da_tich(i) != bat and time.time() < het:
+                time.sleep(0.1)
+            if o.da_tich(i) != bat:
+                raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô đầu dòng «{ten}» trên GAuto")
+            da_doi.append(ten)
+    return da_doi
+
+
 def chon_map(hwnd, hwnd_combo, ten_map):
     """Chọn map ten_map trong ô Map GAuto bằng chuột thật. True nếu đã đổi, False nếu đang đúng map."""
     cac = cac_map(hwnd_combo)
@@ -554,53 +591,70 @@ def _chon_nhan_vat(hwnd, ten_nv, chi_so_dong):
     return khung_ac_tac(hwnd)
 
 
-def bo_tich_dong_khac(hwnd, ten_nv):
-    """Bỏ tích «Ác Tặc» mọi dòng GAuto khác ten_nv (đội viên, nhân vật round trước). Trả về tên các dòng đã bỏ tích."""
-    da_bo = []
-    for id_dong, ten, _, _ in danh_sach_nhan_vat(hwnd):
-        if _khop_ten(ten, ten_nv):
-            continue
-        chon_dong(hwnd, id_dong, ten)
-        o = khung_ac_tac(hwnd)
-        if O_AC_TAC in o and da_tich(o[O_AC_TAC]):
-            _dam_bao_dang_cai(hwnd, ten)
-            dat_o(o[O_AC_TAC], False, O_AC_TAC)
-            da_bo.append(ten)
-    return da_bo
+def _doi_dau_dong(hwnd, ten_nv, bat, in_log):
+    """Tích / bỏ tích ô đầu dòng của đội trưởng; có đổi thì chờ GAuto nạp xong cài đặt (nạp lại xóa ô vừa tích)."""
+    if not dat_dau_dong(hwnd, (ten_nv,), bat):
+        return False
+    if in_log:
+        in_log(f"{'tích' if bat else 'bỏ tích'} ô đầu dòng «{ten_nv}» ({'bật' if bat else 'tắt'} auto GAuto)")
+    time.sleep(GIAY_CHO_GAUTO_NAP)
+    return True
 
 
 def dat_cai_dat_ac_tac(hwnd, at, ten_nv, chi_so_dong=None, cache=None, ten_map=None, in_log=None):
     """
-    Bật Ác Tặc GAuto chỉ cho dòng ten_nv (đội trưởng đang login) theo tùy chọn Ác Tặc của AutoHoc: bỏ tích Ác Tặc các
-    dòng khác, chọn dòng đội trưởng, chọn map ten_map (map AutoHoc đã đưa đội tới), các ô phụ, tích «Ác Tặc» sau cùng.
-    Trả về map GAuto đang chọn.
+    Bật Ác Tặc GAuto cho đúng dòng ten_nv (trưởng nhóm đang login), không đụng dòng khác: tích ô đầu dòng (bật auto
+    GAuto, chờ GAuto nạp cài đặt), chọn dòng, chọn map ten_map, các ô phụ, tích «Ác Tặc» một lần sau cùng.
+    Ô đầu dòng AutoHoc tự tích ghi vào cache["dau_dong"] để tat_ac_tac bỏ tích lại. Trả về map GAuto đang chọn.
+    Lỗi sau khi đã bấm vào GAuto: LoiGautoAcTac có da_thao_tac=True (bên gọi không thử lại cả chuỗi).
     """
     kiem_tra_quyen(hwnd)
-    da_bo = bo_tich_dong_khac(hwnd, ten_nv)
-    if da_bo and in_log:
-        in_log(f"bỏ tích Ác Tặc GAuto ở dòng khác: {', '.join(da_bo)}")
-    o = _chon_nhan_vat(hwnd, ten_nv, None)
-    if ten_map:
-        if "map" not in o:
-            raise LoiGautoAcTac("không thấy ô Map trong khung Ác Tặc của GAuto")
-        _dam_bao_dang_cai(hwnd, ten_nv)
-        chon_map(hwnd, o["map"], ten_map)
-    chay_pp = bool(at.get("chay_pathpoints"))
-    for ten, bat in ((O_CHAY_PATHPOINTS, chay_pp), (O_CHAY_TIM, not chay_pp),
-                     (O_CHO_PARTY, bool(at.get("cho_party", True))), (O_TU_TIM, bool(at.get("tu_tim", True))),
-                     (O_AC_TAC, True)):
-        if ten in o:
+    try:
+        nap_lai = _doi_dau_dong(hwnd, ten_nv, True, in_log)
+        if nap_lai and cache is not None:
+            cache["dau_dong"] = ten_nv
+        o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
+        if ten_map:
+            if "map" not in o:
+                raise LoiGautoAcTac("không thấy ô Map trong khung Ác Tặc của GAuto")
             _dam_bao_dang_cai(hwnd, ten_nv)
-            dat_o(o[ten], bat, ten)
-        elif ten == O_AC_TAC:
+            chon_map(hwnd, o["map"], ten_map)
+        if O_AC_TAC not in o:
             raise LoiGautoAcTac("không thấy ô «Ác Tặc» trên GAuto")
-    return doc_map(o["map"]) if "map" in o else ""
+        chay_pp = bool(at.get("chay_pathpoints"))
+        for ten, bat in ((O_CHAY_PATHPOINTS, chay_pp), (O_CHAY_TIM, not chay_pp),
+                         (O_CHO_PARTY, bool(at.get("cho_party", True))), (O_TU_TIM, bool(at.get("tu_tim", True))),
+                         (O_AC_TAC, True)):
+            if ten in o:
+                _dam_bao_dang_cai(hwnd, ten_nv)
+                dat_o_chuot(hwnd, o[ten], bat, ten)
+        if nap_lai:
+            _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log)
+        return doc_map(o["map"]) if "map" in o else ""
+    except LoiGautoAcTac as loi:
+        loi.da_thao_tac = True
+        raise
 
 
-def tat_ac_tac(hwnd, ten_nv, chi_so_dong=None, cache=None):
+def _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log):
+    """GAuto nạp lại cài đặt muộn hơn GIAY_CHO_GAUTO_NAP thì xóa ô «Ác Tặc» vừa tích: canh thêm, mất thì tích lại 1 lần."""
+    for _ in range(int(GIAY_CANH_NAP_LAI * 2)):
+        time.sleep(0.5)
+        if not da_tich(o[O_AC_TAC]):
+            _dam_bao_dang_cai(hwnd, ten_nv)
+            dat_o_chuot(hwnd, o[O_AC_TAC], True, O_AC_TAC)
+            if in_log:
+                in_log("GAuto nạp lại cài đặt xóa ô «Ác Tặc», tích lại")
+            return
+
+
+def tat_ac_tac(hwnd, ten_nv, chi_so_dong=None, cache=None, in_log=None):
+    """Bỏ tích «Ác Tặc» của ten_nv một lần; ô đầu dòng AutoHoc đã tự tích (cache["dau_dong"]) thì bỏ tích lại."""
+    if cache is not None and cache.get("dau_dong"):
+        _doi_dau_dong(hwnd, cache.pop("dau_dong"), False, in_log)
     o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
     _dam_bao_dang_cai(hwnd, ten_nv)
-    dat_o(o[O_AC_TAC], False, O_AC_TAC)
+    dat_o_chuot(hwnd, o[O_AC_TAC], False, O_AC_TAC)
 
 
 def test_gauto(duong_dan, ten_nv, in_log, bat_thu=False, giay_bat_thu=3, cac_map_autohoc=()):
@@ -649,9 +703,9 @@ def test_gauto(duong_dan, ten_nv, in_log, bat_thu=False, giay_bat_thu=3, cac_map
             in_log(f"Test GAuto:    map GAuto giờ là «{doc_map(o['map'])}»")
         da_bat = da_tich(o[O_AC_TAC])
         in_log(f"Test GAuto: 7) {'bỏ tích' if da_bat else 'tích'} thử ô «{O_AC_TAC}» {giay_bat_thu} giây rồi trả lại")
-        dat_o(o[O_AC_TAC], not da_bat, O_AC_TAC)
+        dat_o_chuot(hwnd, o[O_AC_TAC], not da_bat, O_AC_TAC)
         time.sleep(giay_bat_thu)
-        dat_o(o[O_AC_TAC], da_bat, O_AC_TAC)
+        dat_o_chuot(hwnd, o[O_AC_TAC], da_bat, O_AC_TAC)
         in_log(f"Test GAuto:    đổi được, đã trả ô «{O_AC_TAC}» về {'☑' if da_bat else '☐'}")
     in_log("Test GAuto: OK — AutoHoc điều khiển được GAuto")
     return True

@@ -8,7 +8,8 @@ thấy con nào thì map đó coi như hết: về Đại Lý, sang map tiếp t
 đổi sang map kế theo thứ tự đã chọn. Đi hết các map hoặc hết giờ thì về Đại Lý,
 luồng nhân vật quay lại PMP / Sát Tinh như cũ.
 
-Đường đi: luôn từ Đại Lý, NPC "Di Chuyển" (165, 156):
+Đường đi: từ Đại Lý, NPC "Di Chuyển" (165, 156); đang đứng sẵn ở Lạc Dương / Tô Châu mà map nằm sau thành đó thì đi thẳng
+ra cổng, không về Đại Lý:
     Vô Lượng Sơn, Kiếm Các : Bản Đồ Luyện Cấp ở NPC Di Chuyển Đại Lý (dò dòng theo tên map).
     Tây Hồ, Thái Hồ        : Bản Đồ Thành Thị (111116, 8888) -> Tô Châu (111116, 1002), rồi chạy tới cổng map.
     Đôn Hoàng, Tung Sơn    : Bản Đồ Thành Thị (111116, 8888) -> Lạc Dương (111116, 1001), rồi chạy tới cổng map.
@@ -22,6 +23,7 @@ Tổ đội: đội trưởng (người đầu nhóm trong game) dẫn đường
 """
 import random
 import re
+import threading
 import time
 from collections import namedtuple
 from datetime import datetime, timedelta
@@ -42,6 +44,8 @@ from pho_ban_pmp import (GIAY_CHO_BO_THEO, GIAY_CHO_DOI_MAP, GIAY_CHO_QUAI_XUAT_
 MO_TA = "Ác Tặc"
 KHUNG_GIO = (2, 13, 15, 17, 19, 21)
 KHUNG_SANG = 2
+PHUT_DI_TRUOC = 2
+PHUT_KHUNG_MAC_DINH = 30
 MAP_TO_CHAU = "Tô Châu"
 CAC_MAP = tuple(cau_hinh.CAC_MAP_AC_TAC)
 HUB_CUA_MAP = {"Vô Lượng Sơn": None, "Kiếm Các": None, "Tây Hồ": MAP_TO_CHAU, "Thái Hồ": MAP_TO_CHAU,
@@ -133,30 +137,68 @@ def cac_khung(at):
     return tuple(gio for gio in KHUNG_GIO if not (gio == KHUNG_SANG and at.get("bo_khung_02h")))
 
 
+def phut_khung(at):
+    """Số phút đi Ác Tặc mỗi khung, tính từ giờ bắt đầu (ô «phút GAuto»)."""
+    try:
+        p = int(at.get("phut_gauto") or PHUT_KHUNG_MAC_DINH)
+    except (TypeError, ValueError):
+        p = PHUT_KHUNG_MAC_DINH
+    return max(1, min(p, 120))
+
+
 def khung_hien_tai(at, bay_gio=None):
-    """(ngày, giờ bắt đầu) của khung Ác Tặc đang diễn ra, None nếu ngoài giờ."""
+    """
+    (ngày, giờ bắt đầu) của khung Ác Tặc đang chạy, None nếu ngoài giờ. Khung 21h chạy từ 20:58 (ra map trước
+    PHUT_DI_TRUOC phút) tới 21:00 + phut_khung (vd 21:20).
+    """
     bay_gio = bay_gio or datetime.now()
-    if bay_gio.hour not in cac_khung(at):
-        return None
-    return bay_gio.date().isoformat(), bay_gio.hour
+    sau = (bay_gio + timedelta(minutes=PHUT_DI_TRUOC)).replace(minute=0, second=0, microsecond=0)
+    for bat_dau in (sau, sau - timedelta(hours=1), sau - timedelta(hours=2)):
+        if bat_dau.hour in cac_khung(at) and bay_gio < bat_dau + timedelta(minutes=phut_khung(at)):
+            return bat_dau.date().isoformat(), bat_dau.hour
+    return None
 
 
 def dang_khung_ac_tac(at, bay_gio=None):
     return khung_hien_tai(at, bay_gio) is not None
 
 
-def luc_het_khung(khung):
-    """Thời điểm (time.time()) kết thúc khung."""
+def luc_bat_dau_khung(khung):
+    """Thời điểm (time.time()) giờ bắt đầu khung (vd 21:00) — lúc bật GAuto."""
     ngay, gio = khung
-    return (datetime.fromisoformat(ngay) + timedelta(hours=gio + 1)).timestamp()
+    return (datetime.fromisoformat(ngay) + timedelta(hours=gio)).timestamp()
 
 
-def mo_ta_khung(khung):
-    return f"{khung[1]:02d}:00-{khung[1] + 1:02d}:00"
+def luc_het_khung(khung, at=None):
+    """Thời điểm (time.time()) kết thúc khung: giờ bắt đầu + phut_khung (vd 21:20)."""
+    return luc_bat_dau_khung(khung) + phut_khung(at or {}) * 60
+
+
+def mo_ta_khung(khung, at=None):
+    bat_dau = datetime.fromtimestamp(luc_bat_dau_khung(khung))
+    return f"{bat_dau:%H:%M}-{datetime.fromtimestamp(luc_het_khung(khung, at)):%H:%M}"
 
 
 def mo_ta_lich(at):
-    return ", ".join(f"{g:02d}-{g + 1:02d}h" for g in cac_khung(at))
+    p = phut_khung(at)
+    return ", ".join(f"{g:02d}:00-{(datetime(2000, 1, 1, g) + timedelta(minutes=p)):%H:%M}" for g in cac_khung(at))
+
+
+# Mỗi khung chỉ một nhóm (trưởng nhóm nhận khung đầu tiên) đi Ác Tặc; nhóm khác login vào giữa khung thì không đi.
+_NHAN_KHUNG = {}
+_KHOA_NHAN_KHUNG = threading.Lock()
+
+
+def nhan_khung(khung, ten_truong):
+    """Trưởng nhóm ten_truong nhận đi khung này. False nếu nhóm khác đã nhận."""
+    with _KHOA_NHAN_KHUNG:
+        da = _NHAN_KHUNG.setdefault(tuple(khung), ten_truong)
+    return chuan_hoa(da) == chuan_hoa(ten_truong)
+
+
+def nguoi_nhan_khung(khung):
+    with _KHOA_NHAN_KHUNG:
+        return _NHAN_KHUNG.get(tuple(khung))
 
 
 # ---------- map / đường đi ----------
@@ -172,6 +214,14 @@ def ten_map_chuan(ten_map):
 
 def la_map_ac_tac(ten_map):
     return ten_map_chuan(ten_map) is not None
+
+
+# GAuto gặp Ác Tặc, khiêu chiến xong thì cả đội vào phó bản riêng này (tên khác map dã ngoại).
+CAC_MAP_PHO_BAN_AC_TAC = ("Tặc Khấu doanh địa",)
+
+
+def la_pho_ban_ac_tac(ten_map):
+    return any(cung_ten_map(m, ten_map) for m in CAC_MAP_PHO_BAN_AC_TAC)
 
 
 def nen_bao_roi_map_ac_tac(map_hien, map_tuan_tra):
@@ -206,6 +256,12 @@ def map_tiep_theo(at, bo_qua=()):
     """Map đầu tiên trong danh sách đã chọn chưa nằm trong bo_qua (đã hết Ác Tặc / lỗi), None nếu không còn."""
     bo = {bo_dau(m) for m in bo_qua}
     return next((m for m in cac_map_da_chon(at) if bo_dau(m) not in bo), None)
+
+
+def hub_cua_map(ten_map):
+    """Thành trung chuyển trước khi ra map Ác Tặc (Lạc Dương: Tung Sơn / Đôn Hoàng), None nếu đi từ Đại Lý."""
+    chuan = ten_map_chuan(ten_map)
+    return HUB_CUA_MAP.get(chuan) if chuan else None
 
 
 def tuy_chinh_map():
@@ -565,7 +621,7 @@ class AcTacRunner(PhoBanPMP):
             self.khung = khung
             self.map_da_het, self.map_loi, self.lan_roi_map = set(), {}, {}
             self.da_bo_qua = set()
-        self.het_khung = luc_het_khung(khung)
+        self.het_khung = luc_het_khung(khung, at)
         self.het_han_vong = self.het_khung + 600
         return at, khung
 
@@ -633,6 +689,17 @@ class AcTacRunner(PhoBanPMP):
             self._log(f"{', '.join(chua)} chưa về {MAP_DAI_LY}, vẫn đi (đội viên tự tới sau)")
         xy = self._vi_tri()
         self._goi_party_theo(xy or (0, 0), True, cho=True)
+
+    def _gom_doi_tai_cho(self):
+        """Đội trưởng đứng sẵn ở thành trung chuyển của map (vd Lạc Dương đi Tung Sơn): triệu tập đội viên tại chỗ."""
+        if not self.doi_at or not self.doi_at.cac_doi_vien:
+            return
+        self.doi_at.lam_moi()
+        map_truong = self._map()
+        khac = [ten for ten, m in self.doi_at.map_doi_vien().items() if not cung_ten_map(m, map_truong)]
+        if khac:
+            self._log(f"{', '.join(khac)} không ở [{map_truong}], tự tới sau")
+        self._moi_theo_doi(cho=True)
 
     def _len_thu_neu_xa(self, xy):
         tt = self._tt()
@@ -852,10 +919,17 @@ class AcTacRunner(PhoBanPMP):
             return
         if self.la_truong and self.doi_at is not None:
             self.doi_at.map_dich = ten_map
-        if ve_thanh_truoc:
+        hub = hub_cua_map(ten_map)
+        o_hub = bool(hub) and cung_ten_map(self._map(), hub)
+        if o_hub and (ve_thanh_truoc or gom_doi):
+            self._log(f"đang ở {hub}, đi thẳng {ten_map} (không về {MAP_DAI_LY})")
+        elif ve_thanh_truoc:
             self._ve_thanh_at()
         if gom_doi and self.la_truong:
-            self._gom_doi_dai_ly()
+            if o_hub:
+                self._gom_doi_tai_cho()
+            else:
+                self._gom_doi_dai_ly()
         for chang in chuoi_buoc_toi(ten_map, tuy_chinh_map()):
             m = self._map()
             if cung_ten_map(m, chang.map_toi):
@@ -1264,7 +1338,7 @@ class AcTacRunner(PhoBanPMP):
         self._dong_hoi_thoai()
         self.dat_vung_rieng = dat_vung_danh
         if not self.map_da_het and not self.map_loi:
-            self._log(f"khung {mo_ta_khung(khung)}, đi: {', '.join(cac_map_da_chon(at)) or '(chưa chọn map)'}")
+            self._log(f"khung {mo_ta_khung(khung, at)}, đi: {', '.join(cac_map_da_chon(at)) or '(chưa chọn map)'}")
         try:
             self._doc_thong_bao()
             while True:
@@ -1272,7 +1346,7 @@ class AcTacRunner(PhoBanPMP):
                 ten_map = map_tiep_theo(at, self.map_da_het | set(self.map_loi))
                 if ten_map is None:
                     self.khung_xong = khung
-                    self._log(f"đã đi hết các map khung {mo_ta_khung(khung)}, quay lại PMP / Sát Tinh")
+                    self._log(f"đã đi hết các map khung {mo_ta_khung(khung, at)}, quay lại PMP / Sát Tinh")
                     self.dang_ket_thuc = True
                     self._ve_thanh_at()
                     self._goi_doi_vien_ve_thanh()
@@ -1299,7 +1373,7 @@ class AcTacRunner(PhoBanPMP):
                     self._log(f"bỏ qua {ten_map}: {loi}")
                 self._ve_thanh_at()
         except _HetKhung:
-            self._log(f"hết giờ khung {mo_ta_khung(khung)}, về {MAP_DAI_LY}")
+            self._log(f"hết giờ khung {mo_ta_khung(khung, at)}, về {MAP_DAI_LY}")
             self.khung_xong = khung
             self.dang_ket_thuc = True
             try:

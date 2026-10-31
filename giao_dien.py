@@ -39,7 +39,7 @@ import threading
 import time
 import tkinter as tk
 import traceback
-from datetime import date
+from datetime import date, datetime
 from tkinter import filedialog, messagebox, simpledialog, ttk
 from tkinter import font as tkfont
 
@@ -79,8 +79,9 @@ from pho_ban_pmp import (MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, MAP_PMP, M
                          la_lac_duong, la_map_pho_ban, la_map_trong_pho_ban, GIAY_RETRY_VE_THANH_THEO_DOI)
 from chien_dau import khoang_cach
 from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC_TAC, AcTacRunner, DoiAcTac, buoc_doi_vien,
-                            cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai, mo_ta_lich, ten_map_chuan,
-                            ve_thanh_neu_o_map_ac_tac)
+                            cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai, la_pho_ban_ac_tac,
+                            luc_bat_dau_khung, luc_het_khung, mo_ta_khung, mo_ta_lich, nhan_khung,
+                            nguoi_nhan_khung, phut_khung, ten_map_chuan, ve_thanh_neu_o_map_ac_tac)
 import gauto_ac_tac
 from giao_dich import anh_tui_goc
 from giao_dich_ngay import LuongGiaoDichNgay
@@ -406,6 +407,12 @@ class LuongNhanVat(threading.Thread):
             return True
         return chuan_hoa(thanh_vien[0]) == chuan_hoa(self.ten)
 
+    @staticmethod
+    def truong_nhom_xoay_vong():
+        """Trưởng nhóm xoay vòng đang mời PT (cài «Mời nhóm»), "" nếu không bật mời nhóm."""
+        chung = cau_hinh.chung()
+        return (chung.get("truong_nhom") or "").strip() if chung.get("bat_moi_nhom") else ""
+
     def dang_theo_ac_tac(self, cai_dat):
         """Đội viên: đội trưởng trong auto đang đi Ác Tặc (cài chung mac_dinh)."""
         if not cai_dat["bat_auto"] or not cai_dat_ac_tac()["bat"]:
@@ -697,6 +704,13 @@ class LuongNhanVat(threading.Thread):
             else:
                 self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC}: {gia_tri}"
             return True
+        khung = khung_hien_tai(at)
+        if khung is not None and not nhan_khung(khung, self.ten):
+            self.ac_tac.khung_xong = khung
+            self.in_log(f"{self.ten}: {MO_TA_AC_TAC} khung {mo_ta_khung(khung, at)} đã do nhóm "
+                        f"{nguoi_nhan_khung(khung)} đi — nhóm này không đi, tiếp tục phó bản")
+            self.ket_thuc_ac_tac(tt)
+            return False
         self.dang_ac_tac = True
         self.doi_pmp = self.truong_pmp = None
         self.truong_ac_tac = None
@@ -728,7 +742,6 @@ class LuongNhanVat(threading.Thread):
         khung = khung_hien_tai(at)
         if khung is None:
             return False
-        phut = gauto_ac_tac.phut_gauto(at)
         maps = cac_map_da_chon(at)
         map_dich = maps[0] if maps else None
         gauto_dang_chay = bool(self.ac_tac.gauto_het_luc > time.time())
@@ -744,6 +757,9 @@ class LuongNhanVat(threading.Thread):
                 con = int(truong.ac_tac.gauto_het_luc - time.time())
                 self.trang_thai["mo_ta"] = (f"{MO_TA_AC_TAC} (GAuto): theo đội trưởng, "
                                             f"còn {con // 60}p{con % 60:02d}s")
+                return True
+            if la_pho_ban_ac_tac(tt.get("map")):
+                self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): trong [{tt['map']}] cùng {truong.ten}"
                 return True
             self.truong_ac_tac = truong.doi_ac_tac
             if self.truong_ac_tac is None:
@@ -762,22 +778,29 @@ class LuongNhanVat(threading.Thread):
         if self.ac_tac.khung_xong == khung:
             self.dang_ac_tac = False
             return False
-
-        if gauto_dang_chay and time.time() >= self.ac_tac.gauto_het_luc:
-            try:
-                hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
-                gauto_ac_tac.tat_ac_tac(hwnd_ql, self.ten, self.ac_tac.gauto_chi_so, self.ac_tac.gauto_dong_cache)
-            except gauto_ac_tac.LoiGautoAcTac as loi:
-                self.in_log(f"{self.ten}: GAuto Ác Tặc: không bỏ tích được Ác Tặc trên GAuto ({loi}) — bỏ tích tay")
+        tr_nhom = self.truong_nhom_xoay_vong()
+        if not thanh_vien and not self.ac_tac.gauto_het_luc and tr_nhom \
+                and chuan_hoa(tr_nhom) != chuan_hoa(self.ten):
+            # Chưa vào PT: chỉ trưởng nhóm xoay vòng mới được thao tác GAuto, đội viên không tự coi mình là trưởng.
+            self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): chờ vào PT của {tr_nhom}"
+            return True
+        if not self.ac_tac.gauto_het_luc and not nhan_khung(khung, self.ten):
             self.ac_tac.khung_xong = khung
-            self.ac_tac.gauto_khung = None
-            self.ac_tac.gauto_het_luc = 0.0
-            self.ac_tac.gauto_chi_so = None
             self.dang_ac_tac = False
-            self.in_log(f"{self.ten}: {MO_TA_AC_TAC} — hết {phut} phút GAuto, tắt Ác Tặc")
+            self.in_log(f"{self.ten}: {MO_TA_AC_TAC} khung {mo_ta_khung(khung, at)} đã do nhóm "
+                        f"{nguoi_nhan_khung(khung)} đi — nhóm này không đi, tiếp tục phó bản")
+            return False
+
+        if self.ac_tac.gauto_het_luc and time.time() >= self.ac_tac.gauto_het_luc:
+            self.tat_gauto_ac_tac(at, khung)
             return False
 
         if not gauto_dang_chay:
+            if la_pho_ban_ac_tac(tt.get("map")):
+                # GAuto (bật tay hoặc đã bật) đã khiêu chiến, cả đội đang trong phó bản: không kéo về Đại Lý.
+                self.doi_ac_tac = None
+                self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): đang đánh trong [{tt['map']}]"
+                return True
             map_hien = ten_map_chuan(tt.get("map") or "")
             chua_toi_map = not map_dich or not map_hien or not cung_ten_map(map_hien, map_dich)
             if chua_toi_map:
@@ -793,6 +816,12 @@ class LuongNhanVat(threading.Thread):
                                              map_dich, self.doi_ac_tac)
                 return True
             self.doi_ac_tac = None
+            bat_dau = luc_bat_dau_khung(khung)
+            if self.ac_tac.gauto_khung != khung and time.time() < bat_dau:
+                con = int(bat_dau - time.time())
+                self.trang_thai["mo_ta"] = (f"{MO_TA_AC_TAC} (GAuto): đã tới {map_dich}, "
+                                            f"chờ {con // 60}p{con % 60:02d}s tới giờ bật GAuto")
+                return True
             if self.ac_tac.gauto_khung != khung:
                 try:
                     hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
@@ -804,11 +833,21 @@ class LuongNhanVat(threading.Thread):
                     self.ac_tac.gauto_khung = khung
                     self.ac_tac.khung = khung
                     self.ac_tac.gauto_chi_so = chi_so
-                    self.ac_tac.gauto_het_luc = time.time() + phut * 60
+                    self.ac_tac.gauto_het_luc = luc_het_khung(khung, at)
                     self.ac_tac.gauto_loi_cuoi = None
-                    self.in_log(f"{self.ten}: {MO_TA_AC_TAC} — đã tới {map_dich}, bật GAuto {phut} phút "
-                                f"(cửa sổ «{tieu_de_ql}»)")
+                    self.in_log(f"{self.ten}: {MO_TA_AC_TAC} — đã tới {map_dich}, bật GAuto tới "
+                                f"{datetime.fromtimestamp(self.ac_tac.gauto_het_luc):%H:%M} (cửa sổ «{tieu_de_ql}»)")
                 except gauto_ac_tac.LoiGautoAcTac as loi:
+                    if getattr(loi, "da_thao_tac", False):
+                        # Đã bấm vào GAuto: không làm lại cả chuỗi (bật / tắt nhiều lần); vẫn đếm giờ để tắt 1 lần.
+                        self.ac_tac.gauto_khung = khung
+                        self.ac_tac.khung = khung
+                        self.ac_tac.gauto_chi_so = chi_so
+                        self.ac_tac.gauto_het_luc = luc_het_khung(khung, at)
+                        self.ac_tac.gauto_loi_cuoi = None
+                        self.in_log(f"{self.ten}: GAuto Ác Tặc: {loi} — không thử lại khung này, kiểm tra GAuto "
+                                    f"(vẫn tự tắt lúc {datetime.fromtimestamp(self.ac_tac.gauto_het_luc):%H:%M})")
+                        return True
                     if str(loi) != self.ac_tac.gauto_loi_cuoi:
                         self.in_log(f"{self.ten}: GAuto Ác Tặc: {loi}")
                     self.ac_tac.gauto_loi_cuoi = str(loi)
@@ -819,11 +858,32 @@ class LuongNhanVat(threading.Thread):
         self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): đang chạy trên {map_dich or 'map'}, còn {con // 60}p{con % 60:02d}s"
         return True
 
+    def tat_gauto_ac_tac(self, at, khung=None):
+        """Hết giờ khung: bỏ tích Ác Tặc (và ô đầu dòng) của đội trưởng trên GAuto đúng một lần."""
+        khung = khung or self.ac_tac.gauto_khung
+        try:
+            hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
+            gauto_ac_tac.tat_ac_tac(hwnd_ql, self.ten, self.ac_tac.gauto_chi_so, self.ac_tac.gauto_dong_cache,
+                                    in_log=lambda chu: self.in_log(f"{self.ten}: GAuto Ác Tặc: {chu}"))
+        except gauto_ac_tac.LoiGautoAcTac as loi:
+            self.in_log(f"{self.ten}: GAuto Ác Tặc: không bỏ tích được Ác Tặc trên GAuto ({loi}) — bỏ tích tay")
+        if khung is not None:
+            self.ac_tac.khung_xong = khung
+        self.ac_tac.gauto_khung = None
+        self.ac_tac.gauto_het_luc = 0.0
+        self.ac_tac.gauto_chi_so = None
+        self.dang_ac_tac = False
+        self.in_log(f"{self.ten}: {MO_TA_AC_TAC} — hết khung "
+                    f"{mo_ta_khung(khung, at) if khung else ''}, tắt Ác Tặc GAuto")
+
     def ket_thuc_ac_tac(self, tt):
         """Ra khỏi khung Ác Tặc: thôi chế độ Ác Tặc; còn đứng ở map Ác Tặc (đội viên) thì về Đại Lý."""
+        at = cai_dat_ac_tac()
+        if self.ac_tac.gauto_het_luc and time.time() >= self.ac_tac.gauto_het_luc:
+            self.tat_gauto_ac_tac(at)
+            self.dang_ac_tac = True
         if not self.dang_ac_tac:
             return
-        at = cai_dat_ac_tac()
         if at["bat"] and self.ac_tac.can_chen(at):
             self.dang_ac_tac = False
             self.doi_ac_tac = self.truong_ac_tac = None

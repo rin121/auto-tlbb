@@ -61,6 +61,8 @@ MO_TA_MAN_HINH = {
     "": "đang tải",
 }
 GIAY_LAM_LAI = 10
+# Ở màn chọn nhân vật chừng này giây mà danh sách vẫn trống thì coi như tài khoản không có nhân vật nào.
+GIAY_DS_NHAN_VAT_TRONG = 8
 GIAY_DONG_THONG_BAO = 3
 # "Có nhân vật đối ứng đang online" (bị diss mà nhân vật còn kẹt trên server): game khóa nút Đóng 20 giây
 # (USERONLINE, SelectServerQuest.lua) cho server kịp đá nhân vật cũ, hết 20 giây thì Đóng rồi đăng nhập lại.
@@ -126,6 +128,14 @@ class LoiSaiRuleNhanVat(LoiDangNhap):
 
     def __init__(self, cac_ten):
         super().__init__("có nhân vật sai quy tắc tên: " + ", ".join(cac_ten))
+        self.cac_ten = list(cac_ten)
+
+
+class LoiThieuNhanVat(LoiDangNhap):
+    """Tài khoản không có nhân vật cần vào (bị xóa / server reset): phải tạo lại, đăng nhập lại cũng vô ích."""
+
+    def __init__(self, ten, cac_ten):
+        super().__init__(f'tài khoản không có nhân vật "{ten}" (đang có: {", ".join(cac_ten) or "không có nhân vật nào"})')
         self.cac_ten = list(cac_ten)
 
 
@@ -209,6 +219,10 @@ def ds_ten_nhan_vat(lua):
     ket_qua = lua.chay('local s = "" for i = 0, GameProduceLogin:GetRoleCount() - 1 do '
                        's = s .. GameProduceLogin:GetRoleInfo(i) .. "\\n" end return s')
     return [giai_ma(ten) for ten in ket_qua.split(b"\n")[:-1]]
+
+
+def co_nhan_vat(ten_nhan_vat, cac_ten):
+    return any(so_sanh(ten) == so_sanh(ten_nhan_vat) for so_sanh in (chuan_hoa, bo_dau) for ten in cac_ten)
 
 
 def chon_nhan_vat(lua, ten_nhan_vat, cac_ten=None):
@@ -550,6 +564,9 @@ class LuongDangNhap(threading.Thread):
         self.chi_co_mot_may_chu_thi_chon = False
         self.sai_rule = None
         self.sai_tai_khoan = False
+        # tao_khi_thieu: tài khoản không có nhân vật cần vào thì dừng ngay (LoiThieuNhanVat), để bên gọi tạo nhân vật.
+        self.tao_khi_thieu = False
+        self.thieu_nhan_vat = None
         self._da_gan_proxy = False
         self._cho_retry_sau_diss = False
 
@@ -674,6 +691,11 @@ class LuongDangNhap(threading.Thread):
                     thoat_ve_chon_may_chu(self.pid, self.in_log, self.dung.is_set)
                     _go_pid_dang_nhap(self.tai_khoan["ten_dang_nhap"])
                 self.bao_trang_thai("Tạm dừng: tên nhân vật sai rule")
+                return
+            except LoiThieuNhanVat as loi:
+                self.thieu_nhan_vat = loi.cac_ten
+                self.in_log(f"Dừng: {loi} — cần tạo nhân vật")
+                self.bao_trang_thai("Thiếu nhân vật, cần tạo")
                 return
             except (LoiDangNhap, LoiLua, OSError, psutil.Error) as loi:
                 self.in_log(f"Lần {lan}/{so_lan} thất bại: {loi}")
@@ -901,6 +923,9 @@ class LuongDangNhap(threading.Thread):
             cac_ten = ds_ten_nhan_vat(lua)
             if cac_ten:
                 self.kiem_tra_ds_nhan_vat(cac_ten)
+            if self.tao_khi_thieu and (cac_ten or so_giay_o_man_nay >= GIAY_DS_NHAN_VAT_TRONG) \
+                    and not co_nhan_vat(tk["nhan_vat"], cac_ten):
+                raise LoiThieuNhanVat(tk["nhan_vat"], cac_ten)
             ten = chon_nhan_vat(lua, tk["nhan_vat"], cac_ten)
             if ten:
                 self.in_log(f"Vào trò chơi bằng nhân vật {ten}")

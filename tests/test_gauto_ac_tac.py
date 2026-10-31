@@ -1,7 +1,8 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch
+from contextlib import nullcontext
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -32,7 +33,7 @@ class TestDatCaiDatAcTac(unittest.TestCase):
     def setUp(self):
         self.dang_cai = "caychay10"
         for p in (patch.object(g, "kiem_tra_quyen", lambda h: None),
-                  patch.object(g, "bo_tich_dong_khac", return_value=[]),
+                  patch.object(g, "dat_dau_dong", return_value=[]),
                   patch.object(g, "nhan_vat_dang_cai", lambda h: self.dang_cai)):
             p.start()
             self.addCleanup(p.stop)
@@ -40,10 +41,10 @@ class TestDatCaiDatAcTac(unittest.TestCase):
     def test_gauto_doi_nhan_vat_giua_chung_thi_khong_tich(self):
         da_dat = []
 
-        def dat(h, bat, ten):
+        def dat(h, o, bat, ten):
             da_dat.append((ten, bat))
             self.dang_cai = "caychay255"
-        with patch.object(g, "_chon_nhan_vat", return_value=dict(self.O)), patch.object(g, "dat_o", dat), \
+        with patch.object(g, "_chon_nhan_vat", return_value=dict(self.O)), patch.object(g, "dat_o_chuot", dat), \
                 patch.object(g, "doc_map", return_value="Kiếm Các"):
             with self.assertRaises(g.LoiGautoAcTac):
                 g.dat_cai_dat_ac_tac(1, {}, "caychay10")
@@ -52,7 +53,7 @@ class TestDatCaiDatAcTac(unittest.TestCase):
     def _chay(self, at):
         da_dat = []
         with patch.object(g, "_chon_nhan_vat", return_value=dict(self.O)), \
-                patch.object(g, "dat_o", lambda h, bat, ten: da_dat.append((ten, bat))), \
+                patch.object(g, "dat_o_chuot", lambda h, o, bat, ten: da_dat.append((ten, bat))), \
                 patch.object(g, "doc_map", return_value="Kiếm Các"):
             ten_map = g.dat_cai_dat_ac_tac(1, at, "caychay10")
         return da_dat, ten_map
@@ -73,7 +74,7 @@ class TestDatCaiDatAcTac(unittest.TestCase):
         thu_tu = []
         with patch.object(g, "_chon_nhan_vat", return_value=dict(self.O)), \
                 patch.object(g, "chon_map", lambda h, cb, ten: thu_tu.append(("map", ten))), \
-                patch.object(g, "dat_o", lambda h, bat, ten: thu_tu.append((ten, bat))), \
+                patch.object(g, "dat_o_chuot", lambda h, o, bat, ten: thu_tu.append((ten, bat))), \
                 patch.object(g, "doc_map", return_value="Kiếm Các"):
             g.dat_cai_dat_ac_tac(1, {}, "caychay10", ten_map="Kiếm Các")
         self.assertEqual(thu_tu[0], ("map", "Kiếm Các"))
@@ -87,7 +88,7 @@ class TestDatCaiDatAcTac(unittest.TestCase):
 
     def test_thieu_o_ac_tac_thi_bao_loi(self):
         with patch.object(g, "_chon_nhan_vat", return_value={g.O_CHAY_TIM: 1}), \
-                patch.object(g, "dat_o", lambda *a: None), patch.object(g, "doc_map", return_value=""):
+                patch.object(g, "dat_o_chuot", lambda *a: None), patch.object(g, "doc_map", return_value=""):
             with self.assertRaises(g.LoiGautoAcTac):
                 g.dat_cai_dat_ac_tac(1, {}, "caychay10")
 
@@ -150,24 +151,115 @@ class TestChonDongDungNhanVat(unittest.TestCase):
             self._chon(bang, 2, "caychay244")
 
 
-class TestBoTichDongKhac(unittest.TestCase):
-    """GA-04: chỉ đội trưởng đang login được tích Ác Tặc; dòng khác đang tích thì bỏ."""
+class _BangTich:
+    """Bảng GAuto giả: bấm chuột vào ô đầu dòng thì đảo trạng thái tích dòng đó."""
 
-    def test_bo_tich_cac_dong_khac_doi_truong(self):
-        tich = {"caychay255": True, "caychay244": True, "caychay266": False, "caychay24": True}
-        dang = ["caychay255"]
-        ds = [(i, t, False, False) for i, t in enumerate(tich, 1)]
+    def __init__(self, tich):
+        self.ten_dong, self.tich = list(tich), dict(tich)
 
-        def chon(h, i, ten):
-            dang[0] = ten
-        with patch.object(g, "danh_sach_nhan_vat", return_value=ds), patch.object(g, "chon_dong", chon), \
-                patch.object(g, "khung_ac_tac", lambda h: {g.O_AC_TAC: dang[0]}), \
-                patch.object(g, "da_tich", lambda o: tich[o]), \
-                patch.object(g, "nhan_vat_dang_cai", lambda h: dang[0]), \
-                patch.object(g, "dat_o", lambda o, bat, ten: tich.__setitem__(dang[0], bat)):
-            da_bo = g.bo_tich_dong_khac(1, "caychay244")
-        self.assertEqual(da_bo, ["caychay255", "caychay24"])
-        self.assertEqual(tich, {"caychay255": False, "caychay244": True, "caychay266": False, "caychay24": False})
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def vi_tri(self, i):
+        return (100, 200 + 17 * (i - 1), 300, 17)
+
+    def da_tich(self, i):
+        return self.tich[self.ten_dong[i - 1]]
+
+    def bam(self, diem):
+        i = (diem[1] - 200) // 17 + 1
+        self.x_bam = diem[0]
+        ten = self.ten_dong[i - 1]
+        self.tich[ten] = not self.tich[ten]
+
+    def ds(self, h):
+        return [(i, t, False, self.tich[t]) for i, t in enumerate(self.ten_dong, 1)]
+
+
+class TestDauDong(unittest.TestCase):
+    """GA-06: chỉ dòng trưởng nhóm: tích ô đầu dòng + «Ác Tặc» 1 lần lúc bật, bỏ tích 1 lần lúc tắt."""
+
+    def _dat(self, bang, cac_ten, bat):
+        with patch.object(g, "danh_sach_nhan_vat", bang.ds), patch.object(g, "_bang_nhan_vat", lambda h: 0), \
+                patch.object(g, "_msaa", lambda h: bang), patch.object(g, "_muon_chuot", lambda h, v: nullcontext()), \
+                patch.object(g, "_bam_chuot", lambda h, diem, cho: bang.bam(diem)):
+            return g.dat_dau_dong(1, cac_ten, bat)
+
+    def test_tich_doi_truong_va_doi_vien(self):
+        bang = _BangTich({"caychay2888": False, "caychay2999": True, "caychay3111": False, "khac": False})
+        da = self._dat(bang, ("caychay2888", "caychay2999", "caychay3111"), True)
+        self.assertEqual(da, ["caychay2888", "caychay3111"])
+        self.assertEqual(bang.tich, {"caychay2888": True, "caychay2999": True, "caychay3111": True, "khac": False})
+        self.assertLess(bang.x_bam, 100 + 30)
+
+    def test_bo_tich(self):
+        bang = _BangTich({"caychay2888": True, "caychay2999": True})
+        self.assertEqual(self._dat(bang, ["caychay2888"], False), ["caychay2888"])
+        self.assertEqual(bang.tich, {"caychay2888": False, "caychay2999": True})
+
+    def _bat_tat(self, da_tich_dau_dong, doc_ac_tac=None):
+        """
+        Bật rồi tắt Ác Tặc; ghi lại mọi lần bấm vào GAuto theo thứ tự. doc_ac_tac: các lần đọc ô «Ác Tặc» lúc canh
+        GAuto nạp lại (mặc định luôn ☑).
+        """
+        cache, thu_tu = {}, []
+        doc = list(doc_ac_tac or [])
+
+        def dau_dong(h, ten, bat):
+            thu_tu.append(("dau_dong", tuple(ten), bat))
+            return [] if da_tich_dau_dong else list(ten)
+        with patch.object(g, "kiem_tra_quyen", lambda h: None), \
+                patch.object(g, "_chon_nhan_vat", lambda h, t, c: thu_tu.append(("chon", t)) or {g.O_AC_TAC: 1}), \
+                patch.object(g, "_dam_bao_dang_cai", lambda h, t: None), \
+                patch.object(g, "dat_o_chuot", lambda h, o, bat, ten: thu_tu.append((ten, bat))), \
+                patch.object(g, "da_tich", lambda o: doc.pop(0) if doc else True), \
+                patch.object(g, "GIAY_CANH_NAP_LAI", 1.5), \
+                patch.object(g, "dat_dau_dong", dau_dong), patch.object(g, "GIAY_CHO_GAUTO_NAP", 0):
+            g.dat_cai_dat_ac_tac(1, {}, "caychay32", cache=cache)
+            bat = list(thu_tu)
+            thu_tu.clear()
+            g.tat_ac_tac(1, "caychay32", cache=cache)
+        return bat, thu_tu, cache
+
+    def test_chi_dong_truong_nhom_tich_mot_lan_bat_mot_lan_tat(self):
+        bat, tat, cache = self._bat_tat(da_tich_dau_dong=False)
+        # Ô đầu dòng chỉ của trưởng nhóm, tích trước (GAuto nạp lại cài đặt), «Ác Tặc» tích đúng 1 lần sau cùng.
+        self.assertEqual(bat[0], ("dau_dong", ("caychay32",), True))
+        self.assertEqual(bat[-1], (g.O_AC_TAC, True))
+        self.assertEqual(bat.count((g.O_AC_TAC, True)), 1)
+        self.assertEqual({t for _, t in [x for x in bat if x[0] == "chon"]}, {"caychay32"})
+        self.assertEqual(tat, [("dau_dong", ("caychay32",), False), ("chon", "caychay32"), (g.O_AC_TAC, False)])
+        self.assertNotIn("dau_dong", cache)
+
+    def test_gauto_nap_lai_xoa_o_ac_tac_thi_tich_lai_mot_lan(self):
+        bat, _, _ = self._bat_tat(da_tich_dau_dong=False, doc_ac_tac=[True, False, False])
+        self.assertEqual(bat.count((g.O_AC_TAC, True)), 2)
+        self.assertEqual(bat[-1], (g.O_AC_TAC, True))
+
+    def test_o_dau_dong_da_tich_san_thi_khong_canh_nap_lai(self):
+        bat, _, _ = self._bat_tat(da_tich_dau_dong=True, doc_ac_tac=[False, False])
+        self.assertEqual(bat.count((g.O_AC_TAC, True)), 1)
+
+    def test_dau_dong_da_tich_san_thi_khong_bo_tich(self):
+        _, tat, _ = self._bat_tat(da_tich_dau_dong=True)
+        self.assertEqual(tat, [("chon", "caychay32"), (g.O_AC_TAC, False)])
+
+    def test_loi_sau_khi_bam_danh_dau_da_thao_tac(self):
+        with patch.object(g, "kiem_tra_quyen", lambda h: None), patch.object(g, "dat_dau_dong", return_value=[]), \
+                patch.object(g, "_chon_nhan_vat", return_value={g.O_CHAY_TIM: 1}), \
+                patch.object(g, "_dam_bao_dang_cai", lambda h, t: None), patch.object(g, "dat_o_chuot"):
+            with self.assertRaises(g.LoiGautoAcTac) as ng:
+                g.dat_cai_dat_ac_tac(1, {}, "caychay32")
+        self.assertTrue(ng.exception.da_thao_tac)
+
+    def test_loi_quyen_thi_chua_thao_tac(self):
+        with patch.object(g, "kiem_tra_quyen", side_effect=g.LoiGautoAcTac(g.THONG_BAO_CAN_ADMIN)):
+            with self.assertRaises(g.LoiGautoAcTac) as ng:
+                g.dat_cai_dat_ac_tac(1, {}, "caychay32")
+        self.assertFalse(getattr(ng.exception, "da_thao_tac", False))
 
 
 class TestQuyenAdmin(unittest.TestCase):
