@@ -58,8 +58,8 @@ from chat_the_gioi import GIAY_TOI_THIEU as GIAY_CHAT_TOI_THIEU, LoiChat, gui_th
 from chien_dau import (CAC_PHIM_SKILL, KY_NANG_VE_THANH, MAU_HET_AN_THAN, MON_PHAI_NGA_MY, PHIM_BUFF_DU_PHONG,
                        TEN_KY_NANG_AN_DON, TEN_KY_NANG_BUFF_MAU, ChienDau, LoiChienDau, cai_dat_chien_dau,
                        ma_dung_ky_nang_theo_dinh_nghia)
-from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, hien_cua_so, hien_lai_cua_so_an_lan_truoc,
-                         tim_cua_so_game)
+from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, duy_tri_an, hien_cua_so,
+                         hien_lai_cua_so_an_lan_truoc, tim_cua_so_game)
 from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap, con_chay
 import proxy_mang
 import proxy_broker_ui
@@ -246,8 +246,10 @@ MILI_GIAY_GIUA_MOI_LAN_XEM_HAN_DUNG = 10_000
 SO_HANG_TUI_TOI_DA = 12
 CAC_HANG_TUI = [str(hang) for hang in range(1, SO_HANG_TUI_TOI_DA + 1)]
 CAI_DAT_GAME = (("tat_am_thanh", "Vào game thì tắt âm thanh", "đã tắt âm thanh"),
-                ("giam_do_hoa", "Vào game thì giảm đồ họa xuống thấp nhất (số mô hình, hiệu ứng, profile)",
-                 "đã giảm đồ họa xuống thấp nhất (số mô hình, hiệu ứng, profile)"))
+                ("giam_do_hoa", "Vào game thì giảm đồ họa + giới hạn FPS (hiệu ứng, profile, nền thấp hơn)",
+                 "đã giảm đồ họa + giới hạn FPS"),
+                ("tat_het_hieu_ung", "Tắt hết hiệu ứng trong game (skill, phát sáng trang phục/vũ khí…)",
+                 "đã tắt hiệu ứng trong game"))
 
 
 def ten_trong_tieu_de(hwnd):
@@ -357,26 +359,44 @@ class LuongNhanVat(threading.Thread):
         self.luc_doc_nhom = 0.0
         self.mon_phai = None
         self.da_cai_dat_game = set()
+        self._luc_ap_hieu_ung = 0.0
         self.dung = threading.Event()
 
     def in_log(self, chu):
         self.hang_doi.put(("log", chu))
 
     def cai_dat_game(self, chung):
-        """Vào game thì tắt âm thanh / giảm đồ họa (tab Cài đặt), mỗi mục một lần cho mỗi lần vào game."""
+        """Vào game thì tắt âm thanh / giảm đồ họa / hiệu ứng (tab Cài đặt)."""
         for khoa, _, da_lam in CAI_DAT_GAME:
-            if not chung[khoa]:
+            if not chung.get(khoa):
                 self.da_cai_dat_game.discard(khoa)
                 continue
             if khoa in self.da_cai_dat_game:
                 continue
             try:
-                so_muc = cai_dat_game.ap_dung(self.game.lua, khoa == "tat_am_thanh", khoa == "giam_do_hoa")
+                if khoa == "tat_het_hieu_ung":
+                    so_muc = cai_dat_game.ap_dung_hieu_ung(self.game.lua)
+                else:
+                    so_muc = cai_dat_game.ap_dung(self.game.lua, khoa == "tat_am_thanh",
+                                                  khoa == "giam_do_hoa", chung)
             except LoiLua:
                 return
             self.da_cai_dat_game.add(khoa)
             if so_muc:
                 self.in_log(f"{self.ten}: {da_lam} ({so_muc} mục)")
+
+    def duy_tri_hieu_ung(self, chung, doi_map=False):
+        """Client hay bật lại hiệu ứng sau đổi map — áp lại ViewSetup + View_* định kỳ."""
+        if not chung.get("tat_het_hieu_ung") or not self.dang_trong_game:
+            return
+        bay = time.time()
+        if not doi_map and bay - self._luc_ap_hieu_ung < cai_dat_game.GIAY_GIUA_AP_HIEU_UNG:
+            return
+        self._luc_ap_hieu_ung = bay
+        try:
+            cai_dat_game.ap_dung_hieu_ung(self.game.lua)
+        except LoiLua:
+            pass
 
     def nen_dung(self):
         return self.dung.is_set() or not cau_hinh.cua_nhan_vat(self.ten)["bat_auto"]
@@ -1264,6 +1284,7 @@ class LuongNhanVat(threading.Thread):
                     self.anh_tui, self.anh_tui_cua = anh_tui_goc(self.ten, self.game.lua), self.ten
                 if map_truoc is not None and tt["map"] != map_truoc:
                     self.in_log(f"{self.ten} đã tới [{tt['map']}]")
+                doi_map = map_truoc is not None and tt["map"] != map_truoc
                 map_truoc = self.map_hien_tai = tt["map"]
                 self.hang_doi.put(("cap_nhat", self.hwnd, tt))
                 if self.dang_tu_dang_nhap(self.game.lua.pid):
@@ -1272,6 +1293,7 @@ class LuongNhanVat(threading.Thread):
                     self.dung.wait(chung["giay_giua_moi_lan_kiem_tra"])
                     continue
                 self.cai_dat_game(chung)
+                self.duy_tri_hieu_ung(chung, doi_map=doi_map)
 
                 cai_dat = cau_hinh.cua_nhan_vat(self.ten)
                 if cai_dat["bat_auto"] and tt["hp"] > 0:
@@ -2171,12 +2193,53 @@ class UngDung:
             self.bien_cai_dat_game[khoa] = tk.BooleanVar(value=chung[khoa])
             ttk.Checkbutton(tab, text=nhan, variable=self.bien_cai_dat_game[khoa],
                             command=lambda khoa=khoa: self.doi_cai_dat_game(khoa)).pack(anchor="w")
+        khung_fps = ttk.Frame(tab)
+        khung_fps.pack(anchor="w", pady=(4, 0))
+        self.bien_fps = {k: tk.StringVar(value=str(chung[k])) for k in ("fps_max", "fps_front", "fps_back")}
+        nhan_fps = (("fps_max", "FPS tối đa"), ("fps_front", "FPS khi focus"), ("fps_back", "FPS khi nền / ẩn"))
+        for cot, (khoa, nhan) in enumerate(nhan_fps):
+            ttk.Label(khung_fps, text=nhan).grid(row=0, column=cot * 2, sticky="w", padx=(0 if cot == 0 else 8, 4))
+            sb = ttk.Spinbox(khung_fps, from_=5, to=100, width=4, textvariable=self.bien_fps[khoa],
+                             command=self.luu_cai_dat_fps)
+            sb.grid(row=0, column=cot * 2 + 1, sticky="w")
+            sb.bind("<FocusOut>", lambda _e: self.luu_cai_dat_fps())
+            sb.bind("<Return>", lambda _e: self.luu_cai_dat_fps())
         ttk.Label(tab, text="Âm thanh: như Duyệt Cài đặt âm thanh. Đồ họa: như Duyệt Thiết lập hiển thị (Thấp/Không, "
                             "tắt địa hình/nhân vật cao cấp, số mô hình) + các biến View_* (hiệu ứng, thời tiết…) "
-                            "trong game và trong Bin/System.cfg, Accounts/*.pfc trước khi mở Game.exe. "
+                            "trong game và trong Bin/System.cfg, Accounts/*.pfc trước khi mở Game.exe; "
+                            "System_MaxFPS* (FPS nền thấp khi mất focus hoặc ẩn cửa sổ AutoHoc). "
                             "Không đổi gamma, chất lượng màu 16 bit (yszl), đồng bộ dọc, FULLSCREEN / độ phân giải. "
-                            "Tắt tùy chọn thì không tự bật lại đồ họa.",
+                            "Tắt tùy chọn thì không tự bật lại đồ họa. Game đang mở trước khi bật: bật lại checkbox "
+                            "hoặc vào lại game để áp FPS qua Lua. "
+                            "Tắt hết hiệu ứng: áp lại mỗi ~30 giây và khi đổi map (một số trang phục server vẫn "
+                            "có thể phát sáng nhẹ).",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
+
+    def luu_cai_dat_fps(self):
+        try:
+            gia_tri = {k: so_nguyen(self.bien_fps[k].get(), k) for k in self.bien_fps}
+        except ValueError as loi:
+            messagebox.showerror("Cài đặt chưa đúng", str(loi))
+            return False
+        for k, v in gia_tri.items():
+            if not 5 <= v <= 100:
+                messagebox.showerror("Cài đặt chưa đúng", f"{k}: từ 5 tới 100")
+                return False
+        cau_hinh.dat_chung(gia_tri)
+        if cau_hinh.chung().get("giam_do_hoa"):
+            thu_muc = (cau_hinh.doc_tai_khoan().get("thu_muc_game") or "").strip()
+            if thu_muc and cau_hinh.la_thu_muc_game(thu_muc):
+                try:
+                    so = cai_dat_game.chuan_bi_thu_muc_game(thu_muc)
+                    if so:
+                        self.in_log(f"Đã cập nhật {so} dòng View_*/FPS trong cfg/pfc game")
+                except OSError:
+                    pass
+            for luong in self.cac_luong.values():
+                luong.da_cai_dat_game.discard("giam_do_hoa")
+                if luong.ten and luong.dang_trong_game:
+                    luong.cai_dat_game(cau_hinh.chung())
+        return True
 
     def doi_cai_dat_game(self, khoa):
         bat = self.bien_cai_dat_game[khoa].get()
@@ -2186,10 +2249,21 @@ class UngDung:
                     + (" (các game đang mở cũng làm ngay)" if bat else " (không tự bật lại những gì đã đổi)"))
         if bat:
             chung = cau_hinh.chung()
+            if khoa in ("giam_do_hoa", "tat_het_hieu_ung"):
+                thu_muc = (cau_hinh.doc_tai_khoan().get("thu_muc_game") or "").strip()
+                if thu_muc and cau_hinh.la_thu_muc_game(thu_muc):
+                    try:
+                        so = cai_dat_game.chuan_bi_thu_muc_game(thu_muc, chung)
+                        if so:
+                            self.in_log(f"Đã cập nhật {so} dòng cfg/pfc game")
+                    except OSError:
+                        pass
             for luong in self.cac_luong.values():
                 luong.da_cai_dat_game.discard(khoa)
                 if luong.ten and luong.dang_trong_game:
                     luong.cai_dat_game(chung)
+                    if khoa == "tat_het_hieu_ung":
+                        luong.duy_tri_hieu_ung(chung, doi_map=True)
 
     def _tao_tab_chien_dau(self, so_tay):
         tab = self._tab_cuon(so_tay, "Chiến đấu")
@@ -5230,6 +5304,8 @@ class UngDung:
             self.in_log(f"Cửa sổ game của {luong.ten} đã đóng")
 
     def ve_lai_bang(self):
+        if cac_cua_so_da_an():
+            duy_tri_an()
         so_bat = so_chuyen_sinh = 0
         da_an = cac_cua_so_da_an()
         tieu_de_an = "Hiện" if da_an else "Ẩn"

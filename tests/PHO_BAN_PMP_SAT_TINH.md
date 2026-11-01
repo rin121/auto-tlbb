@@ -121,7 +121,7 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 
 | ID | Bước | Kỳ vọng |
 |----|------|---------|
-| CFG-01 | Bật giảm đồ họa, mở game mới | `System.cfg` / `.pfc` View_* thấp; trong game log giảm đồ họa |
+| CFG-01 | Bật giảm đồ họa, mở game mới | `System.cfg` / `.pfc` View_* thấp + `System_MaxFPS*` (mặc đnh 25/25/5); log giảm đồ họa; bấm Ẩn → ra phó bản/đổi map cửa sổ không hiện lại (duy trì ẩn) |
 | CFG-02 | Sang ngày mới (hoặc xóa đếm) | `hom_nay` reset `so_vong`, `st_vong`, cờ hết lượt |
 
 ---

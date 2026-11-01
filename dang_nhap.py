@@ -378,7 +378,7 @@ def mo_game(thu_muc_game, ten_dang_nhap=None):
     try:
         import cai_dat_game
         import cau_hinh
-        if cau_hinh.chung().get("giam_do_hoa"):
+        if cau_hinh.chung().get("giam_do_hoa") or cau_hinh.chung().get("tat_het_hieu_ung"):
             cai_dat_game.chuan_bi_thu_muc_game(thu_muc_game)
     except OSError:
         pass

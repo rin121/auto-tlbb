@@ -6,7 +6,7 @@ Làm giống nút Duyệt của bảng Cài đặt âm thanh (SoundSetup.lua: Va
 (các game dùng chung file cấu hình trong thư mục game) thì không đổi gì.
 
 Trước khi mở Game.exe (nếu bật giảm đồ họa): chỉnh Bin/System.cfg, Accounts/System.cfg và *.pfc cho các
-biến View_* còn sót (hiệu ứng, thời tiết, số mô hình trong profile…).
+biến View_* còn sót (hiệu ứng, thời tiết, số mô hình trong profile…) và System_MaxFPS* (tab Cài đặt).
 """
 
 import os
@@ -72,6 +72,61 @@ DO_HOA_MAC_DINH = (("dxyy", 2), ("wtdh", 2), ("ksfw", 2), ("wldx", 1), ("sdh", 1
 DO_HOA_TICK_MAC_DINH = (("dxgg", 1), ("rwgg", 1))
 DO_HOA_BIEN_MAC_DINH = (("View_PiFeng", "1"),)
 
+# Tắt hết hiệu ứng: slider/check ViewSetup (hình động wtdh, phát sáng qpfg/rwyy…) + biến View_* hiệu ứng/skill.
+HIeu_UNG_SLIDER = (("wtdh", 0), ("dxyy", 0), ("rwyy", 0), ("dbxs", 0), ("cy", 0), ("ksfw", 0), ("wldx", 0),
+                   ("qpfg", 0), ("sdh", 0), ("miwu", 0), ("fhj", 0))
+HIeu_UNG_CHECK = (("dxgg", 0), ("rwgg", 0))
+HIeu_UNG_BIEN = (
+    ("View_PiFeng", "0"),
+    ("View_EffectLevel", "0"),
+    ("View_EffectQuality", "0"),
+    ("View_ModelEffect", "0"),
+    ("View_ModelShowLogic", "0"),
+    ("View_WalkEffect", "0"),
+    ("View_WaterMove", "0"),
+    ("View_Weather", "0"),
+    ("View_ObjectMove", "0"),
+    ("View_UpdateQuality", "0"),
+    ("View_Specular", "0"),
+    ("View_HumanHighLight", "0"),
+    ("View_Floodlight", "0"),
+    ("View_FullScreenLight", "0"),
+    ("View_HDRFilter", "0"),
+    ("View_GroundHighLight", "0"),
+    ("View_Aplomb", "0"),
+    ("View_Transparency", "0"),
+    ("View_HumanLightmap", "0"),
+    ("View_LightmapQuality", "0"),
+)
+GIAY_GIUA_AP_HIEU_UNG = 30
+
+FPS_MAC_DINH = {"fps_max": 25, "fps_front": 25, "fps_back": 5}
+FPS_KHOA_CFG = ("System_MaxFPS", "System_MaxFPS_Front", "System_MaxFPS_Back")
+
+
+def _fps_so(chung, khoa):
+    try:
+        gia_tri = int(chung.get(khoa, FPS_MAC_DINH[khoa]))
+    except (TypeError, ValueError):
+        gia_tri = FPS_MAC_DINH[khoa]
+    return max(5, min(100, gia_tri))
+
+
+def fps_tu_cau_hinh(chung=None):
+    """Giá trị System_MaxFPS* (string) từ cau_hinh.chung()."""
+    if chung is None:
+        import cau_hinh
+        chung = cau_hinh.chung()
+    return {FPS_KHOA_CFG[0]: str(_fps_so(chung, "fps_max")),
+            FPS_KHOA_CFG[1]: str(_fps_so(chung, "fps_front")),
+            FPS_KHOA_CFG[2]: str(_fps_so(chung, "fps_back"))}
+
+
+def cap_do_hoa_fps(chung=None):
+    cap = dict(DO_HOA_BIEN)
+    cap.update(fps_tu_cau_hinh(chung))
+    return cap
+
 
 def _cap_nhat_tep_cfg(duong_dan, cap):
     """Ghi các biến View_* trong file .cfg/.pfc; trả về số dòng đã đổi hoặc thêm."""
@@ -114,14 +169,27 @@ def _cap_nhat_tep_cfg(duong_dan, cap):
     return doi
 
 
-def chuan_bi_thu_muc_game(thu_muc_game):
+def cap_hieu_ung_cfg():
+    return dict(HIeu_UNG_BIEN)
+
+
+def chuan_bi_thu_muc_game(thu_muc_game, chung=None):
     """
-    Trước khi chạy Game.exe: hạ View_* trong Bin/System.cfg, Accounts/System.cfg và mọi *.pfc.
+    Trước khi chạy Game.exe: hạ View_* / System_MaxFPS* trong Bin/System.cfg, Accounts/System.cfg và mọi *.pfc.
     Game đang chạy thì không gọi (file có thể bị khóa).
     """
+    import cau_hinh
+    if chung is None:
+        chung = cau_hinh.chung()
     if not thu_muc_game:
         return 0
-    cap = dict(DO_HOA_BIEN)
+    cap = {}
+    if chung.get("giam_do_hoa"):
+        cap.update(cap_do_hoa_fps(chung))
+    elif chung.get("tat_het_hieu_ung"):
+        cap.update(cap_hieu_ung_cfg())
+    if not cap:
+        return 0
     tong = 0
     for duong_dan in (
         os.path.join(thu_muc_game, "Bin", "System.cfg"),
@@ -135,28 +203,47 @@ def chuan_bi_thu_muc_game(thu_muc_game):
     return tong
 
 
-def ma_ap_dung(tat_am_thanh, giam_do_hoa):
-    """Code Lua đặt các mục đang khác; trả về số mục đã đổi."""
-    dong = ['local doi = 0',
+def _ma_lua_ap_dung():
+    return ['local doi = 0',
             'local function bien(k, v) if Variable:GetVariable(k) ~= v then '
             'Variable:SetVariable(k, v, 0) doi = doi + 1 end end',
             'local function hien_thi(k, v) if tonumber(SystemSetup:View_GetData(k)) ~= v then '
             'SystemSetup:View_SetData(k, v) doi = doi + 1 end end']
+
+
+def ma_ap_dung_hieu_ung():
+    """Lua: tắt tối đa hiệu ứng client (ViewSetup + View_*)."""
+    dong = _ma_lua_ap_dung()
+    dong += [f'hien_thi("{k}", {v})' for k, v in HIeu_UNG_SLIDER]
+    dong += [f'hien_thi("{k}", {v})' for k, v in HIeu_UNG_CHECK]
+    dong += [f'bien("{k}", "{v}")' for k, v in HIeu_UNG_BIEN]
+    dong.append('return tostring(doi)')
+    return "\n".join(dong)
+
+
+def ap_dung_hieu_ung(lua):
+    return int(lua.chay(ma_ap_dung_hieu_ung()) or b"0")
+
+
+def ma_ap_dung(tat_am_thanh, giam_do_hoa, chung=None):
+    """Code Lua đặt các mục đang khác; trả về số mục đã đổi."""
+    dong = _ma_lua_ap_dung()
     if tat_am_thanh:
         dong += [f'bien("{k}", "{v}")' for k, v in AM_THANH]
     if giam_do_hoa:
         dong += [f'hien_thi("{k}", {v})' for k, v in DO_HOA]
         dong += [f'hien_thi("{k}", {v})' for k, v in DO_HOA_TICK]
         dong += [f'bien("{k}", "{v}")' for k, v in DO_HOA_BIEN]
+        dong += [f'bien("{k}", "{v}")' for k, v in fps_tu_cau_hinh(chung).items()]
     dong.append('return tostring(doi)')
     return "\n".join(dong)
 
 
-def ap_dung(lua, tat_am_thanh, giam_do_hoa):
+def ap_dung(lua, tat_am_thanh, giam_do_hoa, chung=None):
     """Trả về số mục đã đổi. Lỗi gọi game thì ném LoiLua."""
     if not (tat_am_thanh or giam_do_hoa):
         return 0
-    return int(lua.chay(ma_ap_dung(tat_am_thanh, giam_do_hoa)) or b"0")
+    return int(lua.chay(ma_ap_dung(tat_am_thanh, giam_do_hoa, chung)) or b"0")
 
 
 def ma_khoi_phuc_do_hoa():

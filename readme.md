@@ -120,3 +120,6 @@ powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1"
 
 # license
 .\.venv\Scripts\python.exe dong_goi\tao_license.py
+
+# đăng ký tk
+python scripts\auto_register_tlbbnhatkiem.py

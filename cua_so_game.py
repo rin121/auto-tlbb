@@ -29,6 +29,7 @@ KICH_THUOC_TOI_THIEU = (400, 300)
 # thì lần mở sau hiện lại được, không để game chạy mà không thấy cửa sổ.
 DUONG_DAN_CUA_SO_DA_AN = os.path.join(THU_MUC_APP, "cua_so_da_an.json")
 _cua_so_da_an = {}
+_pid_can_an = set()
 _khoa_an = threading.Lock()
 
 
@@ -132,13 +133,45 @@ def cac_cua_so_da_an():
         return set(_cua_so_da_an)
 
 
+def duy_tri_an():
+    """Re-hide cửa sổ game đã ẩn (client tự ShowWindow sau đổi map / đăng nhập). Trả về số lần gọi SW_HIDE."""
+    so = 0
+    pids = set()
+    with _khoa_an:
+        for hwnd, pid in list(_cua_so_da_an.items()):
+            if not _con_la_cua_so_da_an(hwnd, pid):
+                del _cua_so_da_an[hwnd]
+                continue
+            if win32gui.IsWindowVisible(hwnd):
+                win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+                so += 1
+        pids = set(_pid_can_an)
+    if pids:
+        for cua_so in tim_cua_so_game():
+            hwnd, pid = cua_so["hwnd"], cua_so["pid"]
+            if pid not in pids:
+                continue
+            with _khoa_an:
+                if hwnd not in _cua_so_da_an:
+                    _cua_so_da_an[hwnd] = pid
+            if win32gui.IsWindowVisible(hwnd):
+                win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+                so += 1
+    if so:
+        with _khoa_an:
+            _luu_cua_so_da_an()
+    return so
+
+
 def an_cua_so(cac_hwnd):
     """Ẩn các cửa sổ game (không đổi vị trí, game vẫn chạy). Trả về số cửa sổ đã ẩn."""
     so = 0
     with _khoa_an:
         for hwnd in cac_hwnd:
             if win32gui.IsWindow(hwnd) and win32gui.IsWindowVisible(hwnd):
-                _cua_so_da_an[hwnd] = _pid_cua(hwnd)
+                pid = _pid_cua(hwnd)
+                _cua_so_da_an[hwnd] = pid
+                _pid_can_an.add(pid)
                 win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
                 so += 1
         _luu_cua_so_da_an()
@@ -154,6 +187,7 @@ def hien_cua_so():
                 win32gui.ShowWindow(hwnd, win32con.SW_SHOWNA)
                 so += 1
         _cua_so_da_an.clear()
+        _pid_can_an.clear()
         _luu_cua_so_da_an()
     return so
 
