@@ -1,5 +1,7 @@
 """
-Điều khiển Ác Tặc trên cửa sổ GAuto TLBB 2.5 (GAuto_2025.exe, ứng dụng WinForms 32-bit) — không bấm chuột thật:
+Điều khiển Ác Tặc trên cửa sổ GAuto TLBB 2.5 (GAuto_2025.exe, ứng dụng WinForms 32-bit). Bấm bằng chuột ảo (gửi
+WM_LBUTTONDOWN / WM_LBUTTONUP thẳng vào ô, GAuto nổi lên trên cùng không lấy focus, con trỏ thật không động); ô nào
+không ăn chuột ảo thì tự dùng chuột thật (mượn chuột ~1 giây):
     Bảng nhân vật   : SysListView32 con trực tiếp của cửa sổ chính; MSAA: phần tử con 1..n tên "caychay10 (TL/123)",
                       accSelect chọn dòng (GAuto đổi cả tab cài đặt sang nhân vật đó).
     Tab cài đặt     : SysTabControl32; tab chỉ tạo control khi mở lần đầu. Chuyển tab bằng phím mũi tên gửi thẳng vào
@@ -8,8 +10,8 @@
                       "Chờ party (chống kẹt)", "Chạy pathpoints"; ô tích WinForms tự vẽ nên BM_GETCHECK luôn 0,
                       đọc / bấm bằng MSAA (trạng thái CHECKED, hành động mặc định Check / Uncheck).
     Map             : ô COMBOBOX trong khung, GAuto lưu riêng từng nhân vật. Đổi bằng lệnh (CB_SETCURSEL, phím gửi
-                      thẳng) thì GAuto trả lại map cũ, nên chọn bằng chuột thật: đưa GAuto lên trước, bấm nút thả
-                      xuống, bấm dòng map (~1 giây, người dùng đừng động chuột), đọc lại CB_GETCURSEL / CB_GETLBTEXT.
+                      thẳng) thì GAuto trả lại map cũ, nên chọn bằng chuột: bấm nút thả xuống, bấm dòng map, đọc lại
+                      CB_GETCURSEL sau GIAY_GIU_MAP giây (GAuto trả lại map cũ thì làm lại bằng chuột thật).
 GAuto tự nâng quyền Admin khi mở, Windows chặn app thường điều khiển app Admin: AutoHoc phải chạy quyền Admin.
 """
 import contextlib
@@ -17,6 +19,7 @@ import ctypes
 import os
 import re
 import sys
+import threading
 import time
 
 import psutil
@@ -56,6 +59,13 @@ GIAY_CHO_O_TICH = 2.0
 GIAY_CHO_GAUTO_NAP = 5
 # Sau khi tích «Ác Tặc», canh thêm chừng này giây phòng GAuto nạp lại muộn xóa mất ô vừa tích.
 GIAY_CANH_NAP_LAI = 8
+# Bấm GAuto bằng chuột ảo (PostMessage, không di con trỏ / không lấy focus); không ăn thì tự dùng chuột thật.
+CHUOT_AO = True
+# GAuto có lúc trả lại map cũ ngay sau khi đổi: chờ chừng này giây rồi đọc lại.
+GIAY_GIU_MAP = 1.5
+_KHOA_CHUOT_AO = threading.Lock()
+_DA_BAO_CHUOT_THAT = set()
+_CHO_BAO = []
 
 
 class LoiGautoAcTac(Exception):
@@ -327,8 +337,8 @@ def chon_dong(hwnd, id_dong, ten_nv=None):
         # Chọn bằng MSAA có lúc chỉ đổi dòng sáng mà GAuto vẫn giữ cài đặt nhân vật cũ: bấm chuột thật vào dòng.
         if not cho_xong(GIAY_CHO_CHON_MSAA):
             for _ in range(2):
-                _bam_dong_chuot(hwnd, o.vi_tri(id_dong))
-                if cho_xong(GIAY_CHO_CHON_DONG / 2):
+                _bam_dong_chuot(hwnd, o.vi_tri(id_dong), xong)
+                if cho_xong(0.5):
                     break
         if not xong():
             raise LoiGautoAcTac(f"không chọn được dòng «{ten_nv}» trong bảng GAuto (GAuto đang cài cho "
@@ -427,20 +437,17 @@ def da_tich(hwnd_o):
 
 def dat_o_chuot(hwnd, hwnd_o, bat, ten):
     """
-    Tích / bỏ tích ô hwnd_o trong khung Ác Tặc bằng chuột thật: tích qua MSAA thì ô hiện ☑ nhưng GAuto không chạy
-    Ác Tặc (phải bấm tay lại mới chạy). True nếu đã bấm.
+    Tích / bỏ tích ô hwnd_o trong khung Ác Tặc bằng chuột (ảo, không ăn thì thật): tích qua MSAA thì ô hiện ☑ nhưng
+    GAuto không chạy Ác Tặc (phải bấm tay lại mới chạy). Trả về "ảo" / "thật" nếu đã bấm, False nếu ô đã đúng.
     """
     if da_tich(hwnd_o) == bat:
         return False
     l, t, r, b = win32gui.GetWindowRect(hwnd_o)
-    with _muon_chuot(hwnd, f"{'tích' if bat else 'bỏ tích'} ô «{ten}»"):
-        _bam_chuot(hwnd, (l + min(8, (r - l) // 2), (t + b) // 2), f"ô «{ten}»")
-        het = time.time() + GIAY_CHO_O_TICH
-        while da_tich(hwnd_o) != bat and time.time() < het:
-            time.sleep(0.1)
+    cach = _bam_ao_hoac_that(hwnd, hwnd_o, (l + min(8, (r - l) // 2), (t + b) // 2), f"ô «{ten}»",
+                             lambda: da_tich(hwnd_o) == bat)
     if da_tich(hwnd_o) != bat:
         raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô «{ten}» trên GAuto")
-    return True
+    return cach
 
 
 def doc_map(hwnd_combo):
@@ -477,6 +484,81 @@ class _ComboInfo(ctypes.Structure):
                 ("hwndList", ctypes.c_void_p)]
 
 
+@contextlib.contextmanager
+def _noi_len(hwnd):
+    """Đưa GAuto lên trên cùng mà không lấy focus (chuột ảo cần ô không bị che); xong trả về dưới cửa sổ đang dùng."""
+    co = win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE
+    da_tren_cung = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) & win32con.WS_EX_TOPMOST
+    thu_nho = win32gui.IsIconic(hwnd)
+    dang_dung = win32gui.GetForegroundWindow()
+    if thu_nho:
+        win32gui.ShowWindow(hwnd, win32con.SW_SHOWNOACTIVATE)
+    if not da_tren_cung:
+        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, co)
+    try:
+        yield
+    finally:
+        try:
+            if not da_tren_cung:
+                win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, co)
+                if dang_dung and dang_dung != hwnd and win32gui.IsWindow(dang_dung):
+                    win32gui.SetWindowPos(hwnd, dang_dung, 0, 0, 0, 0, co)
+            if thu_nho:
+                win32gui.ShowWindow(hwnd, win32con.SW_SHOWMINNOACTIVE)
+        except win32gui.error:
+            pass
+
+
+def _bam_ao(hwnd_dich, diem):
+    """Chuột ảo: gửi nhấn / nhả chuột trái thẳng vào hwnd_dich tại điểm màn hình diem (không di con trỏ thật)."""
+    x, y = win32gui.ScreenToClient(hwnd_dich, diem)
+    lp = win32api.MAKELONG(x & 0xFFFF, y & 0xFFFF)
+    win32gui.PostMessage(hwnd_dich, win32con.WM_MOUSEMOVE, 0, lp)
+    win32gui.PostMessage(hwnd_dich, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, lp)
+    time.sleep(0.05)
+    win32gui.PostMessage(hwnd_dich, win32con.WM_LBUTTONUP, 0, lp)
+
+
+def _cho_dk(dk, giay):
+    het = time.time() + giay
+    while not dk() and time.time() < het:
+        time.sleep(0.1)
+    return dk()
+
+
+def _bao_chuot_that(cho):
+    if cho not in _DA_BAO_CHUOT_THAT:
+        _DA_BAO_CHUOT_THAT.add(cho)
+        _CHO_BAO.append(f"GAuto không nhận chuột ảo ở {cho}, dùng chuột thật")
+
+
+def rut_bao_chuot(in_log):
+    """Ghi các lần phải chuyển sang chuột thật (mỗi loại ô báo một lần mỗi phiên)."""
+    while _CHO_BAO:
+        chu = _CHO_BAO.pop(0)
+        if in_log:
+            in_log(chu)
+
+
+def _bam_ao_hoac_that(hwnd, hwnd_dich, diem, cho, da_xong, giay=GIAY_CHO_O_TICH):
+    """
+    Bấm chuột ảo vào hwnd_dich; da_xong() không thành True trong giay giây thì bấm chuột thật như cũ.
+    Trả về "ảo" / "thật" (cách đã ăn).
+    """
+    if CHUOT_AO:
+        with _KHOA_CHUOT_AO, _noi_len(hwnd):
+            _bam_ao(hwnd_dich, diem)
+            if _cho_dk(da_xong, giay):
+                return "ảo"
+        if da_xong():
+            return "ảo"
+        _bao_chuot_that(cho)
+    with _muon_chuot(hwnd, cho):
+        _bam_chuot(hwnd, diem, cho)
+        _cho_dk(da_xong, giay)
+    return "thật"
+
+
 def _bam_chuot(hwnd_goc, diem, cho="ô Map"):
     duoi = win32gui.WindowFromPoint(diem)
     if hwnd_goc not in (duoi, win32gui.GetAncestor(duoi, win32con.GA_ROOT), win32gui.GetWindow(duoi, win32con.GW_OWNER)):
@@ -507,13 +589,11 @@ def _muon_chuot(hwnd, viec):
                     pass
 
 
-def _bam_dong_chuot(hwnd, vi_tri):
-    """Bấm chuột thật vào chữ tên nhân vật của dòng (tránh ô tích đầu dòng) trong bảng nhân vật GAuto."""
+def _bam_dong_chuot(hwnd, vi_tri, da_xong):
+    """Bấm chuột (ảo, không ăn thì thật) vào chữ tên nhân vật của dòng (tránh ô tích đầu dòng) trong bảng GAuto."""
     l, t, w, h = vi_tri
     diem = (l + max(30, min(w // 2, 80)), t + h // 2)
-    with _muon_chuot(hwnd, "chọn nhân vật"):
-        _bam_chuot(hwnd, diem, "bảng nhân vật")
-        time.sleep(0.3)
+    return _bam_ao_hoac_that(hwnd, _bang_nhan_vat(hwnd), diem, "dòng nhân vật", da_xong, GIAY_CHO_CHON_DONG / 2)
 
 
 def _diem_o_dau_dong(vi_tri):
@@ -524,28 +604,62 @@ def _diem_o_dau_dong(vi_tri):
 
 def dat_dau_dong(hwnd, cac_ten, bat):
     """
-    Tích / bỏ tích ô đầu dòng của các nhân vật cac_ten có trong bảng GAuto, bằng chuột thật (MSAA không đổi được ô
-    này). Trả về tên các dòng đã đổi.
+    Tích / bỏ tích ô đầu dòng của các nhân vật cac_ten có trong bảng GAuto, bằng chuột (ảo, không ăn thì thật; MSAA
+    không đổi được ô này). Trả về tên các dòng đã đổi.
     """
     can = [(i, ten) for i, ten, _, tich in danh_sach_nhan_vat(hwnd)
            if tich != bat and any(_khop_ten(ten, t) for t in cac_ten)]
     if not can:
         return []
     da_doi = []
-    with _msaa(_bang_nhan_vat(hwnd)) as o, _muon_chuot(hwnd, "tích ô đầu dòng nhân vật"):
+    bang = _bang_nhan_vat(hwnd)
+    with _msaa(bang) as o:
         for i, ten in can:
-            _bam_chuot(hwnd, _diem_o_dau_dong(o.vi_tri(i)), "bảng nhân vật")
-            het = time.time() + GIAY_CHO_O_TICH
-            while o.da_tich(i) != bat and time.time() < het:
-                time.sleep(0.1)
+            _bam_ao_hoac_that(hwnd, bang, _diem_o_dau_dong(o.vi_tri(i)), "ô đầu dòng nhân vật",
+                              lambda: o.da_tich(i) == bat)
             if o.da_tich(i) != bat:
                 raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô đầu dòng «{ten}» trên GAuto")
             da_doi.append(ten)
     return da_doi
 
 
+def _dang_tha_xuong(hwnd_combo):
+    return bool(win32gui.SendMessage(hwnd_combo, win32con.CB_GETDROPPEDSTATE, 0, 0))
+
+
+def _chon_dong_map(hwnd_combo, info, dich, bam):
+    """Mở danh sách ô Map, bấm dòng dich; bam(hwnd_dich, diem) là chuột ảo hoặc thật. False nếu danh sách không mở."""
+    try:
+        bl, bt, br, bb = info.rcButton
+        bam(hwnd_combo, win32gui.ClientToScreen(hwnd_combo, ((bl + br) // 2, (bt + bb) // 2)))
+        if not _cho_dk(lambda: _dang_tha_xuong(hwnd_combo), GIAY_CHO_THA_XUONG):
+            return False
+        win32gui.SendMessage(hwnd_combo, win32con.CB_SETTOPINDEX, dich, 0)
+        ds = info.hwndList
+        dau = win32gui.SendMessage(ds, LB_GETTOPINDEX, 0, 0)
+        cao = win32gui.SendMessage(hwnd_combo, win32con.CB_GETITEMHEIGHT, 0, 0)
+        l, _, r, _ = win32gui.GetClientRect(ds)
+        bam(ds, win32gui.ClientToScreen(ds, ((l + r) // 2, (dich - dau) * cao + cao // 2)))
+        time.sleep(0.5)
+        return True
+    finally:
+        if _dang_tha_xuong(hwnd_combo):
+            win32gui.SendMessage(hwnd_combo, win32con.CB_SHOWDROPDOWN, 0, 0)
+
+
+def _giu_map(hwnd_combo, dich):
+    """Đã đúng map dich và GAuto không trả lại map cũ sau GIAY_GIU_MAP giây."""
+    if win32gui.SendMessage(hwnd_combo, win32con.CB_GETCURSEL, 0, 0) != dich:
+        return False
+    time.sleep(GIAY_GIU_MAP)
+    return win32gui.SendMessage(hwnd_combo, win32con.CB_GETCURSEL, 0, 0) == dich
+
+
 def chon_map(hwnd, hwnd_combo, ten_map):
-    """Chọn map ten_map trong ô Map GAuto bằng chuột thật. True nếu đã đổi, False nếu đang đúng map."""
+    """
+    Chọn map ten_map trong ô Map GAuto: mở danh sách + bấm dòng bằng chuột ảo, không ăn thì chuột thật.
+    Trả về "ảo" / "thật" nếu đã đổi, False nếu đang đúng map.
+    """
     cac = cac_map(hwnd_combo)
     dich = vi_tri_map(cac, ten_map)
     if dich is None:
@@ -555,28 +669,19 @@ def chon_map(hwnd, hwnd_combo, ten_map):
     info = _ComboInfo(cbSize=ctypes.sizeof(_ComboInfo))
     if not ctypes.windll.user32.GetComboBoxInfo(hwnd_combo, ctypes.byref(info)):
         raise LoiGautoAcTac("không đọc được ô Map của GAuto")
+    if CHUOT_AO:
+        with _KHOA_CHUOT_AO, _noi_len(hwnd):
+            _chon_dong_map(hwnd_combo, info, dich, _bam_ao)
+        if _giu_map(hwnd_combo, dich):
+            return "ảo"
+        _bao_chuot_that("ô Map")
     with _muon_chuot(hwnd, "chọn map"):
-        try:
-            bl, bt, br, bb = info.rcButton
-            _bam_chuot(hwnd, win32gui.ClientToScreen(hwnd_combo, ((bl + br) // 2, (bt + bb) // 2)))
-            het = time.time() + GIAY_CHO_THA_XUONG
-            while not win32gui.SendMessage(hwnd_combo, win32con.CB_GETDROPPEDSTATE, 0, 0) and time.time() < het:
-                time.sleep(0.05)
-            if not win32gui.SendMessage(hwnd_combo, win32con.CB_GETDROPPEDSTATE, 0, 0):
-                raise LoiGautoAcTac("bấm ô Map GAuto mà danh sách map không mở")
-            win32gui.SendMessage(hwnd_combo, win32con.CB_SETTOPINDEX, dich, 0)
-            ds = info.hwndList
-            dau = win32gui.SendMessage(ds, LB_GETTOPINDEX, 0, 0)
-            cao = win32gui.SendMessage(hwnd_combo, win32con.CB_GETITEMHEIGHT, 0, 0)
-            l, _, r, _ = win32gui.GetClientRect(ds)
-            _bam_chuot(ds, win32gui.ClientToScreen(ds, ((l + r) // 2, (dich - dau) * cao + cao // 2)))
-            time.sleep(0.5)
-        finally:
-            if win32gui.SendMessage(hwnd_combo, win32con.CB_GETDROPPEDSTATE, 0, 0):
-                win32gui.SendMessage(hwnd_combo, win32con.CB_SHOWDROPDOWN, 0, 0)
+        if not _chon_dong_map(hwnd_combo, info, dich,
+                              lambda h, diem: _bam_chuot(hwnd if h == hwnd_combo else h, diem)):
+            raise LoiGautoAcTac("bấm ô Map GAuto mà danh sách map không mở")
     if win32gui.SendMessage(hwnd_combo, win32con.CB_GETCURSEL, 0, 0) != dich:
         raise LoiGautoAcTac(f"chọn map «{ten_map}» trên GAuto không ăn (đang «{doc_map(hwnd_combo)}»)")
-    return True
+    return "thật"
 
 
 def _chon_nhan_vat(hwnd, ten_nv, chi_so_dong):
@@ -634,6 +739,8 @@ def dat_cai_dat_ac_tac(hwnd, at, ten_nv, chi_so_dong=None, cache=None, ten_map=N
     except LoiGautoAcTac as loi:
         loi.da_thao_tac = True
         raise
+    finally:
+        rut_bao_chuot(in_log)
 
 
 def _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log):
@@ -650,11 +757,14 @@ def _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log):
 
 def tat_ac_tac(hwnd, ten_nv, chi_so_dong=None, cache=None, in_log=None):
     """Bỏ tích «Ác Tặc» của ten_nv một lần; ô đầu dòng AutoHoc đã tự tích (cache["dau_dong"]) thì bỏ tích lại."""
-    if cache is not None and cache.get("dau_dong"):
-        _doi_dau_dong(hwnd, cache.pop("dau_dong"), False, in_log)
-    o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
-    _dam_bao_dang_cai(hwnd, ten_nv)
-    dat_o_chuot(hwnd, o[O_AC_TAC], False, O_AC_TAC)
+    try:
+        if cache is not None and cache.get("dau_dong"):
+            _doi_dau_dong(hwnd, cache.pop("dau_dong"), False, in_log)
+        o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
+        _dam_bao_dang_cai(hwnd, ten_nv)
+        dat_o_chuot(hwnd, o[O_AC_TAC], False, O_AC_TAC)
+    finally:
+        rut_bao_chuot(in_log)
 
 
 def test_gauto(duong_dan, ten_nv, in_log, bat_thu=False, giay_bat_thu=3, cac_map_autohoc=()):
@@ -698,15 +808,17 @@ def test_gauto(duong_dan, ten_nv, in_log, bat_thu=False, giay_bat_thu=3, cac_map
         map_dau = next((m for m in cac_map_autohoc if "map" in o and vi_tri_map(cac_map(o["map"]), m) is not None),
                        None)
         if map_dau:
-            in_log(f"Test GAuto: 6) chọn map «{map_dau}» (map đầu AutoHoc) trên GAuto bằng chuột — đừng động chuột")
-            chon_map(hwnd, o["map"], map_dau)
-            in_log(f"Test GAuto:    map GAuto giờ là «{doc_map(o['map'])}»")
+            in_log(f"Test GAuto: 6) chọn map «{map_dau}» (map đầu AutoHoc) trên GAuto")
+            cach = chon_map(hwnd, o["map"], map_dau)
+            in_log(f"Test GAuto:    map GAuto giờ là «{doc_map(o['map'])}»"
+                   + (f" (chuột {cach})" if cach else " (đã đúng sẵn)"))
         da_bat = da_tich(o[O_AC_TAC])
         in_log(f"Test GAuto: 7) {'bỏ tích' if da_bat else 'tích'} thử ô «{O_AC_TAC}» {giay_bat_thu} giây rồi trả lại")
-        dat_o_chuot(hwnd, o[O_AC_TAC], not da_bat, O_AC_TAC)
+        cach = dat_o_chuot(hwnd, o[O_AC_TAC], not da_bat, O_AC_TAC)
         time.sleep(giay_bat_thu)
         dat_o_chuot(hwnd, o[O_AC_TAC], da_bat, O_AC_TAC)
-        in_log(f"Test GAuto:    đổi được, đã trả ô «{O_AC_TAC}» về {'☑' if da_bat else '☐'}")
+        in_log(f"Test GAuto:    đổi được bằng chuột {cach}, đã trả ô «{O_AC_TAC}» về {'☑' if da_bat else '☐'}")
+    rut_bao_chuot(in_log)
     in_log("Test GAuto: OK — AutoHoc điều khiển được GAuto")
     return True
 

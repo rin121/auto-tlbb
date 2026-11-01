@@ -60,7 +60,7 @@ from chien_dau import (CAC_PHIM_SKILL, KY_NANG_VE_THANH, MAU_HET_AN_THAN, MON_PH
                        ma_dung_ky_nang_theo_dinh_nghia)
 from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, hien_cua_so, hien_lai_cua_so_an_lan_truoc,
                          tim_cua_so_game)
-from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap
+from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap, con_chay
 import proxy_mang
 import proxy_broker_ui
 from game_api import Game
@@ -3439,7 +3439,7 @@ class UngDung:
                   foreground="gray").pack(side="left", padx=(8, 0))
 
         self.bien_nhan_do_tan_thu = tk.BooleanVar(value=tuy_chon["nhan_do_tan_thu"])
-        ttk.Checkbutton(khung, text="Vào từng nhân vật nhận đồ tân thủ (Thiên Long, Vàng + ĐT, mang đồ, dùng Hộp "
+        ttk.Checkbutton(khung, text="Vào từng nhân vật nhận đồ tân thủ (Tiêu Dao, Vàng + ĐT, mang đồ, dùng Hộp "
                                     "Point, cộng Nội Lực)", variable=self.bien_nhan_do_tan_thu).pack(anchor="w",
                                                                                                     pady=(4, 0))
         dong = ttk.Frame(khung)
@@ -3814,7 +3814,8 @@ class UngDung:
 
         ttk.Label(tab, text="Phó bản — cột XV: tham gia xoay vòng (chỉ mở game khi bấm Bắt đầu ở tab Phó bản). Train — "
                             "cột Bật: bật auto train. Double-click dòng tài khoản (không phải cột XV/Bật) để mở game và "
-                            "đăng nhập ngay (mạng qua Proxifier + Proxy Broker bên dưới). Tự mở lại khi diss: bảng Train, "
+                            "đăng nhập ngay; nếu chưa có nhân vật thì tự chạy tạo nhân vật + nhận đồ / nâng cấp (tab Tạo "
+                            "nhân vật). Mạng qua Proxifier + Proxy Broker bên dưới. Tự mở lại khi diss: bảng Train, "
                             "tích Bật + ô bên trên. Mỗi tài khoản chỉ nằm một bảng. Game train không bị tắt khi chạy xoay vòng "
                             "phó bản. Nhân vật để trống thì tới màn chọn nhân vật; vào game rồi thì tự ghi tên. Sửa tay "
                             "tai_khoan.json: tai_khoan_pho_ban / tai_khoan_train (mật khẩu chữ thường).",
@@ -3855,6 +3856,9 @@ class UngDung:
         dong_pf = ttk.Frame(khung_pf)
         dong_pf.grid(row=4, column=0, columnspan=3, sticky="w", pady=(4, 0))
         ttk.Button(dong_pf, text="Lưu Proxifier", command=self.luu_proxy_broker).pack(side="left")
+        self.nut_pf_tim_gan = ttk.Button(
+            dong_pf, text="Tìm và gán proxy mới", command=self.tim_gan_proxy_moi)
+        self.nut_pf_tim_gan.pack(side="left", padx=4)
         ttk.Button(dong_pf, text="Chạy Proxy Broker", command=self.chay_proxy_broker).pack(side="left", padx=4)
         ttk.Button(dong_pf, text="Dừng Broker", command=self.dung_proxy_broker).pack(side="left", padx=4)
         self.nhan_pf_broker_led = ttk.Label(khung_pf, text="○ Broker: chưa chạy", font=("Segoe UI", 9, "bold"))
@@ -3866,6 +3870,7 @@ class UngDung:
         self._pf_health_truoc = None
         self._pf_gan_luc_da_login = None
         self._pf_failover_luc_truoc = None
+        self._pf_dang_tim_gan = False
         self.root.after(500, self.cap_nhat_trang_thai_proxy_broker)
         self.root.after(2000, self._lap_cap_nhat_proxy_broker)
 
@@ -4287,10 +4292,38 @@ class UngDung:
         nhan_vat = f" ({tai_khoan['nhan_vat']})" if tai_khoan.get("nhan_vat") else ""
         self._khoi_dong_luong_dang_nhap(
             tai_khoan,
-            ly_do_log=f"[Bấm tài khoản] Mở game và đăng nhập {ten}{nhan_vat}",
+            tu_dong_tao_neu_trong=True,
+            ly_do_log=f"[Bấm tài khoản] Mở game và đăng nhập {ten}{nhan_vat}"
+            + " (nếu chưa có nhân vật sẽ tự tạo + nhận đồ / nâng cấp)",
         )
 
-    def _khoi_dong_luong_dang_nhap(self, tai_khoan, cai_dat=None, ly_do_log=None):
+    def _tuy_chon_tao_nv_tu_cau_hinh(self, cai_dat):
+        t = cai_dat.get("tao_nhan_vat_moi") or {}
+        return {"so_nhan_vat": int(t.get("so_nhan_vat") or 1),
+                "nhan_do_tan_thu": bool(t.get("nhan_do_tan_thu", True)),
+                "dung_ten": True}
+
+    def _khoi_dong_tao_nv_sau_dang_nhap(self, luong, cai_dat):
+        tk = luong.tai_khoan
+        ten = (tk.get("ten_dang_nhap") or "").strip()
+        if self.luong_tao_nv and self.luong_tao_nv.is_alive():
+            self.in_log(f"{ten}: tab Tạo nhân vật đang chạy — không chuyển tự động sau đăng nhập")
+            return
+        hwnd = None
+        if luong.pid and con_chay(luong.pid):
+            hwnd = next((c["hwnd"] for c in tim_cua_so_game() if c["pid"] == luong.pid), None)
+        tuy_chon = self._tuy_chon_tao_nv_tu_cau_hinh(cai_dat)
+        ds = [{"ten_dang_nhap": ten, "mat_khau": tk.get("mat_khau") or ""}]
+        self.trang_thai_tai_khoan[ten] = "Đang tạo nhân vật"
+        self.in_log(
+            f"[Bấm tài khoản] {ten}: chưa có nhân vật — tạo {tuy_chon['so_nhan_vat']} nhân vật"
+            + (", nhận đồ tân thủ / nâng cấp" if tuy_chon["nhan_do_tan_thu"] else "")
+        )
+        self.luong_tao_nv = LuongTaoNhanVat(ds, cai_dat, tuy_chon, self.hang_doi, hwnd=hwnd, giu_game=False)
+        self.luong_tao_nv.start()
+        self.nut_tao_nv.configure(text="Dừng")
+
+    def _khoi_dong_luong_dang_nhap(self, tai_khoan, cai_dat=None, ly_do_log=None, tu_dong_tao_neu_trong=False):
         """Một luồng LuongDangNhap (proxy qua dang_nhap.dieu_khien). Trả về True nếu đã start."""
         ten = (tai_khoan.get("ten_dang_nhap") or "").strip()
         if not ten:
@@ -4321,6 +4354,7 @@ class UngDung:
         self.in_log(ly_do_log or f"Mở game và đăng nhập tài khoản {ten}")
         self.trang_thai_tai_khoan[ten] = "Đang mở game"
         self.cac_luong_dang_nhap[ten] = LuongDangNhap(tai_khoan, cai_dat, self.hang_doi)
+        self.cac_luong_dang_nhap[ten].tu_dong_tao_neu_trong = tu_dong_tao_neu_trong
         self.cac_luong_dang_nhap[ten].start()
         return True
 
@@ -4679,6 +4713,61 @@ class UngDung:
         )
         self.cap_nhat_trang_thai_proxy_broker()
 
+    def tim_gan_proxy_moi(self):
+        if self._pf_dang_tim_gan:
+            return
+        self._ap_dung_phat_hien_proxifier(ghi_log=False)
+        self.luu_proxy_broker()
+        ppx = self.bien_pf_ppx.get().strip()
+        exe = self.bien_pf_exe.get().strip()
+        if not exe or not os.path.isfile(exe):
+            messagebox.showwarning("Proxy Broker", "Chọn Proxifier.exe trước.")
+            return
+        if not ppx or not os.path.isfile(ppx):
+            messagebox.showwarning("Proxy Broker", "Chọn Profile .ppx trước.")
+            return
+        self._pf_dang_tim_gan = True
+        self.nut_pf_tim_gan.config(state="disabled")
+        self.nhan_pf_broker_led.config(text="… Đang tìm proxy (ipify)…", foreground="#b8860b")
+        self.in_log("[Proxy Broker] Đang tìm và gắn proxy mới (không cần vào game)...")
+
+        def worker():
+            try:
+                ok, msg, khoi_dong_lai = proxy_broker_ui.chay_tim_gan_proxy_moi(
+                    self._proc_proxy_broker
+                )
+            except (OSError, RuntimeError, subprocess.TimeoutExpired) as loi:
+                ok, msg, khoi_dong_lai = False, str(loi), False
+            self.root.after(
+                0, lambda: self._ket_thuc_tim_gan_proxy(ok, msg, khoi_dong_lai)
+            )
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _ket_thuc_tim_gan_proxy(self, ok, msg, khoi_dong_lai_daemon=False):
+        self._pf_dang_tim_gan = False
+        if getattr(self, "nut_pf_tim_gan", None):
+            self.nut_pf_tim_gan.config(state="normal")
+        if khoi_dong_lai_daemon:
+            try:
+                self._proc_proxy_broker = proxy_broker_ui.chay_broker_daemon()
+                con_chay, loi = proxy_broker_ui.kiem_tra_vua_chay(self._proc_proxy_broker)
+                if not con_chay:
+                    self._proc_proxy_broker = None
+                    self.in_log(f"[Proxy Broker] Không khởi động lại daemon — {loi[:120]}")
+                else:
+                    self.in_log("[Proxy Broker] Đã khởi động lại daemon sau tìm gán proxy.")
+            except (OSError, RuntimeError) as loi:
+                self._proc_proxy_broker = None
+                self.in_log(f"[Proxy Broker] Không khởi động lại daemon: {loi}")
+        self.cap_nhat_trang_thai_proxy_broker()
+        if ok:
+            self.in_log(f"[Proxy Broker] {msg.splitlines()[0]}")
+            messagebox.showinfo("Proxy Broker", msg)
+        else:
+            self.in_log(f"[Proxy Broker] Không gắn được — {msg.splitlines()[0]}")
+            messagebox.showerror("Proxy Broker", msg)
+
     def dung_proxy_broker(self):
         if proxy_broker_ui.dung_broker(self._proc_proxy_broker):
             self._proc_proxy_broker = None
@@ -4887,10 +4976,13 @@ class UngDung:
         self.root.after(3000, self.giam_sat_dang_nhap)
 
     def _giam_sat_dang_nhap(self):
+        cai_dat = cau_hinh.doc_tai_khoan()
         for ten, luong in list(self.cac_luong_dang_nhap.items()):
             if luong.is_alive():
                 continue
-            if luong.thanh_cong:
+            if luong.chuyen_sang_tao_nv:
+                self._khoi_dong_tao_nv_sau_dang_nhap(luong, cai_dat)
+            elif luong.thanh_cong:
                 self.luc_vao_game[ten] = time.time()
             elif not luong.dung.is_set():
                 self.tai_khoan_tam_dung.add(ten)
@@ -4898,7 +4990,6 @@ class UngDung:
                             "Sửa xong thì bấm Thêm / Sửa, Lưu cài đặt, hoặc tắt bật lại tài khoản để thử lại.")
             del self.cac_luong_dang_nhap[ten]
 
-        cai_dat = cau_hinh.doc_tai_khoan()
         ds = [(t.get("ten_dang_nhap"), t.get("nhan_vat"), bool(t.get("bat")), khoa)
               for khoa in (cau_hinh.KHOA_TK_PHO_BAN, cau_hinh.KHOA_TK_TRAIN)
               for t in cai_dat[khoa]]

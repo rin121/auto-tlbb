@@ -185,7 +185,7 @@ class TestDauDong(unittest.TestCase):
     def _dat(self, bang, cac_ten, bat):
         with patch.object(g, "danh_sach_nhan_vat", bang.ds), patch.object(g, "_bang_nhan_vat", lambda h: 0), \
                 patch.object(g, "_msaa", lambda h: bang), patch.object(g, "_muon_chuot", lambda h, v: nullcontext()), \
-                patch.object(g, "_bam_chuot", lambda h, diem, cho: bang.bam(diem)):
+                patch.object(g, "_bam_chuot", lambda h, diem, cho: bang.bam(diem)), patch.object(g, "CHUOT_AO", False):
             return g.dat_dau_dong(1, cac_ten, bat)
 
     def test_tich_doi_truong_va_doi_vien(self):
@@ -260,6 +260,73 @@ class TestDauDong(unittest.TestCase):
             with self.assertRaises(g.LoiGautoAcTac) as ng:
                 g.dat_cai_dat_ac_tac(1, {}, "caychay32")
         self.assertFalse(getattr(ng.exception, "da_thao_tac", False))
+
+
+class TestChuotAo(unittest.TestCase):
+    """GA-10: bấm GAuto bằng chuột ảo (không di con trỏ thật); không ăn thì tự dùng chuột thật, báo log 1 lần."""
+
+    def setUp(self):
+        self.tt = {"v": False, "sel": 0}
+        self.that = []
+        for p in (patch.object(g, "_noi_len", lambda h: nullcontext()),
+                  patch.object(g, "_muon_chuot", lambda h, v: nullcontext()),
+                  patch.object(g, "_DA_BAO_CHUOT_THAT", set()), patch.object(g, "_CHO_BAO", []),
+                  patch.object(g, "CHUOT_AO", True)):
+            p.start()
+            self.addCleanup(p.stop)
+
+    def _bam(self, ao_an):
+        def ao(h, diem):
+            if ao_an:
+                self.tt["v"] = True
+
+        def that(h, diem, cho=""):
+            self.that.append(cho)
+            self.tt["v"] = True
+        with patch.object(g, "_bam_ao", ao), patch.object(g, "_bam_chuot", that):
+            return g._bam_ao_hoac_that(1, 2, (10, 10), "ô «Ác Tặc»", lambda: self.tt["v"], giay=0.2)
+
+    def test_chuot_ao_an_thi_khong_dung_chuot_that(self):
+        self.assertEqual(self._bam(ao_an=True), "ảo")
+        self.assertEqual(self.that, [])
+
+    def test_chuot_ao_khong_an_thi_dung_chuot_that_bao_mot_lan(self):
+        self.assertEqual(self._bam(ao_an=False), "thật")
+        self.tt["v"] = False
+        self.assertEqual(self._bam(ao_an=False), "thật")
+        self.assertEqual(len(self.that), 2)
+        log = []
+        g.rut_bao_chuot(log.append)
+        self.assertEqual(log, ["GAuto không nhận chuột ảo ở ô «Ác Tặc», dùng chuột thật"])
+
+    def _chon_map(self, ao_an):
+        def gui(h, msg, w, l):
+            return self.tt["sel"] if msg == g.win32con.CB_GETCURSEL else 0
+
+        def chon_dong_map(hc, info, dich, bam):
+            if bam is g._bam_ao:
+                if ao_an:
+                    self.tt["sel"] = dich
+            else:
+                self.that.append("map")
+                self.tt["sel"] = dich
+            return True
+        with patch.object(g, "cac_map", return_value=["Kiếm Các", "Tung Sơn"]), \
+                patch.object(g.win32gui, "SendMessage", gui), \
+                patch.object(g.ctypes.windll.user32, "GetComboBoxInfo", return_value=1), \
+                patch.object(g, "_chon_dong_map", chon_dong_map), patch.object(g, "GIAY_GIU_MAP", 0):
+            return g.chon_map(1, 5, "Tung Sơn")
+
+    def test_chon_map_chuot_ao(self):
+        self.assertEqual(self._chon_map(ao_an=True), "ảo")
+        self.assertEqual(self.that, [])
+
+    def test_chon_map_chuot_ao_khong_an_thi_chuot_that(self):
+        self.assertEqual(self._chon_map(ao_an=False), "thật")
+        self.assertEqual(self.that, ["map"])
+        log = []
+        g.rut_bao_chuot(log.append)
+        self.assertEqual(log, ["GAuto không nhận chuột ảo ở ô Map, dùng chuột thật"])
 
 
 class TestQuyenAdmin(unittest.TestCase):

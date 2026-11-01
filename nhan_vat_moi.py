@@ -6,7 +6,7 @@ Kịch bản ghi từ một lần chơi tay tài khoản caychay9 (ban_ghi/ghi_2
     Tạo           : CreateRole_SelectGirl() (chọn luôn avatar nữ đầu tiên), CreateRole_Name:SetText(tên),
                     CreateRole_BnClickCreateRole() -> GameProduceLogin:CreateRole(tên, 0).
     Vào game      : GameProduceLogin:SendEnterGameMsg(i) -> mã kiểm tra -> Đại Lý (160, 168).
-    NPC Tân Thủ   : (111111, 9996) Gia Nhập Môn Phái -> (0, 324) Thiên Long; (111111, 6666) Vàng + ĐT.
+    NPC Tân Thủ   : (111111, 9996) Gia Nhập Môn Phái -> dòng «Tiêu Dao» (hàng 2); (111111, 6666) Vàng + ĐT.
     Túi           : mang Bách Bảo Nang, Bách Bảo Rương (chuột phải = nút ô túi :DoAction(), hộp "trang bị sẽ bị
                     khóa" bấm OK -> EquipItem).
     NPC Tân Thủ   : (111111, 1200) Nhận Trang Bị Tân Thủ (cần 16 ô trống nên phải mang túi trước), mang hết đồ.
@@ -34,6 +34,7 @@ import psutil
 
 import cau_hinh
 import nang_cap_nhan_vat
+from auto_chuyen_sinh import chuan_hoa
 from bang_ma_viscii import giai_ma
 from dang_nhap import (CONG_MO_GAME, LoiDangNhap, LoiSaiRuleNhanVat, LoiSaiTaiKhoan, LuongDangNhap, bo_dau, cho_cua_so, chuoi_lua,
                        con_chay, dang_hien, dong_thong_bao, giu_client, lay_client_ranh, man_hinh_hien_tai,
@@ -49,14 +50,14 @@ from pho_ban_pmp import (GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MA_DA_MANG, MAP_DA
 from tao_nhan_vat import giai_ma_kiem_tra
 from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 
-MON_PHAI_THIEN_LONG = 6
+MON_PHAI_TIEU_DAO = 8
 CHUA_VAO_PHAI = 9
 
 NPC_TAN_THU = ("Tân Thủ", (160, 166))
 NPC_CONG_POINT = ("Cộng Point", (168, 142))
 NPC_HOI_MAU = ("Di Chuyển", (165, 156))
 DONG_VAO_PHAI = (111111, 9996)
-DONG_THIEN_LONG = (0, 324)
+DONG_TIEU_DAO = ("Tiêu Dao",)
 DONG_VANG = (111111, 6666)
 DONG_NHAN_TRANG_BI = (111111, 1200)
 DONG_CONG_10_TRIEU = (111114, 7111)
@@ -206,6 +207,15 @@ class NhanDoTanThu(PhoBanPMP):
     def _tien(self):
         return int(float(self.game.lua.chay(MA_TIEN)))
 
+    def _dong_hien_trong_hoi_thoai(self, dong):
+        ht = self._hoi_thoai()
+        if not ht:
+            return False
+        if isinstance(dong[0], str):
+            goi = chuan_hoa(dong[0])
+            return any(goi in chuan_hoa(chu) for _, _, _, chu in ht[1])
+        return any((s, e) == dong for _, s, e, _ in ht[1])
+
     def _noi_chuyen(self, npc, cac_dong):
         """Mở hội thoại NPC rồi chọn lần lượt các dòng (dòng sau phải hiện ra mới chọn)."""
         ten_npc, xy = npc
@@ -214,10 +224,9 @@ class NhanDoTanThu(PhoBanPMP):
             self.da_toi_cong_point = True
         self._mo_hoi_thoai(ten_npc, xy, cac_dong[0], dan_doi=False)
         for i, dong in enumerate(cac_dong):
-            if i and not self._cho(lambda: (lambda ht: ht and any((s, e) == dong for _, s, e, _ in ht[1]))(
-                    self._hoi_thoai()), GIAY_CHO_GAME_TRA_LOI * 2):
+            if i and not self._cho(lambda d=dong: self._dong_hien_trong_hoi_thoai(d), GIAY_CHO_GAME_TRA_LOI * 2):
                 raise LoiPhoBan(f"NPC {ten_npc} không hiện dòng {dong} ({self._chu_hoi_thoai()})")
-            self._chon(dong)
+            self._chon_dong(dong)
             time.sleep(0.5)
 
     def chay(self):
@@ -225,7 +234,8 @@ class NhanDoTanThu(PhoBanPMP):
         if tt is None:
             raise LoiPhoBan("chưa vào game")
         self.in_log(f"{self.ten}: bắt đầu nhận đồ tân thủ [{tt['map']} ({tt['x']}, {tt['y']})]")
-        self._vao_thien_long(tt)
+        self.in_log(f"{self.ten}: bước 1 — gia nhập phái Tiêu Dao")
+        self._vao_tieu_dao(tt)
         self._nhan_vang()
         self._mang(MA_TUI_BACH_BAO)
         self._nhan_trang_bi()
@@ -237,7 +247,7 @@ class NhanDoTanThu(PhoBanPMP):
         self._thu_cuoi()
         self.hoi_mau()
         con_lai = {
-            "chưa vào Thiên Long": (self._tt() or {}).get("mon_phai") != MON_PHAI_THIEN_LONG,
+            "chưa vào Tiêu Dao": (self._tt() or {}).get("mon_phai") != MON_PHAI_TIEU_DAO,
             "chưa mang trang bị tân thủ": self.game.lua.chay(MA_DA_MANG_KHOI) != b"1",
             "còn Hộp Point": self._so_luong({MA_HOP_POINT}) > 0,
             "còn trên 10.000.000 điểm tiềm năng": self.game.diem_tiem_nang() >= DIEM_MOI_LAN_CONG,
@@ -285,17 +295,17 @@ class NhanDoTanThu(PhoBanPMP):
         finally:
             self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
 
-    def _vao_thien_long(self, tt):
-        if tt["mon_phai"] == MON_PHAI_THIEN_LONG:
+    def _vao_tieu_dao(self, tt):
+        if tt["mon_phai"] == MON_PHAI_TIEU_DAO:
+            self.in_log(f"{self.ten}: đã ở phái Tiêu Dao (bước 1 xong)")
             return
         if tt["mon_phai"] != CHUA_VAO_PHAI:
-            self.in_log(f"{self.ten}: đã ở môn phái khác (mã {tt['mon_phai']}), không vào Thiên Long")
-            return
-        self._noi_chuyen(NPC_TAN_THU, (DONG_VAO_PHAI, DONG_THIEN_LONG))
-        if not self._cho(lambda: (self._tt() or {}).get("mon_phai") == MON_PHAI_THIEN_LONG,
+            self.in_log(f"{self.ten}: đang ở môn phái khác (mã {tt['mon_phai']}), vẫn thử gia nhập Tiêu Dao")
+        self._noi_chuyen(NPC_TAN_THU, (DONG_VAO_PHAI, DONG_TIEU_DAO))
+        if not self._cho(lambda: (self._tt() or {}).get("mon_phai") == MON_PHAI_TIEU_DAO,
                          GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):
-            raise LoiPhoBan(f"chọn Thiên Long mà chưa vào phái ({self._chu_hoi_thoai()})")
-        self.in_log(f"{self.ten}: đã gia nhập Thiên Long")
+            raise LoiPhoBan(f"bước 1 — chọn Tiêu Dao mà chưa vào phái ({self._chu_hoi_thoai()})")
+        self.in_log(f"{self.ten}: đã gia nhập Tiêu Dao")
 
     def _nhan_vang(self):
         tien = self._tien()

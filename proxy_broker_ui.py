@@ -77,7 +77,68 @@ def _nguon_proxy_broker_san_co():
     return ket
 
 
+def _nguon_proxy_broker_moi_nhat():
+    """Thư mục nguồn ProxyBroker (repo) để đồng bộ cạnh exe."""
+    ds = []
+    if getattr(sys, "frozen", False):
+        meipass = getattr(sys, "_MEIPASS", "") or ""
+        if meipass:
+            ds.append(os.path.join(meipass, "ProxyBroker"))
+    ds.extend(_nguon_proxy_broker_san_co())
+    for duong in ds:
+        if os.path.isfile(os.path.join(duong, "dieu_phoi.py")):
+            try:
+                with open(os.path.join(duong, "dieu_phoi.py"), encoding="utf-8") as f:
+                    if "tim_va_gan_moi" in f.read():
+                        return duong
+            except OSError:
+                continue
+    for duong in ds:
+        if os.path.isfile(os.path.join(duong, "__main__.py")):
+            return duong
+    return None
+
+
+def dong_bo_proxy_broker_tu_bundled():
+    """Đồng bộ ProxyBroker\\ cạnh exe từ bản nhúng trong exe hoặc repo (tránh folder cũ)."""
+    nguon = _nguon_proxy_broker_moi_nhat()
+    if not nguon:
+        return
+    dich = os.path.join(THU_MUC_APP, "ProxyBroker")
+    os.makedirs(dich, exist_ok=True)
+    for ten in os.listdir(nguon):
+        if ten.startswith("."):
+            continue
+        s = os.path.join(nguon, ten)
+        d = os.path.join(dich, ten)
+        try:
+            if os.path.isdir(s):
+                if os.path.isdir(d):
+                    shutil.rmtree(d, ignore_errors=True)
+                shutil.copytree(s, d)
+            else:
+                shutil.copy2(s, d)
+        except OSError:
+            continue
+    lap = os.path.join(dich, "ProxyBroker")
+    if os.path.isdir(lap) and os.path.isfile(os.path.join(lap, "dieu_phoi.py")):
+        for ten in os.listdir(lap):
+            s = os.path.join(lap, ten)
+            d = os.path.join(dich, ten)
+            try:
+                if os.path.isdir(s):
+                    if os.path.isdir(d):
+                        shutil.rmtree(d, ignore_errors=True)
+                    shutil.copytree(s, d)
+                else:
+                    shutil.copy2(s, d)
+            except OSError:
+                continue
+        shutil.rmtree(lap, ignore_errors=True)
+
+
 def dam_bao_proxy_broker_tai_app():
+    dong_bo_proxy_broker_tu_bundled()
     co = _goi_pythonpath_proxy_broker()
     if co:
         return co
@@ -283,6 +344,49 @@ def doc_log_cuoi(so_dong=8):
         return ""
 
 
+def _doc_log_tu_dau_dong(dau_dong):
+    if not os.path.isfile(DUONG_DAN_LOG):
+        return ""
+    try:
+        with open(DUONG_DAN_LOG, encoding="utf-8", errors="replace") as f:
+            dong = f.readlines()
+        if dau_dong < 0 or dau_dong >= len(dong):
+            return "".join(dong).strip()
+        return "".join(dong[dau_dong:]).strip()
+    except OSError:
+        return ""
+
+
+def _dem_dong_log():
+    if not os.path.isfile(DUONG_DAN_LOG):
+        return 0
+    try:
+        with open(DUONG_DAN_LOG, encoding="utf-8", errors="replace") as f:
+            return sum(1 for _ in f)
+    except OSError:
+        return 0
+
+
+def _phan_tich_log_gan_moi(doan_log):
+    """Đọc đoạn log của lần chạy --gan-moi (không lẫn daemon)."""
+    if not doan_log:
+        return False, "Không có log — xem proxy_broker.log."
+    dong = [d.strip() for d in doan_log.splitlines() if d.strip()]
+    for d in reversed(dong):
+        if d.startswith("Đã gắn proxy ") or "Đã gắn proxy" in d:
+            return True, d
+    for d in reversed(dong):
+        if d.startswith("Không tìm") or d.startswith("Lỗi sửa .ppx") or d.startswith("Lỗi nạp Proxifier"):
+            return False, d
+    for d in reversed(dong):
+        if d.startswith("→ OK") or "→ OK — IP" in d:
+            return True, d
+    for d in reversed(dong):
+        if not d.startswith("Thử [") and not d.startswith("---"):
+            return False, d
+    return False, "Không tìm được proxy khả dụng (test ipify). Xem proxy_broker.log."
+
+
 def _doc_pid():
     if not os.path.isfile(DUONG_DAN_PID):
         return None
@@ -329,9 +433,17 @@ def mo_ta_hien_thi(proc=None):
     chay, pid = broker_dang_chay(proc)
     st = doc_state()
     health = st.get("health") or "—"
+    px = st.get("proxy_active") or {}
+    co_proxy = bool(px.get("host"))
     if chay:
         tieu_de = f"● Broker ĐANG CHẠY (PID {pid or '?'})"
         mau = "#0a7a0a" if health == "healthy" else "#b8860b"
+    elif co_proxy and health == "healthy":
+        ip = px.get("host", "?")
+        ms = px.get("latency_ms")
+        tre = f" ~{ms}ms" if ms is not None else ""
+        tieu_de = f"● Đã gắn proxy {ip}{tre} (broker chưa chạy)"
+        mau = "#0a7a0a"
     else:
         tieu_de = "○ Broker không chạy"
         mau = "#888888"
@@ -359,34 +471,56 @@ def mo_ta_state():
             f"Login thêm: {'có' if st.get('cho_phep_login_them') else 'không'}{phu}")
 
 
-def _argv_chay_broker(prefix, goc):
+def _argv_chay_broker(prefix, goc, *extra_argv):
     """
     python -m ProxyBroker — ocr_py (embed) thường bỏ qua PYTHONPATH;
     chèn thư mục cha ProxyBroker vào sys.path trước khi run_module.
     """
-    code = (f"import sys, runpy; sys.path.insert(0, {repr(goc)}); sys.argv=['ProxyBroker','--daemon']; "
-            "runpy.run_module('ProxyBroker', run_name='__main__', alter_sys=True)")
+    argv = ["ProxyBroker"] + list(extra_argv)
+    code = (
+        f"import sys, runpy; sys.path.insert(0, {repr(goc)}); "
+        f"sys.argv={argv!r}; "
+        "runpy.run_module('ProxyBroker', run_name='__main__', alter_sys=True)"
+    )
     return prefix + ["-c", code]
+
+
+def _argv_tim_gan_proxy_moi(prefix, goc):
+    """Gọi trực tiếp DieuPhoi.tim_va_gan_moi — không phụ thuộc argparse __main__ cũ."""
+    code = (
+        f"import sys; sys.path.insert(0, {repr(goc)}); "
+        "from ProxyBroker.dieu_phoi import DieuPhoi; "
+        "dp = DieuPhoi(); "
+        "ok = dp.tim_va_gan_moi(bo_qua_game_target=True); "
+        "raise SystemExit(0 if ok else 1)"
+    )
+    return prefix + ["-c", code]
+
+
+def _env_broker(goc):
+    env = os.environ.copy()
+    env["AUTOHOC_APP_DIR"] = THU_MUC_APP
+    env["PYTHONPATH"] = goc + os.pathsep + env.get("PYTHONPATH", "")
+    env["PYTHONUTF8"] = "1"
+    return env
 
 
 def chay_broker_daemon():
     dam_bao_log_broker()
+    dam_bao_proxy_broker_tai_app()
     goc = tim_goc_module()
     if not (goc and _thu_muc_co_proxy_broker(goc)):
         raise RuntimeError(
             f"Không thấy package ProxyBroker cạnh AutoHoc ({THU_MUC_APP}).\n"
             "Chạy lại build/deploy (cần thư mục ProxyBroker\\ cùng chỗ AutoHoc.exe) hoặc cập nhật bản AutoHoc mới.")
     prefix, mo_ta = tim_lenh_python()
-    env = os.environ.copy()
-    env["AUTOHOC_APP_DIR"] = THU_MUC_APP
-    env["PYTHONPATH"] = goc + os.pathsep + env.get("PYTHONPATH", "")
-    env["PYTHONUTF8"] = "1"
+    env = _env_broker(goc)
     os.makedirs(os.path.dirname(DUONG_DAN_LOG), exist_ok=True)
     log_f = open(DUONG_DAN_LOG, "a", encoding="utf-8")
     log_f.write(f"\n--- Khởi chạy broker {time.strftime('%Y-%m-%d %H:%M:%S')} | {mo_ta} | cwd={goc} ---\n")
     log_f.flush()
     proc = subprocess.Popen(
-        _argv_chay_broker(prefix, goc),
+        _argv_chay_broker(prefix, goc, "--daemon"),
         cwd=goc,
         env=env,
         stdout=log_f,
@@ -420,3 +554,63 @@ def kiem_tra_vua_chay(proc, cho_giay=2.0):
         return True, ""
     log = doc_log_cuoi(15)
     return False, log or f"Broker thoát ngay (mã {proc.returncode}). Xem {DUONG_DAN_LOG}"
+
+
+def chay_tim_gan_proxy_moi(proc_daemon=None):
+    """
+    Tìm + gắn proxy mới (test ipify), cập nhật .ppx. Không cần game.
+    Tạm dừng broker daemon (nếu đang chạy) để không tranh state/.ppx với --gan-moi.
+    Trả về (thanh_cong, thong_bao_hien_thi, can_khoi_dong_lai_daemon).
+    """
+    dam_bao_log_broker()
+    dam_bao_proxy_broker_tai_app()
+    goc = tim_goc_module()
+    if not (goc and _thu_muc_co_proxy_broker(goc)):
+        raise RuntimeError(
+            f"Không thấy package ProxyBroker cạnh AutoHoc ({THU_MUC_APP})."
+        )
+    da_chay_daemon, _ = broker_dang_chay(proc_daemon)
+    if da_chay_daemon:
+        dung_broker(proc_daemon)
+
+    prefix, mo_ta = tim_lenh_python()
+    env = _env_broker(goc)
+    os.makedirs(os.path.dirname(DUONG_DAN_LOG), exist_ok=True)
+    dau_dong = _dem_dong_log()
+    with open(DUONG_DAN_LOG, "a", encoding="utf-8") as log_f:
+        log_f.write(
+            f"\n--- Tìm gán proxy mới {time.strftime('%Y-%m-%d %H:%M:%S')} | {mo_ta} ---\n"
+        )
+        log_f.flush()
+        try:
+            proc = subprocess.run(
+                _argv_tim_gan_proxy_moi(prefix, goc),
+                cwd=goc,
+                env=env,
+                stdout=log_f,
+                stderr=subprocess.STDOUT,
+                creationflags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess, "CREATE_NO_WINDOW") else 0,
+                timeout=600,
+            )
+            ma = proc.returncode
+        except subprocess.TimeoutExpired:
+            ma = -1
+    doan = _doc_log_tu_dau_dong(dau_dong)
+    ok_log, msg_log = _phan_tich_log_gan_moi(doan)
+    st = doc_state()
+    px = st.get("proxy_active") or {}
+    if ma == 0 and ok_log:
+        ip = px.get("host", "?")
+        port = px.get("port", "?")
+        ms = px.get("latency_ms")
+        tre = f", ~{ms}ms" if ms is not None else ""
+        if msg_log.startswith("Đã gắn"):
+            return True, msg_log, da_chay_daemon
+        return True, f"Đã tìm và gắn proxy {ip}:{port}{tre}.", da_chay_daemon
+    if ok_log and px.get("host"):
+        return True, msg_log, da_chay_daemon
+    if not ok_log and msg_log:
+        return False, msg_log, da_chay_daemon
+    if ma != 0:
+        return False, f"Lệnh tìm proxy thoát mã {ma}. Xem proxy_broker.log.", da_chay_daemon
+    return False, "Không tìm được proxy khả dụng (test ipify).", da_chay_daemon

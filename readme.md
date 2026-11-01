@@ -100,6 +100,8 @@ powershell -ExecutionPolicy Bypass -File dong_goi\build_dung_thu.ps1 -SoNgay 3
 - Cấp license (GUI: HWID + số ngày, `0` = không giới hạn):
   `cd AutoHoc` → `.\.venv\Scripts\python.exe dong_goi\tao_license.py`
   Dòng lệnh: `dong_goi\tao_license.py <HWID> "ghi chú" <số_ngày> [license.dat]`
+  `license_private.pem` phải khớp `KHOA_CONG_B64` trong `kich_hoat_khoa_cong.py` (GUI cảnh báo nếu lệch); sau đổi khóa công phải **build lại exe**.
+  `license_private.pem` phải khớp `KHOA_CONG_B64` trong `kich_hoat_khoa_cong.py` (GUI cảnh báo nếu lệch); sau đổi khóa công phải **build lại exe**.
 
 
   ## Build:
@@ -114,3 +116,7 @@ powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1" -ChiWi
 
 # Cả hai (cần .venv + .venv_win7)
 powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1"
+
+
+# license
+.\.venv\Scripts\python.exe dong_goi\tao_license.py

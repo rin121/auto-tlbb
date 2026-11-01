@@ -1,0 +1,8 @@
+# Cài vào ocr_py (Python 3.8 embed) khi build Win7 — Proxy Broker cần khi AutoHoc gọi ocr_py\python.exe.
+# Chạy tay trên máy đã deploy: dong_goi\cai_broker_ocr_py_win7.ps1 -OcrPy "C:\...\win7_cu\ocr_py"
+psutil==5.9.8
+requests==2.31.0
+urllib3==1.26.18
+certifi>=2023.7.22
+charset-normalizer>=3.2.0
+idna>=3.4

@@ -314,11 +314,13 @@ class TestNangCapSauDangNhap(unittest.TestCase):
                 self.hwnd = hwnd
 
             def thong_tin(self):
-                return {"ten": "caychay24"}
+                return {"ten": "caychay24", "mon_phai": 8}
         self.luong = mock.Mock()
         self.luong.pid = 100
+        self.luong.tai_khoan = {"ten_dang_nhap": "caychay24"}
         self.luong.dung = threading.Event()
         self.luong.in_log = self.log.append
+        self.luong.bao_trang_thai = lambda chu: None
         self.cac_patch = [
             mock.patch.object(dang_nhap, "tim_cua_so_game", lambda: [{"hwnd": 7, "pid": 100}]),
             mock.patch.object(dang_nhap, "Game", GameGia),
@@ -332,7 +334,9 @@ class TestNangCapSauDangNhap(unittest.TestCase):
 
     def _chay(self, da_lam, nang_cap):
         from unittest import mock
-        with mock.patch.object(ncnv, "da_lam", lambda ten: da_lam), mock.patch.object(ncnv, "nang_cap", nang_cap):
+        with mock.patch.object(ncnv, "da_lam", lambda ten: da_lam), \
+                mock.patch.object(ncnv, "nang_cap", nang_cap), \
+                mock.patch("nhan_vat_moi.da_xong", lambda tk: ["caychay24"]):
             self.dang_nhap.LuongDangNhap.nang_cap_sau_dang_nhap(self.luong)
 
     def test_chua_lam_thi_nang_cap(self):

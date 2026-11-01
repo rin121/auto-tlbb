@@ -92,6 +92,32 @@ def _khoa_cong():
         return None
 
 
+def xac_minh_chu_ky(ban):
+    """
+    Chỉ kiểm tra định dạng + chữ ký Ed25519 (không so HWID máy hiện tại).
+    Dùng khi admin tạo license (dong_goi/tao_license.py).
+    Trả về (hop_le: bool, mo_ta: str).
+    """
+    if Ed25519PublicKey is None:
+        return False, "Thiếu thư viện cryptography."
+    khoa = _khoa_cong()
+    if khoa is None:
+        return False, "Bản auto chưa có khóa công kích hoạt."
+    if not ban or not isinstance(ban, dict):
+        return False, "File license không đúng định dạng."
+    chu_ky = ban.get("chu_ky")
+    payload = ban.get("payload")
+    if not chu_ky or not isinstance(payload, dict):
+        return False, "File license không đúng định dạng."
+    if payload.get("v") != PHIEN_BAN:
+        return False, "License phiên bản không tương thích."
+    try:
+        khoa.verify(base64.b64decode(chu_ky), _noi_dung_ky(payload))
+    except Exception:
+        return False, "Chữ ký license không hợp lệ (private key không khớp KHOA_CONG_B64 trong exe?)."
+    return True, "Chữ ký license hợp lệ."
+
+
 def xac_thuc_license(duong_dan=None):
     """
     Trả về (hop_le: bool, mo_ta: str).

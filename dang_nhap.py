@@ -139,6 +139,10 @@ class LoiThieuNhanVat(LoiDangNhap):
         self.cac_ten = list(cac_ten)
 
 
+class LoiCanTaoNhanVat(LoiDangNhap):
+    """Màn chọn nhân vật trống — double-click: chuyển sang LuongTaoNhanVat (giữ client)."""
+
+
 def bo_ma_mau(chu):
     """"#e6633ff#gFFFF99#bMáy Chủ Mới" -> "Máy Chủ Mới"."""
     return MAU_MA_MAU.sub("", chu).strip()
@@ -567,6 +571,9 @@ class LuongDangNhap(threading.Thread):
         # tao_khi_thieu: tài khoản không có nhân vật cần vào thì dừng ngay (LoiThieuNhanVat), để bên gọi tạo nhân vật.
         self.tao_khi_thieu = False
         self.thieu_nhan_vat = None
+        # Double-click tài khoản: danh sách NV trống → chuyển LuongTaoNhanVat (giữ game).
+        self.tu_dong_tao_neu_trong = False
+        self.chuyen_sang_tao_nv = False
         self._da_gan_proxy = False
         self._cho_retry_sau_diss = False
 
@@ -639,8 +646,10 @@ class LuongDangNhap(threading.Thread):
         """
         Vừa vào game: nhân vật chưa có trong nang_cap_da_xong.json thì nâng cấp (nang_cap_nhan_vat). Lỗi thì chỉ ghi
         log, không tính là đăng nhập hỏng; lần đăng nhập sau làm tiếp các bước còn lại.
+        Chưa gia nhập phái / chưa nhận đồ tân thủ: không nâng cấp (tab Tạo nhân vật làm bước 1 gia nhập phái trước).
         """
         import nang_cap_nhan_vat  # nang_cap_nhan_vat import dang_nhap
+        from nhan_vat_moi import CHUA_VAO_PHAI, MON_PHAI_TIEU_DAO, NhanDoTanThu, da_xong, cung_ten
         try:
             hwnd = next((c["hwnd"] for c in tim_cua_so_game() if c["pid"] == self.pid), None)
             if not hwnd:
@@ -649,6 +658,19 @@ class LuongDangNhap(threading.Thread):
             tt = game.thong_tin()
             if not tt or nang_cap_nhan_vat.da_lam(tt["ten"]):
                 return
+            tk = (self.tai_khoan.get("ten_dang_nhap") or "").strip()
+            if tk and not any(cung_ten(tt["ten"], t) for t in da_xong(tk)):
+                if tt.get("mon_phai") == CHUA_VAO_PHAI:
+                    self.in_log(f"{tt['ten']}: chưa gia nhập phái — chờ nhận đồ tân thủ (bước 1: Tiêu Dao)")
+                return
+            if tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
+                self.in_log(f"{tt['ten']}: bước 1 — gia nhập phái Tiêu Dao (trước nâng cấp)")
+                NhanDoTanThu(game, tt["ten"], self.in_log, self.dung.is_set,
+                             lambda chu: self.bao_trang_thai(chu))._vao_tieu_dao(tt)
+                tt = game.thong_tin()
+                if not tt or tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
+                    self.in_log(f"{tt['ten'] if tt else '?'}: chưa vào Tiêu Dao — bỏ qua nâng cấp lần này")
+                    return
             self.bao_trang_thai("Nâng cấp nhân vật")
             nang_cap_nhan_vat.nang_cap(game, tt["ten"], self.in_log, self.dung.is_set,
                                        lambda chu: self.bao_trang_thai(f"Nâng cấp: {chu}"))
@@ -664,7 +686,7 @@ class LuongDangNhap(threading.Thread):
         finally:
             if self.thanh_cong:
                 tha_client_dang_nhap(self)
-            else:
+            elif not self.chuyen_sang_tao_nv:
                 nha_cac_client(self)
 
     def _chay_cac_lan(self):
@@ -693,9 +715,19 @@ class LuongDangNhap(threading.Thread):
                 self.bao_trang_thai("Tạm dừng: tên nhân vật sai rule")
                 return
             except LoiThieuNhanVat as loi:
+                if self.tu_dong_tao_neu_trong:
+                    self.chuyen_sang_tao_nv = True
+                    self.in_log(f"{loi} — tự chạy tạo nhân vật + nhận đồ / nâng cấp")
+                    self.bao_trang_thai("Chuyển sang tạo nhân vật")
+                    return
                 self.thieu_nhan_vat = loi.cac_ten
                 self.in_log(f"Dừng: {loi} — cần tạo nhân vật")
                 self.bao_trang_thai("Thiếu nhân vật, cần tạo")
+                return
+            except LoiCanTaoNhanVat:
+                self.chuyen_sang_tao_nv = True
+                self.in_log("Tài khoản chưa có nhân vật — tự chạy tạo nhân vật + nhận đồ / nâng cấp")
+                self.bao_trang_thai("Chuyển sang tạo nhân vật")
                 return
             except (LoiDangNhap, LoiLua, OSError, psutil.Error) as loi:
                 self.in_log(f"Lần {lan}/{so_lan} thất bại: {loi}")
@@ -918,9 +950,11 @@ class LuongDangNhap(threading.Thread):
                 lua.chay(trong_cua_so("LoginSelectRole", "SelectRole_Return()"))
                 self.in_log("Máy chủ đang bận: bấm Quay lại để đăng nhập lại")
                 return True
+            cac_ten = ds_ten_nhan_vat(lua) if (tk.get("nhan_vat") or self.tu_dong_tao_neu_trong) else []
+            if self.tu_dong_tao_neu_trong and not cac_ten and so_giay_o_man_nay >= GIAY_DS_NHAN_VAT_TRONG:
+                raise LoiCanTaoNhanVat()
             if not tk.get("nhan_vat"):
                 return False
-            cac_ten = ds_ten_nhan_vat(lua)
             if cac_ten:
                 self.kiem_tra_ds_nhan_vat(cac_ten)
             if self.tao_khi_thieu and (cac_ten or so_giay_o_man_nay >= GIAY_DS_NHAN_VAT_TRONG) \

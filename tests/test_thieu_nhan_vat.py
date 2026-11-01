@@ -47,6 +47,39 @@ class TestLamBuocThieuNhanVat(unittest.TestCase):
             self._lam(["caychay3"], 100, tao_khi_thieu=False)
         self.assertNotIsInstance(ng.exception, dang_nhap.LoiThieuNhanVat)
 
+    def test_tu_dong_tao_ds_trong_khong_co_ten_nv(self):
+        luong = dang_nhap.LuongDangNhap({"ten_dang_nhap": "acc1", "mat_khau": "x"}, {}, queue.Queue())
+        luong.tu_dong_tao_neu_trong = True
+        lua = MagicMock()
+        with patch.object(dang_nhap, "ds_ten_nhan_vat", return_value=[]):
+            with self.assertRaises(dang_nhap.LoiCanTaoNhanVat):
+                luong.lam_buoc(lua, "chon_nhan_vat", dang_nhap.GIAY_DS_NHAN_VAT_TRONG)
+
+    def test_tu_dong_tao_chua_du_giay_thi_cho(self):
+        luong = dang_nhap.LuongDangNhap({"ten_dang_nhap": "acc1", "mat_khau": "x"}, {}, queue.Queue())
+        luong.tu_dong_tao_neu_trong = True
+        lua = MagicMock()
+        with patch.object(dang_nhap, "ds_ten_nhan_vat", return_value=[]):
+            self.assertFalse(luong.lam_buoc(lua, "chon_nhan_vat", dang_nhap.GIAY_DS_NHAN_VAT_TRONG - 1))
+
+    def test_tu_dong_tao_thieu_ten_nv_da_cau_hinh(self):
+        luong = dang_nhap.LuongDangNhap({"ten_dang_nhap": "caychay30", "mat_khau": "x", "nhan_vat": "caychay30"},
+                                        {"so_lan_thu_toi_da": 1}, queue.Queue())
+        luong.tu_dong_tao_neu_trong = True
+        luong.tao_khi_thieu = False
+        with patch.object(luong, "dang_nhap_mot_lan", side_effect=dang_nhap.LoiThieuNhanVat("caychay30", [])):
+            luong._chay_cac_lan()
+        self.assertTrue(luong.chuyen_sang_tao_nv)
+        self.assertFalse(luong.thanh_cong)
+
+    def test_loi_can_tao_nv_dat_co_chuyen(self):
+        luong = dang_nhap.LuongDangNhap({"ten_dang_nhap": "acc1", "mat_khau": "x"},
+                                        {"so_lan_thu_toi_da": 1}, queue.Queue())
+        luong.tu_dong_tao_neu_trong = True
+        with patch.object(luong, "dang_nhap_mot_lan", side_effect=dang_nhap.LoiCanTaoNhanVat()):
+            luong._chay_cac_lan()
+        self.assertTrue(luong.chuyen_sang_tao_nv)
+
     def test_luong_vao_nhan_vat_xoay_vong_bat_tao_khi_thieu(self):
         tk = {"ten_dang_nhap": "caychay30", "mat_khau": "x", "nhan_vat": "caychay30"}
         self.assertTrue(xv.LuongVaoNhanVat(tk, {}, queue.Queue()).tao_khi_thieu)
