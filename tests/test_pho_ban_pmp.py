@@ -120,7 +120,8 @@ class TestTapHopVaVeThanh(unittest.TestCase):
 
     def test_can_ve_tap_hop_dai_ly(self):
         doi = self._doi(True, pb.MAP_DAI_LY)
-        self.assertTrue(pb.can_ve_tap_hop(doi, "Lạc Dương"))
+        self.assertFalse(pb.can_ve_tap_hop(doi, "Lạc Dương"))
+        self.assertTrue(pb.can_ve_tap_hop(doi, "Túc Mộng Sơn"))
         self.assertFalse(pb.can_ve_tap_hop(doi, pb.MAP_DAI_LY))
 
     def test_khong_ve_khi_trong_an(self):
@@ -222,6 +223,81 @@ class TestXyGomDoiVien(unittest.TestCase):
         doi = pb.DoiPMP("t", {})
         doi.vi_tri_truong = (3, 4, pb.MAP_DAI_LY)
         self.assertEqual(pb.xy_gom_doi_vien(doi, truong, pb.MAP_DAI_LY, (1, 2)), (3, 4))
+
+
+class TestBatDoiVienTuDiLacDuong(unittest.TestCase):
+    def test_bat_co_doi_vien_o_dai_ly(self):
+        dv = MagicMock()
+        dv.map_hien_tai = pb.MAP_DAI_LY
+        dv.game.thong_tin.return_value = {"map": pb.MAP_DAI_LY}
+        doi = pb.DoiPMP("t", {"a": dv}, doc_lai=lambda: {"a": dv})
+        self.assertTrue(pb.bat_doi_vien_tu_di_lac_duong(doi))
+        self.assertTrue(doi.di_lac_duong)
+        self.assertEqual(doi.npc_gom[0], pb.MAP_LAC_DUONG)
+
+    def test_khong_bat_khi_ca_doi_lac_duong(self):
+        dv = MagicMock()
+        dv.map_hien_tai = pb.MAP_LAC_DUONG
+        dv.game.thong_tin.return_value = {"map": pb.MAP_LAC_DUONG}
+        doi = pb.DoiPMP("t", {"a": dv}, doc_lai=lambda: {"a": dv})
+        self.assertFalse(pb.bat_doi_vien_tu_di_lac_duong(doi))
+        self.assertFalse(doi.di_lac_duong)
+
+
+class TestGomDoiNeuLechMap(unittest.TestCase):
+    def _runner(self, map_truong, maps_dv):
+        inst = pb.PhoBanPMP.__new__(pb.PhoBanPMP)
+        inst.ten = "truong"
+        inst.in_log = MagicMock()
+        cac = {}
+        for ten, m in maps_dv.items():
+            dv = MagicMock()
+            dv.map_hien_tai = m
+            dv.game.thong_tin.return_value = {"map": m}
+            cac[ten] = dv
+        inst.doi = pb.DoiPMP("truong", cac)
+        inst._map = lambda: map_truong
+        inst._ca_doi_ve_thanh = MagicMock()
+        return inst
+
+    def test_truong_ld_doi_vien_dl_khong_ve_ca_doi(self):
+        inst = self._runner(pb.MAP_LAC_DUONG, {"a": pb.MAP_DAI_LY, "b": pb.MAP_LAC_DUONG})
+        inst.doi.cho_ve_sau_boss = 1.0
+        self.assertFalse(inst._gom_doi_neu_lech_map())
+        inst._ca_doi_ve_thanh.assert_not_called()
+        self.assertTrue(inst.doi.di_lac_duong)
+        self.assertIsNone(inst.doi.cho_ve_sau_boss)
+
+    def test_truong_ld_map_lac_van_ve_ca_doi(self):
+        inst = self._runner(pb.MAP_LAC_DUONG, {"a": pb.MAP_LAU_LAN})
+        self.assertTrue(inst._gom_doi_neu_lech_map())
+        inst._ca_doi_ve_thanh.assert_called_once()
+
+
+class TestMapGomDoiVien(unittest.TestCase):
+    def test_uu_tien_lac_duong_khi_dang_o_do(self):
+        doi = pb.DoiPMP("t", {})
+        self.assertEqual(pb.map_gom_doi_vien(doi, pb.MAP_LAC_DUONG, None), pb.MAP_LAC_DUONG)
+
+
+class TestChoDoiGanXyMapDich(unittest.TestCase):
+    def test_bo_qua_doi_vien_da_o_map_dich(self):
+        dv = MagicMock()
+        dv.map_hien_tai = pb.MAP_LAC_DUONG
+        dv.game.thong_tin.return_value = {"map": pb.MAP_LAC_DUONG, "x": 1, "y": 1}
+        doi = pb.DoiPMP("tr", {"dv": dv})
+        pho_ban = pb.PhoBanPMP(MagicMock(), lambda *_: None)
+        pho_ban.ten = "tr"
+        pho_ban.doi = doi
+        pho_ban.nen_dung = lambda: False
+        pho_ban._tt = lambda: {"map": pb.MAP_DAI_LY, "x": 165, "y": 156}
+        pho_ban._xy_npc_gan = lambda *_a, **_k: (165, 156)
+        pho_ban._truong_chay_toi_npc = lambda *_a, **_k: None
+        pho_ban._mo_ta = lambda *_: None
+        pho_ban._theo_doi = lambda *_a, **_k: None
+        pho_ban.doi.gui_trieu_tap = lambda *_a, **_k: None
+        pho_ban.doi.chua_theo = lambda: []
+        pho_ban._cho_doi_gan_xy((165, 156), pb.MAP_DAI_LY, "Di Chuyển", map_dich=pb.MAP_LAC_DUONG)
 
 
 class TestPhienXoayVong(unittest.TestCase):
@@ -543,10 +619,25 @@ class TestNenVeThanhTheoDoiThem(unittest.TestCase):
         doi = pb.DoiPMP("t", {})
         pb.bat_tap_hop(doi, pb.MAP_DAI_LY)
         ve, ly = pb.nen_ve_thanh_theo_doi(doi, pb.MAP_LAC_DUONG, pb.MAP_DAI_LY, False, False)
+        self.assertFalse(ve)
+        ve, ly = pb.nen_ve_thanh_theo_doi(doi, pb.MAP_LAU_LAN, pb.MAP_DAI_LY, False, False)
         self.assertTrue(ve)
         self.assertEqual(ly, f"gom {pb.MAP_DAI_LY}")
 
+
+class TestDoiVienDatMapGom(unittest.TestCase):
+    def test_gom_dai_ly_chap_nhan_lac_duong(self):
+        self.assertTrue(pb.doi_vien_dat_map_gom(pb.MAP_DAI_LY, pb.MAP_DAI_LY))
+        self.assertTrue(pb.doi_vien_dat_map_gom(pb.MAP_LAC_DUONG, pb.MAP_DAI_LY))
+        self.assertFalse(pb.doi_vien_dat_map_gom("Túc Mộng Sơn", pb.MAP_DAI_LY))
+
     def test_gom_lac_duong(self):
+        self.assertTrue(pb.doi_vien_dat_map_gom(pb.MAP_LAC_DUONG, pb.MAP_LAC_DUONG))
+        self.assertFalse(pb.doi_vien_dat_map_gom(pb.MAP_DAI_LY, pb.MAP_LAC_DUONG))
+
+
+class TestNenVeThanhGomLacDuong(unittest.TestCase):
+    def test_gom_lac_duong_map_la(self):
         doi = pb.DoiPMP("t", {})
         pb.bat_tap_hop(doi, pb.MAP_LAC_DUONG)
         ve, ly = pb.nen_ve_thanh_theo_doi(doi, "Hỏa Diệm Sơn", pb.MAP_LAC_DUONG, False, False)

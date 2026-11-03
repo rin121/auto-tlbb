@@ -440,7 +440,8 @@ GIAY_CHO_HOI_MAU_DAI_LY = 8
 GIAY_GIUA_HOI_MAU_DAI_LY = 3
 XY_NPC_PMP = CAC_BUOC_VAO[1][2]
 TEN_NPC_PMP = CAC_BUOC_VAO[1][1]
-GIAY_GIUA_BUOC_DOI_VIEN_GOM = 2.5
+GIAY_GIUA_BUOC_DOI_VIEN_GOM = 1.5
+GIAY_GIUA_BUOC_HOI_THOAI_DOI_VIEN = 0.35
 # Đội viên cần về Đại Lý (gom / map lạ): thử lại kỹ năng Quay về thành mỗi 3 giây.
 GIAY_RETRY_VE_THANH_THEO_DOI = 3
 # NPC SÁT TINH trên map thường lệch vài ô so với tọa độ ghi tay; gom đội dùng vị trí NPC đọc từ game.
@@ -687,6 +688,20 @@ def xy_gom_doi_vien(doi, truong_luong, map_can, xy_npc):
     return xy_npc
 
 
+def _goi_mo_npc_gan(game, ten_npc, xy, tt, state):
+    """Đội viên đứng cạnh NPC mà hội thoại chưa mở: gọi lại tên NPC / chạy sát (giống logic trưởng nhóm)."""
+    bay_gio = time.time()
+    if bay_gio - state.get("luc_goi", 0) < GIAY_CHAY_LAI:
+        return
+    state["luc_goi"] = bay_gio
+    lan = state.get("lan_goi", 0) + 1
+    state["lan_goi"] = lan
+    if lan % 2 == 1:
+        _chay_toi_xy(game, xy, ten_npc)
+    else:
+        game.lua.chay(f"SetAutoRunTargetNPCName({chuoi_lua(ten_npc)})")
+
+
 def cap_nhat_di_lac_duong_doi_vien(game, map_dang_o, state):
     """Đội viên ở Đại Lý: một bước tự NPC Di Chuyển sang Lạc Dương (gọi lặp từ luồng đội viên)."""
     if la_lac_duong(map_dang_o):
@@ -694,10 +709,6 @@ def cap_nhat_di_lac_duong_doi_vien(game, map_dang_o, state):
         return
     if not la_dai_ly(map_dang_o):
         return
-    bay_gio = time.time()
-    if bay_gio - state.get("luc", 0) < GIAY_GIUA_BUOC_DOI_VIEN_GOM:
-        return
-    state["luc"] = bay_gio
     _, ten_npc, xy, cac_dong, map_toi = BUOC_DI_CHUYEN_LAC_DUONG
     try:
         tt = game.thong_tin()
@@ -706,12 +717,19 @@ def cap_nhat_di_lac_duong_doi_vien(game, map_dang_o, state):
     if not tt:
         return
     vi_tri = (tt["x"], tt["y"])
-    if khoang_cach(vi_tri, xy) > KHOANG_GAN_NPC_SAT_TINH:
+    at_npc = khoang_cach(vi_tri, xy) <= KHOANG_GAN_NPC_SAT_TINH
+    buoc = state.get("dong", 0)
+    ht = _doc_hoi_thoai_game(game) if at_npc else None
+    dang_hoi_thoai = buoc < len(cac_dong) and ht and ht[1]
+    bay_gio = time.time()
+    gap = GIAY_GIUA_BUOC_HOI_THOAI_DOI_VIEN if (at_npc and buoc < len(cac_dong)) else GIAY_GIUA_BUOC_DOI_VIEN_GOM
+    if bay_gio - state.get("luc", 0) < gap:
+        return
+    state["luc"] = bay_gio
+    if not at_npc:
         _chay_toi_xy(game, xy, ten_npc)
         return
-    buoc = state.get("dong", 0)
     if buoc < len(cac_dong):
-        ht = _doc_hoi_thoai_game(game)
         if ht and ht[1]:
             dong = cac_dong[buoc]
             if isinstance(dong[0], str):
@@ -723,7 +741,7 @@ def cap_nhat_di_lac_duong_doi_vien(game, map_dang_o, state):
             state["dong"] = buoc + 1
             state["luc_chon_xong"] = bay_gio
         else:
-            _chay_toi_xy(game, xy, ten_npc)
+            _goi_mo_npc_gan(game, ten_npc, xy, tt, state)
         return
     try:
         moi = game.thong_tin()
@@ -801,7 +819,11 @@ def cap_nhat_doi_vien_toi_truong(game, doi, truong_luong, map_dang_o, state):
     if bay_gio - state.get("luc", 0) < GIAY_GIUA_BUOC_DOI_VIEN_GOM:
         return
     state["luc"] = bay_gio
-    xy = xy_gom_doi_vien(doi, truong_luong, MAP_DAI_LY, None)
+    map_gom = map_gom_doi_vien(doi, map_dang_o, truong_luong)
+    xy_npc = None
+    if doi.npc_gom and len(doi.npc_gom) >= 3 and chuan_hoa(doi.npc_gom[0]) == chuan_hoa(map_gom):
+        xy_npc = doi.npc_gom[2]
+    xy = xy_gom_doi_vien(doi, truong_luong, map_gom, xy_npc)
     if not xy:
         return
     try:
@@ -848,10 +870,26 @@ def can_ve_tap_hop(doi, ten_map, map_truong=None):
     o_dai_ly = la_dai_ly(ten_map)
     o_lac_duong = la_lac_duong(ten_map)
     if map_gom == chuan_hoa(MAP_DAI_LY):
+        # PMP/Sát Tinh: đã ở Lạc Dương thì giữ nguyên; chỉ kéo map lạ / ngoài LD về Đại Lý.
+        if o_lac_duong:
+            return False
         return not o_dai_ly
     if map_gom == chuan_hoa(MAP_LAC_DUONG):
         return not o_lac_duong and not o_dai_ly
     return False
+
+
+def doi_vien_dat_map_gom(ten_map, map_gom):
+    """
+    Đội viên đã sẵn sàng cho bước gom map_gom.
+    Gom Đại Lý (trước Di Chuyển sang Lạc Dương): ai ở Lạc Dương coi như đủ, không bắt về Đại Lý.
+    """
+    khoa = chuan_hoa(map_gom or MAP_DAI_LY)
+    if khoa == chuan_hoa(MAP_DAI_LY):
+        return la_dai_ly(ten_map) or la_lac_duong(ten_map)
+    if khoa == chuan_hoa(MAP_LAC_DUONG):
+        return la_lac_duong(ten_map)
+    return la_dai_ly(ten_map)
 
 
 def nen_ve_thanh_theo_doi(doi, map_dv, map_truong, het_luot, dang_theo_doi):
@@ -882,6 +920,57 @@ def nen_ve_thanh_theo_doi(doi, map_dv, map_truong, het_luot, dang_theo_doi):
         map_gom = chuan_hoa((doi.map_tap_hop if doi else None) or MAP_DAI_LY)
         return True, f"gom {MAP_DAI_LY if map_gom == chuan_hoa(MAP_DAI_LY) else MAP_LAC_DUONG}"
     return False, ""
+
+
+def bat_doi_vien_tu_di_lac_duong(doi, pmp=None, dem=None):
+    """
+    Có đội viên chưa tới Lạc Dương (thường còn ở Đại Lý): bật di_lac_duong + npc_gom để luồng đội viên tự Di Chuyển
+    ngay, không chờ hết thời gian chờ Theo đội sau khi đội trưởng đã sang Lạc Dương.
+    """
+    if not doi:
+        return False
+    doi.lam_moi()
+    maps = doi.map_doi_vien()
+    if not maps:
+        return False
+    if all(la_lac_duong(m) for m in maps.values()):
+        doi.di_lac_duong = False
+        return False
+    if not any(la_dai_ly(m) for m in maps.values()):
+        return False
+    doi.di_lac_duong = True
+    if pmp is not None and dem is not None:
+        ten_npc, xy = npc_lac_duong_can_toi(pmp, dem)
+    else:
+        ten_npc, xy = TEN_NPC_PMP, XY_NPC_PMP
+    if ten_npc:
+        doi.npc_gom = (MAP_LAC_DUONG, ten_npc, xy)
+    return True
+
+
+def map_gom_doi_vien(doi, map_dang_o, truong_luong):
+    """Map mục tiêu khi đội trưởng gom (ưu tiên map đội viên đang đứng, rồi vị trí trưởng)."""
+    if la_lac_duong(map_dang_o):
+        return MAP_LAC_DUONG
+    if la_dai_ly(map_dang_o):
+        return MAP_DAI_LY
+    if truong_luong is not None:
+        try:
+            tt = truong_luong.game.thong_tin()
+            if tt:
+                m = tt.get("map")
+                if la_lac_duong(m):
+                    return MAP_LAC_DUONG
+                if la_dai_ly(m):
+                    return MAP_DAI_LY
+        except (LoiLua, OSError, AttributeError):
+            pass
+    vt = doi.vi_tri_truong if doi else None
+    if vt and la_lac_duong(vt[2]):
+        return MAP_LAC_DUONG
+    if vt and la_dai_ly(vt[2]):
+        return MAP_DAI_LY
+    return MAP_DAI_LY
 
 
 class DoiPMP:
@@ -1209,10 +1298,14 @@ class PhoBanPMP:
         if not chua_toi():
             return
         luc_bao = 0.0
+        if chuan_hoa(map_can) == chuan_hoa(MAP_LAC_DUONG):
+            bat_doi_vien_tu_di_lac_duong(self.doi)
         while True:
             if self.nen_dung():
                 raise _Dung()
             self.doi.lam_moi()
+            if chuan_hoa(map_can) == chuan_hoa(MAP_LAC_DUONG):
+                bat_doi_vien_tu_di_lac_duong(self.doi)
             thieu = chua_toi()
             if not thieu:
                 return
@@ -1247,9 +1340,10 @@ class PhoBanPMP:
         self.game.lua.chay(f"AutoRunToTarget({xy[0]}, {xy[1]}) "
                            f"SetAutoRunTargetNPCName({chuoi_lua(ten_npc)})")
 
-    def _cho_doi_gan_xy(self, xy, map_can, ten_npc=None):
+    def _cho_doi_gan_xy(self, xy, map_can, ten_npc=None, map_dich=None):
         """
         Đội trưởng chờ mọi đội viên cùng map và đứng gần xy (game chỉ kéo cả đội vào phó bản khi đủ người gần NPC).
+        map_dich: map sau bước NPC (vd. Lạc Dương) — đội viên đã ở đó thì không chờ tới NPC trên map_can.
         Kiểm tra lại mỗi GIAY_CHO_GOM_DOI_RETRY giây. ten_npc: đọc vị trí NPC thật và trưởng nhóm tự chạy tới.
         """
         if not self.doi or not self.doi.cac_doi_vien:
@@ -1263,6 +1357,7 @@ class PhoBanPMP:
         luc_bat_dau = time.time()
         het_han_trieu = time.time() + GIAY_TOI_DA_CHO_GAN_NPC
         khoa_map = chuan_hoa(map_can)
+        khoa_dich = chuan_hoa(map_dich) if map_dich else None
         while True:
             if self.nen_dung():
                 raise _Dung()
@@ -1294,6 +1389,8 @@ class PhoBanPMP:
             thieu = []
             for ten, luong in self.doi.cac_doi_vien.items():
                 m = luong.map_hien_tai
+                if khoa_dich and chuan_hoa(m or "") == khoa_dich:
+                    continue
                 if chuan_hoa(m or "") != khoa_map:
                     thieu.append(f"{ten} (đang ở {m or '?'})")
                     continue
@@ -1360,7 +1457,6 @@ class PhoBanPMP:
         """
         if not self.doi:
             return
-        o_map = la_lac_duong if chuan_hoa(map_gom) == chuan_hoa(MAP_LAC_DUONG) else la_dai_ly
         luc_bao = 0.0
         bat_dau = time.time()
         da_bao = None
@@ -1381,10 +1477,13 @@ class PhoBanPMP:
                 da_bao = list(self.doi.cac_doi_vien)
                 self.in_log(f"{self.ten}: PMP gom đội ở {map_gom}: {', '.join(da_bao)}")
             maps = self.doi.map_doi_vien()
-            chua_ve = [ten for ten, m in maps.items() if not o_map(m)]
+            chua_ve = [ten for ten, m in maps.items() if not doi_vien_dat_map_gom(m, map_gom)]
             if chua_ve:
                 chi_tiet = ", ".join(f"{ten} ({maps.get(ten) or '?'})" for ten in chua_ve)
                 cho = f"chờ {chi_tiet} về {map_gom}"
+                if chuan_hoa(map_gom) == chuan_hoa(MAP_DAI_LY) and any(
+                        la_lac_duong(maps.get(ten)) for ten in maps if ten not in chua_ve):
+                    cho = f"chờ {chi_tiet} (đội viên đã ở {MAP_LAC_DUONG} giữ nguyên)"
                 self._mo_ta(cho)
                 if bay_gio - luc_bao >= 60:
                     luc_bao = bay_gio
@@ -1394,7 +1493,13 @@ class PhoBanPMP:
             self._cho_load_map(map_gom)
             self.game.lua.chay(MA_THEO_DOI)
             ds = ", ".join(self.doi.cac_doi_vien)
-            self.in_log(f"{self.ten}: PMP cả đội ({ds}) đã ở {map_gom}, bắt đầu đi")
+            co_ld = chuan_hoa(map_gom) == chuan_hoa(MAP_DAI_LY) and any(
+                la_lac_duong(self.doi.map_doi_vien().get(ten)) for ten in self.doi.cac_doi_vien)
+            if co_ld:
+                self.in_log(f"{self.ten}: PMP cả đội ({ds}) sẵn sàng (có acc đã ở {MAP_LAC_DUONG}, không gom về "
+                            f"{MAP_DAI_LY}), trưởng đi tiếp")
+            else:
+                self.in_log(f"{self.ten}: PMP cả đội ({ds}) đã ở {map_gom}, bắt đầu đi")
             return
 
     def _cho_doi_gan_truong(self):
@@ -1420,6 +1525,8 @@ class PhoBanPMP:
                 self.doi.vi_tri_truong = (xy_tr[0], xy_tr[1], MAP_DAI_LY)
                 thieu = []
                 for ten, luong in self.doi.cac_doi_vien.items():
+                    if la_lac_duong(luong.map_hien_tai):
+                        continue
                     if not la_dai_ly(luong.map_hien_tai):
                         thieu.append(f"{ten} (đang ở {luong.map_hien_tai or '?'})")
                         continue
@@ -1584,8 +1691,8 @@ class PhoBanPMP:
 
     def _cho_doi_sang_lac_duong(self):
         """
-        Sau Di Chuyển: chờ đội viên theo sang Lạc Dương. Ai bị bỏ lại ở Đại Lý thì bật di_lac_duong để đội viên đó tự
-        đi NPC Di Chuyển, rồi chờ tới khi cả đội sang.
+        Sau Di Chuyển: chờ đội viên theo sang Lạc Dương. Ai bị bỏ lại ở Đại Lý thì bật di_lac_duong ngay (song song
+        với vài giây chờ Theo đội), rồi chờ tới khi cả đội sang.
         """
         if not self.doi or not self.doi.cac_doi_vien:
             return
@@ -1593,18 +1700,23 @@ class PhoBanPMP:
         while time.time() < het_han:
             if self.nen_dung():
                 raise _Dung()
+            bat_doi_vien_tu_di_lac_duong(self.doi)
             if all(la_lac_duong(m) for m in self.doi.map_doi_vien().values()):
+                self.doi.di_lac_duong = False
+                self.doi.npc_gom = None
                 return
             time.sleep(1)
         chua = [ten for ten, m in self.doi.map_doi_vien().items() if not la_lac_duong(m)]
         if not chua:
             return
         self.in_log(f"{self.ten}: PMP {', '.join(chua)} không theo sang {MAP_LAC_DUONG}, tự đi NPC Di Chuyển")
-        self.doi.di_lac_duong = True
+        bat_doi_vien_tu_di_lac_duong(self.doi)
         try:
             self._cho_doi_vien(MAP_LAC_DUONG)
         finally:
             self.doi.di_lac_duong = False
+            if all(la_lac_duong(m) for m in self.doi.map_doi_vien().values()):
+                self.doi.npc_gom = None
 
     def _theo_doi(self, xy, dan_doi=True):
         """Lên thú (nếu NPC xa) rồi luôn bấm Theo đội. Đổi map / F9 là mất theo đội."""
@@ -2086,11 +2198,35 @@ class PhoBanPMP:
 
     def _gom_doi_neu_lech_map(self):
         """
-        Đầu vòng, đội trưởng ngoài Đại Lý (vd. Lạc Dương) mà đội viên ở map khác: cả đội cùng dùng kỹ năng Quay về Đại
-        Lý để đứng chung một chỗ, rồi đội trưởng dẫn đội đi phó bản như bình thường. True nếu đã về.
+        Đầu vòng, đội trưởng ngoài Đại Lý mà đội viên lệch map.
+        Trưởng ở Lạc Dương: đội viên đã LD giữ nguyên; chỉ người ở Đại Lý tự Di Chuyển sang LD — không kéo cả đội
+        về Đại Lý. Map lạ (không DL/LD): gom cả đội về Đại Lý như cũ. True nếu đã ép cả đội về Đại Lý.
         """
         m = self._map()
         if not self.doi or not m or la_dai_ly(m) or la_map_trong_pho_ban(m):
+            return False
+        maps = self.doi.map_doi_vien()
+        if not maps:
+            return False
+        if la_lac_duong(m):
+            map_khac = [f"{ten} ({mv})" for ten, mv in maps.items()
+                        if mv and not la_lac_duong(mv) and not la_dai_ly(mv)]
+            if map_khac:
+                lech = ", ".join(map_khac)
+                self.in_log(f"{self.ten}: PMP đội trưởng ở {m}, đội viên map lạ ({lech}) — cả đội dùng kỹ năng về "
+                            f"{MAP_DAI_LY} rồi đi lại từ đầu")
+                bat_tap_hop(self.doi, MAP_DAI_LY)
+                try:
+                    self._ca_doi_ve_thanh()
+                finally:
+                    tat_tap_hop(self.doi)
+                return True
+            o_dai_ly = [ten for ten, mv in maps.items() if mv and la_dai_ly(mv)]
+            if o_dai_ly:
+                self.in_log(f"{self.ten}: PMP đội trưởng ở {m}, đội viên ở {MAP_DAI_LY} ({', '.join(o_dai_ly)}) — "
+                            f"tự Di Chuyển sang {MAP_LAC_DUONG} (không kéo cả đội về {MAP_DAI_LY})")
+            bat_doi_vien_tu_di_lac_duong(self.doi)
+            self.doi.cho_ve_sau_boss = None
             return False
         lech = self._doi_vien_lech_map()
         if not lech:
@@ -2121,14 +2257,25 @@ class PhoBanPMP:
                 return False
             self.in_log(f"{self.ten}: PMP {ten_npc} đã đưa tới [{m}]")
             if self.doi:
-                tat_tap_hop(self.doi)
-                self.doi.npc_gom = None
-                self.doi.di_lac_duong = False
+                if chuan_hoa(map_toi) == chuan_hoa(MAP_LAC_DUONG):
+                    bat_doi_vien_tu_di_lac_duong(self.doi)
+                else:
+                    tat_tap_hop(self.doi)
+                    self.doi.npc_gom = None
+                    self.doi.di_lac_duong = False
             return True
 
         def gom_doi():
+            if self.doi and map_toi and chuan_hoa(map_o) == chuan_hoa(MAP_DAI_LY) \
+                    and chuan_hoa(map_toi) == chuan_hoa(MAP_LAC_DUONG):
+                maps = self.doi.map_doi_vien()
+                if maps and all(la_lac_duong(m) for m in maps.values()):
+                    ds = ", ".join(f"{ten} ({m or '?'})" for ten, m in maps.items())
+                    self.in_log(f"{self.ten}: PMP đội viên đã ở {MAP_LAC_DUONG} ({ds}), "
+                                f"trưởng tự {ten_npc} sang {MAP_LAC_DUONG} (không chờ gom {MAP_DAI_LY})")
+                    return False
             try:
-                self._cho_doi_gan_xy(xy, map_o, ten_npc)
+                self._cho_doi_gan_xy(xy, map_o, ten_npc, map_dich=map_toi)
             except _TruongSaiMap:
                 if da_toi():
                     return True

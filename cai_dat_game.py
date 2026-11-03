@@ -12,6 +12,7 @@ Trước khi mở Game.exe (giảm đồ họa / tắt hiệu ứng / scale đ�
 và *.pfc cho các biến View_* còn sót và System_MaxFPS* (khi giảm đồ họa).
 """
 
+import ctypes
 import os
 import re
 from glob import glob
@@ -123,6 +124,7 @@ DO_PHAN_GIAI_CAO_MIN, DO_PHAN_GIAI_CAO_MAX = 480, 1440
 DO_PHAN_GIAI_CHECK = (("qpms", 0),)
 
 FPS_MAC_DINH = {"fps_max": 25, "fps_front": 25, "fps_back": 5}
+FPS_MIN, FPS_MAX = 5, 100
 FPS_KHOA_CFG = ("System_MaxFPS", "System_MaxFPS_Front", "System_MaxFPS_Back")
 
 
@@ -131,7 +133,7 @@ def _fps_so(chung, khoa):
         gia_tri = int(chung.get(khoa, FPS_MAC_DINH[khoa]))
     except (TypeError, ValueError):
         gia_tri = FPS_MAC_DINH[khoa]
-    return max(5, min(100, gia_tri))
+    return max(FPS_MIN, min(FPS_MAX, gia_tri))
 
 
 def fps_tu_cau_hinh(chung=None):
@@ -285,15 +287,27 @@ def ap_dung_hieu_ung(lua):
     return int(lua.chay(ma_ap_dung_hieu_ung()) or b"0")
 
 
-def ma_ap_dung_do_phan_giai(chung=None):
+def ma_ap_dung_do_phan_giai(chung=None, ep=False):
     """Lua: cửa sổ WxH như Duyệt ViewSetup (View_Resoution + bỏ FULLSCREEN)."""
-    dong = _ma_lua_ap_dung()
+    dong = _ma_lua_ap_dung(ep=ep)
     # ViewSetup_Accept: ghi rỗng rồi ghi lại để client nhận độ phân giải mới.
     dong.append('bien("View_Resoution", "")')
     dong += [f'bien("{k}", "{v}")' for k, v in cap_do_phan_giai_cfg(chung)]
     dong += [f'hien_thi("{k}", {v})' for k, v in DO_PHAN_GIAI_CHECK]
     dong.append('return tostring(doi)')
     return "\n".join(dong)
+
+
+def _kich_thuoc_cua_so_tu_vung_client(rong_client, cao_client, style, ex_style):
+    """Client WxH → kích thước outer window (viền + title bar)."""
+    class RECT(ctypes.Structure):
+        _fields_ = [("left", ctypes.c_long), ("top", ctypes.c_long),
+                    ("right", ctypes.c_long), ("bottom", ctypes.c_long)]
+
+    rect = RECT(0, 0, int(rong_client), int(cao_client))
+    if not ctypes.windll.user32.AdjustWindowRectEx(ctypes.byref(rect), int(style), False, int(ex_style)):
+        raise OSError("AdjustWindowRectEx")
+    return rect.right - rect.left, rect.bottom - rect.top
 
 
 def scale_cua_so(hwnd, rong_muc=None, cao_muc=None, chung=None):
@@ -313,10 +327,10 @@ def scale_cua_so(hwnd, rong_muc=None, cao_muc=None, chung=None):
         return False
     style = win32gui.GetWindowLong(hwnd, win32con.GWL_STYLE)
     ex = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
-    khung = win32gui.AdjustWindowRectEx(
-        (0, 0, rong_muc, cao_muc), style, False, ex)
-    rong = khung[2] - khung[0]
-    cao = khung[3] - khung[1]
+    try:
+        rong, cao = _kich_thuoc_cua_so_tu_vung_client(rong_muc, cao_muc, style, ex)
+    except OSError:
+        return False
     try:
         win32gui.SetWindowPos(
             hwnd, None, x, y, rong, cao,
@@ -331,9 +345,9 @@ def scale_cua_so_800x600(hwnd):
     return scale_cua_so(hwnd)
 
 
-def ap_dung_do_phan_giai(lua, hwnd=None, chung=None):
+def ap_dung_do_phan_giai(lua, hwnd=None, chung=None, ep=False):
     """Trả về số mục Lua đã đổi. hwnd: nếu có thì scale luôn khung cửa sổ."""
-    so = int(lua.chay(ma_ap_dung_do_phan_giai(chung)) or b"0")
+    so = int(lua.chay(ma_ap_dung_do_phan_giai(chung, ep=ep)) or b"0")
     if hwnd is None:
         hwnd = getattr(lua, "hwnd", None)
     if scale_cua_so(hwnd, chung=chung):

@@ -465,6 +465,19 @@ def dat_nhan_vat(ten, cai_dat):
     _ghi_ban_luu(ban)
 
 
+_cac_thong_bao_sua_nv = []
+
+
+def dang_ky_thong_bao_sua_nv(ham):
+    """Gọi ham(tên) sau mỗi sua_nhan_vat (xoay vòng / phó bản cập nhật cấu hình nền, giao diện làm mới cột Auto)."""
+    _cac_thong_bao_sua_nv.append(ham)
+
+
+def _goi_thong_bao_sua_nv(ten):
+    for ham in _cac_thong_bao_sua_nv:
+        ham(ten)
+
+
 def sua_nhan_vat(ten, ham):
     """ham(cài đặt) sửa thẳng cài đặt đã lưu của nhân vật, trong cùng một lần khóa (luồng auto cập nhật bộ đếm)."""
     with _khoa:
@@ -474,6 +487,7 @@ def sua_nhan_vat(ten, ham):
         ban = _chup_ban_luu()
         gia_tri = _sao_chep(_du_lieu["nhan_vat"][ten])
     _ghi_ban_luu(ban)
+    _goi_thong_bao_sua_nv(ten)
     return gia_tri
 
 

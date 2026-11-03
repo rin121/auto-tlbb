@@ -1,5 +1,5 @@
 """
-AUTO CLICK: bấm liên tục các ô F1-F10 trên thanh kỹ năng (tab "Auto click"), không cần đang đánh quái.
+AUTO CLICK: bấm liên tục các ô F1-F10 trên thanh kỹ năng (tab Tiện ích), không cần đang đánh quái.
 
 Dùng cùng cách với tự dùng kỹ năng ở chien_dau.py: Button_ActionN:DoAction() của cửa sổ MainMenuBar như bấm phím FN.
 Mỗi lượt bấm mọi ô đã tích; ô chưa hồi / đang vận công thì game tự bỏ qua.

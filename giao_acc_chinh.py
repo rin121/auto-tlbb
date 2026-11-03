@@ -290,53 +290,11 @@ def ap_dung_so_tui(ds, tk_chinh, so):
     return kq, bo, them
 
 
-class LuongGiaoAccChinh(threading.Thread):
-    def __init__(self, hang_doi):
-        super().__init__(daemon=True)
-        self.hang_doi = hang_doi
-        self.dung = threading.Event()
-        self.cd = cai_dat()
-        self.tk_chinh = {"ten_dang_nhap": self.cd["tai_khoan"], "mat_khau": self.cd["mat_khau"],
-                         "nhan_vat": self.cd["nhan_vat"]}
-        self.loai_tru = cac_tu_loai_tru(self.cd["loai_tru"])
-        self.tat_ca_pho_ban = bool(self.cd.get("tat_ca_pho_ban"))
-        self.bo_qua = []
-        self.tk_khong_co_do = set()
-        if self.tat_ca_pho_ban:
-            ds = cac_nhan_vat_pho_ban(self.cd["tai_khoan"], self.cd["chi_hom_nay"], self.bo_qua)
-        else:
-            ds = cac_truong_nhom(self.cd["tai_khoan"], self.cd["chi_hom_nay"], self.bo_qua)
-        self.ds_truong, self.bo_vi_so, self.them_tu_so = ap_dung_so_tui(ds, self.cd["tai_khoan"], so_tui_do.doc())
-        self.chinh = None
-        self.hwnd_truong = None
-        self.pid_dieu_khien = set()
-        self.cac_luong_con = []
-        self.tien_trinh = {}
-        self.luc_cat = 0.0
-        self._pho_ban_da_luu = {}
-        # Tài khoản đã bị đăng xuất để nhường client: tự đăng nhập khi diss không mở lại trong lúc giao.
-        self.tk_da_thoat = set()
+class GiaoAccChinhEngine:
+    """Đăng nhập, di chuyển, giao dịch, cất túi acc nhận — dùng chung «Giao acc chính» và «Gộp acc chính»."""
 
-    # ---------- dùng từ giao diện ----------
-
-    def cac_tai_khoan(self):
-        if not self.is_alive():
-            return set()
-        return ({self.tk_chinh["ten_dang_nhap"].lower()} | {tk["ten_dang_nhap"].lower() for tk, _ in self.ds_truong}
-                | self.tk_da_thoat)
-
-    def dang_dieu_khien(self, pid):
-        if not self.is_alive():
-            return False
-        return pid in self.pid_dieu_khien or any(l.pid == pid and l.is_alive() for l in list(self.cac_luong_con))
-
-    # ---------- chung ----------
-
-    def in_log(self, chu):
-        self.hang_doi.put(("log", f"[Giao acc chính] {chu}"))
-
-    def bao_trang_thai(self, chu):
-        self.hang_doi.put(("trang_thai_giao_acc_chinh", chu))
+    ghi_so_tui = True
+    thoat_sau_giao = False
 
     def _kiem_tra_dung(self):
         if self.dung.is_set():
@@ -361,62 +319,6 @@ class LuongGiaoAccChinh(threading.Thread):
         except (LoiLua, OSError):
             return None
 
-    def run(self):
-        try:
-            self._chay()
-        except _Dung:
-            self.in_log("Đã dừng (tiến trình đã lưu, bấm Bắt đầu để đi tiếp)")
-            self.bao_trang_thai("Đã dừng")
-        except LoiGiaoAccChinh as loi:
-            self.in_log(f"Dừng: {loi} (tiến trình đã lưu)")
-            self.bao_trang_thai(f"Dừng: {loi}")
-        except Exception:
-            self.in_log(f"Lỗi không mong đợi\n{traceback.format_exc()}")
-            self.bao_trang_thai("Lỗi, xem log")
-        finally:
-            self._khoi_phuc_phó_ban()
-            for luong in self.cac_luong_con:
-                luong.dung.set()
-            if self.chinh:
-                try:
-                    self.chinh.lua.chay(MA_DONG_CUA_SO)
-                except (LoiLua, OSError):
-                    pass
-            self.pid_dieu_khien.clear()
-
-    def _tam_tat_phó_ban(self):
-        """Tắt phó bản trên cấu hình để luồng auto đang chạy thoát vòng PMP/Sát Tinh ngay."""
-        if self._pho_ban_da_luu:
-            return
-        for ten in cau_hinh.cac_nhan_vat():
-            cd = cau_hinh.cua_nhan_vat(ten)
-            pmp = cai_dat_pmp(cd)
-            if not pmp.get("bat"):
-                continue
-            self._pho_ban_da_luu[ten] = copy.deepcopy(pmp)
-
-            def sua(c):
-                moi = dict(cai_dat_pmp(c))
-                moi["bat"] = False
-                c["pho_ban_pmp"] = moi
-
-            cau_hinh.sua_nhan_vat(ten, sua)
-        if self._pho_ban_da_luu:
-            self.in_log(f"Tạm tắt phó bản {len(self._pho_ban_da_luu)} nhân vật trong lúc giao dịch")
-
-    def _khoi_phuc_phó_ban(self):
-        if not self._pho_ban_da_luu:
-            return
-        so = len(self._pho_ban_da_luu)
-        for ten, pmp in self._pho_ban_da_luu.items():
-
-            def sua(c, luu=pmp):
-                c["pho_ban_pmp"] = copy.deepcopy(luu)
-
-            cau_hinh.sua_nhan_vat(ten, sua)
-        self._pho_ban_da_luu = {}
-        self.in_log(f"Bật lại phó bản {so} nhân vật")
-
     def _ve_chon_may_chu(self, game, ten):
         try:
             game.lua.chay(MA_DONG_CUA_SO)
@@ -426,61 +328,6 @@ class LuongGiaoAccChinh(threading.Thread):
             ve_chon_may_chu(game, self.dung.is_set, lambda chu: self.in_log(f"{ten}: {chu}"))
         except LoiDangNhap as loi:
             raise LoiGiaoAccChinh(f"{ten}: {loi}") from loi
-
-    def _chay(self):
-        hom_nay_chu = date.today().isoformat()
-        self.tien_trinh = dict(self.cd.get("tien_trinh") or {})
-        if self.tien_trinh.get("ngay") != hom_nay_chu:
-            self.tien_trinh = {"ngay": hom_nay_chu, "da_xong": [], "ma_da_nhan": []}
-        for ly_do in dict.fromkeys(l for _, _, l in self.bo_qua):
-            cac = list(dict.fromkeys(tk if ly_do.startswith("tài khoản") else ten
-                                     for tk, ten, l in self.bo_qua if l == ly_do))
-            self.in_log(f"Bỏ qua {len(cac)} ({ly_do}): {', '.join(cac)}")
-        if self.bo_vi_so:
-            self.in_log(f"Bỏ qua {len(self.bo_vi_so)} (sổ túi đồ ghi không có đồ): {', '.join(self.bo_vi_so)}")
-        so = so_tui_do.doc()
-        if self.them_tu_so:
-            self.in_log(f"Thêm {len(self.them_tu_so)} nhân vật sổ túi đồ ghi còn đồ: " + ", ".join(
-                f"{ten} ({so_tui_do.mo_ta(so_tui_do.muc_cua(so, ten))})" for _, ten in self.them_tu_so))
-        da_xong_ds = {chuan_hoa(t) for t in self.tien_trinh["da_xong"]}
-        # Đã giao hôm nay nhưng sau đó đi phó bản tiếp (sổ ghi lại có đồ) thì giao lại.
-        con = [(tk, ten) for tk, ten in self.ds_truong
-               if chuan_hoa(ten) not in da_xong_ds or so_tui_do.can_giao(so_tui_do.muc_cua(so, ten))]
-        loai = "mọi acc phó bản" if self.tat_ca_pho_ban else "trưởng nhóm"
-        self.in_log(f"Bắt đầu: acc chính {self.tk_chinh['nhan_vat']}, {len(self.ds_truong)} nhân vật ({loai})"
-                    + (" đã đi hôm nay" if self.cd["chi_hom_nay"] else "")
-                    + f", đã xong {len(self.ds_truong) - len(con)}, còn {len(con)}: "
-                    + ", ".join(ten for _, ten in con))
-        if not con:
-            self.bao_trang_thai(f"Xong (không còn nhân vật {loai})")
-            return
-        self._tam_tat_phó_ban()
-        try:
-            self._chay_giao(con, loai)
-        finally:
-            self._khoi_phuc_phó_ban()
-
-    def _chay_giao(self, con, loai):
-        self._vao_acc_chinh()
-        ten_truong = ten_cac_truong_nhom(self.tk_chinh["ten_dang_nhap"]) if self.tat_ca_pho_ban else set()
-        so_tui = so_tui_do.doc()
-        for so, (tk, ten) in enumerate(con, 1):
-            self.bao_trang_thai(f"{so}/{len(con)}: {ten}")
-            # Chỉ đoán theo tài khoản khi sổ chưa có nhân vật này; sổ ghi còn đồ / chưa rõ thì luôn đăng nhập.
-            if self.tat_ca_pho_ban and so_tui_do.muc_cua(so_tui, ten) is None \
-                    and bo_qua_cung_tai_khoan(tk, ten, self.tk_khong_co_do, ten_truong):
-                self.in_log(f"{ten}: nhân vật khác của {tk['ten_dang_nhap']} không có đồ (đã giao cho trưởng nhóm), "
-                            "bỏ qua không đăng nhập")
-                self.tien_trinh["da_xong"].append(ten)
-                self._luu_tien_trinh()
-                continue
-            if self._mot_truong_nhom(tk, ten):
-                self.tien_trinh["da_xong"].append(ten)
-                self._luu_tien_trinh()
-        self.in_log(f"Xong tất cả nhân vật ({loai})")
-        self.bao_trang_thai("Xong")
-
-    # ---------- đăng nhập ----------
 
     def _dang_nhap(self, tai_khoan, hwnd):
         acc_chinh = tai_khoan["ten_dang_nhap"].lower() == self.tk_chinh["ten_dang_nhap"].lower()
@@ -561,10 +408,6 @@ class LuongGiaoAccChinh(threading.Thread):
         self._chay_toi(game, ten, NPC_TAN_THU[1])
 
     def _chon_game_truong(self, tk):
-        """
-        Client cho acc giao dịch: game đang dùng tài khoản đó, client của acc trước, client khác acc chính (chỉ mở game
-        mới khi không còn client nào). Client khác đang trong game thì về chọn máy chủ, không tắt.
-        """
         hwnd_chinh = self.chinh.lua.hwnd
         hwnd = tim_game_cua_tai_khoan(tk["ten_dang_nhap"])
         cac_cua_so = [c["hwnd"] for c in tim_cua_so_game() if c["hwnd"] != hwnd_chinh]
@@ -572,8 +415,6 @@ class LuongGiaoAccChinh(threading.Thread):
             hwnd = self.hwnd_truong if self.hwnd_truong in cac_cua_so else (cac_cua_so[0] if cac_cua_so else None)
         self._thoat_cac_client(giu={hwnd_chinh, hwnd})
         return hwnd
-
-    # ---------- di chuyển ----------
 
     def _ve_dai_ly(self, game, ten):
         luc_ve = 0.0
@@ -600,7 +441,6 @@ class LuongGiaoAccChinh(threading.Thread):
             tt = self._doc(game)
             if tt and math.hypot(tt["x"] - xy[0], tt["y"] - xy[1]) <= KHOANG_CACH_DUNG_CHO:
                 return True
-            # Lệnh chạy bị game bỏ khi đang tải map sau Về thành / bị chặn đường: gửi lại định kỳ.
             if tt and time.time() - lan_gui[0] >= GIAY_GUI_LAI_CHAY:
                 if not la_dai_ly(tt["map"]):
                     self._ve_dai_ly(game, ten)
@@ -627,10 +467,7 @@ class LuongGiaoAccChinh(threading.Thread):
         self.in_log(f"{ten}: đã về chọn máy chủ, sang nhân vật tiếp theo")
         self.hwnd_truong = hwnd
 
-    # ---------- một nhân vật phó bản / trưởng nhóm ----------
-
     def _do_can_giao(self, game, bo_qua):
-        """Các ô (túi, ô) cần giao, trừ đồ loại trừ và đồ đã thử mà không giao được (bo_qua: {(túi, ô, mã)})."""
         cac_o = []
         for (ten_tui, o), (ma, _, ten) in sorted(doc_tui(game.lua).items()):
             if (ten_tui, o, ma) in bo_qua or bi_loai_tru(ten, self.loai_tru):
@@ -639,7 +476,6 @@ class LuongGiaoAccChinh(threading.Thread):
         return cac_o
 
     def _mot_truong_nhom(self, tk, ten):
-        """Giao hết đồ của một trưởng nhóm cho acc chính. True khi xong (không còn đồ giao được)."""
         ten_chinh = self.tk_chinh["nhan_vat"]
         self.in_log(f"{ten}: đăng nhập")
         game = self._dang_nhap(dict(tk, nhan_vat=ten), self._chon_game_truong(tk))
@@ -652,10 +488,11 @@ class LuongGiaoAccChinh(threading.Thread):
         cac_o = self._do_can_giao(game, bo_qua)
         if not cac_o:
             self.in_log(f"{ten}: không có đồ cần giao")
-            so_tui_do.ghi_da_giao(tk["ten_dang_nhap"], ten)
-            if chuan_hoa(ten) not in ten_cac_truong_nhom(self.tk_chinh["ten_dang_nhap"]):
-                self.tk_khong_co_do.add(tk["ten_dang_nhap"].lower())
-            if self.tat_ca_pho_ban:
+            if self.ghi_so_tui:
+                so_tui_do.ghi_da_giao(tk["ten_dang_nhap"], ten)
+                if chuan_hoa(ten) not in ten_cac_truong_nhom(self.tk_chinh["ten_dang_nhap"]):
+                    self.tk_khong_co_do.add(tk["ten_dang_nhap"].lower())
+            if self.thoat_sau_giao:
                 self._thoat_game_pho_ban(game, ten)
             return True
         self.in_log(f"{ten}: có {len(cac_o)} ô đồ, giao dịch cho {ten_chinh}")
@@ -683,10 +520,11 @@ class LuongGiaoAccChinh(threading.Thread):
                 self.in_log(f"{ten}: giao dịch lỗi ({loi}), thử lại {lan_loi}/{SO_LAN_THU_GIAO_DICH}")
                 if lan_loi >= SO_LAN_THU_GIAO_DICH:
                     self.in_log(f"{ten}: giao dịch lỗi nhiều lần, bỏ qua (lần sau bấm Bắt đầu sẽ thử lại)")
-                    try:
-                        so_tui_do.ghi_so_o(tk["ten_dang_nhap"], ten, doc_tui(game.lua), self.loai_tru)
-                    except (LoiLua, OSError):
-                        pass
+                    if self.ghi_so_tui:
+                        try:
+                            so_tui_do.ghi_so_o(tk["ten_dang_nhap"], ten, doc_tui(game.lua), self.loai_tru)
+                        except (LoiLua, OSError):
+                            pass
                     return False
                 self.dung.wait(3)
                 continue
@@ -698,15 +536,13 @@ class LuongGiaoAccChinh(threading.Thread):
         self._don_tui_chinh()
         self.in_log(f"{ten}: đã giao xong"
                     + (f", còn {len(bo_qua)} ô không giao được (đồ khóa?)" if bo_qua else ""))
-        so_tui_do.ghi_da_giao(tk["ten_dang_nhap"], ten, {ma for _, _, ma in bo_qua})
-        if self.tat_ca_pho_ban:
+        if self.ghi_so_tui:
+            so_tui_do.ghi_da_giao(tk["ten_dang_nhap"], ten, {ma for _, _, ma in bo_qua})
+        if self.thoat_sau_giao:
             self._thoat_game_pho_ban(game, ten)
         return True
 
-    # ---------- cất đồ của acc chính ----------
-
     def _o_trong(self):
-        """{túi: số ô trống} của acc chính."""
         so_o = [int(float(x)) for x in self.chinh.lua.chay(MA_KICH_THUOC_TUI).decode().split("\t")]
         dung = {"base": 0, "material": 0}
         for ten_tui, _ in doc_tui(self.chinh.lua):
@@ -714,7 +550,6 @@ class LuongGiaoAccChinh(threading.Thread):
         return {"base": so_o[0] - dung["base"], "material": so_o[1] - dung["material"]}
 
     def _do_da_nhan(self):
-        """{(túi, ô): (mã, số, tên)} đồ trong túi acc chính có mã từng nhận từ trưởng nhóm."""
         ma = set(self.tien_trinh["ma_da_nhan"])
         return {o: v for o, v in doc_tui(self.chinh.lua).items() if v[0] in ma}
 
@@ -733,7 +568,6 @@ class LuongGiaoAccChinh(threading.Thread):
                                   f"{trong['material']} ô Nguyên liệu trống)")
 
     def _cat_mot_o(self, o, ma_cat):
-        """Gửi lệnh cất ô o (ma_cat) rồi chờ ô đổi. Trả về "1" đã cất, "0" không cất được, "dong" cửa sổ đã đóng."""
         lua = self.chinh.lua
         truoc = doc_tui(lua).get(o)
         if truoc is None:
@@ -808,3 +642,177 @@ class LuongGiaoAccChinh(threading.Thread):
             da_cat += kq == "1"
         lua.chay(MA_DONG_CUA_SO)
         self.in_log(f"Đã cất {da_cat}/{len(cac_o)} ô vào Thương khố")
+
+    def _chay_giao_don(self, con, mo_ta_loai):
+        """Acc chính online rồi lần lượt giao từng nhân vật trong con."""
+        self._vao_acc_chinh()
+        for so, (tk, ten) in enumerate(con, 1):
+            self.bao_trang_thai(f"{so}/{len(con)}: {ten}")
+            if self._mot_truong_nhom(tk, ten):
+                self.tien_trinh["da_xong"].append(ten)
+                self._luu_tien_trinh()
+        self.in_log(f"Xong tất cả nhân vật ({mo_ta_loai})")
+        self.bao_trang_thai("Xong")
+
+
+class LuongGiaoAccChinh(threading.Thread, GiaoAccChinhEngine):
+    def __init__(self, hang_doi):
+        super().__init__(daemon=True)
+        self.hang_doi = hang_doi
+        self.dung = threading.Event()
+        self.cd = cai_dat()
+        self.tk_chinh = {"ten_dang_nhap": self.cd["tai_khoan"], "mat_khau": self.cd["mat_khau"],
+                         "nhan_vat": self.cd["nhan_vat"]}
+        self.loai_tru = cac_tu_loai_tru(self.cd["loai_tru"])
+        self.tat_ca_pho_ban = bool(self.cd.get("tat_ca_pho_ban"))
+        self.bo_qua = []
+        self.tk_khong_co_do = set()
+        if self.tat_ca_pho_ban:
+            ds = cac_nhan_vat_pho_ban(self.cd["tai_khoan"], self.cd["chi_hom_nay"], self.bo_qua)
+        else:
+            ds = cac_truong_nhom(self.cd["tai_khoan"], self.cd["chi_hom_nay"], self.bo_qua)
+        self.ds_truong, self.bo_vi_so, self.them_tu_so = ap_dung_so_tui(ds, self.cd["tai_khoan"], so_tui_do.doc())
+        self.chinh = None
+        self.hwnd_truong = None
+        self.pid_dieu_khien = set()
+        self.cac_luong_con = []
+        self.tien_trinh = {}
+        self.luc_cat = 0.0
+        self._pho_ban_da_luu = {}
+        # Tài khoản đã bị đăng xuất để nhường client: tự đăng nhập khi diss không mở lại trong lúc giao.
+        self.tk_da_thoat = set()
+        self.ghi_so_tui = True
+        self.thoat_sau_giao = self.tat_ca_pho_ban
+
+    # ---------- dùng từ giao diện ----------
+
+    def cac_tai_khoan(self):
+        if not self.is_alive():
+            return set()
+        return ({self.tk_chinh["ten_dang_nhap"].lower()} | {tk["ten_dang_nhap"].lower() for tk, _ in self.ds_truong}
+                | self.tk_da_thoat)
+
+    def dang_dieu_khien(self, pid):
+        if not self.is_alive():
+            return False
+        return pid in self.pid_dieu_khien or any(l.pid == pid and l.is_alive() for l in list(self.cac_luong_con))
+
+    # ---------- chung ----------
+
+    def in_log(self, chu):
+        self.hang_doi.put(("log", f"[Giao acc chính] {chu}"))
+
+    def bao_trang_thai(self, chu):
+        self.hang_doi.put(("trang_thai_giao_acc_chinh", chu))
+
+    def _luu_tien_trinh(self):
+        luu_cai_dat(tien_trinh=self.tien_trinh)
+
+    def run(self):
+        try:
+            self._chay()
+        except _Dung:
+            self.in_log("Đã dừng (tiến trình đã lưu, bấm Bắt đầu để đi tiếp)")
+            self.bao_trang_thai("Đã dừng")
+        except LoiGiaoAccChinh as loi:
+            self.in_log(f"Dừng: {loi} (tiến trình đã lưu)")
+            self.bao_trang_thai(f"Dừng: {loi}")
+        except Exception:
+            self.in_log(f"Lỗi không mong đợi\n{traceback.format_exc()}")
+            self.bao_trang_thai("Lỗi, xem log")
+        finally:
+            self._khoi_phuc_phó_ban()
+            for luong in self.cac_luong_con:
+                luong.dung.set()
+            if self.chinh:
+                try:
+                    self.chinh.lua.chay(MA_DONG_CUA_SO)
+                except (LoiLua, OSError):
+                    pass
+            self.pid_dieu_khien.clear()
+
+    def _tam_tat_phó_ban(self):
+        """Tắt phó bản trên cấu hình để luồng auto đang chạy thoát vòng PMP/Sát Tinh ngay."""
+        if self._pho_ban_da_luu:
+            return
+        for ten in cau_hinh.cac_nhan_vat():
+            cd = cau_hinh.cua_nhan_vat(ten)
+            pmp = cai_dat_pmp(cd)
+            if not pmp.get("bat"):
+                continue
+            self._pho_ban_da_luu[ten] = copy.deepcopy(pmp)
+
+            def sua(c):
+                moi = dict(cai_dat_pmp(c))
+                moi["bat"] = False
+                c["pho_ban_pmp"] = moi
+
+            cau_hinh.sua_nhan_vat(ten, sua)
+        if self._pho_ban_da_luu:
+            self.in_log(f"Tạm tắt phó bản {len(self._pho_ban_da_luu)} nhân vật trong lúc giao dịch")
+
+    def _khoi_phuc_phó_ban(self):
+        if not self._pho_ban_da_luu:
+            return
+        so = len(self._pho_ban_da_luu)
+        for ten, pmp in self._pho_ban_da_luu.items():
+
+            def sua(c, luu=pmp):
+                c["pho_ban_pmp"] = copy.deepcopy(luu)
+
+            cau_hinh.sua_nhan_vat(ten, sua)
+        self._pho_ban_da_luu = {}
+        self.in_log(f"Bật lại phó bản {so} nhân vật")
+
+    def _chay(self):
+        hom_nay_chu = date.today().isoformat()
+        self.tien_trinh = dict(self.cd.get("tien_trinh") or {})
+        if self.tien_trinh.get("ngay") != hom_nay_chu:
+            self.tien_trinh = {"ngay": hom_nay_chu, "da_xong": [], "ma_da_nhan": []}
+        for ly_do in dict.fromkeys(l for _, _, l in self.bo_qua):
+            cac = list(dict.fromkeys(tk if ly_do.startswith("tài khoản") else ten
+                                     for tk, ten, l in self.bo_qua if l == ly_do))
+            self.in_log(f"Bỏ qua {len(cac)} ({ly_do}): {', '.join(cac)}")
+        if self.bo_vi_so:
+            self.in_log(f"Bỏ qua {len(self.bo_vi_so)} (sổ túi đồ ghi không có đồ): {', '.join(self.bo_vi_so)}")
+        so = so_tui_do.doc()
+        if self.them_tu_so:
+            self.in_log(f"Thêm {len(self.them_tu_so)} nhân vật sổ túi đồ ghi còn đồ: " + ", ".join(
+                f"{ten} ({so_tui_do.mo_ta(so_tui_do.muc_cua(so, ten))})" for _, ten in self.them_tu_so))
+        da_xong_ds = {chuan_hoa(t) for t in self.tien_trinh["da_xong"]}
+        # Đã giao hôm nay nhưng sau đó đi phó bản tiếp (sổ ghi lại có đồ) thì giao lại.
+        con = [(tk, ten) for tk, ten in self.ds_truong
+               if chuan_hoa(ten) not in da_xong_ds or so_tui_do.can_giao(so_tui_do.muc_cua(so, ten))]
+        loai = "mọi acc phó bản" if self.tat_ca_pho_ban else "trưởng nhóm"
+        self.in_log(f"Bắt đầu: acc chính {self.tk_chinh['nhan_vat']}, {len(self.ds_truong)} nhân vật ({loai})"
+                    + (" đã đi hôm nay" if self.cd["chi_hom_nay"] else "")
+                    + f", đã xong {len(self.ds_truong) - len(con)}, còn {len(con)}: "
+                    + ", ".join(ten for _, ten in con))
+        if not con:
+            self.bao_trang_thai(f"Xong (không còn nhân vật {loai})")
+            return
+        self._tam_tat_phó_ban()
+        try:
+            self._chay_giao(con, loai)
+        finally:
+            self._khoi_phuc_phó_ban()
+
+    def _chay_giao(self, con, loai):
+        self._vao_acc_chinh()
+        ten_truong = ten_cac_truong_nhom(self.tk_chinh["ten_dang_nhap"]) if self.tat_ca_pho_ban else set()
+        so_tui = so_tui_do.doc()
+        for so, (tk, ten) in enumerate(con, 1):
+            self.bao_trang_thai(f"{so}/{len(con)}: {ten}")
+            # Chỉ đoán theo tài khoản khi sổ chưa có nhân vật này; sổ ghi còn đồ / chưa rõ thì luôn đăng nhập.
+            if self.tat_ca_pho_ban and so_tui_do.muc_cua(so_tui, ten) is None \
+                    and bo_qua_cung_tai_khoan(tk, ten, self.tk_khong_co_do, ten_truong):
+                self.in_log(f"{ten}: nhân vật khác của {tk['ten_dang_nhap']} không có đồ (đã giao cho trưởng nhóm), "
+                            "bỏ qua không đăng nhập")
+                self.tien_trinh["da_xong"].append(ten)
+                self._luu_tien_trinh()
+                continue
+            if self._mot_truong_nhom(tk, ten):
+                self.tien_trinh["da_xong"].append(ten)
+                self._luu_tien_trinh()
+        self.in_log(f"Xong tất cả nhân vật ({loai})")
+        self.bao_trang_thai("Xong")
