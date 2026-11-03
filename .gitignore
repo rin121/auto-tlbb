@@ -29,3 +29,9 @@ dong_goi/dist_dung_thu/
 _han_dung.py
 _kich_hoat_bat.py
 dong_goi/kich_hoat/license_private.pem
+
+# Build Win10 32-bit (py -3.11-32 / -ChiX86)
+.venv32/
+dong_goi/build_moi_x86/
+dong_goi/build_tam_x86/
+dong_goi/AutoHoc/x86/

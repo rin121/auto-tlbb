@@ -64,6 +64,10 @@ class TestHoiThoaiNpcSatTinh(unittest.TestCase):
         self.assertEqual(PhoBanPMP._chu_het_sat_tinh([chu]), chu)
         chu = "Trong tổ đội của các hạ có caychay16, caychay18 đã tham gia phụ bản 20 lần trong ngày hôm nay!"
         self.assertEqual(PhoBanPMP._chu_het_sat_tinh([chu]), chu)
+        # Đúng chữ NPC trên màn hình (cosato / đội viên hết 20 lượt).
+        chu = ("Trong tổ đội của các hạ có cosato3, cosato2, cosato4 đã tham gia phụ bản "
+               "#G20 lần#W trong ngày hôm nay!")
+        self.assertEqual(PhoBanPMP._chu_het_sat_tinh([chu]), chu)
 
     def test_khong_het(self):
         self.assertIsNone(PhoBanPMP._chu_het_sat_tinh(["Khiêu chiến Thập Nhị Sát Tinh"]))
@@ -252,6 +256,38 @@ class TestDaVaoLoiDaiKhiDangGom(unittest.TestCase):
         with self.assertRaises(pb._TruongSaiMap):
             self._pb(pb.MAP_DAI_LY)._vong_sat_tinh(_pmp())
         self.assertEqual(self.danh, [])
+
+
+class TestHetSatTinhKhongThuLai(unittest.TestCase):
+    """XV-05: NPC báo đội viên đã 20 lần → hết lượt ngay, không thử lại SO_LAN_THU lần."""
+
+    def test_kiem_tra_hoi_thoai_info_20_lan(self):
+        chu = ("Trong tổ đội của các hạ có cosato3, cosato2, cosato4 đã tham gia phụ bản "
+               "20 lần trong ngày hôm nay!")
+        inst = PhoBanPMP(MagicMock(), lambda *_: None)
+        inst._hoi_thoai = lambda: ("SÁT TINH", [("info", -1, -1, chu)])
+        with self.assertRaises(pb._HetSatTinh) as cm:
+            inst._kiem_tra_het_sat_tinh_hoi_thoai()
+        self.assertEqual(cm.exception.chu, chu)
+
+    def test_vao_sat_tinh_het_ngay_khong_bam_lai(self):
+        chu = ("Trong tổ đội của các hạ có cosato3, cosato2, cosato4 đã tham gia phụ bản "
+               "20 lần trong ngày hôm nay!")
+        inst = PhoBanPMP(MagicMock(), lambda *_: None)
+        inst.ten, inst.doi, inst.trang_thai = "cosato1", None, {}
+        inst.che_do = "sat_tinh"
+        inst._map = lambda: pb.MAP_LAC_DUONG
+        self.so_mo = 0
+
+        def mo(*_a, **_k):
+            self.so_mo += 1
+            raise pb._HetSatTinh(chu)
+
+        inst._mo_hoi_thoai = mo
+        with self.assertRaises(pb._HetSatTinh) as cm:
+            inst._vao_sat_tinh()
+        self.assertEqual(cm.exception.chu, chu)
+        self.assertEqual(self.so_mo, 1)
 
 
 class TestKetDiChuyenThiVeThanh(unittest.TestCase):

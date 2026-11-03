@@ -63,6 +63,9 @@ GIAY_CANH_NAP_LAI = 8
 CHUOT_AO = True
 # GAuto có lúc trả lại map cũ ngay sau khi đổi: chờ chừng này giây rồi đọc lại.
 GIAY_GIU_MAP = 1.5
+# Máy ảo / màn nhỏ: cửa sổ game hay đè GAuto — thử lại vài lần, đẩy cửa sổ che xuống dưới.
+SO_LAN_THU_CHE = 4
+GIAY_GIUA_THU_CHE = 0.25
 _KHOA_CHUOT_AO = threading.Lock()
 _DA_BAO_CHUOT_THAT = set()
 _CHO_BAO = []
@@ -559,29 +562,103 @@ def _bam_ao_hoac_that(hwnd, hwnd_dich, diem, cho, da_xong, giay=GIAY_CHO_O_TICH)
     return "thật"
 
 
+def _thuoc_gauto(hwnd_goc, diem):
+    """True nếu điểm màn hình đang nằm trên cửa sổ GAuto (kể cả control con)."""
+    try:
+        duoi = win32gui.WindowFromPoint(diem)
+    except win32gui.error:
+        return False
+    if not duoi:
+        return False
+    try:
+        goc = win32gui.GetAncestor(duoi, win32con.GA_ROOT)
+        chu = win32gui.GetWindow(duoi, win32con.GW_OWNER)
+    except win32gui.error:
+        return False
+    return hwnd_goc in (duoi, goc, chu)
+
+
+def _ha_cua_so_che(hwnd_goc, diem):
+    """Đẩy cửa sổ đang đè điểm bấm xuống dưới (không ẩn), để chuột thật bấm được GAuto trên VM/màn nhỏ."""
+    try:
+        duoi = win32gui.WindowFromPoint(diem)
+    except win32gui.error:
+        return None
+    if not duoi:
+        return None
+    try:
+        goc = win32gui.GetAncestor(duoi, win32con.GA_ROOT)
+    except win32gui.error:
+        return None
+    if not goc or goc == hwnd_goc or not win32gui.IsWindow(goc):
+        return None
+    try:
+        win32gui.SetWindowPos(
+            goc, win32con.HWND_BOTTOM, 0, 0, 0, 0,
+            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE)
+    except win32gui.error:
+        return None
+    return goc
+
+
 def _bam_chuot(hwnd_goc, diem, cho="ô Map"):
-    duoi = win32gui.WindowFromPoint(diem)
-    if hwnd_goc not in (duoi, win32gui.GetAncestor(duoi, win32con.GA_ROOT), win32gui.GetWindow(duoi, win32con.GW_OWNER)):
+    co = win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE
+    for lan in range(SO_LAN_THU_CHE):
+        if _thuoc_gauto(hwnd_goc, diem):
+            break
+        try:
+            win32gui.SetWindowPos(hwnd_goc, win32con.HWND_TOPMOST, 0, 0, 0, 0, co | win32con.SWP_SHOWWINDOW)
+            win32gui.BringWindowToTop(hwnd_goc)
+        except win32gui.error:
+            pass
+        _ha_cua_so_che(hwnd_goc, diem)
+        time.sleep(GIAY_GIUA_THU_CHE)
+    else:
         raise LoiGautoAcTac(f"cửa sổ GAuto đang bị cửa sổ khác che chỗ {cho}")
     win32api.SetCursorPos(diem)
     time.sleep(0.15)
+    if not _thuoc_gauto(hwnd_goc, diem):
+        _ha_cua_so_che(hwnd_goc, diem)
+        time.sleep(GIAY_GIUA_THU_CHE)
+        if not _thuoc_gauto(hwnd_goc, diem):
+            raise LoiGautoAcTac(f"cửa sổ GAuto đang bị cửa sổ khác che chỗ {cho}")
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
 
 @contextlib.contextmanager
 def _muon_chuot(hwnd, viec):
-    """Đưa GAuto lên trước để bấm chuột thật; xong trả chuột và cửa sổ trên cùng như cũ."""
+    """Đưa GAuto lên trước + TOPMOST để bấm chuột thật; xong trả chuột và z-order như cũ."""
     with KHOA_CHUOT:
         cu_truoc, cu_chuot = win32gui.GetForegroundWindow(), win32api.GetCursorPos()
+        co = win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE
+        try:
+            da_tren_cung = bool(win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) & win32con.WS_EX_TOPMOST)
+        except win32gui.error:
+            da_tren_cung = False
         try:
             try:
                 _len_truoc(hwnd)
             except LoiKeoTha as loi:
                 raise LoiGautoAcTac(f"không đưa được cửa sổ GAuto lên trước để {viec}") from loi
+            if not da_tren_cung:
+                try:
+                    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, co)
+                except win32gui.error:
+                    pass
             yield
         finally:
-            win32api.SetCursorPos(cu_chuot)
+            try:
+                if not da_tren_cung:
+                    win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, co)
+                    if cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc):
+                        win32gui.SetWindowPos(hwnd, cu_truoc, 0, 0, 0, 0, co)
+            except win32gui.error:
+                pass
+            try:
+                win32api.SetCursorPos(cu_chuot)
+            except win32api.error:
+                pass
             if cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc):
                 try:
                     _len_truoc(cu_truoc)
@@ -714,8 +791,11 @@ def dat_cai_dat_ac_tac(hwnd, at, ten_nv, chi_so_dong=None, cache=None, ten_map=N
     Lỗi sau khi đã bấm vào GAuto: LoiGautoAcTac có da_thao_tac=True (bên gọi không thử lại cả chuỗi).
     """
     kiem_tra_quyen(hwnd)
+    # Chỉ đánh dấu đã thao tác sau khi tích ô đầu dòng xong — lỗi che cửa sổ lúc đầu vẫn cho thử lại khung.
+    da_thao_tac = False
     try:
         nap_lai = _doi_dau_dong(hwnd, ten_nv, True, in_log)
+        da_thao_tac = True
         if nap_lai and cache is not None:
             cache["dau_dong"] = ten_nv
         o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
@@ -737,7 +817,8 @@ def dat_cai_dat_ac_tac(hwnd, at, ten_nv, chi_so_dong=None, cache=None, ten_map=N
             _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log)
         return doc_map(o["map"]) if "map" in o else ""
     except LoiGautoAcTac as loi:
-        loi.da_thao_tac = True
+        if da_thao_tac:
+            loi.da_thao_tac = True
         raise
     finally:
         rut_bao_chuot(in_log)

@@ -123,3 +123,6 @@ powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1"
 
 # đăng ký tk
 python scripts\auto_register_tlbbnhatkiem.py
+
+
+powershell -ExecutionPolicy Bypass -File "d:\Games\ThienLongCityCSClientFull2026\AutoHoc\dong_goi\build_va_deploy.ps1" -ChiX86

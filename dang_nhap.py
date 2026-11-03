@@ -34,7 +34,7 @@ import psutil
 import giai_captcha
 from auto_chuyen_sinh import chuan_hoa
 from bang_ma_viscii import giai_ma, ma_hoa
-from cua_so_game import tim_cua_so_game
+from cua_so_game import tim_cua_so_game, tim_hwnd_chinh_game_pid
 from game_api import Game
 from lua_game import LoiLua
 import proxy_mang
@@ -378,8 +378,9 @@ def mo_game(thu_muc_game, ten_dang_nhap=None):
     try:
         import cai_dat_game
         import cau_hinh
-        if cau_hinh.chung().get("giam_do_hoa") or cau_hinh.chung().get("tat_het_hieu_ung"):
-            cai_dat_game.chuan_bi_thu_muc_game(thu_muc_game)
+        chung = cau_hinh.chung()
+        if chung.get("giam_do_hoa") or chung.get("tat_het_hieu_ung") or chung.get("scale_800x600"):
+            cai_dat_game.chuan_bi_thu_muc_game(thu_muc_game, chung)
     except OSError:
         pass
     proc = subprocess.Popen([duong_dan, "-fl"], cwd=os.path.dirname(duong_dan))
@@ -464,7 +465,7 @@ def hwnd_dang_dang_nhap(ten_dang_nhap):
     for cua_so in tim_cua_so_game():
         if cua_so["pid"] == pid:
             return cua_so["hwnd"]
-    return None
+    return tim_hwnd_chinh_game_pid(pid)
 
 
 # Client (pid) đang do luồng đăng nhập nào điều khiển. Server bảo trì / đăng nhập lỗi thì client vẫn mở ở màn hình

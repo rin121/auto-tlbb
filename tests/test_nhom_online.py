@@ -112,6 +112,43 @@ class TestBatDauLaiKhiNhomDangOnline(unittest.TestCase):
         self.assertEqual(r, 1)
         self.assertEqual([t["ten_dang_nhap"] for t in tk], ["caychay11", "caychay12", "caychay13"])
 
+    def test_ten_online_trung_nhieu_round_uu_tien_round_cao(self):
+        """cosato11 online khớp cả round 1 và 2 (cùng tên hiển thị) — phải chọn round cao, không round 1."""
+        ds = [{"ten_dang_nhap": f"cosato{i}"} for i in (11, 22, 33, 44)]
+
+        def ten_cua(tk, r):
+            return tk if r < 2 else tk + tk[-1] * r
+
+        online = ["cosato11", "cosato22", "cosato33", "cosato44"]
+        r, tk = xv.chon_round_online(ds, online, 3, da_xong=lambda ten: False, ten_cua=ten_cua)
+        self.assertEqual(r, 1)
+        self.assertEqual([t["ten_dang_nhap"] for t in tk], ["cosato11", "cosato22", "cosato33", "cosato44"])
+
+    def test_cap_nhat_hwnd_khi_process_con_song(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, True, False)
+        tv = xv.ThanhVien({"ten_dang_nhap": "caychay10", "mat_khau": "x"})
+        tv.ten, tv.hwnd = "caychay10", 999
+        tv.game = MagicMock()
+        tv.game.lua.pid = 42
+        with patch.object(xv, "con_chay", return_value=True), \
+                patch("xoay_vong.win32gui.IsWindow", side_effect=lambda h: h == 1000), \
+                patch.object(xv, "tim_hwnd_chinh_game_pid", return_value=1000), \
+                patch.object(xv, "Game", side_effect=lambda h: MagicMock(lua=MagicMock(pid=42, hwnd=h))):
+            self.assertTrue(luong._cap_nhat_hwnd_tv(tv))
+        self.assertEqual(tv.hwnd, 1000)
+
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, True, False)
+        luong.in_log = MagicMock()
+        tv = xv.ThanhVien({"ten_dang_nhap": "caychay10", "mat_khau": "x"})
+        tv.ten, tv.hwnd = "caychay10", 999
+        game = MagicMock()
+        game.lua.hwnd = 999
+        luong_ok = MagicMock(thanh_cong=True, game=game, sai_rule=None, sai_tai_khoan=None, pid=1)
+        with patch.object(luong, "_gan_game"), \
+                patch.object(luong, "_chay_luong_vao", return_value=[(tv, luong_ok)]):
+            con = luong._dang_nhap([tv])
+        self.assertEqual(con, [tv])
+
     def test_het_luot_thi_khong_tinh(self):
         online = ["caychay111", "caychay122", "caychay10"]
         r, tk = xv.chon_round_online(self.DS, online, 3, da_xong=lambda ten: ten != "caychay10",

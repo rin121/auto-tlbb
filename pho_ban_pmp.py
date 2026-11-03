@@ -1847,6 +1847,17 @@ class PhoBanPMP:
                 for _, _, _, chu in cac_dong:
                     if self.che_do == "pmp" and self._la_bao_het_pmp_thuong(chu):
                         raise _HetLuot(chu)
+                # QUEST_INFO «đã tham gia phụ bản 20 lần…» (không có dòng Khiêu chiến): hết Sát Tinh ngay,
+                # không chờ / thử lại SO_LAN_THU lần rồi mới báo lỗi.
+                if getattr(self, "che_do", None) == "sat_tinh":
+                    cac_chu = [chu for _, _, _, chu in cac_dong]
+                    het_st = self._chu_het_sat_tinh(cac_chu)
+                    if het_st:
+                        raise _HetSatTinh(het_st)
+                    if self._con_lai_sat_tinh(cac_chu) == 0:
+                        raise _HetSatTinh(next(
+                            (chu for chu in cac_chu if "còn lại" in chuan_hoa(chu)),
+                            "còn lại 0 lượt"))
                 if getattr(self, "_vao_het_so", False):
                     ly_do = self._chu_het_pmp_so([chu for _, _, _, chu in cac_dong])
                     if ly_do:
@@ -2496,8 +2507,8 @@ class PhoBanPMP:
         """
         for chu in cac_chu:
             c = re.sub(r"#[ceg][0-9a-f]{6}|#[a-z]", "", chuan_hoa(chu))
-            if "ngày mai hãy quay lại" in c or re.search(r"đã tham gia.{0,30}?\b20\s*lần", c) \
-                    or re.search(r"đã tham gia.{0,30}?lần trong ngày hôm nay", c):
+            if "ngày mai hãy quay lại" in c or re.search(r"đã tham gia.{0,40}?\b20\s*lần", c) \
+                    or re.search(r"đã tham gia.{0,40}?\b20\s*lần.{0,40}?trong ngày hôm nay", c):
                 return chu
         return None
 
@@ -2510,6 +2521,18 @@ class PhoBanPMP:
                 return int(khop.group(1))
         return None
 
+    def _kiem_tra_het_sat_tinh_hoi_thoai(self):
+        """Hội thoại đang mở báo hết lượt Sát Tinh → raise _HetSatTinh (xoay vòng logout/login ngay)."""
+        ht = self._hoi_thoai()
+        if not ht:
+            return
+        cac = [chu for _, _, _, chu in ht[1]]
+        het = self._chu_het_sat_tinh(cac)
+        if het:
+            raise _HetSatTinh(het)
+        if self._con_lai_sat_tinh(cac) == 0:
+            raise _HetSatTinh(next((chu for chu in cac if "còn lại" in chuan_hoa(chu)), "còn lại 0 lượt"))
+
     def _vao_sat_tinh(self):
         map_o, ten_npc, xy, (dong_1, dong_2), map_toi = BUOC_VAO_SAT_TINH
         for lan in range(1, SO_LAN_THU + 1):
@@ -2520,7 +2543,10 @@ class PhoBanPMP:
                 self._cho_doi_gan_xy(xy, map_o, ten_npc)
             self._mo_ta(f"Sát Tinh: tới NPC {ten_npc}")
             # Cả đội đã gom quanh NPC: bấm lại Theo đội lúc này chỉ chen vào thao tác click NPC.
+            # Hết 20 lượt (QUEST_INFO «đã tham gia phụ bản 20 lần…»): raise ngay trong _mo_hoi_thoai /
+            # _kiem_tra_het — không thử lại SO_LAN_THU lần.
             self._mo_hoi_thoai(ten_npc, xy, dong_1, dan_doi=not self.doi)
+            self._kiem_tra_het_sat_tinh_hoi_thoai()
             self._chon(dong_1)
             ht = self._cho(lambda: (lambda h: h if h and (
                 any((s, e) == dong_2 for _, s, e, _ in h[1])

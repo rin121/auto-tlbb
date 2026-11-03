@@ -106,6 +106,18 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         dat.assert_called_once()
         self.assertGreater(luong.ac_tac.gauto_het_luc, time.time())
 
+    def test_loi_che_cua_so_thi_thu_lai_khung(self):
+        """GAuto bị cửa sổ game che lúc tích ô đầu dòng — chưa thao tác xong thì thử lại khung."""
+        luong = _luong()
+        loi = gd.gauto_ac_tac.LoiGautoAcTac("cửa sổ GAuto đang bị cửa sổ khác che chỗ ô đầu dòng nhân vật")
+        with patch.object(gd.gauto_ac_tac, "dat_cai_dat_ac_tac", side_effect=loi) as dat, \
+                patch.object(gd.gauto_ac_tac, "tom_tat_cua_so", return_value="GAuto"), \
+                patch.object(gd.gauto_ac_tac, "tim_chi_so_dong_theo_ten", return_value=1):
+            luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT)
+            luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT)
+        self.assertEqual(dat.call_count, 2)
+        self.assertIsNone(luong.ac_tac.gauto_khung)
+
     def test_toi_map_truoc_gio_bat_dau_thi_cho(self):
         luong = _luong()
         gd.luc_bat_dau_khung.return_value = time.time() + 90

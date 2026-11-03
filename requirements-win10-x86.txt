@@ -1,0 +1,10 @@
+# Python 3.11 win32 — Windows 10 x86 (channel x86\AutoHoc.exe)
+# Pin psutil/cryptography: bản mới nhất chưa có wheel win32 (cần MSVC).
+pywin32
+psutil==7.1.1
+Pillow
+pefile
+ziglang
+ddddocr
+PySocks
+cryptography==48.0.1

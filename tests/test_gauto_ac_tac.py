@@ -255,6 +255,15 @@ class TestDauDong(unittest.TestCase):
                 g.dat_cai_dat_ac_tac(1, {}, "caychay32")
         self.assertTrue(ng.exception.da_thao_tac)
 
+    def test_loi_che_o_dau_dong_thi_chua_thao_tac(self):
+        """VM/màn nhỏ: GAuto bị che lúc tích ô đầu dòng — cho AutoHoc thử lại khung, không bỏ cả khung."""
+        with patch.object(g, "kiem_tra_quyen", lambda h: None), \
+                patch.object(g, "dat_dau_dong", side_effect=g.LoiGautoAcTac(
+                    "cửa sổ GAuto đang bị cửa sổ khác che chỗ ô đầu dòng nhân vật")):
+            with self.assertRaises(g.LoiGautoAcTac) as ng:
+                g.dat_cai_dat_ac_tac(1, {}, "caychay32")
+        self.assertFalse(getattr(ng.exception, "da_thao_tac", False))
+
     def test_loi_quyen_thi_chua_thao_tac(self):
         with patch.object(g, "kiem_tra_quyen", side_effect=g.LoiGautoAcTac(g.THONG_BAO_CAN_ADMIN)):
             with self.assertRaises(g.LoiGautoAcTac) as ng:
@@ -327,6 +336,42 @@ class TestChuotAo(unittest.TestCase):
         log = []
         g.rut_bao_chuot(log.append)
         self.assertEqual(log, ["GAuto không nhận chuột ảo ở ô Map, dùng chuột thật"])
+
+
+class TestBamChuotKhiChe(unittest.TestCase):
+    """Máy ảo / màn nhỏ: cửa sổ game đè GAuto — đẩy xuống dưới rồi bấm lại."""
+
+    def test_ha_cua_so_che_roi_bam(self):
+        thu_tu = []
+
+        def thuoc(_h, _d):
+            return len(thu_tu) >= 2
+
+        def ha(h, d):
+            thu_tu.append(("ha", h, d))
+            return 99
+
+        with patch.object(g, "SO_LAN_THU_CHE", 3), patch.object(g, "GIAY_GIUA_THU_CHE", 0), \
+                patch.object(g, "_thuoc_gauto", side_effect=thuoc), \
+                patch.object(g, "_ha_cua_so_che", ha), \
+                patch.object(g.win32gui, "SetWindowPos") as swp, \
+                patch.object(g.win32gui, "BringWindowToTop"), \
+                patch.object(g.win32api, "SetCursorPos"), \
+                patch.object(g.win32api, "mouse_event") as me:
+            g._bam_chuot(1, (100, 200), "ô đầu dòng nhân vật")
+        self.assertGreaterEqual(len(thu_tu), 1)
+        self.assertEqual(me.call_count, 2)
+        self.assertTrue(any(c.args[1] == g.win32con.HWND_TOPMOST for c in swp.call_args_list))
+
+    def test_van_che_thi_bao_loi(self):
+        with patch.object(g, "SO_LAN_THU_CHE", 2), patch.object(g, "GIAY_GIUA_THU_CHE", 0), \
+                patch.object(g, "_thuoc_gauto", return_value=False), \
+                patch.object(g, "_ha_cua_so_che", return_value=None), \
+                patch.object(g.win32gui, "SetWindowPos"), \
+                patch.object(g.win32gui, "BringWindowToTop"):
+            with self.assertRaises(g.LoiGautoAcTac) as ng:
+                g._bam_chuot(1, (10, 10), "ô đầu dòng nhân vật")
+        self.assertIn("che chỗ ô đầu dòng nhân vật", str(ng.exception))
 
 
 class TestQuyenAdmin(unittest.TestCase):

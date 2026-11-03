@@ -28,9 +28,11 @@ KICH_THUOC_TOI_THIEU = (400, 300)
 # Cửa sổ game auto đã ẩn vẫn tính là game đang mở. Lưu ra file (hwnd, pid) để AutoHoc bị tắt ngang
 # thì lần mở sau hiện lại được, không để game chạy mà không thấy cửa sổ.
 DUONG_DAN_CUA_SO_DA_AN = os.path.join(THU_MUC_APP, "cua_so_da_an.json")
+DUONG_DAN_PID_CLIENT_AN = os.path.join(THU_MUC_APP, "pid_client_an.json")
 _cua_so_da_an = {}
 _pid_can_an = set()
-_khoa_an = threading.Lock()
+_pid_client_an = set()
+_khoa_an = threading.RLock()
 
 
 def bat_dpi_awareness():
@@ -73,39 +75,114 @@ def dua_cua_so_len_truoc(hwnd):
     time.sleep(0.5)
 
 
+def _la_cua_so_game_hop_le(hwnd):
+    """Cửa sổ top-level Game.exe đủ lớn (kể cả IsWindowVisible=False — cột Ẩn AutoHoc)."""
+    if not win32gui.IsWindow(hwnd):
+        return False
+    _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    try:
+        if psutil.Process(pid).name().lower() != TEN_TIEN_TRINH_GAME:
+            return False
+    except psutil.Error:
+        return False
+    if win32gui.IsIconic(hwnd):
+        return True
+    try:
+        _, _, rong, cao = vung_client(hwnd)
+    except win32gui.error:
+        return False
+    return rong >= KICH_THUOC_TOI_THIEU[0] and cao >= KICH_THUOC_TOI_THIEU[1]
+
+
+def _dien_tich_client(hwnd):
+    try:
+        _, _, rong, cao = vung_client(hwnd)
+        return rong * cao
+    except win32gui.error:
+        return 0
+
+
+def tim_hwnd_chinh_game_pid(pid):
+    """Cửa sổ game chính của pid (kể cả đang ẩn), None nếu không có."""
+    if not pid:
+        return None
+    candidates = []
+
+    def cb(hwnd, _):
+        if win32process.GetWindowThreadProcessId(hwnd)[1] != pid:
+            return True
+        if _la_cua_so_game_hop_le(hwnd):
+            candidates.append(hwnd)
+        return True
+
+    try:
+        win32gui.EnumWindows(cb, None)
+    except win32gui.error:
+        return None
+    if not candidates:
+        return None
+    return max(candidates, key=_dien_tich_client)
+
+
 def tim_cua_so_game():
     """
     Duyệt tất cả cửa sổ đang mở, giữ lại những cửa sổ thuộc tiến trình Game.exe.
     Mỗi phần tử trả về là dict gồm: hwnd (mã cửa sổ), pid (mã tiến trình), tieu_de.
+    Client ẩn (SW_HIDE) vẫn được liệt kê nếu process Game.exe còn chạy.
     """
     ket_qua = []
+    da_hwnd = set()
 
-    def xu_ly_tung_cua_so(hwnd, _):
-        if not win32gui.IsWindowVisible(hwnd) and hwnd not in _cua_so_da_an:
-            return True
-
+    def them(hwnd):
+        if hwnd in da_hwnd:
+            return
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
-        try:
-            ten_tien_trinh = psutil.Process(pid).name().lower()
-        except psutil.Error:
-            return True
-        if ten_tien_trinh != TEN_TIEN_TRINH_GAME:
-            return True
-
-        if not win32gui.IsIconic(hwnd):
-            _, _, rong, cao = vung_client(hwnd)
-            if rong < KICH_THUOC_TOI_THIEU[0] or cao < KICH_THUOC_TOI_THIEU[1]:
-                return True
-
+        da_hwnd.add(hwnd)
         ket_qua.append({
             "hwnd": hwnd,
             "pid": pid,
             "tieu_de": win32gui.GetWindowText(hwnd),
         })
+
+    def xu_ly_tung_cua_so(hwnd, _):
+        if _la_cua_so_game_hop_le(hwnd):
+            them(hwnd)
         return True
 
     win32gui.EnumWindows(xu_ly_tung_cua_so, None)
+
+    for proc in psutil.process_iter(["pid", "name"]):
+        try:
+            if (proc.info.get("name") or "").lower() != TEN_TIEN_TRINH_GAME:
+                continue
+            pid = proc.info["pid"]
+        except (psutil.Error, TypeError):
+            continue
+        if any(c["pid"] == pid for c in ket_qua):
+            continue
+        hwnd = tim_hwnd_chinh_game_pid(pid)
+        if hwnd:
+            them(hwnd)
+    with _khoa_an:
+        for pid in list(_pid_client_an):
+            if not _process_game_con_song(pid):
+                _pid_client_an.discard(pid)
+                continue
+            if any(c["pid"] == pid for c in ket_qua):
+                continue
+            hwnd = tim_hwnd_chinh_game_pid(pid)
+            if hwnd:
+                them(hwnd)
+        if _pid_client_an:
+            _luu_pid_client_an()
     return ket_qua
+
+
+def _process_game_con_song(pid):
+    try:
+        return psutil.Process(pid).name().lower() == TEN_TIEN_TRINH_GAME
+    except psutil.Error:
+        return False
 
 
 def _pid_cua(hwnd):
@@ -122,6 +199,52 @@ def _luu_cua_so_da_an():
             json.dump([[hwnd, pid] for hwnd, pid in _cua_so_da_an.items()], f)
     except OSError:
         pass
+
+
+def _tai_pid_client_an():
+    global _pid_client_an
+    try:
+        with open(DUONG_DAN_PID_CLIENT_AN, encoding="utf-8") as f:
+            ds = json.load(f)
+    except (OSError, ValueError, TypeError):
+        return
+    if isinstance(ds, list):
+        _pid_client_an = {int(p) for p in ds if p}
+
+
+def _luu_pid_client_an():
+    try:
+        with open(DUONG_DAN_PID_CLIENT_AN, "w", encoding="utf-8") as f:
+            json.dump(sorted(_pid_client_an), f)
+    except OSError:
+        pass
+
+
+def ghi_pid_client_an(pid):
+    """Client ẩn (cột Ẩn AutoHoc): nhớ pid để lần mở AutoHoc sau vẫn quét được process."""
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return
+    with _khoa_an:
+        if pid not in _pid_client_an:
+            _pid_client_an.add(pid)
+            _luu_pid_client_an()
+
+
+def xoa_pid_client_an(pid=None):
+    with _khoa_an:
+        if pid is None:
+            _pid_client_an.clear()
+        else:
+            try:
+                _pid_client_an.discard(int(pid))
+            except (TypeError, ValueError):
+                pass
+        _luu_pid_client_an()
+
+
+_tai_pid_client_an()
 
 
 def cac_cua_so_da_an():
@@ -172,6 +295,7 @@ def an_cua_so(cac_hwnd):
                 pid = _pid_cua(hwnd)
                 _cua_so_da_an[hwnd] = pid
                 _pid_can_an.add(pid)
+                ghi_pid_client_an(pid)
                 win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
                 so += 1
         _luu_cua_so_da_an()

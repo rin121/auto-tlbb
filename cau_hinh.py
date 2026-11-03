@@ -38,6 +38,7 @@ MAC_DINH_CHUNG = {"giay_cho_game_khoi_dong": 90, "bat_moi_nhom": False, "truong_
                   "chat_the_gioi": False, "noi_dung_chat_the_gioi": "", "giay_chat_the_gioi": 300,
                   "nhan_vat_chat_the_gioi": "",
                   "tat_am_thanh": True, "giam_do_hoa": True, "tat_het_hieu_ung": True,
+                  "scale_800x600": True, "scale_rong": 800, "scale_cao": 600,
                   "fps_max": 25, "fps_front": 25, "fps_back": 5,
                   "danh_sach_map": CAC_MAP_MAC_DINH,
                   "thu_tu_tab": [], "tab_an": [], "thu_tu_nhan_vat": [], "cao_bang": {},
@@ -505,6 +506,11 @@ def thay_tat_ca_nhan_vat(ham):
             nhan_vat[ten] = _sao_chep(ham(ten, _sao_chep(nhan_vat[ten])))
         ban = _chup_ban_luu()
     _ghi_ban_luu(ban)
+
+
+def duong_dan_gauto():
+    """Đường dẫn GAuto.exe (tab Phó bản → Ác Tặc), dùng chung cho ẩn kiểu 2 / Test GAuto."""
+    return ((mac_dinh().get("ac_tac") or {}).get("duong_dan_gauto") or "").strip()
 
 
 def mac_dinh():

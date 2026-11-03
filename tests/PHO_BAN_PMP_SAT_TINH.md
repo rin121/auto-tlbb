@@ -69,7 +69,7 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | ST-C01 | Bật **Chỉ đi Sát Tinh** | Không vào PMP; NPC Lạc Dương luôn SÁT TINH |
 | XV-01 | Xoay vòng 4 acc, 2 round | Mỗi round: PMP (nếu còn) → ST tới hết lượt; đổi nhóm theo cấu hình |
 | XV-02 | **Chế độ test** | 1 round, 1 lượt PMP hoặc 1 lượt ST (tùy chỉ Sát Tinh) |
-| XV-05 | NPC SÁT TINH báo «Trong tổ đội của các hạ có A, B đã tham gia phụ bản 20 lần trong ngày hôm nay!» | Cả nhóm đánh dấu hết lượt Sát Tinh, giao dịch rồi xoay vòng đăng nhập nhóm / round tiếp theo |
+| XV-05 | NPC SÁT TINH báo «Trong tổ đội của các hạ có A, B đã tham gia phụ bản 20 lần trong ngày hôm nay!» (QUEST_INFO, nút Tạm biệt) | Nhận diện ngay khi mở hội thoại — **không** thử lại 3 lần; cả nhóm `st_het`, giao dịch rồi logout/login xoay vòng nhóm / round tiếp |
 | XV-03 | Qua 0h khi nhóm **đang trong** PMP / Lôi đài | Đi nốt vòng đó, không vào vòng mới; ra khỏi phó bản → tắt auto, giao dịch, làm mới danh sách, chạy lại từ nhóm 1 |
 | XV-04 | Qua 0h khi nhóm **chưa vào** phó bản (đang ở Đại Lý / Lạc Dương) | Dừng ngay trong ~3 giây, làm mới danh sách, chạy lại từ nhóm 1 |
 | XV-06 | Nhóm đang đi PMP / Sát Tinh, bấm **Giao dịch ngay** | Trong ~3–6 giây cả đội tắt auto, đội viên chạy tới trưởng nhóm giao đồ mới nhặt (từ đầu round); xong bật lại Auto + Phó bản, bộ đếm hôm nay giữ nguyên, đi tiếp |

@@ -59,7 +59,7 @@ from chien_dau import (CAC_PHIM_SKILL, KY_NANG_VE_THANH, MAU_HET_AN_THAN, MON_PH
                        TEN_KY_NANG_AN_DON, TEN_KY_NANG_BUFF_MAU, ChienDau, LoiChienDau, cai_dat_chien_dau,
                        ma_dung_ky_nang_theo_dinh_nghia)
 from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, duy_tri_an, hien_cua_so,
-                         hien_lai_cua_so_an_lan_truoc, tim_cua_so_game)
+                         hien_lai_cua_so_an_lan_truoc, tim_cua_so_game, tim_hwnd_chinh_game_pid)
 from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap, con_chay
 import proxy_mang
 import proxy_broker_ui
@@ -249,7 +249,9 @@ CAI_DAT_GAME = (("tat_am_thanh", "Vào game thì tắt âm thanh", "đã tắt �
                 ("giam_do_hoa", "Vào game thì giảm đồ họa + giới hạn FPS (hiệu ứng, profile, nền thấp hơn)",
                  "đã giảm đồ họa + giới hạn FPS"),
                 ("tat_het_hieu_ung", "Tắt hết hiệu ứng trong game (skill, phát sáng trang phục/vũ khí…)",
-                 "đã tắt hiệu ứng trong game"))
+                 "đã tắt hiệu ứng trong game"),
+                ("scale_800x600", "Tự scale độ phân giải cửa sổ game (ô rộng × cao bên dưới)",
+                 "đã scale cửa sổ / độ phân giải"))
 
 
 def ten_trong_tieu_de(hwnd):
@@ -366,7 +368,7 @@ class LuongNhanVat(threading.Thread):
         self.hang_doi.put(("log", chu))
 
     def cai_dat_game(self, chung):
-        """Vào game thì tắt âm thanh / giảm đồ họa / hiệu ứng (tab Cài đặt)."""
+        """Vào game thì tắt âm thanh / giảm đồ họa / hiệu ứng / scale độ phân giải (tab Cài đặt)."""
         for khoa, _, da_lam in CAI_DAT_GAME:
             if not chung.get(khoa):
                 self.da_cai_dat_game.discard(khoa)
@@ -376,6 +378,8 @@ class LuongNhanVat(threading.Thread):
             try:
                 if khoa == "tat_het_hieu_ung":
                     so_muc = cai_dat_game.ap_dung_hieu_ung(self.game.lua)
+                elif khoa == "scale_800x600":
+                    so_muc = cai_dat_game.ap_dung_do_phan_giai(self.game.lua, self.hwnd, chung)
                 else:
                     so_muc = cai_dat_game.ap_dung(self.game.lua, khoa == "tat_am_thanh",
                                                   khoa == "giam_do_hoa", chung)
@@ -383,6 +387,9 @@ class LuongNhanVat(threading.Thread):
                 return
             self.da_cai_dat_game.add(khoa)
             if so_muc:
+                if khoa == "scale_800x600":
+                    rong, cao = cai_dat_game.do_phan_giai_tu_cau_hinh(chung)
+                    da_lam = f"đã scale cửa sổ / độ phân giải {rong}x{cao}"
                 self.in_log(f"{self.ten}: {da_lam} ({so_muc} mục)")
 
     def duy_tri_hieu_ung(self, chung, doi_map=False):
@@ -1252,13 +1259,36 @@ class LuongNhanVat(threading.Thread):
             return False, None
         return True, tin[0]
 
+    def _lam_moi_hwnd_neu_can(self):
+        if win32gui.IsWindow(self.hwnd):
+            return True
+        if not self.da_noi or not self.game:
+            return False
+        try:
+            pid = self.game.lua.pid
+        except (LoiLua, OSError, AttributeError):
+            return False
+        if not pid or not con_chay(pid):
+            return False
+        hwnd = tim_hwnd_chinh_game_pid(pid)
+        if not hwnd or not win32gui.IsWindow(hwnd):
+            return False
+        self.hwnd = hwnd
+        try:
+            self.game = Game(self.hwnd)
+        except LoiLua:
+            return False
+        return True
+
     def run(self):
         threading.Thread(target=self.vong_tu_duyet, daemon=True).start()
         threading.Thread(target=self.vong_chien_dau, daemon=True).start()
         threading.Thread(target=self.vong_auto_click, daemon=True).start()
         threading.Thread(target=self.vong_chat_the_gioi, daemon=True).start()
         map_truoc = None
-        while not self.dung.is_set() and win32gui.IsWindow(self.hwnd):
+        while not self.dung.is_set():
+            if not win32gui.IsWindow(self.hwnd) and not self._lam_moi_hwnd_neu_can():
+                break
             chung = cau_hinh.chung()
             try:
                 if not self.da_noi:
@@ -2193,6 +2223,25 @@ class UngDung:
             self.bien_cai_dat_game[khoa] = tk.BooleanVar(value=chung[khoa])
             ttk.Checkbutton(tab, text=nhan, variable=self.bien_cai_dat_game[khoa],
                             command=lambda khoa=khoa: self.doi_cai_dat_game(khoa)).pack(anchor="w")
+        khung_scale = ttk.Frame(tab)
+        khung_scale.pack(anchor="w", pady=(2, 0))
+        self.bien_scale = {
+            "scale_rong": tk.StringVar(value=str(chung.get("scale_rong", 800))),
+            "scale_cao": tk.StringVar(value=str(chung.get("scale_cao", 600))),
+        }
+        ttk.Label(khung_scale, text="Độ phân giải rộng").pack(side="left")
+        sb_rong = ttk.Spinbox(
+            khung_scale, from_=cai_dat_game.DO_PHAN_GIAI_RONG_MIN, to=cai_dat_game.DO_PHAN_GIAI_RONG_MAX,
+            width=5, textvariable=self.bien_scale["scale_rong"], command=self.luu_cai_dat_scale)
+        sb_rong.pack(side="left", padx=(4, 0))
+        ttk.Label(khung_scale, text="× cao").pack(side="left", padx=(8, 0))
+        sb_cao = ttk.Spinbox(
+            khung_scale, from_=cai_dat_game.DO_PHAN_GIAI_CAO_MIN, to=cai_dat_game.DO_PHAN_GIAI_CAO_MAX,
+            width=5, textvariable=self.bien_scale["scale_cao"], command=self.luu_cai_dat_scale)
+        sb_cao.pack(side="left", padx=(4, 0))
+        for sb in (sb_rong, sb_cao):
+            sb.bind("<FocusOut>", lambda _e: self.luu_cai_dat_scale())
+            sb.bind("<Return>", lambda _e: self.luu_cai_dat_scale())
         khung_fps = ttk.Frame(tab)
         khung_fps.pack(anchor="w", pady=(4, 0))
         self.bien_fps = {k: tk.StringVar(value=str(chung[k])) for k in ("fps_max", "fps_front", "fps_back")}
@@ -2208,11 +2257,14 @@ class UngDung:
                             "tắt địa hình/nhân vật cao cấp, số mô hình) + các biến View_* (hiệu ứng, thời tiết…) "
                             "trong game và trong Bin/System.cfg, Accounts/*.pfc trước khi mở Game.exe; "
                             "System_MaxFPS* (FPS nền thấp khi mất focus hoặc ẩn cửa sổ AutoHoc). "
-                            "Không đổi gamma, chất lượng màu 16 bit (yszl), đồng bộ dọc, FULLSCREEN / độ phân giải. "
-                            "Tắt tùy chọn thì không tự bật lại đồ họa. Game đang mở trước khi bật: bật lại checkbox "
-                            "hoặc vào lại game để áp FPS qua Lua. "
-                            "Tắt hết hiệu ứng: áp lại mỗi ~30 giây và khi đổi map (một số trang phục server vẫn "
-                            "có thể phát sáng nhẹ).",
+                            "Không đổi gamma, chất lượng màu 16 bit (yszl), đồng bộ dọc. "
+                            "Scale độ phân giải: ô rộng × cao (vd 800×600, 1024×768); ghi View_Resoution + bỏ "
+                            "FULLSCREEN (cfg trước khi mở game), áp Lua và thu cửa sổ client; độ phân giải render "
+                            "đôi khi cần vào lại game. Cửa sổ nhỏ hơn = ít pixel vẽ hơn (nhẹ GPU/VRAM, tiết kiệm "
+                            "một phần CPU khi nhiều cửa sổ). Tắt tùy chọn thì không tự bật lại. Game đang mở trước "
+                            "khi bật: bật lại checkbox hoặc vào lại game. "
+                            "Tắt hết hiệu ứng: ép áp lại ViewSetup + View_* mỗi ~10 giây và khi đổi map "
+                            "(thần khí / trang phục gắn particle phía server có thể vẫn sáng nhẹ).",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
 
     def luu_cai_dat_fps(self):
@@ -2241,6 +2293,42 @@ class UngDung:
                     luong.cai_dat_game(cau_hinh.chung())
         return True
 
+    def luu_cai_dat_scale(self):
+        try:
+            rong = so_nguyen(self.bien_scale["scale_rong"].get(), "Độ phân giải rộng")
+            cao = so_nguyen(self.bien_scale["scale_cao"].get(), "Độ phân giải cao")
+        except ValueError as loi:
+            messagebox.showerror("Cài đặt chưa đúng", str(loi))
+            return False
+        if not cai_dat_game.DO_PHAN_GIAI_RONG_MIN <= rong <= cai_dat_game.DO_PHAN_GIAI_RONG_MAX:
+            messagebox.showerror(
+                "Cài đặt chưa đúng",
+                f"Rộng: từ {cai_dat_game.DO_PHAN_GIAI_RONG_MIN} tới {cai_dat_game.DO_PHAN_GIAI_RONG_MAX}")
+            return False
+        if not cai_dat_game.DO_PHAN_GIAI_CAO_MIN <= cao <= cai_dat_game.DO_PHAN_GIAI_CAO_MAX:
+            messagebox.showerror(
+                "Cài đặt chưa đúng",
+                f"Cao: từ {cai_dat_game.DO_PHAN_GIAI_CAO_MIN} tới {cai_dat_game.DO_PHAN_GIAI_CAO_MAX}")
+            return False
+        cau_hinh.dat_chung({"scale_rong": rong, "scale_cao": cao})
+        self.bien_scale["scale_rong"].set(str(rong))
+        self.bien_scale["scale_cao"].set(str(cao))
+        if not cau_hinh.chung().get("scale_800x600"):
+            return True
+        thu_muc = (cau_hinh.doc_tai_khoan().get("thu_muc_game") or "").strip()
+        if thu_muc and cau_hinh.la_thu_muc_game(thu_muc):
+            try:
+                so = cai_dat_game.chuan_bi_thu_muc_game(thu_muc)
+                if so:
+                    self.in_log(f"Đã cập nhật {so} dòng View_*/độ phân giải trong cfg/pfc game")
+            except OSError:
+                pass
+        for luong in self.cac_luong.values():
+            luong.da_cai_dat_game.discard("scale_800x600")
+            if luong.ten and luong.dang_trong_game:
+                luong.cai_dat_game(cau_hinh.chung())
+        return True
+
     def doi_cai_dat_game(self, khoa):
         bat = self.bien_cai_dat_game[khoa].get()
         cau_hinh.dat_chung({khoa: bat})
@@ -2249,7 +2337,7 @@ class UngDung:
                     + (" (các game đang mở cũng làm ngay)" if bat else " (không tự bật lại những gì đã đổi)"))
         if bat:
             chung = cau_hinh.chung()
-            if khoa in ("giam_do_hoa", "tat_het_hieu_ung"):
+            if khoa in ("giam_do_hoa", "tat_het_hieu_ung", "scale_800x600"):
                 thu_muc = (cau_hinh.doc_tai_khoan().get("thu_muc_game") or "").strip()
                 if thu_muc and cau_hinh.la_thu_muc_game(thu_muc):
                     try:

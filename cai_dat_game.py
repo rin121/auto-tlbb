@@ -2,23 +2,29 @@
 Tab Cài đặt: vào game thì tắt âm thanh và giảm đồ họa xuống thấp nhất.
 
 Làm giống nút Duyệt của bảng Cài đặt âm thanh (SoundSetup.lua: Variable:SetVariable) và Thiết lập hiển thị
-(ViewSetup.lua: SystemSetup:View_SetData), không mở bảng. Chỉ ghi mục đang khác, nên game đã ở mức thấp nhất
-(các game dùng chung file cấu hình trong thư mục game) thì không đổi gì.
+(ViewSetup.lua: SystemSetup:View_SetData), không mở bảng.
 
-Trước khi mở Game.exe (nếu bật giảm đồ họa): chỉnh Bin/System.cfg, Accounts/System.cfg và *.pfc cho các
-biến View_* còn sót (hiệu ứng, thời tiết, số mô hình trong profile…) và System_MaxFPS* (tab Cài đặt).
+Giảm đồ họa / âm thanh: chỉ ghi mục đang khác (các client dùng chung cfg thì khỏi đụng lại).
+Tắt hết hiệu ứng: luôn ép View_SetData / SetVariable lại (kể cả đã = 0) vì client hay giữ particle /
+ánh sáng / thần khí dù biến đã thấp — và áp lại định kỳ + khi đổi map.
+
+Trước khi mở Game.exe (giảm đồ họa / tắt hiệu ứng / scale độ phân giải): chỉnh Bin/System.cfg, Accounts/System.cfg
+và *.pfc cho các biến View_* còn sót và System_MaxFPS* (khi giảm đồ họa).
 """
 
 import os
 import re
 from glob import glob
 
+import win32con
+import win32gui
+
 AM_THANH = (("DisableAllSound", "1"), ("EnableBGSound", "0"), ("Enable3DSound", "0"),
             ("EnableSKSound", "0"), ("EnableUISound", "0"))
 
 # Các ô trong bảng Thiết lập hiển thị: 0 là mức thấp nhất (Không / Thấp / 1 / bỏ tích).
 # Không đổi: Chất lượng màu sắc (yszl, 16 bit ở chế độ cửa sổ dễ làm game lỗi), Phân giải đồng bộ (cztb),
-# FULLSCREEN (qpms), gamma và các mục không có trên bảng.
+# gamma và các mục không có trên bảng. FULLSCREEN / độ phân giải chỉ khi bật scale_800x600.
 DO_HOA = (("dxyy", 0),  # Độ bóng
           ("fhj", 0),   # Khử răng cưa
           ("wtdh", 0),  # Hình động
@@ -72,10 +78,11 @@ DO_HOA_MAC_DINH = (("dxyy", 2), ("wtdh", 2), ("ksfw", 2), ("wldx", 1), ("sdh", 1
 DO_HOA_TICK_MAC_DINH = (("dxgg", 1), ("rwgg", 1))
 DO_HOA_BIEN_MAC_DINH = (("View_PiFeng", "1"),)
 
-# Tắt hết hiệu ứng: slider/check ViewSetup (hình động wtdh, phát sáng qpfg/rwyy…) + biến View_* hiệu ứng/skill.
+# Tắt hết hiệu ứng: ViewSetup (slider + check đúng như ViewSetup.lua) + biến View_* hiệu ứng/ánh sáng.
+# qpfg / sdh / miwu là CHECK_String (không phải slider).
 HIeu_UNG_SLIDER = (("wtdh", 0), ("dxyy", 0), ("rwyy", 0), ("dbxs", 0), ("cy", 0), ("ksfw", 0), ("wldx", 0),
-                   ("qpfg", 0), ("sdh", 0), ("miwu", 0), ("fhj", 0))
-HIeu_UNG_CHECK = (("dxgg", 0), ("rwgg", 0))
+                   ("fhj", 0))
+HIeu_UNG_CHECK = (("dxgg", 0), ("rwgg", 0), ("qpfg", 0), ("sdh", 0), ("miwu", 0))
 HIeu_UNG_BIEN = (
     ("View_PiFeng", "0"),
     ("View_EffectLevel", "0"),
@@ -97,8 +104,23 @@ HIeu_UNG_BIEN = (
     ("View_Transparency", "0"),
     ("View_HumanLightmap", "0"),
     ("View_LightmapQuality", "0"),
+    ("View_Fanhunjiao", "0"),
+    ("View_VisibleRangeLevelNew", "0"),
+    ("View_TextureFiltering", "0"),
+    ("View_ModlePolygon", "0"),
+    ("View_EnableFog", "0"),
+    ("View_TextureQuality", "0"),
+    ("View_MeticulousScene", "0"),
+    ("View_PolygonQuantity", "0"),
+    ("View_ColorQuality", "0"),
 )
-GIAY_GIUA_AP_HIEU_UNG = 30
+GIAY_GIUA_AP_HIEU_UNG = 10
+
+# ViewSetup Accept: Variable View_Resoution (đúng chính tả game) + bỏ FULLSCREEN (qpms).
+DO_PHAN_GIAI_RONG_MAC_DINH, DO_PHAN_GIAI_CAO_MAC_DINH = 800, 600
+DO_PHAN_GIAI_RONG_MIN, DO_PHAN_GIAI_RONG_MAX = 640, 2560
+DO_PHAN_GIAI_CAO_MIN, DO_PHAN_GIAI_CAO_MAX = 480, 1440
+DO_PHAN_GIAI_CHECK = (("qpms", 0),)
 
 FPS_MAC_DINH = {"fps_max": 25, "fps_front": 25, "fps_back": 5}
 FPS_KHOA_CFG = ("System_MaxFPS", "System_MaxFPS_Front", "System_MaxFPS_Back")
@@ -120,6 +142,33 @@ def fps_tu_cau_hinh(chung=None):
     return {FPS_KHOA_CFG[0]: str(_fps_so(chung, "fps_max")),
             FPS_KHOA_CFG[1]: str(_fps_so(chung, "fps_front")),
             FPS_KHOA_CFG[2]: str(_fps_so(chung, "fps_back"))}
+
+
+def _so_trong_khoang(gia_tri, mac_dinh, thap, cao):
+    try:
+        so = int(gia_tri)
+    except (TypeError, ValueError):
+        so = mac_dinh
+    return max(thap, min(cao, so))
+
+
+def do_phan_giai_tu_cau_hinh(chung=None):
+    """(rộng, cao) client game từ cau_hinh; mặc định 800x600."""
+    if chung is None:
+        import cau_hinh
+        chung = cau_hinh.chung()
+    rong = _so_trong_khoang(
+        chung.get("scale_rong", DO_PHAN_GIAI_RONG_MAC_DINH),
+        DO_PHAN_GIAI_RONG_MAC_DINH, DO_PHAN_GIAI_RONG_MIN, DO_PHAN_GIAI_RONG_MAX)
+    cao = _so_trong_khoang(
+        chung.get("scale_cao", DO_PHAN_GIAI_CAO_MAC_DINH),
+        DO_PHAN_GIAI_CAO_MAC_DINH, DO_PHAN_GIAI_CAO_MIN, DO_PHAN_GIAI_CAO_MAX)
+    return rong, cao
+
+
+def chuoi_do_phan_giai(chung=None):
+    rong, cao = do_phan_giai_tu_cau_hinh(chung)
+    return f"{rong},{cao}"
 
 
 def cap_do_hoa_fps(chung=None):
@@ -173,6 +222,10 @@ def cap_hieu_ung_cfg():
     return dict(HIeu_UNG_BIEN)
 
 
+def cap_do_phan_giai_cfg(chung=None):
+    return (("View_Resoution", chuoi_do_phan_giai(chung)), ("View_FullScreen", "0"))
+
+
 def chuan_bi_thu_muc_game(thu_muc_game, chung=None):
     """
     Trước khi chạy Game.exe: hạ View_* / System_MaxFPS* trong Bin/System.cfg, Accounts/System.cfg và mọi *.pfc.
@@ -186,8 +239,10 @@ def chuan_bi_thu_muc_game(thu_muc_game, chung=None):
     cap = {}
     if chung.get("giam_do_hoa"):
         cap.update(cap_do_hoa_fps(chung))
-    elif chung.get("tat_het_hieu_ung"):
+    if chung.get("tat_het_hieu_ung"):
         cap.update(cap_hieu_ung_cfg())
+    if chung.get("scale_800x600"):
+        cap.update(dict(cap_do_phan_giai_cfg(chung)))
     if not cap:
         return 0
     tong = 0
@@ -203,7 +258,12 @@ def chuan_bi_thu_muc_game(thu_muc_game, chung=None):
     return tong
 
 
-def _ma_lua_ap_dung():
+def _ma_lua_ap_dung(ep=False):
+    """ep=True: luôn SetVariable/View_SetData (dùng cho tắt hiệu ứng)."""
+    if ep:
+        return ['local doi = 0',
+                'local function bien(k, v) Variable:SetVariable(k, v, 0) doi = doi + 1 end',
+                'local function hien_thi(k, v) SystemSetup:View_SetData(k, v) doi = doi + 1 end']
     return ['local doi = 0',
             'local function bien(k, v) if Variable:GetVariable(k) ~= v then '
             'Variable:SetVariable(k, v, 0) doi = doi + 1 end end',
@@ -212,8 +272,8 @@ def _ma_lua_ap_dung():
 
 
 def ma_ap_dung_hieu_ung():
-    """Lua: tắt tối đa hiệu ứng client (ViewSetup + View_*)."""
-    dong = _ma_lua_ap_dung()
+    """Lua: ép tắt tối đa hiệu ứng client (ViewSetup + View_*), luôn gọi Set lại."""
+    dong = _ma_lua_ap_dung(ep=True)
     dong += [f'hien_thi("{k}", {v})' for k, v in HIeu_UNG_SLIDER]
     dong += [f'hien_thi("{k}", {v})' for k, v in HIeu_UNG_CHECK]
     dong += [f'bien("{k}", "{v}")' for k, v in HIeu_UNG_BIEN]
@@ -223,6 +283,62 @@ def ma_ap_dung_hieu_ung():
 
 def ap_dung_hieu_ung(lua):
     return int(lua.chay(ma_ap_dung_hieu_ung()) or b"0")
+
+
+def ma_ap_dung_do_phan_giai(chung=None):
+    """Lua: cửa sổ WxH như Duyệt ViewSetup (View_Resoution + bỏ FULLSCREEN)."""
+    dong = _ma_lua_ap_dung()
+    # ViewSetup_Accept: ghi rỗng rồi ghi lại để client nhận độ phân giải mới.
+    dong.append('bien("View_Resoution", "")')
+    dong += [f'bien("{k}", "{v}")' for k, v in cap_do_phan_giai_cfg(chung)]
+    dong += [f'hien_thi("{k}", {v})' for k, v in DO_PHAN_GIAI_CHECK]
+    dong.append('return tostring(doi)')
+    return "\n".join(dong)
+
+
+def scale_cua_so(hwnd, rong_muc=None, cao_muc=None, chung=None):
+    """Đặt vùng client cửa sổ game theo rộng×cao (cửa sổ thường). Trả về True nếu đã đổi kích thước."""
+    if rong_muc is None or cao_muc is None:
+        rong_muc, cao_muc = do_phan_giai_tu_cau_hinh(chung)
+    if not hwnd or not win32gui.IsWindow(hwnd):
+        return False
+    if win32gui.IsIconic(hwnd):
+        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+    try:
+        _, _, rong_client, cao_client = win32gui.GetClientRect(hwnd)
+        x, y, _, _ = win32gui.GetWindowRect(hwnd)
+    except win32gui.error:
+        return False
+    if rong_client == rong_muc and cao_client == cao_muc:
+        return False
+    style = win32gui.GetWindowLong(hwnd, win32con.GWL_STYLE)
+    ex = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
+    khung = win32gui.AdjustWindowRectEx(
+        (0, 0, rong_muc, cao_muc), style, False, ex)
+    rong = khung[2] - khung[0]
+    cao = khung[3] - khung[1]
+    try:
+        win32gui.SetWindowPos(
+            hwnd, None, x, y, rong, cao,
+            win32con.SWP_NOZORDER | win32con.SWP_NOACTIVATE)
+    except win32gui.error:
+        return False
+    return True
+
+
+def scale_cua_so_800x600(hwnd):
+    """Giữ tên cũ: scale theo cấu hình (mặc định 800×600)."""
+    return scale_cua_so(hwnd)
+
+
+def ap_dung_do_phan_giai(lua, hwnd=None, chung=None):
+    """Trả về số mục Lua đã đổi. hwnd: nếu có thì scale luôn khung cửa sổ."""
+    so = int(lua.chay(ma_ap_dung_do_phan_giai(chung)) or b"0")
+    if hwnd is None:
+        hwnd = getattr(lua, "hwnd", None)
+    if scale_cua_so(hwnd, chung=chung):
+        so += 1
+    return so
 
 
 def ma_ap_dung(tat_am_thanh, giam_do_hoa, chung=None):
