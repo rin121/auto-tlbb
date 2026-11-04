@@ -180,8 +180,10 @@ def tim_cua_so_game():
 
 def _process_game_con_song(pid):
     try:
+        if not isinstance(pid, int) or pid <= 0:
+            return False
         return psutil.Process(pid).name().lower() == TEN_TIEN_TRINH_GAME
-    except psutil.Error:
+    except (psutil.Error, ValueError, TypeError):
         return False
 
 
@@ -209,7 +211,7 @@ def _tai_pid_client_an():
     except (OSError, ValueError, TypeError):
         return
     if isinstance(ds, list):
-        _pid_client_an = {int(p) for p in ds if p}
+        _pid_client_an = {int(p) for p in ds if p and int(p) > 0}
 
 
 def _luu_pid_client_an():
@@ -225,6 +227,8 @@ def ghi_pid_client_an(pid):
     try:
         pid = int(pid)
     except (TypeError, ValueError):
+        return
+    if pid <= 0:
         return
     with _khoa_an:
         if pid not in _pid_client_an:

@@ -71,25 +71,23 @@ class TestVatPhamGop(unittest.TestCase):
 
     def test_o_doi_phieu_du_hai_loai(self):
         import giao_acc_chinh as gac
-        self.assertGreaterEqual(len(gac.O_DOI_PHIEU), 2)
-        self.assertEqual(gac.O_DOI_PHIEU[0], 1)
+        self.assertEqual(gac.O_DOI_PHIEU, (6, 7))
+        self.assertEqual(gac.O_PHIEU_KNB_20K, 6)
+        self.assertEqual(gac.O_PHIEU_KNB_30K, 7)
+        self.assertEqual(gac.MA_PHIEU_KNB_20K, 30004614)
+        self.assertEqual(gac.MA_PHIEU_KNB_30K, 30004615)
         self.assertIn("_Clicked", gac.MA_BAM_O_DOI)
         self.assertIn('mo .. "_Clicked"', gac.MA_BAM_O_DOI)
-        self.assertIn("DuiHuanUI_Bk_Icon", gac.MA_TEN_O_DOI)
         self.assertIn("DuiHuanUI_Bk_Icon", gac.MA_BAM_O_DOI)
-        self.assertIn("DuiHuanUI_OK_Clicked", gac.MA_XAC_NHAN_DOI)
+        self.assertIn("_OK_Clicked", gac.MA_XAC_NHAN_DOI)
 
-    def test_o_phieu_20k_30k_doc_dui_huan_ui(self):
-        from unittest.mock import MagicMock, patch
+    def test_o_phieu_20k_30k_co_dinh_theo_ghi(self):
         import giao_acc_chinh as gac
         luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
-        luong.tk_chinh = {"nhan_vat": "Gao"}
-        luong.in_log = lambda *_: None
-        luong.chinh = MagicMock()
-        raw = "3\tPhiếu khác\n7\t#-09Phiếu KNB 20K\n15\tPhiếu KNB 30K\n"
-        luong.chinh.lua.chay.return_value = raw.encode("utf-8")
-        with patch.object(gac, "giai_ma", side_effect=lambda b: b.decode("utf-8")):
-            self.assertEqual(luong._o_phieu_20k_30k("XiaoXiang_DuiHuanUI2"), [7, 15])
+        self.assertEqual(luong._o_phieu_20k_30k("XiaoXiang_DuiHuanUI2"), [6, 7])
+        self.assertEqual(luong._tim_o_phieu_20k_30k("XiaoXiang_DuiHuanUI2"), [6, 7])
+        self.assertEqual(luong._o_phieu_20k_30k_tu_chuoi(
+            "3\tPhiếu khác\n7\t#-09Phiếu KNB 20K\n15\tPhiếu KNB 30K\n"), [7, 15])
 
     def test_tccn_dung_action_button_va_select(self):
         import giao_acc_chinh as gac
@@ -488,16 +486,18 @@ class TestLuongGopAccChinh(unittest.TestCase):
             hwnd = luong._chon_game_truong({"ten_dang_nhap": "bong1"})
         self.assertEqual(hwnd, 22)
 
-    def test_xac_nhan_phieu_0_2_giay(self):
+    def test_xac_nhan_phieu_delay(self):
         import inspect
         import giao_acc_chinh as gac
         src = inspect.getsource(gac.GiaoAccChinhEngine._mot_lan_doi_phieu)
         self.assertIn("GIAY_XAC_NHAN_PHIEU", src)
-        self.assertEqual(gac.GIAY_XAC_NHAN_PHIEU, 0.2)
-        self.assertIn("Phiếu KNB 20K", gac.GiaoAccChinhEngine._o_phieu_20k_30k.__doc__)
+        self.assertIn("GIAY_SAU_CHON_O_DOI", src)
+        self.assertNotIn("MA_DOI_DA_CHON", src)
+        self.assertGreaterEqual(gac.GIAY_XAC_NHAN_PHIEU, 0.2)
+        self.assertIn("ô cố định", gac.GiaoAccChinhEngine._o_phieu_20k_30k.__doc__.lower())
 
     def test_hop_thanh_chi_bam_o_20k_30k(self):
-        """Không quét hết ô công thức — chỉ bấm Phiếu KNB 20K rồi 30K."""
+        """Chỉ bấm ô cố định 6 (20K) rồi 7 (30K) theo ghi tay."""
         from unittest.mock import MagicMock
         import giao_acc_chinh as gac
         luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
@@ -513,7 +513,6 @@ class TestLuongGopAccChinh(unittest.TestCase):
         luong.chinh = MagicMock()
         luong.chinh.lua.chay.return_value = b"true"
         luong._mo_cua_so_doi = lambda _t: "XiaoXiang_DuiHuanUI2"
-        luong._o_phieu_20k_30k = lambda _mo: [5, 12]
         bam = []
         luong._co_phieu_nho = lambda: len(bam) < 2
         luong._so_phieu_theo_muc = lambda: ({100: 0, 300: 0} if len(bam) >= 2 else {100: 10, 300: 5})
@@ -526,10 +525,10 @@ class TestLuongGopAccChinh(unittest.TestCase):
 
         luong._mot_lan_doi_phieu = mot
         luong._hop_thanh_phieu()
-        self.assertEqual(bam, [5, 12])
+        self.assertEqual(bam, [6, 7])
 
-    def test_hop_thanh_khong_quet_khi_thieu_ten_20k_30k(self):
-        from unittest.mock import MagicMock
+    def test_hop_thanh_khong_doi_khi_het_o_phieu(self):
+        from unittest.mock import MagicMock, patch
         import giao_acc_chinh as gac
         luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
         luong.tk_chinh = {"nhan_vat": "Gao"}
@@ -546,20 +545,29 @@ class TestLuongGopAccChinh(unittest.TestCase):
         luong.chinh = MagicMock()
         luong.chinh.lua.chay.return_value = b"true"
         luong._mo_cua_so_doi = lambda _t: "XiaoXiang_DuiHuanUI2"
-        luong._o_phieu_20k_30k = lambda _mo, bao_raw=False: []
         bam = []
         luong._mot_lan_doi_phieu = lambda *_a, **_k: bam.append(1) or True
-        luong._hop_thanh_phieu()
+        with patch.object(gac, "O_DOI_PHIEU", ()):
+            luong._hop_thanh_phieu()
         self.assertEqual(bam, [])
-        self.assertTrue(any("không thấy ô" in d and "không quét" in d for d in logs))
+        self.assertTrue(any("không có khung" in d for d in logs))
+
+    def test_tim_o_phieu_co_dinh_6_7(self):
+        import giao_acc_chinh as gac
+        luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        self.assertEqual(luong._tim_o_phieu_20k_30k("XiaoXiang_DuiHuanUI2"), [6, 7])
+        self.assertEqual(luong._o_phieu_20k_30k_tu_chuoi(
+            "7\tPhiếu KNB 20K\n9\tPhiếu KNB 30K\n"), [7, 9])
 
     def test_mot_lan_doi_phieu_loi_lua_thi_false(self):
         from unittest.mock import MagicMock
         import giao_acc_chinh as gac
         from lua_game import LoiLua
         luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        luong.dung = MagicMock()
+        luong.dung.wait = lambda *_: None
         luong._so_phieu_theo_muc = lambda: {100: 5, 300: 0}
         luong.in_log = lambda *_: None
         luong.chinh = MagicMock()
         luong.chinh.lua.chay.side_effect = LoiLua("treo")
-        self.assertFalse(luong._mot_lan_doi_phieu("XiaoXiang_DuiHuanUI2", "Gao", 5))
+        self.assertFalse(luong._mot_lan_doi_phieu("XiaoXiang_DuiHuanUI2", "Gao", 6))

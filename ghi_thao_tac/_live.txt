@@ -1,11 +1,32 @@
-GaoCáMặp hwnd=3934236
-win=false present=true
-box 1 dau=0 so=20
-box 2 dau=20 so=20
-box 3 dau=40 so=20
-tong=60
-2	Thiên Mệnh Thần Thạch	5
-3	Phiếu KNB 100	3
-n=2
-0	Phiếu KNB 300	4
-1	Phiếu KNB 3K	4
+pid 21728 ten 'GaoDẻLâu'
+=== GaoDẻLâu ===
+truoc {100: 2164, 300: 1100, 20000: 8, 30000: 5}
+cua so da mo
+mo= 'XiaoXiang_DuiHuanUI2'
+--- thu o 6 20K ---
+Clicked 6 -> b'1'
+OK -> b'1'
+sau_lan {100: 2164, 300: 1000, 20000: 8, 30000: 6} giam= True
+Clicked 6 -> b'1'
+OK -> b'1'
+sau_lan {100: 1964, 300: 1000, 20000: 9, 30000: 6} giam= True
+Clicked 6 -> b'1'
+OK -> b'1'
+sau_lan {100: 1764, 300: 1000, 20000: 10, 30000: 6} giam= True
+o 6 doi_duoc 3 lan
+--- thu o 7 30K ---
+Clicked 7 -> b'1'
+OK -> b'1'
+sau_lan {100: 1564, 300: 1000, 20000: 11, 30000: 6} giam= True
+Clicked 7 -> b'1'
+OK -> b'1'
+sau_lan {100: 1564, 300: 900, 20000: 11, 30000: 7} giam= True
+Clicked 7 -> b'1'
+OK -> b'1'
+sau_lan {100: 1564, 300: 800, 20000: 11, 30000: 8} giam= True
+o 7 doi_duoc 3 lan
+=== KET QUA ===
+truoc {100: 2164, 300: 1100, 20000: 8, 30000: 5}
+sau   {100: 1564, 300: 800, 20000: 11, 30000: 8}
+delta 100 -600 300 -300 20K 3 30K 3
+THANH CONG: doi duoc 6 lan

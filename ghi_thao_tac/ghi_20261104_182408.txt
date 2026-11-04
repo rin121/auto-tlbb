@@ -1,0 +1,355 @@
+[18:24:08.890] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261104_182408.txt (chỉ gaodẻlâu)
+[18:24:08.920] pid 11088: (đọc lỗi: không nạp được DLL vào game (game đã tắt?): PermissionError(13, 'Access is denied.', None, 5))
+[18:24:09.003] GaoDẻLâu: (bọc thêm 1556 hàm giao diện để ghi nút bấm)
+[18:24:09.014] GaoDẻLâu: ở map [Đại Lý] (154, 173)
+[18:24:09.025] GaoDẻLâu: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_2, MessageBall, MiniMap, Packet, PartyFrame, PlayerFrame, PlayerImpactFrame, SuperTooltip
+[18:24:09.046] GaoDẻLâu: túi lúc đầu: ô 0 Phiếu KNB 300 (mã 30004607) x200; ô 1 Phiếu KNB 300 (mã 30004607) x200; ô 2 Phiếu KNB 300 (mã 30004607) x200; ô 3 Phiếu KNB 300 (mã 30004607) x200; ô 4 Phiếu KNB 300 (mã 30004607) x200; ô 5 Phiếu KNB 300 (mã 30004607) x200; ô 6 Phiếu KNB 300 (mã 30004607) x200; ô 7 Phiếu KNB 300 (mã 30004607) x200; ô 8 Phiếu KNB 100 (mã 30004606) x200; ô 9 Phiếu KNB 100 (mã 30004606) x200; ô 10 Phiếu KNB 100 (mã 30004606) x200; ô 11 Phiếu KNB 100 (mã 30004606) x200; ô 12 Phiếu KNB 100 (mã 30004606) x200; ô 13 Phiếu KNB 100 (mã 30004606) x200; ô 14 Phiếu KNB 100 (mã 30004606) x200; ô 15 Phiếu KNB 100 (mã 30004606) x164; ô 16 Phiếu KNB 100 (mã 30004606) x200; ô 17 Phiếu KNB 100 (mã 30004606) x200; ô 18 Phiếu KNB 100 (mã 30004606) x200; ô 19 Phiếu KNB 100 (mã 30004606) x200; ô 20 Phiếu KNB 100 (mã 30004606) x200; ô 21 Phiếu KNB 100 (mã 30004606) x200; ô 22 Phiếu KNB 100 (mã 30004606) x200; ô 23 Phiếu KNB 100 (mã 30004606) x200; ô 24 Phiếu KNB 100 (mã 30004606) x200; ô 25 Phiếu KNB 100 (mã 30004606) x200; ô 26 Phiếu KNB 100 (mã 30004606) x200
+[18:24:09.058] GaoDẻLâu: trang bị lúc đầu: ô 0 Thái Ất Huyền Hoàn - VIP2 (mã 10162660) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Toạ Kỵ: Thương Lan Nguyên Thánh - VIP2 (mã 10165066) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Huyền Thiết - Giới (mã 10162437) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Thần Vương - Ngọc (mã 10162478) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 16 Tư Vô Tà - VIP2 (mã 10163077) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[18:24:09.068] GaoDẻLâu: chỉ số lúc đầu: LEVEL=59, MEMPAI=6, POINT_REMAIN=25006, STR=396322, SPR=396321, CON=20962949, INT=10951222, DEX=61095085, MAXHP=250000000, MAXMP=182527331, MONEY=11304033, YUANBAO=431500, ZENGDIAN=1894085, EXP=420123
+[18:24:24.256] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:24.256] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:24.256] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:24.266] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[18:24:25.560] GaoDẻLâu: chọn mục tiêu GaoDẻLâu
+[18:24:25.581] GaoDẻLâu: MỞ cửa sổ TargetBuff
+[18:24:25.581] GaoDẻLâu: MỞ cửa sổ TargetFrame
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2BC70)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2BE50)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2BE50)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2BB08)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2BB08)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2BB08)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2C288)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2C288)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2C288)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BB08, table: 2FD2C288)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2C300)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2C300)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2C300)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BB08, table: 2FD2C300)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C288, table: 2FD2C300)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BB08, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C288, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C300, table: 2FD2C328)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BB08, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C288, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C300, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C328, table: 2FD2C080)
+[18:24:26.188] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BA18, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BC70, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BE50, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2BB08, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C288, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C300, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C328, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: GỌI CompareTable_Quest(table: 2FD2C080, table: 2FD2C7D8)
+[18:24:26.189] GaoDẻLâu: chọn mục tiêu Trao Đổi
+[18:24:26.210] GaoDẻLâu: MỞ cửa sổ Quest
+[18:24:26.286] GaoDẻLâu: hội thoại NPC [Trao Đổi]:
+        - Chào Mừng Các Bạn Đến Với Thiên Long Nhất Kiếm, Ta Là Sứ Giả Đổi Trang Bị VIP, Mời Các bạn Lựa Chọn Đồ Mà Các Bạn Cần. (mã -1, -1; loại text)
+        - Đổi Trang Bị VIP (mã 0, 1; loại id)
+        - Đổi Bảo Thạch VIP (mã 0, 2; loại id)
+        - Đổi Thời Trang VIP (mã 0, 3; loại id)
+        - Đổi Thú Cưỡi VIP (mã 0, 4; loại id)
+        - Đổi Pet Boos (mã 0, 5; loại id)
+        - Đổi Pet Boos Siêu Cấp - 5.000 mảnh (mã 900140, 9; loại id)
+        - Nâng Cấp Trang Bị VIP (mã 0, 6; loại id)
+        - Hợp Thành Vật Phẩm (mã 0, 7; loại id)
+        - Doi 100 phieu 3.000 KNB => 1 phieu 300.000 KNB (mã 900140, 10; loại id)
+        - [thông tin] _ExteriorWeaponDisplay()
+        - [thông tin] mMelting:UpdateProductAction(tonumber(shuzu[i]))
+        -  (mã , ; loại )
+        - end (mã , ; loại )
+        - shuzu2 = XiaoXiang_DuiHuanUI2_Split(Get_XParam_STR(0), szSeparator) (mã , ; loại )
+        - [thông tin] Disable();
+        - shuzu2 = XiaoXiang_DuiHuanUI2_Split(Get_XParam_STR(0), szSeparator) (mã , ; loại )
+        - [thông tin] DuiHuanUI2_Clicked2(yixuanzeID)
+        - [thông tin] d
+        - [thông tin] 
+        - [thông tin] nUI2_Bk_Icon[nIndex]:SetPushed(1);
+        - [thông tin] Index)
+        - [thông tin] RIPT_ParamCount( 3 );
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] QẠ
+        - [thông tin] ẴÂG\
+        - [thông tin] ẲẴ
+        - [thông tin] ạ
+        - [thông tin] Ẳ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮỮ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] `]QỴ
+        - [thông tin] 
+        - [thông tin] PW4
+        - [thông tin] 
+        - [thông tin] pũỸ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] Nìẵ1
+        - [thông tin] úỸ
+        - [thông tin] 
+        - [thông tin] 4
+        - [thông tin] 
+        - [thông tin] úỸ #úỸ0úỸ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] á2
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] đ>úỸÀỶúỸ
+        - [thông tin] ỠẺĐÝỳĐ_Ứừ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] úỸ)úỸ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ƠóộờÁểạĐ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] ÀỶúỸ
+        - [thông tin] Ôớ_Ứừ
+        - [thông tin] Đh4
+        - [thông tin] 
+        - [thông tin] ÀỶúỸ ụPỴÀỶúỸ
+        - [thông tin] ừÓớốơả
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] pẫù6
+        - [thông tin] PỴ
+        - [thông tin] 
+        - [thông tin] 4
+        - [thông tin] 
+        - [thông tin] PỴPÒPỴ`LúỸ
+        - [thông tin] 
+        - [thông tin] 
+        - [thông tin] 
+[18:24:27.492] GaoDẻLâu: GỌI QuestOption_Clicked()
+[18:24:27.492] GaoDẻLâu: GỌI QuestFrameOptionClicked(-1, 0, 7)
+[18:24:27.492] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[18:24:27.503] GaoDẻLâu: MỞ cửa sổ XiaoXiang_DuiHuanUI2
+[18:24:28.141] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[18:24:28.772] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_Clicked(6)
+[18:24:28.772] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1)
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:28.772] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:28.772] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:28.772] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[18:24:28.772] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_Clicked2(6)
+[18:24:29.425] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[18:24:30.096] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:30.096] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:30.096] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:30.096] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:30.096] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.096] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.117] GaoDẻLâu: túi ô 8: Phiếu KNB 100 (mã 30004606) -> Phiếu KNB 20K (mã 30004614) x1
+[18:24:30.703] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:30.703] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:30.703] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:30.704] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:30.704] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:30.704] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:30.704] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:30.704] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:30.704] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:30.704] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:30.704] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.704] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:30.736] GaoDẻLâu: túi ô 8: Phiếu KNB 20K số lượng 1 -> 5
+[18:24:30.736] GaoDẻLâu: túi ô 9: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:30.736] GaoDẻLâu: túi ô 10: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:30.736] GaoDẻLâu: túi ô 11: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:30.736] GaoDẻLâu: túi ô 12: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:31.821] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:31.821] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:31.821] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:31.822] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:31.822] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:31.822] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:31.822] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 6)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004614)
+[18:24:31.822] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:31.822] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.822] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:31.843] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[18:24:31.854] GaoDẻLâu: túi ô 8: Phiếu KNB 20K số lượng 5 -> 8
+[18:24:31.854] GaoDẻLâu: túi ô 13: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:31.854] GaoDẻLâu: túi ô 14: mất Phiếu KNB 100 (mã 30004606) x200
+[18:24:31.854] GaoDẻLâu: túi ô 15: mất Phiếu KNB 100 (mã 30004606) x164
+[18:24:31.854] GaoDẻLâu: túi ô 16: Phiếu KNB 100 số lượng 200 -> 164
+[18:24:32.451] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_Clicked(7)
+[18:24:32.451] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1)
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:32.451] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:32.451] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:32.451] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[18:24:32.451] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_Clicked2(7)
+[18:24:32.462] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[18:24:33.068] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:33.068] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:33.068] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:33.068] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:33.068] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:33.068] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:33.068] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:33.069] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:33.069] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:33.738] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.738] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.738] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.738] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:33.738] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:33.738] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:33.739] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.739] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:33.739] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:33.739] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.739] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:33.739] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:33.739] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:33.739] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.739] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:33.771] GaoDẻLâu: túi ô 0: mất Phiếu KNB 300 (mã 30004607) x200
+[18:24:33.771] GaoDẻLâu: túi ô 1: mất Phiếu KNB 300 (mã 30004607) x200
+[18:24:33.771] GaoDẻLâu: túi ô 9: thêm Phiếu KNB 30K (mã 30004615) x4
+[18:24:34.401] GaoDẻLâu: GỌI XiaoXiang_DuiHuanUI2_OK_Clicked()
+[18:24:34.401] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(DuiHuan33)
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(955555)
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 2)
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 30004615)
+[18:24:34.401] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[18:24:34.401] GaoDẻLâu: GỌI Send_XSCRIPT()
+[18:24:34.401] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:34.401] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[18:24:34.422] GaoDẻLâu: túi ô 2: Phiếu KNB 300 số lượng 200 -> 100
+[18:24:34.422] GaoDẻLâu: túi ô 9: Phiếu KNB 30K số lượng 4 -> 5
+[18:24:59.014] GHI: dừng ghi

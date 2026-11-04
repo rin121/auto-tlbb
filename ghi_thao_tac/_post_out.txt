@@ -1,0 +1,4 @@
+pywin ok 132618
+ctypes 132618 r=1 err=0
+pywin ok 132616
+ctypes 132616 r=1 err=0

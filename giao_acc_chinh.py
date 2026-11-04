@@ -47,8 +47,13 @@ MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": LOAI_TR
             "tat_ca_pho_ban": False, "tien_trinh": {}}
 DONG_THUONG_KHO = (111111, 9993)
 NPC_TRAO_DOI = ("Trao Đổi", (155, 173))
-# XiaoXiang_DuiHuanUI2: ô công thức 1..36, bấm XiaoXiang_DuiHuanUI2_Clicked(i) rồi OK_Clicked.
-O_DOI_PHIEU = tuple(range(1, 37))
+# XiaoXiang_DuiHuanUI2 — ghi tay 2026-11-04 (GaoDẻLâu):
+# Clicked(6) → OK = Phiếu KNB 20K (mã 30004614); Clicked(7) → OK = Phiếu KNB 30K (mã 30004615).
+O_PHIEU_KNB_20K = 6
+O_PHIEU_KNB_30K = 7
+MA_PHIEU_KNB_20K = 30004614
+MA_PHIEU_KNB_30K = 30004615
+O_DOI_PHIEU = (O_PHIEU_KNB_20K, O_PHIEU_KNB_30K)
 # Game Lua cũ (không có string.match): dùng string.find lấy capture.
 _MA_TIM_TEN_CUA = (
     'local function tim(chu, mau) local _, _, a = string.find(chu, mau) return a end '
@@ -187,6 +192,39 @@ MA_DOI_DA_CHON = (
     'local nut = icons[i] '
     'if nut and nut.GetPushed and tonumber(nut:GetPushed()) == 1 then return "1" end '
     'end end return "0"')
+# Chọn 1 ô (không Xác nhận) rồi đọc tên công thức từ nhãn / tooltip / ActionItem sau khi chọn.
+MA_DOC_TEN_O_DOI = (
+    'local mo, i = "{mo}", {i} '
+    'if mo == "" then return "" end '
+    'if not IsWindowShow(mo) and not IsWindowShow("DuiHuanUI") then return "dong" end '
+    'local goi = _G[mo .. "_Clicked"] or _G["DuiHuanUI_Clicked"] '
+    'if goi then goi(i) end '
+    'local nut = _G[string.format("DuiHuanUI_Bk_Icon%d", i)] '
+    'or _G[string.format("%s_Bk_Icon%d", mo, i)] '
+    'if nut and nut.DoAction and not goi then nut:DoAction() end '
+    'local function lay(w) '
+    'if not w then return "" end '
+    'if w.GetText then local ok, t = pcall(function() return w:GetText() end) '
+    'if ok and t and t ~= "" then return t end end '
+    'if w.GetActionItem then local ok, a = pcall(function() return w:GetActionItem() end) '
+    'if ok and type(a) == "table" and a.GetName then '
+    'local ok2, id = pcall(function() return a:GetID() end) '
+    'if ok2 and id and id ~= 0 then '
+    'local ok3, ten = pcall(function() return a:GetName() end) '
+    'if ok3 and ten and ten ~= "" then return ten end end end end '
+    'return "" end '
+    'local ds = {"XiaoXiang_DuiHuanUI2_ItemName", "XiaoXiang_DuiHuanUI2_Name", '
+    '"XiaoXiang_DuiHuanUI2_Info", "XiaoXiang_DuiHuanUI2_Explain", "XiaoXiang_DuiHuanUI2_ItemInfo", '
+    '"DuiHuanUI_ItemName", "DuiHuanUI_Name", "DuiHuanUI_Info", "DuiHuanUI_Explain", '
+    '"DuiHuanUI_ItemInfo", "DuiHuanUI_Text", "SuperTooltips_ItemName"} '
+    'for _, n in ipairs(ds) do local t = lay(_G[n]) if t ~= "" then return t end end '
+    'if SuperTooltips then '
+    'if SuperTooltips.GetTitle then local ok, t = pcall(function() return SuperTooltips:GetTitle() end) '
+    'if ok and t and t ~= "" then return t end end '
+    'if SuperTooltips.GetOwner then local ok, o = pcall(function() return SuperTooltips:GetOwner() end) '
+    'if ok then local t = lay(o) if t ~= "" then return t end end end end '
+    'local t = lay(nut) if t ~= "" then return t end '
+    'return ""')
 SO_O_TOI_THIEU = 5
 SO_O_MOT_LAN = 5
 SO_LAN_THU_GIAO_DICH = 3
@@ -203,7 +241,11 @@ GIAY_GIUA_HAI_LAN_CAT = 1.5
 GIAY_GIUA_RUT_KHO = 1
 SO_LAN_THU_CAT = 2
 SO_LAN_HOP_THANH_TOI_DA = 40
-GIAY_XAC_NHAN_PHIEU = 0.2
+GIAY_XAC_NHAN_PHIEU = 0.35
+# Giữ hằng cũ cho test / tool — auto không còn quét từng ô để tìm tên.
+SO_O_DOI_TIM_TOI_DA = 36
+GIAY_GIUA_HAI_LAN_TIM_O_DOI = 0.35
+GIAY_SAU_CHON_O_DOI = 0.25
 
 MA_KICH_THUOC_TUI = 'return DataPool:GetBaseBag_Num() .. "\\t" .. DataPool:GetMatBag_Num()'
 MA_MO_TCCN = trong_cua_so("MainMenuBar", "MainMenuBar_KuaiJieYiZhan()")
@@ -1431,14 +1473,10 @@ class GiaoAccChinhEngine:
                     + (f" (đang mở: {dang_mo})" if dang_mo else " (không quét được tên cửa sổ nào)"))
         return ""
 
-    def _o_phieu_20k_30k(self, mo, bao_raw=False):
-        """Chỉ số ô công thức Phiếu KNB 20K và 30K, theo thứ tự 20K rồi 30K (DuiHuanUI_Bk_Icon)."""
-        try:
-            raw = giai_ma(self.chinh.lua.chay(MA_TEN_O_DOI.replace("{mo}", mo)))
-        except (LoiLua, OSError):
-            return []
+    def _o_phieu_20k_30k_tu_chuoi(self, raw):
+        """Parse «ô\\ttên» → [ô_20K, ô_30K] (thiếu loại nào thì bỏ loại đó)."""
         tim = {}
-        for dong in raw.splitlines():
+        for dong in (raw or "").splitlines():
             phan = dong.split("\t", 1)
             if len(phan) < 2 or not phan[0].isdigit():
                 continue
@@ -1447,16 +1485,20 @@ class GiaoAccChinhEngine:
                 tim.setdefault(20000, o)
             elif la_cong_thuc_phieu(phan[1], 30000):
                 tim.setdefault(30000, o)
-        kq = [tim[m] for m in (20000, 30000) if m in tim]
-        if bao_raw and not kq:
-            mau = " | ".join(
-                dong.replace("\t", "=") for dong in raw.splitlines() if dong.strip())[:240]
-            self.in_log(f"{self.tk_chinh['nhan_vat']}: đọc ô đổi ({mo}) — "
-                        + (f"có {mau}" if mau else "không đọc được tên ô nào (DuiHuanUI_Bk_Icon)"))
-        return kq
+        return [tim[m] for m in (20000, 30000) if m in tim]
+
+    def _o_phieu_20k_30k(self, mo, bao_raw=False):
+        """Ô cố định Phiếu KNB 20K/30K (ghi tay); mo chỉ để tương thích chỗ gọi cũ."""
+        del mo, bao_raw
+        return list(O_DOI_PHIEU)
+
+    def _tim_o_phieu_20k_30k(self, mo):
+        """Trả về [ô 20K, ô 30K] theo ghi tay XiaoXiang_DuiHuanUI2_Clicked(6)/(7)."""
+        del mo
+        return list(O_DOI_PHIEU)
 
     def _mot_lan_doi_phieu(self, mo, ten, o, im_lang=False):
-        """Bấm 1 ô công thức (20K/30K) rồi Xác nhận. True nếu túi giảm phiếu 100 hoặc 300."""
+        """Clicked(o) rồi OK_Clicked — True nếu túi giảm phiếu 100 hoặc 300."""
         lua = self.chinh.lua
         try:
             truoc = self._so_phieu_theo_muc()
@@ -1465,9 +1507,7 @@ class GiaoAccChinhEngine:
                 if not im_lang:
                     self.in_log(f"{ten}: không bấm được ô {o} ({kq.decode('utf-8', 'replace')})")
                 return False
-            # Server trả Clicked2 mới bật OK / đẩy ô — ô trống thì bỏ qua, không Xác nhận.
-            if not self._cho(lambda: lua.chay(MA_DOI_DA_CHON.replace("{mo}", mo)) == b"1", 1.2, 0.15):
-                return False
+            self.dung.wait(GIAY_SAU_CHON_O_DOI)
             kq = lua.chay(MA_XAC_NHAN_DOI.replace("{mo}", mo))
             if kq != b"1":
                 if not im_lang:
@@ -1486,7 +1526,7 @@ class GiaoAccChinhEngine:
         return False
 
     def _hop_thanh_phieu(self):
-        """Chỉ đổi ô Phiếu KNB 20K rồi 30K (bấm ô → Xác nhận), không quét công thức khác."""
+        """Đổi đúng ô 6 (20K) rồi ô 7 (30K): Clicked → OK, không đụng công thức khác."""
         ten = self.tk_chinh["nhan_vat"]
         lua = self.chinh.lua
         if not self._co_phieu_nho():
@@ -1494,6 +1534,7 @@ class GiaoAccChinhEngine:
         self.bao_trang_thai(f"{ten}: hợp thành Phiếu KNB 100/300 → 20K/30K")
         mo = ""
         da_doi = 0
+        o_ten = list(O_DOI_PHIEU)
         while da_doi < SO_LAN_HOP_THANH_TOI_DA:
             self._kiem_tra_dung()
             try:
@@ -1515,19 +1556,12 @@ class GiaoAccChinhEngine:
                 mo = self._mo_cua_so_doi(ten)
                 if not mo:
                     break
-                self.in_log(f"{ten}: cửa sổ đổi «{mo}», túi còn {self._o_trong()['base']} ô trống, "
-                            f"phiếu 100={muc[100]}, 300={muc[300]} — chỉ đổi ô 20K/30K")
-            o_ten = self._o_phieu_20k_30k(mo)
-            if not o_ten:
-                # Tên công thức đôi khi load chậm sau khi mở cửa sổ.
                 self.dung.wait(0.8)
-                o_ten = self._o_phieu_20k_30k(mo, bao_raw=True)
+                self.in_log(f"{ten}: cửa sổ đổi «{mo}», túi còn {self._o_trong()['base']} ô trống, "
+                            f"phiếu 100={muc[100]}, 300={muc[300]} — ô {o_ten} (20K rồi 30K)")
             if not o_ten:
-                self.in_log(f"{ten}: không thấy ô «Phiếu KNB 20K» / «30K» trong «{mo}» — "
-                            "dừng (không quét ô công thức khác)")
+                self.in_log(f"{ten}: không có khung «Phiếu KNB 20K» / «30K» — dừng đổi phiếu")
                 break
-            if da_doi == 0:
-                self.in_log(f"{ten}: ô đổi phiếu: {o_ten} (20K rồi 30K nếu có)")
             giam_vong = False
             dung_som = False
             for o in o_ten:
