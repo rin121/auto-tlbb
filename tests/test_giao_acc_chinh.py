@@ -118,6 +118,50 @@ class TestChayToiNpcTanThu(unittest.TestCase):
                 luong._chay_toi(game, "caychay144", (160, 166))
         self.assertTrue(game.lua.lenh)
 
+    def test_xep_tui_sau_giao(self):
+        luong = self._luong([])
+        luong.tk_chinh = {"nhan_vat": "accchinh"}
+        luong.in_log = lambda *_: None
+        lua = self._Lua()
+        luong.chinh = type("G", (), {"lua": lua})()
+        with patch.object(gac.time, "sleep"):
+            luong._xep_tui_chinh()
+        self.assertTrue(any("OpenWindow" in m and "Packet" in m for m in lua.lenh))
+        self.assertTrue(any("Packet_PackUp_Clicked" in m for m in lua.lenh))
+
+
+class TestThoatAccChinh(unittest.TestCase):
+    def test_giao_xong_thi_thoat_acc_chinh(self):
+        luong = gac.LuongGiaoAccChinh.__new__(gac.LuongGiaoAccChinh)
+        luong.tk_chinh = {"ten_dang_nhap": "AccChinh", "nhan_vat": "chinh"}
+        luong.chinh = object()
+        luong.tk_da_thoat = set()
+        luong.in_log = lambda *_: None
+        da_thoat = []
+        luong._thoat_game_pho_ban = lambda game, ten: da_thoat.append(ten)
+        luong._thoat_acc_chinh()
+        self.assertEqual(da_thoat, ["chinh"])
+        self.assertIsNone(luong.chinh)
+        self.assertIn("accchinh", luong.tk_da_thoat)
+
+    def test_acc_dang_trong_game_thi_khong_logout(self):
+        luong = gac.LuongGiaoAccChinh.__new__(gac.LuongGiaoAccChinh)
+        luong.ten_giu_online = {gac.chuan_hoa("GaoCáMặp")}
+        luong.tk_da_thoat = set()
+        luong.pid_dieu_khien = set()
+        luong.dung = type("D", (), {"is_set": lambda self: False})()
+        luong.in_log = lambda *_: None
+        luong._kiem_tra_dung = lambda: None
+        cua_so = [{"hwnd": 1, "pid": 9, "tieu_de": "GaoCáMặp"}]
+        game = type("G", (), {"thong_tin": lambda self: {"ten": "GaoCáMặp", "tai_khoan": "kduy122"},
+                              "lua": object()})()
+        with patch.object(gac, "tim_cua_so_game", return_value=cua_so), \
+                patch.object(gac, "Game", return_value=game), \
+                patch.object(gac, "thoat_ve_chon_may_chu") as thoat:
+            luong._thoat_cac_client()
+        thoat.assert_not_called()
+        self.assertNotIn("kduy122", luong.tk_da_thoat)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -297,5 +297,106 @@ class TestXepLaiDangNhapLoi(unittest.TestCase):
         self.assertEqual(tt["thu_lai"], {"caychay48|0": 1})
 
 
+class TestDuNhomDungSoNguoi(unittest.TestCase):
+    def test_thieu_nguoi_trong_game_thi_chua_du(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 1, False, False, False, False)
+        nhom = []
+        for ten in ("a", "b", "c", "d", "e", "f"):
+            tv = xv.ThanhVien({"ten_dang_nhap": ten, "mat_khau": "", "nhan_vat": ten})
+            tv.ten = ten
+            tv.game = MagicMock()
+            nhom.append(tv)
+        dang_choi = {tv: True for tv in nhom}
+        dang_choi[nhom[-1]] = False
+        luong._tv_dang_choi = lambda tv: dang_choi[tv]
+        with patch.object(xv, "doc_nhom", lambda lua: {"thanh_vien": [tv.ten for tv in nhom]}):
+            self.assertFalse(luong._du_nhom(nhom[0], nhom))
+        dang_choi[nhom[-1]] = True
+        with patch.object(xv, "doc_nhom", lambda lua: {"thanh_vien": [tv.ten for tv in nhom[:5]]}):
+            self.assertFalse(luong._du_nhom(nhom[0], nhom))
+        with patch.object(xv, "doc_nhom", lambda lua: {"thanh_vien": [tv.ten for tv in nhom]}):
+            self.assertTrue(luong._du_nhom(nhom[0], nhom))
+
+    def test_dang_nhap_lai_nguoi_thieu_khong_logout_ca_nhom(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 1, False, False, False, False)
+        a, b = xv.ThanhVien({"ten_dang_nhap": "a", "mat_khau": ""}), xv.ThanhVien({"ten_dang_nhap": "b", "mat_khau": ""})
+        a.hwnd, b.hwnd = 11, 22
+        a.ten, b.ten = "a", "b"
+        lan = {"n": 0}
+        luong.dung.is_set = lambda: lan["n"] > 0
+        luong._du_nhom = lambda *_: False
+        luong._tv_dang_choi = lambda tv: tv is a
+        luong.in_log = lambda *_: None
+
+        def dn(offline, giu_them=()):
+            lan["n"] += 1
+            self.assertEqual(offline, [b])
+            self.assertEqual(list(giu_them), [11, 22])
+            return []
+
+        luong._dang_nhap = dn
+        self.assertFalse(luong._cho_du_nhom("nhóm", a, [a, b], None, 2))
+
+
+class TestThoatGameNgoaiNhom(unittest.TestCase):
+    def test_tieu_de_launcher_khong_bi_dua_ve_may_chu(self):
+        cua = {"hwnd": 5, "pid": 9, "tieu_de": "Thien Long Bat Bo"}
+        with patch.object(xv, "tim_cua_so_game", return_value=[cua]), \
+                patch.object(xv, "hwnd_giu_khi_xoay_vong", return_value=set()), \
+                patch.object(xv, "ten_trong_tieu_de", return_value=None), \
+                patch.object(xv, "thoat_ve_chon_may_chu") as thoat:
+            xv.thoat_game_khac([], lambda *_: None)
+        thoat.assert_not_called()
+
+    def test_da_vao_game_ngoai_nhom_van_logout(self):
+        cua = {"hwnd": 5, "pid": 9, "tieu_de": "cosato777 (10) [Lac Duong] - ChickenAuto"}
+        with patch.object(xv, "tim_cua_so_game", return_value=[cua]), \
+                patch.object(xv, "hwnd_giu_khi_xoay_vong", return_value=set()), \
+                patch.object(xv, "ten_trong_tieu_de", return_value="cosato777"), \
+                patch.object(xv, "Game") as game_cls, \
+                patch.object(xv, "man_hinh_hien_tai", return_value="vao_game"), \
+                patch.object(xv, "thoat_ve_chon_may_chu") as thoat:
+            game_cls.return_value.thong_tin.return_value = {"ten": "cosato777"}
+            xv.thoat_game_khac([], lambda *_: None)
+        thoat.assert_called_once()
+
+
+class TestBoSungHangCho(unittest.TestCase):
+    def test_acc_chua_het_luot_bi_roi_khoi_hang_thi_duoc_them_lai(self):
+        a = {"ten_dang_nhap": "a"}
+        b = {"ten_dang_nhap": "b"}
+        hang = [[a], []]
+        them = xv.bo_sung_hang_cho(hang, [a, b], 2, set(), {}, da_xong_fn=lambda ten: ten == "a")
+        self.assertEqual(them, ["aa", "b", "bb"])
+        self.assertEqual([tk["ten_dang_nhap"] for tk in hang[0]], ["a", "b"])
+        self.assertEqual([tk["ten_dang_nhap"] for tk in hang[1]], ["a", "b"])
+
+    def test_het_luot_va_thu_dang_nhap_du_thi_khong_them(self):
+        a = {"ten_dang_nhap": "a"}
+        hang = [[], []]
+        thu = {"a|0": xv.SO_LAN_XEP_LAI_DANG_NHAP}
+        them = xv.bo_sung_hang_cho(hang, [a], 2, set(), thu, da_xong_fn=lambda ten: ten == "aa")
+        self.assertEqual(them, [])
+        self.assertEqual(hang, [[], []])
+
+
+class TestMoDuClient(unittest.TestCase):
+    def test_thieu_client_thi_mo_them_roi_giu_hwnd(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 1, False, False, False, False)
+        luong.cac_hwnd = [1, 2, 3, 4]
+        log = []
+        luong.in_log = log.append
+        with patch.object(xv, "hwnd_giu_khi_xoay_vong", return_value=set()), \
+                patch.object(xv, "tim_cua_so_game", side_effect=[[{"hwnd": i} for i in range(4)],
+                                                              [{"hwnd": i} for i in range(5)]]), \
+                patch.object(xv.cau_hinh, "doc_tai_khoan", return_value={"thu_muc_game": "G", "giay_cho_truoc_khi_nap_dll": 1}), \
+                patch.object(xv, "mo_game", return_value=99) as mo, \
+                patch.object(xv, "cho_cua_so", return_value=50):
+            luong._mo_du_client(5)
+        mo.assert_called_once_with("G")
+        self.assertIn(50, luong.cac_hwnd)
+        self.assertTrue(any("mở thêm 1" in dong for dong in log))
+
+
 if __name__ == "__main__":
     unittest.main()

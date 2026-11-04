@@ -177,6 +177,12 @@ def la_loi_may_chu_ban(chu):
     return any(c in chu for c in ("dang thao tac", "dang ban", "loi noi bo"))
 
 
+def la_loi_ten_da_ton_tai(chu):
+    """Server báo tên đã có trên máy chủ — nhân vật có thể đã tạo (sổ / danh sách client chưa kịp), không phải sai rule."""
+    chu = bo_dau(chu)
+    return "ton tai" in chu or "da co" in chu
+
+
 def doc_danh_sach(chu):
     """Mỗi dòng "tài_khoản mật_khẩu" (cách nhau bởi dấu cách, tab, dấu phẩy hoặc |). Sai dòng nào thì báo ValueError."""
     ds = []
@@ -461,6 +467,9 @@ class LuongTaoNhanVat(LuongDangNhap):
                     if self.dung.is_set():
                         return "đã dừng"
                     self.in_log(f"Lần {lan}/{so_lan} thất bại: {loi}")
+                    if "Không mở được màn hình tạo nhân vật" in str(loi):
+                        self.in_log("Server không trả danh sách nhân vật — đã bấm Quay lại và đăng nhập lại một lần, không thử tiếp")
+                        return "thất bại"
                 except Exception:
                     if self.dung.is_set():
                         return "đã dừng"
@@ -600,11 +609,13 @@ class LuongTaoNhanVat(LuongDangNhap):
             time.sleep(0.5)
         time.sleep(1)
 
-    def mo_man_tao(self, lua):
+    def mo_man_tao(self, lua, thu_lai_dang_nhap=True):
         """
         Bấm Tạo nhân vật, giải mã kiểm tra tới khi mở cửa sổ LoginCreateRole. Trả về True nếu đã qua mã kiểm tra.
         Vừa từ trong game về, game có lúc mở thẳng màn hình tạo mà không hỏi mã, rồi server báo "Kiểm tra chưa được
         duyệt": khi đó trả về False để người gọi về chọn nhân vật bấm lại.
+        Tài khoản chưa có nhân vật mà bấm đăng ký không mở được màn hình (server không trả danh sách):
+        bấm Quay lại rồi đăng nhập lại đúng một lần.
         """
         if dang_hien(lua, "LoginCreateRole"):
             if self.da_qua_ma:
@@ -619,6 +630,12 @@ class LuongTaoNhanVat(LuongDangNhap):
             self.bao_trang_thai("Giải mã kiểm tra tạo nhân vật")
             self.da_qua_ma = giai_ma_kiem_tra(lua, self.in_log, self.dung.is_set)
         if not dang_hien(lua, "LoginCreateRole"):
+            if thu_lai_dang_nhap and not ds_nhan_vat(lua):
+                self.in_log("Tài khoản không có nhân vật, bấm đăng ký không được — bấm Quay lại rồi đăng nhập lại")
+                self.game.lua.chay(trong_cua_so("LoginSelectRole", "SelectRole_Return()"))
+                time.sleep(1)
+                self.toi_chon_nhan_vat(self.game)
+                return self.mo_man_tao(self.game.lua, thu_lai_dang_nhap=False)
             raise LoiDangNhap("Không mở được màn hình tạo nhân vật")
         return self.da_qua_ma
 
@@ -660,13 +677,24 @@ class LuongTaoNhanVat(LuongDangNhap):
                         self.in_log(f"Đã tạo nhân vật {ten} (nữ, avatar đầu tiên)")
                         return ten
                     continue
+                if la_loi_ten_da_ton_tai(loi):
+                    # Tên đúng rule nhưng đã có trên server (client từng đọc danh sách trống): không coi sai rule.
+                    self.in_log(f"Tạo {ten}: game báo \"{loi}\" — về chọn nhân vật kiểm tra lại (không bỏ tích XV)")
+                    self.ve_chon_nhan_vat(lua)
+                    self.da_qua_ma = False
+                    time.sleep(1)
+                    if any(cung_ten(ten, c) for c in ds_nhan_vat(lua)):
+                        self.in_log(f"Nhân vật {ten} đã có trên tài khoản, dùng luôn")
+                        return ten
+                    raise LoiDangNhap(
+                        f"Server báo tên {ten} đã tồn tại nhưng danh sách chưa thấy — đăng nhập lại để đọc lại")
                 if not la_loi_ma_kiem_tra(loi):
                     break
                 self.da_qua_ma = False
                 self.in_log(f"Không tạo được {ten}: {loi}, làm lại mã kiểm tra")
             else:
                 raise LoiDangNhap(f"Tạo {ten} {SO_LAN_TAO_MOT_TEN} lần vẫn chưa được")
-            # Còn lại là lỗi về tên (trùng, không hợp lệ...): thử tên sau, vẫn ở màn hình tạo, khỏi nhập lại mã.
+            # Còn lại là lỗi về tên (không hợp lệ...): thử tên sau, vẫn ở màn hình tạo, khỏi nhập lại mã.
             self.in_log(f"Không tạo được {ten}: {loi}" + (", thử tên khác" if ten != cac_ten_thu[-1] else ""))
         if self.tuy_chon.get("dung_ten"):
             raise LoiSaiRuleNhanVat([f"{ten_goc} (không tạo được đúng tên)"])

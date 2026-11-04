@@ -66,6 +66,30 @@ def bam(hwnd, diem):
     keo(hwnd, diem, diem)
 
 
+def bam_phai(hwnd, diem):
+    """Bấm chuột phải tại điểm (toạ độ client của cửa sổ game hwnd)."""
+    with KHOA_CHUOT:
+        cu_truoc, cu_chuot = win32gui.GetForegroundWindow(), win32api.GetCursorPos()
+        try:
+            _len_truoc(hwnd)
+            a = win32gui.ClientToScreen(hwnd, diem)
+            if not _thuoc_game(hwnd, a):
+                raise LoiKeoTha("cửa sổ game đang bị cửa sổ khác che")
+            win32api.SetCursorPos(a)
+            time.sleep(0.2)
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
+            time.sleep(0.12)
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+            time.sleep(0.3)
+        finally:
+            win32api.SetCursorPos(cu_chuot)
+            if cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc):
+                try:
+                    _len_truoc(cu_truoc)
+                except (win32gui.error, LoiKeoTha):
+                    pass
+
+
 def keo(hwnd, tu, toi):
     """Kéo từ điểm tu tới điểm toi (toạ độ client của cửa sổ game hwnd)."""
     with KHOA_CHUOT:

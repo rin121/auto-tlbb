@@ -38,7 +38,7 @@ from cua_so_game import tim_cua_so_game, tim_hwnd_chinh_game_pid
 from game_api import Game
 from lua_game import LoiLua
 import proxy_mang
-from gioi_han_client import thu_dong_hop_client_qua_nhieu
+from gioi_han_client import dong_hop_runtime_error, thu_dong_hop_client_qua_nhieu
 
 # Tên cửa sổ lấy từ Config.axp/InterfaceEx.txt. Xét theo thứ tự: màn hình đứng trước che màn hình sau.
 CAC_MAN_HINH = (
@@ -397,6 +397,7 @@ def cho_cua_so(pid, giay_cho, nen_dung, khi_co_cua_so=None):
         if not con_chay(pid):
             raise LoiDangNhap("Game tự tắt lúc đang khởi động")
         thu_dong_hop_client_qua_nhieu()
+        dong_hop_runtime_error()
         tuoi = time.time() - bat_dau
         cac_cua_so = [c for c in tim_cua_so_game() if c["pid"] == pid]
         if cac_cua_so and khi_co_cua_so and not da_goi_khi_co_cua_so:

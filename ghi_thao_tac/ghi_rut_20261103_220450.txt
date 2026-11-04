@@ -1,0 +1,2 @@
+[22:04:50.115] GHI rút đồ -> d:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_rut_20261103_220450.txt
+[22:04:50.115] Anh mở Thương khố, rút 1 món gộp, rồi mở Thiên Cơ, nhập 250, rút 1 món. Xong thì báo em.

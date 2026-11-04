@@ -1,20 +1,26 @@
 """
 GỘP ĐỒ VỀ ACC CHÍNH: lần lượt đăng nhập các acc nguồn (user nhập: tài khoản, mật khẩu, tên nhân vật),
-giao đồ về một acc chính nhận — cùng quy tắc giao / cất túi như giao_acc_chinh.py, không dùng xoay vòng / sổ túi đồ.
+giao đồ về một acc chính nhận. Acc nguồn về Đại Lý, rút Mảnh Ngọc Vip, Phiếu KNB 100/300/2000/3000,
+Thiên Mệnh Thần Thạch, Mảnh Vỡ Trân Thú, Mảnh vỡ Thiên Ngoại từ Thiên Cơ Cẩm Nang (mỗi lần nhập 250, cách 3 giây)
+và Thương khố, rồi giao các món đó. Không dùng xoay vòng / sổ túi đồ.
 """
 import re
 import threading
+import unicodedata
 import traceback
 from datetime import date
 
 import cau_hinh
 from auto_chuyen_sinh import chuan_hoa
 from giao_acc_chinh import GiaoAccChinhEngine, LoiGiaoAccChinh, MA_DONG_CUA_SO, _Dung
+from lua_game import LoiLua
 from so_tui_do import LOAI_TRU_MAC_DINH, cac_tu_loai_tru
 
 KHOA_CAI_DAT = "gop_acc_chinh"
 MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": LOAI_TRU_MAC_DINH,
             "danh_sach": "", "tien_trinh": {}}
+# Luồng gộp đang chạy — xoay vòng giữ hwnd, không logout chéo.
+_luong_gop_hien_tai = None
 
 
 def cai_dat():
@@ -25,6 +31,63 @@ def cai_dat():
 
 def luu_cai_dat(**thay_doi):
     cau_hinh.dat_chung({KHOA_CAI_DAT: dict(cai_dat(), **thay_doi)})
+
+
+def luong_gop_dang_chay():
+    luong = _luong_gop_hien_tai
+    return luong if luong is not None and luong.is_alive() else None
+
+
+def cac_tai_khoan_gop_cau_hinh():
+    """Tên đăng nhập (chữ thường) acc nhận + mọi acc nguồn trong cấu hình gộp."""
+    cd = cai_dat()
+    kq = set()
+    tk_nhan = (cd.get("tai_khoan") or "").strip().lower()
+    if tk_nhan:
+        kq.add(tk_nhan)
+    try:
+        for tk, _ in parse_danh_sach(cd.get("danh_sach") or ""):
+            ten = (tk.get("ten_dang_nhap") or "").strip().lower()
+            if ten:
+                kq.add(ten)
+    except ValueError:
+        pass
+    return kq
+
+
+def hwnd_giu_khi_gop():
+    """
+    Cửa sổ gộp đồ (acc nhận / nguồn) — xoay vòng không được tắt hoặc đăng xuất.
+    Gồm tài khoản trong cấu hình đang mở + hwnd luồng gộp đang điều khiển (kể cả lúc đăng nhập).
+    """
+    from cua_so_game import tim_cua_so_game
+    from xoay_vong import tim_hwnd_cua_tai_khoan
+    giu = set()
+    for tk in cac_tai_khoan_gop_cau_hinh():
+        hwnd = tim_hwnd_cua_tai_khoan(tk)
+        if hwnd:
+            giu.add(hwnd)
+    luong = luong_gop_dang_chay()
+    if luong is None:
+        return giu
+    chinh = getattr(luong, "chinh", None)
+    if chinh is not None:
+        try:
+            giu.add(chinh.lua.hwnd)
+        except (AttributeError, OSError):
+            pass
+    hwnd_truong = getattr(luong, "hwnd_truong", None)
+    if hwnd_truong:
+        giu.add(hwnd_truong)
+    pids = set(getattr(luong, "pid_dieu_khien", None) or ())
+    for con in list(getattr(luong, "cac_luong_con", None) or []):
+        if getattr(con, "pid", None):
+            pids.add(con.pid)
+    if pids:
+        for cua_so in tim_cua_so_game():
+            if cua_so["pid"] in pids:
+                giu.add(cua_so["hwnd"])
+    return giu
 
 
 def parse_danh_sach(text):
@@ -40,7 +103,7 @@ def parse_danh_sach(text):
         cot = [c.strip() for c in re.split(r"[,;\t]", dong) if c.strip()]
         if len(cot) < 3:
             raise ValueError(f"Dòng {so}: cần 3 trường (tài khoản, mật khẩu, tên nhân vật)")
-        tk, mk, ten = cot[0], cot[1], cot[2]
+        tk, mk, ten = cot[0], cot[1], unicodedata.normalize("NFC", cot[2])
         kq.append(({"ten_dang_nhap": tk, "mat_khau": mk}, ten))
     if not kq:
         raise ValueError("Danh sách acc nguồn trống (mỗi dòng: tài khoản, mật khẩu, tên nhân vật)")
@@ -58,7 +121,11 @@ class LuongGopAccChinh(threading.Thread, GiaoAccChinhEngine):
         self.loai_tru = cac_tu_loai_tru(self.cd["loai_tru"])
         self.ds_nguon = parse_danh_sach(self.cd["danh_sach"])
         self.ghi_so_tui = False
-        self.thoat_sau_giao = True
+        # Một acc nguồn thì giữ trong game. Nhiều acc thì giao xong đăng xuất để vào acc kế.
+        self.thoat_sau_giao = len(self.ds_nguon) > 1
+        self.rut_truoc_giao = True
+        self.chi_giao_gop = True
+        self.kiem_tra_rule_ten = False
         self.tk_khong_co_do = set()
         self.chinh = None
         self.hwnd_truong = None
@@ -90,6 +157,8 @@ class LuongGopAccChinh(threading.Thread, GiaoAccChinhEngine):
         luu_cai_dat(tien_trinh=self.tien_trinh)
 
     def run(self):
+        global _luong_gop_hien_tai
+        _luong_gop_hien_tai = self
         try:
             self._chay()
         except _Dung:
@@ -114,6 +183,8 @@ class LuongGopAccChinh(threading.Thread, GiaoAccChinhEngine):
                 except (LoiLua, OSError):
                     pass
             self.pid_dieu_khien.clear()
+            if _luong_gop_hien_tai is self:
+                _luong_gop_hien_tai = None
 
     def _chay(self):
         hom_nay_chu = date.today().isoformat()

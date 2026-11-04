@@ -109,28 +109,56 @@ def _doi_ten_file_hong(duong_dan):
 
 
 def _ghi_json_an_toan(duong_dan, chu):
-    """Ghi file tạm + thay thế; giữ .bak của bản trước (tránh file rỗng nếu máy treo giữa lúc ghi)."""
-    tam = duong_dan + ".tmp"
-    with open(tam, "w", encoding="utf-8", newline="\n") as f:
-        f.write(chu)
-        f.flush()
+    """Ghi file tạm + thay thế; giữ .bak của bản trước (tránh file rỗng nếu máy treo giữa lúc ghi).
+
+    Dùng tên .tmp duy nhất theo pid/thread: nhiều chỗ ghi cùng lúc vào *.json.tmp cố định
+    dễ làm os.replace báo WinError 2 (file tạm đã bị luồng khác replace/xóa).
+    """
+    thu_muc = os.path.dirname(os.path.abspath(duong_dan))
+    if thu_muc:
+        os.makedirs(thu_muc, exist_ok=True)
+    tam = f"{duong_dan}.tmp.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+
+    def _viet_tam():
+        with open(tam, "w", encoding="utf-8", newline="\n") as f:
+            f.write(chu)
+            f.flush()
+            try:
+                os.fsync(f.fileno())
+            except OSError:
+                pass
+
+    try:
+        _viet_tam()
+        if os.path.isfile(duong_dan) and os.path.getsize(duong_dan) > 0:
+            try:
+                shutil.copy2(duong_dan, duong_dan + ".bak")
+            except OSError:
+                pass
+        for lan in range(10):
+            try:
+                if not os.path.isfile(tam):
+                    _viet_tam()
+                os.replace(tam, duong_dan)
+                return
+            except PermissionError:
+                if lan == 9:
+                    raise
+                time.sleep(0.1)
+            except FileNotFoundError:
+                # WinError 2: mất file tạm (AV / race) hoặc thiếu thư mục.
+                if thu_muc:
+                    os.makedirs(thu_muc, exist_ok=True)
+                if lan == 9:
+                    raise
+                time.sleep(0.1)
+                _viet_tam()
+    finally:
         try:
-            os.fsync(f.fileno())
+            if os.path.isfile(tam):
+                os.remove(tam)
         except OSError:
             pass
-    if os.path.isfile(duong_dan) and os.path.getsize(duong_dan) > 0:
-        try:
-            shutil.copy2(duong_dan, duong_dan + ".bak")
-        except OSError:
-            pass
-    for lan in range(10):
-        try:
-            os.replace(tam, duong_dan)
-            return
-        except PermissionError:
-            if lan == 9:
-                raise
-            time.sleep(0.1)
 
 
 def _doc_json_voi_phuc_hoi(duong_dan, ten_hien_thi, tao_mac_dinh=None, duong_dan_mau=None, lam_chuoi=None):

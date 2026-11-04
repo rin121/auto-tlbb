@@ -36,6 +36,7 @@ import subprocess
 import sys
 import threading
 import time
+import unicodedata
 import tkinter as tk
 import traceback
 from datetime import date, datetime
@@ -64,8 +65,8 @@ import proxy_mang
 import proxy_broker_ui
 from game_api import Game
 from giao_acc_chinh import LuongGiaoAccChinh, cai_dat as cai_dat_giao_acc_chinh, luu_cai_dat as luu_giao_acc_chinh
-from gop_acc_chinh import LuongGopAccChinh, cai_dat as cai_dat_gop_acc_chinh, luu_cai_dat as luu_gop_acc_chinh, \
-    parse_danh_sach
+from gop_acc_chinh import (LuongGopAccChinh, cai_dat as cai_dat_gop_acc_chinh,
+                           luu_cai_dat as luu_gop_acc_chinh, parse_danh_sach)
 from giai_captcha import LoiGiaiCaptcha, kiem_tra_ocr_win7, lam_nong_ocr
 from lua_game import THONG_BAO_LOI, LoiLua, da_nap_dll
 from mat_ket_noi import XuLyMatKetNoi
@@ -90,8 +91,8 @@ from moi_nhom import SO_NGUOI_TOI_DA, doc_nhom, doc_xung_quanh, xu_ly_nhom
 from nhat_do import NhatDo
 from nang_cap_nhan_vat import LuongNangCapOnline
 from nhan_vat_moi import LuongTaoNhanVat, doc_danh_sach
-from xoay_vong import (SO_NGUOI_MOT_NHOM_TOI_DA, SO_ROUND_TOI_DA, LuongXoayVong, cac_tai_khoan_dang_tich,
-                       nhom_dang_online, xoa_xv_tien_trinh)
+from xoay_vong import (SO_NGUOI_CHO_PHEP_GOP_SONG_SONG, SO_NGUOI_MOT_NHOM_TOI_DA, SO_ROUND_TOI_DA, LuongXoayVong,
+                       cac_tai_khoan_dang_tich, co_the_gop_song_song_xv, nhom_dang_online, xoa_xv_tien_trinh)
 from tao_nhan_vat import dang_hoi_ma_kiem_tra, giai_ma_kiem_tra
 from tu_dung_vat_pham import TuDungCanKhonHo, TuDungX2
 from tang_cap import GIAY_GIUA_MOI_LAN as GIAY_GIUA_MOI_LAN_TANG_CAP, thu_tang_cap
@@ -1471,7 +1472,12 @@ class LuongNhanVat(threading.Thread):
             return False
         return True
 
+    def vong_an_nguoi(self):
+        from an_nguoi_choi import vong_an_nguoi_choi
+        vong_an_nguoi_choi(self)
+
     def run(self):
+        threading.Thread(target=self.vong_an_nguoi, daemon=True).start()
         threading.Thread(target=self.vong_tu_duyet, daemon=True).start()
         threading.Thread(target=self.vong_chien_dau, daemon=True).start()
         threading.Thread(target=self.vong_auto_click, daemon=True).start()
@@ -1950,15 +1956,8 @@ class UngDung:
         self.bang.bind("<B1-Motion>", self._keo_dong_bang, add="+")
         self.bang.bind("<ButtonRelease-1>", self._tha_dong_bang, add="+")
 
-        khung = ttk.Frame(tren, padding=(10, 0, 0, 0))
-        khung.pack(side="left", fill="y")
-        self.bien_thong_tin = {}
-        for dong, (khoa, nhan) in enumerate((("level", "Level"), ("hp", "HP"), ("mp", "MP"), ("map", "Map"),
-                                             ("toa_do", "Vị trí"), ("chuyen_sinh", "Chuyển sinh"))):
-            ttk.Label(khung, text=nhan).grid(row=dong, column=0, sticky="w", pady=1)
-            self.bien_thong_tin[khoa] = tk.StringVar(value="-")
-            ttk.Label(khung, textvariable=self.bien_thong_tin[khoa], width=16).grid(
-                row=dong, column=1, sticky="w", padx=(8, 0))
+        self.khung_nut_xoay_vong = ttk.Frame(tren, padding=(10, 4, 4, 0))
+        self.khung_nut_xoay_vong.pack(side="left", fill="y")
         self._keo_dai_duoc(self.bang, "nhan_vat", cha=self.root, khi_doi=self._lam_moi_cao_tab, padx=6, after=tren)
 
     def _keo_dong_bang(self, su_kien):
@@ -2086,8 +2085,6 @@ class UngDung:
             return
         if luong.ten != self.ten_dang_sua:
             self.nap_form(luong.ten)
-        self.ve_lai_thong_tin()
-
     def luong_dang_chon(self):
         for luong in self.cac_luong.values():
             if luong.ten is not None and luong.ten == self.ten_dang_sua:
@@ -3000,15 +2997,14 @@ class UngDung:
                         variable=self.bien_xv_ngay_moi, command=self.luu_cai_dat_xoay_vong).pack(anchor="w")
         self.bien_xv_so_nguoi.trace_add("write", lambda *_: self.luu_cai_dat_xoay_vong())
         self.bien_xv_so_round.trace_add("write", lambda *_: self.luu_cai_dat_xoay_vong())
+        nen_xv = ttk.Style().lookup("TFrame", "background") or "SystemButtonFace"
+        self.nut_xoay_vong = NutBatDungXoayVong(
+            self.khung_nut_xoay_vong, self.bat_tat_xoay_vong, self.px, self.he_so, nen_xv)
+        self.nut_xoay_vong.pack(anchor="n")
         dong_chinh = ttk.Frame(khung)
         dong_chinh.pack(fill="x", pady=(8, 0))
-        nen_xv = ttk.Style().lookup("TLabelframe", "background") \
-            or ttk.Style().lookup("TFrame", "background") or "SystemButtonFace"
-        self.nut_xoay_vong = NutBatDungXoayVong(
-            dong_chinh, self.bat_tat_xoay_vong, self.px, self.he_so, nen_xv)
-        self.nut_xoay_vong.pack(side="left")
         self.nhan_xoay_vong = ttk.Label(dong_chinh, text="")
-        self.nhan_xoay_vong.pack(side="left", padx=8)
+        self.nhan_xoay_vong.pack(side="left")
         dong_phu = ttk.Frame(khung)
         dong_phu.pack(fill="x", pady=(4, 0))
         ttk.Button(dong_phu, text="Chạy lại từ đầu", command=self.chay_lai_xoay_vong).pack(side="left")
@@ -3081,7 +3077,8 @@ class UngDung:
         khung_text.grid(row=5, column=0, columnspan=2, sticky="ew", pady=(2, 0))
         thanh_cuon = ttk.Scrollbar(khung_text)
         thanh_cuon.pack(side="right", fill="y")
-        self.o_gop_danh_sach = tk.Text(khung_text, height=6, width=58, yscrollcommand=thanh_cuon.set, wrap="none")
+        self.o_gop_danh_sach = tk.Text(khung_text, height=6, width=58, yscrollcommand=thanh_cuon.set, wrap="none",
+                                       font=("Segoe UI", 10))
         self.o_gop_danh_sach.pack(side="left", fill="both", expand=True)
         thanh_cuon.config(command=self.o_gop_danh_sach.yview)
         self.o_gop_danh_sach.insert("1.0", cd_gop.get("danh_sach") or "")
@@ -3093,9 +3090,10 @@ class UngDung:
         ttk.Button(dong_gop, text="Làm lại từ đầu", command=self.dat_lai_gop_acc_chinh).pack(side="left", padx=4)
         self.nhan_gop_acc_chinh = ttk.Label(dong_gop, text=self._mo_ta_tien_trinh_gop())
         self.nhan_gop_acc_chinh.pack(side="left", padx=8)
-        ttk.Label(khung_gop, text="Gom đồ từ các acc chính trung gian (user nhập) về một acc chính nhận. Cùng quy tắc "
-                                  "giao / cất túi như khung trên; sau mỗi acc nguồn xong thì về chọn máy chủ. "
-                                  "Không lấy danh sách từ xoay vòng, không dùng sổ túi đồ phó bản.\n"
+        ttk.Label(khung_gop, text="Gom đồ từ các acc nguồn về acc nhận. Mỗi acc nguồn về Đại Lý, mở Thiên Cơ Cẩm Nang "
+                                  "(nhập 250, mỗi lần rút cách 3 giây) và Thương khố (cách 1 giây), rút Mảnh Ngọc Vip, Phiếu KNB "
+                                  "100/300/2000/3000, Thiên Mệnh Thần Thạch, Mảnh Vỡ Trân Thú, Mảnh vỡ Thiên Ngoại "
+                                  "rồi giao các món đó. Xong thì về chọn máy chủ. Không lấy danh sách từ xoay vòng.\n"
                                   "Acc nhận / acc nguồn tự ghi vào cau_hinh.json khi sửa (không cần nút Lưu); "
                                   "Bắt đầu chỉ để chạy gộp đồ.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(
@@ -3281,8 +3279,8 @@ class UngDung:
         if job is not None:
             self.root.after_cancel(job)
             self._job_luu_gop = None
-        luu_gop_acc_chinh(**{k: v.get().strip() for k, v in self.bien_gop.items()},
-                          danh_sach=self.o_gop_danh_sach.get("1.0", "end").strip())
+        luu_gop_acc_chinh(**{k: unicodedata.normalize("NFC", v.get().strip()) for k, v in self.bien_gop.items()},
+                          danh_sach=unicodedata.normalize("NFC", self.o_gop_danh_sach.get("1.0", "end").strip()))
 
     def dat_lai_gop_acc_chinh(self):
         if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
@@ -3311,8 +3309,18 @@ class UngDung:
             messagebox.showinfo("Gộp đồ về acc chính", "Đang giao dịch cho acc chính (phó bản), chờ xong hoặc dừng trước")
             return
         if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
-            messagebox.showinfo("Gộp đồ về acc chính", "Đang xoay vòng tài khoản, chờ xong hoặc dừng trước")
-            return
+            try:
+                so_nguoi = int(self.bien_xv_so_nguoi.get().strip())
+            except (ValueError, AttributeError):
+                so_nguoi = None
+            if not co_the_gop_song_song_xv(so_nguoi):
+                messagebox.showinfo(
+                    "Gộp đồ về acc chính",
+                    f"Đang xoay vòng nhóm {so_nguoi or '?'} người — chỉ gộp song song khi "
+                    f"≤ {SO_NGUOI_CHO_PHEP_GOP_SONG_SONG} người/nhóm (cần ~2 client riêng). "
+                    "Giảm số người mỗi nhóm hoặc dừng xoay vòng trước.")
+                return
+            self.in_log(f"[Gộp acc chính] Chạy song song xoay vòng (nhóm {so_nguoi} người)")
         if self.luong_tao_nv and self.luong_tao_nv.is_alive():
             messagebox.showinfo("Gộp đồ về acc chính", "Đang tạo nhân vật ở tab Tạo nhân vật, chờ xong hoặc dừng trước")
             return
@@ -3546,9 +3554,6 @@ class UngDung:
         if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
             messagebox.showinfo("Xoay vòng", "Đang giao dịch cho acc chính, chờ xong hoặc dừng trước")
             return
-        if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
-            messagebox.showinfo("Xoay vòng", "Đang gộp đồ về acc chính, chờ xong hoặc dừng trước")
-            return
         if not cac_tai_khoan_dang_tich():
             messagebox.showinfo("Xoay vòng", "Chưa tích XV (xoay vòng) tài khoản phó bản nào ở tab Tài khoản")
             return
@@ -3557,21 +3562,21 @@ class UngDung:
                                  f"Số người mỗi nhóm (1–{SO_NGUOI_MOT_NHOM_TOI_DA}) và số round (1–{SO_ROUND_TOI_DA}) "
                                  "phải là số hợp lệ")
             return
+        if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
+            try:
+                so_nguoi = int(self.bien_xv_so_nguoi.get().strip())
+            except (ValueError, AttributeError):
+                so_nguoi = None
+            if not co_the_gop_song_song_xv(so_nguoi):
+                messagebox.showinfo(
+                    "Xoay vòng",
+                    f"Đang gộp đồ về acc chính — chỉ xoay vòng song song khi "
+                    f"≤ {SO_NGUOI_CHO_PHEP_GOP_SONG_SONG} người/nhóm (đang đặt {so_nguoi or '?'}). "
+                    "Giảm số người mỗi nhóm hoặc dừng gộp trước.")
+                return
+            self.in_log(f"[Xoay vòng] Chạy song song gộp đồ (nhóm {so_nguoi} người)")
         if self._chan_neu_chua_kich_hoat():
             return
-        try:
-            so_mot_nhom = int(self.bien_xv_so_nguoi.get())
-        except (ValueError, tk.TclError):
-            so_mot_nhom = 4
-        gioi_ip = proxy_mang.so_ip_toi_da()
-        if so_mot_nhom > gioi_ip:
-            if not messagebox.askyesno(
-                    "Xoay vòng — giới hạn server",
-                    f"Server thường giới hạn khoảng {gioi_ip} tài khoản online theo proxy đã cấu hình "
-                    f"(số proxy × acc/IP).\n\n"
-                    f"Bạn đặt {so_mot_nhom} người/nhóm — acc vượt giới hạn hay bị «Đã ngắt kết nối».\n\n"
-                    "Vẫn bắt đầu?"):
-                return
         self.luong_xoay_vong = LuongXoayVong(self.hang_doi, int(self.bien_xv_so_round.get()),
                                              self.bien_xv_test.get(), self.bien_xv_chuyen_do.get(),
                                              self.bien_xv_ngay_moi.get(), self.bien_xv_chi_sat_tinh.get(),
@@ -5748,7 +5753,6 @@ class UngDung:
             except OSError:
                 pass
             self.ve_lai_bang()
-            self.ve_lai_thong_tin()
             self.hien_khung_buff()
             cach_phu = bay_gio - self._luc_ve_lai_phu
             if cach_phu >= GIAY_VE_LAI_BANG_PHU or can_ve_tai_khoan or can_ve_nhom or can_ve_xung_quanh:
@@ -5821,24 +5825,6 @@ class UngDung:
             f"Đang theo dõi {len(self.cac_luong)} cửa sổ game - {so_bat} nhân vật bật auto, "
             f"{so_chuyen_sinh} bật chuyển sinh" + (f" - đang ẩn {len(da_an)} cửa sổ game" if da_an else ""))
 
-    def ve_lai_thong_tin(self):
-        luong = self.luong_dang_chon()
-        tt = self.thong_tin.get(luong.hwnd) if luong else None
-        if tt is None:
-            for bien in self.bien_thong_tin.values():
-                bien.set("-")
-            return
-
-        def phan_tram(hien_tai, toi_da):
-            return f"{hien_tai * 100 // toi_da}%" if toi_da else "-"
-
-        self.bien_thong_tin["level"].set(str(tt["level"]))
-        self.bien_thong_tin["hp"].set(phan_tram(tt["hp"], tt["hp_toi_da"]))
-        self.bien_thong_tin["mp"].set(phan_tram(tt["mp"], tt["mp_toi_da"]))
-        self.bien_thong_tin["map"].set(tt["map"])
-        self.bien_thong_tin["toa_do"].set(f"[{tt['x']},{tt['y']}]")
-        self.bien_thong_tin["chuyen_sinh"].set(f"{luong.trang_thai.get('so_lan_chuyen_sinh', 0)} lần")
-
     def thoat(self):
         hien_cua_so()
         if not self.dang_khoi_dong:
@@ -5872,6 +5858,9 @@ class UngDung:
 def main():
     bat_dpi_awareness()
     root = tk.Tk()
+    # Windows đang để locale hệ thống cp936 (game). Tk đọc phím Unikey qua bảng mã đó nên chữ có dấu
+    # trong ô Text bị sai, tên nhân vật không khớp. utf-8 để ô nhập nhận đúng Unicode.
+    root.tk.call("encoding", "system", "utf-8")
     icon = os.path.join(getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__))), "icon.ico")
     if os.path.exists(icon):
         root.iconbitmap(default=icon)
@@ -5882,8 +5871,18 @@ def main():
             messagebox.showerror("Hết hạn dùng thử", han_dung.THONG_BAO_HET_HAN)
             root.destroy()
             return
-    UngDung(root)
-    root.mainloop()
+    app = UngDung(root)
+    dung_runtime = threading.Event()
+    threading.Thread(target=_vong_runtime, args=(app, dung_runtime), daemon=True).start()
+    try:
+        root.mainloop()
+    finally:
+        dung_runtime.set()
+
+
+def _vong_runtime(app, dung_runtime):
+    from gioi_han_client import vong_dong_hop_runtime
+    vong_dong_hop_runtime(app.in_log, dung_runtime.is_set)
 
 
 if __name__ == "__main__":

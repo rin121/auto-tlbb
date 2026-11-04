@@ -175,6 +175,23 @@ class TestXoayVongTaoKhiThieu(unittest.TestCase):
         self.assertTrue(tao.call_args[1]["giu_game"])
         self.assertEqual(luong.cac_luong_con, [])
 
+    def test_round_giu_du_nguoi_khi_mot_acc_chua_vao(self):
+        nhom = self._nhom()
+        luong = xv.LuongXoayVong(queue.Queue(), 1, False, False, False, False)
+
+        def dang_nhap(tvs):
+            tvs[0].game = MagicMock()
+            tvs[1].game = None
+            return [tvs[0]]
+
+        da_di = {}
+        luong._dang_nhap = dang_nhap
+        luong._bo_acc_chinh_train = lambda tvs: tvs
+        luong._di_round = lambda mo, tvs: da_di.setdefault("so", len(tvs)) or tvs
+        with patch.object(xv, "ten_round", lambda tk, r: tk):
+            luong._round(1, 0, nhom)
+        self.assertEqual(da_di["so"], 2)
+
     def test_round_sau_tao_du_nhan_vat_toi_round(self):
         tv = self._nhom()[0]
         tv.ten = "caychay3000"

@@ -374,6 +374,34 @@ class TestBamChuotKhiChe(unittest.TestCase):
         self.assertIn("che chỗ ô đầu dòng nhân vật", str(ng.exception))
 
 
+class TestKhongGianhFocusAutohoc(unittest.TestCase):
+    def test_muon_chuot_khong_tra_focus_ve_autohoc(self):
+        with patch.object(g.win32gui, "GetForegroundWindow", return_value=7), \
+                patch.object(g.win32api, "GetCursorPos", return_value=(1, 2)), \
+                patch.object(g.win32gui, "GetWindowLong", return_value=0), \
+                patch.object(g.win32gui, "IsWindow", return_value=True), \
+                patch.object(g.win32gui, "SetWindowPos"), \
+                patch.object(g.win32api, "SetCursorPos"), \
+                patch.object(g, "_len_truoc") as len_truoc, \
+                patch.object(g, "_la_cua_so_autohoc", return_value=True):
+            with g._muon_chuot(1, "ô Ác Tặc"):
+                pass
+        self.assertEqual(len_truoc.call_args_list, [((1,),)])
+
+    def test_muon_chuot_tra_focus_cua_so_khac(self):
+        with patch.object(g.win32gui, "GetForegroundWindow", return_value=7), \
+                patch.object(g.win32api, "GetCursorPos", return_value=(1, 2)), \
+                patch.object(g.win32gui, "GetWindowLong", return_value=0), \
+                patch.object(g.win32gui, "IsWindow", return_value=True), \
+                patch.object(g.win32gui, "SetWindowPos"), \
+                patch.object(g.win32api, "SetCursorPos"), \
+                patch.object(g, "_len_truoc") as len_truoc, \
+                patch.object(g, "_la_cua_so_autohoc", return_value=False):
+            with g._muon_chuot(1, "ô Ác Tặc"):
+                pass
+        self.assertEqual([c.args[0] for c in len_truoc.call_args_list], [1, 7])
+
+
 class TestQuyenAdmin(unittest.TestCase):
     def test_gauto_admin_autohoc_thuong_thi_bao_can_admin(self):
         with patch.object(g, "gauto_la_admin", return_value=True), patch.object(g, "autohoc_la_admin", return_value=False):

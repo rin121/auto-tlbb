@@ -1,0 +1,11 @@
+GaoCáMặp hwnd=3934236
+win=false present=true
+box 1 dau=0 so=20
+box 2 dau=20 so=20
+box 3 dau=40 so=20
+tong=60
+2	Thiên Mệnh Thần Thạch	5
+3	Phiếu KNB 100	3
+n=2
+0	Phiếu KNB 300	4
+1	Phiếu KNB 3K	4

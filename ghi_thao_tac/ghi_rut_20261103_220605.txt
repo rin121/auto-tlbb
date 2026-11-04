@@ -1,0 +1,986 @@
+[22:06:05.989] GHI rút đồ -> d:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_rut_20261103_220605.txt
+[22:06:05.992] Anh mở Thương khố, rút 1 món gộp, rồi mở Thiên Cơ, nhập 250, rút 1 món. Xong thì báo em.
+[22:06:15.699] pid 19740 (TLBB  (Mar 24 2009 16:38:41)): Game không phản hồi (đang loading hoặc bị treo?)
+[22:06:16.126] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:06:16.127] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:06:16.128] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:06:16.128] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:06:34.256] pid 16800 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[22:07:19.996] pid 16216 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[22:07:51.541] pid 16024 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[22:09:07.000] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:07.462] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:07.918] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:07.919] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:12.063] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:12.523] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:33.779] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:38.421] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:09:38.879] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:39.554] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:40.023] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:40.478] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:40.936] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:41.393] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:41.862] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:45.541] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:11:45.542] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:13:09.494] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:13:09.960] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:13:10.879] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:13:14.575] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:13:15.032] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:44.808] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:44.809] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:45.746] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:46.209] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:52.289] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:15:59.761] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:16:03.504] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:18:54.099] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:18:54.101] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:18:54.103] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:18:54.104] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:19:00.036] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:19:00.058] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:19:01.851] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:19:01.881] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:19:02.308] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:19:04.130] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:19:04.130] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:20:13.877] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:20:14.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:20:17.513] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:20:18.419] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:22:48.012] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[22:22:49.820] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[22:26:46.967] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:26:51.898] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[22:26:53.703] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:26:54.598] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:26:54.598] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[22:26:54.599] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[22:27:00.011] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:27:00.012] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:27:00.014] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[22:29:49.233] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:33:44.270] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:33:44.293] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:33:46.074] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:33:48.348] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:33:48.349] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:37:27.381] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:37:27.381] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:37:27.830] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:40:05.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[22:40:49.665] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[22:40:49.666] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:40:49.668] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[22:40:49.669] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:40:49.669] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[22:44:34.133] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:44:34.134] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:44:40.092] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:48:46.890] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:48:46.892] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:48:47.341] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:48:47.342] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:48:47.344] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:51:04.664] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:51:04.665] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:51:04.666] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:51:04.666] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:51:24.992] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:51:24.993] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:51:25.455] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:51:46.340] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:51:46.341] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:51:46.342] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:55:14.221] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:14.222] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:55:14.224] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:14.224] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:55:16.093] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:16.094] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:55:16.095] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:16.096] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:55:17.469] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:17.470] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI BankLockFast_Frame_On_ResetPos
+[22:55:17.472] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(VIEW_RESOLUTION_CHANGED)
+[22:55:17.473] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Frame_On_ResetPos
+[22:55:20.184] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[22:58:51.414] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[22:58:51.416] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[22:58:51.876] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[22:58:52.343] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:01:37.900] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:01:37.900] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:04:38.868] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:04:38.869] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:04:38.871] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:04:38.871] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:04:38.872] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:04:44.801] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:04:51.216] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:04:51.216] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:04:51.666] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:04:54.843] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:04:54.843] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:04:55.293] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:04:59.353] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:05:01.593] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:05:01.593] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:05:01.595] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:05:06.562] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:05:07.014] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:05:07.014] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:05:11.081] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:05:11.082] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:06:19.908] pid 2324 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[23:08:23.508] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:09:20.729] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:09:20.761] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:09:22.555] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:09:23.894] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Phi�u KNB 100x2;1:Thi�n M�nh Th�n Th�chx5;	
+[23:09:25.712] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 1:Thi�n M�nh Th�n Th�chx5;	
+[23:09:38.854] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:09:50.625] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:09:50.626] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:09:52.896] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:10:03.359] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:10:03.360] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:42.230] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:42.230] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:42.232] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:10:42.233] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:42.233] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:10:42.682] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:10:42.683] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:43.132] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:10:44.958] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:45.856] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:47.243] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:47.691] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:47.692] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:49.970] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:50.879] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:50.879] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:50.881] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:53.606] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:10:53.607] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:54.056] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:10:54.964] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:54.965] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:54.967] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:10:54.967] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:54.968] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx3;	
+[23:10:55.416] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:10:55.416] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:55.418] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:55.418] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:55.418] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:10:55.419] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:10:55.420] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx4;	
+[23:10:57.227] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[23:11:04.049] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:04.499] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:04.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:04.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:07.718] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:07.718] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:07.740] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:07.741] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:08.169] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:08.170] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:08.631] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:11:10.442] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:11:10.442] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:10.893] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:11:11.351] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:11.352] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:11.801] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:11:11.802] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:11.803] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:11:11.803] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:11.804] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:Phi�u KNB 100x3;	
+[23:11:18.134] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:11:18.135] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:11:19.993] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:11:20.442] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:13:04.593] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:13:05.949] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:13:05.950] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:13:05.951] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:13:05.951] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:13:05.952] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 1:Phi�u KNB 100x3;	
+[23:13:18.648] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:13:22.680] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:13:24.935] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:13:24.935] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:13:48.040] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:13:48.040] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:14:12.087] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:12.087] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:12.109] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:15.248] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:15.696] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:24.306] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:24.327] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:33.290] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:14:33.291] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:14:34.198] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:14:34.198] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:14:36.449] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:Phi�u KNB 100x3;	
+[23:18:11.100] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:18:11.101] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:18:12.897] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 1:Phi�u KNB 100x3;	
+[23:18:19.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:18:19.712] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:18:19.713] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:18:19.713] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:18:19.714] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:18:35.951] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:18:35.951] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:18:36.401] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:18:40.055] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:18:44.148] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:18:45.503] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:18:45.951] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:18:49.114] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:18:49.114] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:18:49.577] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:18:53.648] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:20:08.045] pid 2240 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[23:22:54.060] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:22:56.782] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:22:56.783] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:22:56.784] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:22:56.784] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:22:57.263] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:23:05.907] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:05.907] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:05.930] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:07.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:07.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:07.748] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:25.225] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:25.225] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:25.248] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:25.696] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:31.155] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:31.178] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:31.604] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:31.626] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:35.731] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:37.524] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:41.171] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:23:41.172] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:23:42.984] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:23:42.984] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:42.986] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:23:42.987] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:42.987] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:23:42.987] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:23:42.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:23:42.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:23:42.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:23:42.989] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[23:23:43.466] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:Phi�u KNB 100x3;	
+[23:23:44.385] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:24:13.751] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:24:13.751] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:24:14.215] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:15.113] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:24:15.113] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:24:15.114] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[23:24:15.115] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:24:15.115] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 1:Phi�u KNB 100x3;	
+[23:24:22.786] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:24:31.825] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:24:33.649] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:24:36.335] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:24:36.367] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:24:36.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:24:40.012] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:24:40.012] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:24:40.462] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:43.684] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:43.684] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:24:43.686] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:24:43.686] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:24:43.686] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:43.687] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:24:44.134] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:44.135] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:24:49.530] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:24:49.531] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:24:49.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:24:49.981] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:24:53.127] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:24:53.128] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:24:53.596] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:24:57.670] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:24:57.671] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:32:37.799] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[23:32:37.800] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[23:32:37.801] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:32:37.802] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoD�L�u	Bank,Packet,	n=1 tong=60 1:Phi�u KNB 2000x200;	
+[23:32:41.524] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:32:41.986] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoD�L�u	Packet_Temporary,		n=0 gold= 
+[23:32:58.982] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:32:59.440] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,		n=0 gold= 
+[23:33:00.373] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:33:00.844] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:16.519] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:35:16.996] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:35:16.997] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:35:16.998] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:35:16.998] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:16.998] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:35:17.905] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:18.354] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:21.068] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:21.069] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:35:21.070] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:35:31.009] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:35:32.365] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:32.814] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:35.531] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:35:35.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:35:35.533] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:36:04.774] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:36:06.117] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:06.567] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:07.025] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:07.488] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:07.938] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:09.316] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:36:09.316] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:36:09.318] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:39:46.943] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:39:47.403] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:39:47.404] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:39:47.405] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:39:47.406] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:39:47.406] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:39:47.855] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:39:47.855] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:39:48.307] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:39:48.768] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:39:51.030] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:39:51.479] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:39:51.479] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:39:51.482] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:42:17.755] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:42:19.574] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:42:20.022] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:42:22.271] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:42:22.272] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:42:22.274] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:44:36.680] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:44:36.680] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:45:29.444] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:45:46.088] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:45:47.434] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:45:47.436] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,		n=0 gold=250 
+[23:46:37.511] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:46:37.512] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:49:46.629] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:49:46.630] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:49:47.079] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:50:52.519] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:50:52.519] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:15.703] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:15.704] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[23:52:19.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:52:22.104] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:22.104] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:24.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:24.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:26.611] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:26.612] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:31.134] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:31.593] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[23:52:34.297] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:34.297] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:34.298] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:52:34.299] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:52:34.299] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:52:34.300] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:34.301] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:34.301] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:52:36.102] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:36.103] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:36.552] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:36.552] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:37.001] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:37.002] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:37.452] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:41.946] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:41.946] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:52:43.305] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:52:43.305] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:53:14.264] pid 13504 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[23:55:42.505] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[23:55:42.953] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:55:42.954] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:55:42.955] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:55:42.956] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:55:42.956] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:55:42.956] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:55:42.957] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:55:42.957] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,		n=0 gold= 
+[23:55:59.639] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Select(4)
+[23:55:59.640] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:55:59.641] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:55:59.642] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:55:59.642] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:55:59.643] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:55:59.643] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:56:03.703] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:56:03.704] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:03.705] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:56:03.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:56:03.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:03.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:56:07.313] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Select(6)
+[23:56:07.762] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:07.763] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:56:11.355] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Select(7)
+[23:56:11.356] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:56:11.357] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:11.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:56:11.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:56:15.434] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:56:15.435] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:15.436] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:56:15.436] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:56:15.437] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:56:15.438] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:25.793] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[23:57:25.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:28.061] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:28.061] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:57:28.063] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[23:57:28.063] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:57:28.063] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:28.064] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:28.064] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:28.514] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:28.514] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[23:57:29.432] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:57:29.433] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:29.434] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:57:29.435] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:57:29.435] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:29.435] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:29.894] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[23:57:30.345] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:30.345] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(1)
+[23:57:30.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:57:30.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:30.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:57:30.348] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:57:30.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:30.795] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:30.797] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[23:57:31.258] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:31.259] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(2)
+[23:57:31.709] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[23:57:32.616] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:32.617] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(3)
+[23:57:32.618] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:57:32.619] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:32.619] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:57:32.620] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:57:33.069] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:33.069] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:33.071] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[23:57:33.519] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:33.520] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(4)
+[23:57:33.992] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:57:33.993] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[23:57:33.994] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[23:58:59.897] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:59:00.347] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:59:27.323] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[23:59:27.324] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:59:27.325] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[23:59:27.326] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[23:59:27.786] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[23:59:27.787] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:00:52.388] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:00:52.389] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:00:52.391] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:00:52.391] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:00:52.839] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:00:52.839] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:00:55.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:00:55.532] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:00:55.534] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:00:55.534] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:00:55.983] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:00:55.983] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:00:58.697] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:00:58.698] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:00:58.699] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:00:58.700] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:01.837] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:01.838] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:01.840] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:01.840] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:02.300] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:02.300] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:01:31.355] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:31.356] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(0)
+[00:01:31.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:31.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:31.359] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:31.359] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:31.360] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:31.360] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:01:31.829] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:01:32.278] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:32.279] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(1)
+[00:01:32.281] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:32.282] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:32.282] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:32.282] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:32.752] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:01:33.233] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:33.234] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:33.235] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:33.236] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:33.236] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:33.237] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:01:33.708] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:01:33.709] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:33.710] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(3)
+[00:01:33.710] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:33.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:33.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:33.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:34.160] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:34.161] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:01:34.162] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:01:35.560] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Select(4)
+[00:01:35.561] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:35.562] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:35.562] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:01:35.562] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:01:35.563] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:35.563] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:01:36.033] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:01:36.034] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:36.035] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:38.828] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:01:38.829] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:38.830] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:01:38.830] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:01:40.237] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:40.238] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:40.239] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:01:40.240] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:40.241] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Phi�u KNB 300x4;	
+[00:01:40.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:40.711] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:40.713] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:01:40.713] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:40.714] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Phi�u KNB 300x4;1:Phi�u KNB 3Kx4;	
+[00:01:43.104] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:01:50.965] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:50.965] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:50.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:51.426] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:51.449] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:55.193] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:55.215] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:55.664] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:58.439] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:01:58.440] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:59.358] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:59.359] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:59.360] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:01:59.361] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:59.361] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 0:Phi�u KNB 300x4;1:Phi�u KNB 3Kx4;2:Thi�n M�nh Th�n Th�chx5;	
+[00:01:59.842] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:01:59.843] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:59.844] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:01:59.844] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:01:59.845] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Phi�u KNB 300x4;1:Phi�u KNB 3Kx4;2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:05:09.682] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:05:09.683] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:05:09.685] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:05:32.206] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:05:32.207] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:05:32.208] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:06:09.837] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:09:01.196] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 0:Phi�u KNB 300x4;2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:09:01.658] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:09:01.658] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:09:01.659] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:09:01.660] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:09:01.660] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Phi�u KNB 300x4;1:Phi�u KNB 3Kx4;2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:09:24.718] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:09:24.719] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:09:25.637] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 1:Phi�u KNB 3Kx4;2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:09:31.526] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 2:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;	
+[00:09:36.991] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 3:Phi�u KNB 100x3;	
+[00:09:42.912] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:09:56.501] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:09:56.952] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:09:56.974] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:10:00.108] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:10:03.722] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:11:14.004] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.005] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.027] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.029] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:14.500] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:16.295] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:16.765] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:20.354] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:20.803] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:20.825] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:21.283] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:25.341] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:25.363] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:25.792] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:25.814] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:26.241] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:26.242] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:26.264] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:30.401] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:30.402] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:30.425] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:30.884] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:34.082] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:35.921] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:11:35.922] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:35.923] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:35.923] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:11:36.833] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:36.834] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:36.835] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:36.836] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:36.836] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:36.836] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:36.837] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Thi�n M�nh Th�n Th�chx5;	
+[00:11:37.295] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:37.296] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:37.298] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:37.298] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:37.299] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:#-09#c33ff99M�nh V� Th�i Trangx200;	
+[00:11:38.664] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:38.664] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:38.665] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:38.665] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:38.667] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:38.667] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:38.667] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:#-09#c33ff99M�nh V� Th�i Trangx200;2:#-09#c33ff99M�nh V� Th�i Trangx50;	
+[00:11:39.116] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:39.116] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.118] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:39.118] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.118] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:39.118] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.119] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:#-09#c33ff99M�nh V� Th�i Trangx200;2:#-09#c33ff99M�nh V� Th�i Trangx50;3:Phi�u KNB 100x3;	
+[00:11:39.600] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:39.601] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.603] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:39.603] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.603] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:39.604] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.604] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:39.605] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.605] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:39.605] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:39.606] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=6 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:#-09#c33ff99M�nh V� Th�i Trangx200;2:#-09#c33ff99M�nh V� Th�i Trangx50;3:Phi�u KNB 100x3;4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:11:40.997] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:40.998] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:41.000] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:41.000] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:41.001] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=5 tong=60 0:Thi�n M�nh Th�n Th�chx5;1:#-09#c33ff99M�nh V� Th�i Trangx200;3:Phi�u KNB 100x3;4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:11:41.460] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:41.461] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:41.462] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:11:41.463] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:11:41.463] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:11:41.944] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:11:42.869] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[00:11:42.869] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:42.871] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:11:42.872] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:11:42.872] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:11:42.872] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:42.872] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:42.873] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:11:42.874] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,		n=0 gold= 
+[00:11:43.345] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:43.345] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:11:43.796] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:43.796] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:43.798] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(0)
+[00:11:44.259] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:44.260] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:44.261] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:11:44.262] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:11:44.262] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:44.262] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:11:44.710] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:11:45.160] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:45.619] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:45.620] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(1)
+[00:11:45.621] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:11:45.622] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:45.623] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:11:45.623] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:11:45.623] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:11:45.624] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:11:46.071] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:11:46.519] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:11:46.520] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:23.379] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:14:23.381] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:23.382] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Thi�n M�nh Th�n Th�chx5;3:Phi�u KNB 100x3;4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:14:23.833] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:24.282] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:24.282] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:24.284] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:14:24.284] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:24.285] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 3:Phi�u KNB 100x3;4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:14:25.192] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:25.193] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:25.195] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:14:25.195] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:25.195] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 4:Phi�u KNB 300x4;5:Phi�u KNB 3Kx4;	
+[00:14:26.551] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 5:Phi�u KNB 3Kx4;	
+[00:14:27.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:27.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:27.469] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:14:27.469] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:14:27.469] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:14:33.322] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:33.344] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:36.502] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:36.524] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:37.422] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:37.423] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:37.424] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:40.132] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:43.303] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:14:43.753] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:43.754] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:14:43.755] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:14:43.756] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:14:43.756] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:43.756] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:14:44.205] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:44.206] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:14:45.113] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:45.114] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:45.115] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:14:45.115] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:14:45.574] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:45.575] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:14:48.268] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:48.269] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:48.270] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:14:48.271] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:14:48.719] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:48.720] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:14:54.124] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:14:54.125] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:14:55.948] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:14:55.977] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:15:02.738] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:15:02.738] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:15:02.740] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:15:03.189] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:15:06.786] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:15:07.706] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:15:42.710] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:16:13.435] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:20:53.065] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:20:53.516] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:20:53.538] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:20:53.967] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:20:53.989] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:20:54.427] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:03.003] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:10.256] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:14.312] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:15.210] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:17.490] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:17.490] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:21:18.878] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:18.878] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:18.880] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:21:18.881] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:18.881] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:18.881] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:18.882] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 0:Phi�u KNB 100x3;	
+[00:21:19.341] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 0:Phi�u KNB 100x3;1:Phi�u KNB 300x4;	
+[00:21:19.791] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:19.791] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:19.793] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:21:19.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:19.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:19.794] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:19.795] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:19.795] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:19.795] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 0:Phi�u KNB 100x3;1:Phi�u KNB 300x4;2:Phi�u KNB 3Kx4;	
+[00:21:20.257] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:20.258] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:20.259] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:21:20.260] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:21:20.260] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Phi�u KNB 100x3;1:Phi�u KNB 300x4;2:Phi�u KNB 3Kx4;3:Thi�n M�nh Th�n Th�chx5;	
+[00:21:22.514] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:22.514] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:21:22.516] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:21:22.517] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:21:22.517] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:22.517] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,		n=0 gold= 
+[00:21:22.987] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:22.987] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:21:23.905] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:23.905] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(1)
+[00:21:24.354] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:24.355] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:21:24.356] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:21:24.825] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:24.826] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(2)
+[00:21:25.275] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:25.276] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:21:25.277] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:21:25.735] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:25.736] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:25.738] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_PutInItem(3)
+[00:21:25.738] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:21:25.738] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:25.739] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:21:25.739] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:21:26.187] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:21:26.188] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:21:26.189] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_TimerProc
+[00:21:31.599] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:21:31.600] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:31.925] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:31.925] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=4 tong=60 0:Phi�u KNB 100x3;1:Phi�u KNB 300x4;2:Phi�u KNB 3Kx4;3:Thi�n M�nh Th�n Th�chx5;	
+[00:22:32.388] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:32.389] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:32.391] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:22:32.391] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:32.391] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=3 tong=60 1:Phi�u KNB 300x4;2:Phi�u KNB 3Kx4;3:Thi�n M�nh Th�n Th�chx5;	
+[00:22:33.299] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:33.299] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:33.300] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:22:33.301] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:33.301] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=2 tong=60 2:Phi�u KNB 3Kx4;3:Thi�n M�nh Th�n Th�chx5;	
+[00:22:34.647] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=1 tong=60 3:Thi�n M�nh Th�n Th�chx5;	
+[00:22:35.584] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:35.585] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:35.586] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(UPDATE_BANK)
+[00:22:35.586] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:22:35.587] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:22:41.064] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:41.086] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:41.514] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:41.546] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:41.992] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:42.014] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:42.445] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:42.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:44.696] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:45.612] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:45.613] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:45.615] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:45.616] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:45.616] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:50.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:22:50.989] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[00:22:51.886] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:22:53.708] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:53.708] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:53.709] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:22:53.710] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:22:54.159] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:54.160] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:22:56.408] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:56.408] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:56.410] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:22:56.410] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:22:56.858] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:56.858] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:22:59.588] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:22:59.588] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:22:59.589] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:22:59.590] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:23:02.310] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:23:02.310] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:04.127] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:04.159] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:04.598] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:05.046] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:05.069] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:06.875] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:06.897] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.856] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.857] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.858] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.859] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.859] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.859] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:07.859] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(PACKAGE_ITEM_CHANGED)
+[00:23:08.288] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:08.288] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:23:08.289] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:23:08.290] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:23:08.290] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:08.739] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:08.739] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:23:09.657] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:11.006] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:23:11.006] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:23:11.008] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:23:11.467] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:23:14.635] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:23:14.636] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[00:23:15.090] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:23:15.989] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:23:15.990] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:30.599] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:26:30.600] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:26:30.602] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:26:31.049] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:34.235] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:26:34.235] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[00:26:34.694] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:34.694] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:26:34.695] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:26:34.696] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:26:34.696] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:34.697] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:34.697] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update_II
+[00:26:34.697] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:26:35.593] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:26:35.594] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:36.988] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_OnEvent(TOGLE_BANK)
+[00:26:36.989] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_UpdateFrame(1)
+[00:26:36.991] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Bank,Packet,	n=0 tong=60 	
+[00:26:37.441] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:40.597] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Bank_Close_Clicked
+[00:26:40.598] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI MainMenuBar_KuaiJieYiZhan
+[00:26:41.048] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:41.049] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_ChangeNum
+[00:26:41.050] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_SetFramePos
+[00:26:41.051] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_Update
+[00:26:41.051] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:26:41.051] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GaoC�M�p	Packet_Temporary,Packet,		n=0 gold= 
+[00:26:41.973] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnHiden
+[00:26:41.974] Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1): GỌI Packet_Temporary_OnEvent(UI_COMMAND)
+[00:27:23.630] pid 24408 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[00:28:09.896] pid 8008 (TLBB  (Mar 24 2009 16:38:41)): LoadLibraryA trong game thất bại (DLL không nạp được)
+[00:28:15.116] pid 23648 (Thien Long Bat Bo  (Thiên Long Nh?t Ki?m:Nh?t Ki?m S1)): cửa sổ game đã đóng (Invalid window handle.)

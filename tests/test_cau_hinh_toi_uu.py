@@ -132,5 +132,40 @@ class TestDocTaiKhoanKhongGhiLai(unittest.TestCase):
         self.assertEqual(len(tren_file["tai_khoan_pho_ban"]), 2)
 
 
+class TestGhiJsonAnToan(unittest.TestCase):
+    def test_ghi_va_doc_lai(self):
+        import os
+        import tempfile
+        thu = tempfile.mkdtemp()
+        path = os.path.join(thu, "cau_hinh.json")
+        cau_hinh._ghi_json_an_toan(path, '{"a": 1}\n')
+        with open(path, encoding="utf-8") as f:
+            self.assertEqual(f.read(), '{"a": 1}\n')
+        # Không để sót file .tmp.* sau khi replace thành công.
+        so_tmp = [t for t in os.listdir(thu) if ".tmp" in t]
+        self.assertEqual(so_tmp, [])
+
+    def test_retry_khi_mat_file_tam(self):
+        import os
+        import tempfile
+        from unittest.mock import patch
+        thu = tempfile.mkdtemp()
+        path = os.path.join(thu, "cau_hinh.json")
+        lan = {"n": 0}
+        replace_that = os.replace
+
+        def replace_lan_dau_fail(src, dst):
+            lan["n"] += 1
+            if lan["n"] == 1:
+                os.remove(src)
+                raise FileNotFoundError(2, "No such file", src)
+            return replace_that(src, dst)
+
+        with patch("cau_hinh.os.replace", replace_lan_dau_fail):
+            cau_hinh._ghi_json_an_toan(path, '{"ok": true}\n')
+        self.assertTrue(os.path.isfile(path))
+        self.assertGreaterEqual(lan["n"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

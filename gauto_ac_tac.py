@@ -487,6 +487,17 @@ class _ComboInfo(ctypes.Structure):
                 ("hwndList", ctypes.c_void_p)]
 
 
+def _la_cua_so_autohoc(hwnd):
+    """Cửa sổ thuộc chính tiến trình AutoHoc (UI Tk). Đưa nó lên trước giữa các lần bấm GAuto thì hai cửa sổ giành focus."""
+    if not hwnd:
+        return False
+    try:
+        _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    except (win32gui.error, OSError):
+        return False
+    return pid == os.getpid()
+
+
 @contextlib.contextmanager
 def _noi_len(hwnd):
     """Đưa GAuto lên trên cùng mà không lấy focus (chuột ảo cần ô không bị che); xong trả về dưới cửa sổ đang dùng."""
@@ -504,7 +515,9 @@ def _noi_len(hwnd):
         try:
             if not da_tren_cung:
                 win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, co)
-                if dang_dung and dang_dung != hwnd and win32gui.IsWindow(dang_dung):
+                # Không nhét GAuto xuống dưới cửa sổ AutoHoc — laptop hay để AutoHoc focus, mỗi ô lại nhảy qua lại.
+                if dang_dung and dang_dung != hwnd and win32gui.IsWindow(dang_dung) \
+                        and not _la_cua_so_autohoc(dang_dung):
                     win32gui.SetWindowPos(hwnd, dang_dung, 0, 0, 0, 0, co)
             if thu_nho:
                 win32gui.ShowWindow(hwnd, win32con.SW_SHOWMINNOACTIVE)
@@ -648,10 +661,12 @@ def _muon_chuot(hwnd, viec):
                     pass
             yield
         finally:
+            tra_focus = cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc) \
+                and not _la_cua_so_autohoc(cu_truoc)
             try:
                 if not da_tren_cung:
                     win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, co)
-                    if cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc):
+                    if tra_focus:
                         win32gui.SetWindowPos(hwnd, cu_truoc, 0, 0, 0, 0, co)
             except win32gui.error:
                 pass
@@ -659,7 +674,7 @@ def _muon_chuot(hwnd, viec):
                 win32api.SetCursorPos(cu_chuot)
             except win32api.error:
                 pass
-            if cu_truoc and cu_truoc != hwnd and win32gui.IsWindow(cu_truoc):
+            if tra_focus:
                 try:
                     _len_truoc(cu_truoc)
                 except (LoiKeoTha, win32gui.error):
