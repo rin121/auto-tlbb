@@ -57,8 +57,8 @@ from auto_cong_diem import CAC_CHI_SO, TuCongDiem
 from auto_chuyen_sinh import cac_o_cua_viec, chuan_hoa, mo_ta_o, tim_cac_o, xu_ly_nhan_vat
 from chat_the_gioi import GIAY_TOI_THIEU as GIAY_CHAT_TOI_THIEU, LoiChat, gui_the_gioi, ma_lua_chat
 from chien_dau import (CAC_PHIM_SKILL, KY_NANG_VE_THANH, MAU_HET_AN_THAN, MON_PHAI_NGA_MY, PHIM_BUFF_DU_PHONG,
-                       TEN_KY_NANG_AN_DON, TEN_KY_NANG_BUFF_MAU, ChienDau, LoiChienDau, cai_dat_chien_dau,
-                       ma_dung_ky_nang_theo_dinh_nghia)
+                       PHAN_TRAM_VE_TRI_LIEU, TEN_KY_NANG_AN_DON, TEN_KY_NANG_BUFF_MAU, ChienDau, LoiChienDau,
+                       cai_dat_chien_dau, ma_dung_ky_nang_theo_dinh_nghia, nen_ve_tri_lieu)
 from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, duy_tri_an, hien_cua_so,
                          hien_lai_cua_so_an_lan_truoc, tim_cua_so_game, tim_hwnd_chinh_game_pid)
 from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap, con_chay
@@ -72,15 +72,16 @@ from gop_acc_chinh import (LuongGopAccChinh, cai_dat as cai_dat_gop_acc_chinh,
 from giai_captcha import LoiGiaiCaptcha, kiem_tra_ocr_win7, lam_nong_ocr
 from lua_game import THONG_BAO_LOI, LoiLua, da_nap_dll
 from mat_ket_noi import XuLyMatKetNoi
-from pho_ban_pmp import (MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, MAP_PMP, MO_TA as MO_TA_PHO_BAN, DoiPMP,
+from pho_ban_pmp import (MA_BO_THEO_DOI, MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, MAP_PMP, MO_TA as MO_TA_PHO_BAN, DoiPMP,
                          PhoBanPMP, cap_nhat_chay_gan_npc_co_dinh, cap_nhat_di_lac_duong_doi_vien,
                          cap_nhat_doi_vien_cho_sat_tinh, cap_nhat_doi_vien_toi_truong, cap_nhat_doi_vien_tu_lac_duong,
                          cap_nhat_hoi_mau_dai_ly, cap_nhat_trieu_tap_doi_vien,
                          cac_doan_hom_nay, chuan_bi_ve_thanh,
                          can_ve_khi_het_luot, cai_dat_pmp, con_sat_tinh, nen_ve_thanh_theo_doi,
                          dat_phien_xoay_vong,
-                         hom_nay, la_dai_ly, pmp_dang_duoc_phep_chay, xoa_co_xoay_vong_luu_tat_ca,
-                         la_lac_duong, la_map_pho_ban, la_map_trong_pho_ban, GIAY_RETRY_VE_THANH_THEO_DOI)
+                         hom_nay, la_dai_ly, la_sat_tinh, npc_do_sat_tinh, pmp_dang_duoc_phep_chay, xoa_co_xoay_vong_luu_tat_ca,
+                         la_lac_duong, la_map_pho_ban, la_map_trong_pho_ban, GIAY_RETRY_VE_THANH_THEO_DOI,
+                         MAP_SAT_TINH, BAN_KINH_SAT_TINH)
 from chien_dau import khoang_cach
 from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC_TAC, AcTacRunner, DoiAcTac, buoc_doi_vien,
                             ca_doi_trong_pho_ban_ac_tac, cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai,
@@ -291,10 +292,10 @@ GIAY_GIUA_MOI_LUOT_DANH = 0.4
 MO_TA_TAM_DUNG_DANH = ("Dịch chuyển", "Đang chuyển sinh", "HP = 0", "Đã chết")
 CAC_KHOA_CHIEN_DAU_CHUNG = ("ban_kinh", "dung_f1", "lua_quai", "so_quai_lua", "danh_theo_key", "ten_key",
                             "dung_skill_pet", "cac_phim_skill", "uu_tien_nguoi_choi", "xuong_thu", "nhat_do",
-                            "an_don", "phan_tram_an_don", "xuat_chien_tran_thu", "hoan_hi_toi_thieu")
+                            "an_don", "phan_tram_an_don", "xuat_chien_tran_thu", "hoan_hi_toi_thieu", "ve_tri_lieu")
 CAC_O_TICH_CHIEN_DAU = ("bat", "quanh_diem", "dung_f1", "lua_quai", "danh_theo_key", "dung_skill_pet",
                         "uu_tien_nguoi_choi", "xuong_thu", "nhat_do", "buff_mau", "an_don", "xuat_chien_tran_thu",
-                        "tu_tang_cap")
+                        "tu_tang_cap", "ve_tri_lieu")
 # Thành viên hỏi mục tiêu của Key thì Key đọc mục tiêu của mình trong GIAY_KEY_DOC_MUC_TIEU giây tới;
 # tin mục tiêu cũ hơn GIAY_TIN_KEY_CON_DUNG thì coi như không biết Key đang đánh gì.
 GIAY_KEY_DOC_MUC_TIEU = 3
@@ -497,6 +498,8 @@ class LuongNhanVat(threading.Thread):
         self.truong_ac_tac = None    # DoiAcTac của đội trưởng mà nhân vật này đang theo
         self.ac_tac_state = {}
         self.luc_ve_thanh_theo_doi = 0.0
+        self.luc_ve_tri_lieu = 0.0
+        self.luc_log_ve_tri_lieu = 0.0
         self.luc_chay_gan_sat_tinh = 0.0
         self.luc_log_gan_sat_tinh = 0.0
         self.pmp_gom_state = {}
@@ -662,8 +665,53 @@ class LuongNhanVat(threading.Thread):
                     return doi
         return None
 
+    def _cap_nhat_danh_npc_do_sat_tinh(self, chien_dau):
+        """Trong Lôi đài, có Sát Tinh (tên đỏ) thì bật đánh dù đội trưởng chưa tới bước đánh."""
+        self.danh_npc_do_sat_tinh = False
+        self._npc_do_vung = None
+        if not la_sat_tinh(self.map_hien_tai) or not self.da_noi or not self.dang_trong_game:
+            self._da_log_npc_do_sat_tinh = False
+            return
+        try:
+            canh = chien_dau._doc_quanh_minh()
+        except (LoiChienDau, LoiLua, OSError):
+            return
+        npc = npc_do_sat_tinh(canh.cac_quai, canh.vi_tri)
+        if npc is None:
+            self._da_log_npc_do_sat_tinh = False
+            return
+        self.danh_npc_do_sat_tinh = True
+        self._npc_do_vung = (npc.x, npc.y, BAN_KINH_SAT_TINH)
+        self._bo_theo_de_danh_sat_tinh()
+
+    def _bo_theo_de_danh_sat_tinh(self):
+        """Đang Theo đội thì game không cho đánh. Bỏ theo khi Sát Tinh đã ra."""
+        bay_gio = time.time()
+        if bay_gio - getattr(self, "luc_bo_theo_sat_tinh", 0) < 3:
+            return
+        self.luc_bo_theo_sat_tinh = bay_gio
+        try:
+            dang_theo = self.game.lua.chay(MA_DANG_THEO_DOI) == b"1"
+        except (LoiLua, OSError, AttributeError):
+            return
+        if not dang_theo:
+            if not getattr(self, "_da_log_npc_do_sat_tinh", False):
+                self._da_log_npc_do_sat_tinh = True
+                self.in_log(f"{self.ten}: Sát Tinh có NPC chữ đỏ, đánh (không đứng yên)")
+            return
+        try:
+            self.game.lua.chay(MA_BO_THEO_DOI)
+        except (LoiLua, OSError, AttributeError):
+            return
+        if not getattr(self, "_da_log_npc_do_sat_tinh", False):
+            self._da_log_npc_do_sat_tinh = True
+            self.in_log(f"{self.ten}: Sát Tinh có NPC chữ đỏ, bỏ theo đội để đánh")
+
     def tam_dung_vi_pho_ban(self):
         """Chưa tới lúc đánh ải (đang chạy / nói chuyện NPC): không tự đánh, tránh chọn nhầm NPC chưa hóa quái."""
+        # Trong lôi đài đã có Sát Tinh (tên đỏ): đánh dù đội trưởng còn đang gom ở thành.
+        if getattr(self, "danh_npc_do_sat_tinh", False):
+            return False
         if self.dang_ac_tac:
             # Ác Tặc: chỉ đánh khi đội trưởng (hoặc chính mình) đã ghi vùng quanh Ác Tặc, không đánh quái thường.
             return self.vung_danh_pho_ban() is None
@@ -1351,6 +1399,9 @@ class LuongNhanVat(threading.Thread):
             cai_dat_nv = cau_hinh.cua_nhan_vat(self.ten) if self.ten else None
             cai_dat = cai_dat_chien_dau(cai_dat_nv) if cai_dat_nv else None
             vung = self.vung_danh_pho_ban()
+            self._cap_nhat_danh_npc_do_sat_tinh(chien_dau)
+            if self.danh_npc_do_sat_tinh and self._npc_do_vung:
+                vung = self._npc_do_vung
             doi_pmp = self.doi_pmp or self.truong_pmp
             doi_at = (self.doi_ac_tac or self.truong_ac_tac) if self.dang_ac_tac else None
             if cai_dat and vung:
@@ -1368,6 +1419,13 @@ class LuongNhanVat(threading.Thread):
             else:
                 chien_dau.khong_bo_qua_ten = False
                 chien_dau.chi_danh_ten = ()
+            if self.danh_npc_do_sat_tinh:
+                # Sát Tinh không có danh sách tên cố định. NPC cửa không được chọn.
+                chien_dau.chi_danh_ten = ()
+                chien_dau.ten_khong_danh = ("khô vinh",)
+                chien_dau.khong_bo_qua_ten = True
+            else:
+                chien_dau.ten_khong_danh = ()
             try:
                 mo_ta = None
                 if self.can_an_don(cai_dat_nv, cai_dat):
@@ -1488,6 +1546,40 @@ class LuongNhanVat(threading.Thread):
             except LoiLua:
                 pass
         return {chuan_hoa(ten) for ten in self.thanh_vien_nhom}
+
+    def map_bi_cam_ve_tri_lieu(self, ten_map):
+        """Đã ở Đại Lý, hoặc đang trong ải — không bấm Về thành giữa Lôi đài / PMP / Tặc Khấu."""
+        return la_dai_ly(ten_map) or la_map_trong_pho_ban(ten_map) or la_pho_ban_ac_tac(ten_map)
+
+    def xu_ly_ve_tri_lieu(self, tt, cai_dat):
+        """
+        Máu dưới 20% (tab Chiến đấu, mặc định bật): về Đại Lý rồi NPC Trị Liệu hồi. True nếu lượt này đang về thành
+        (tạm ngừng đánh / PMP). Đội viên theo trưởng, Ác Tặc, trong ải thì không về.
+        """
+        if not nen_ve_tri_lieu(cai_dat, tt, self.map_bi_cam_ve_tri_lieu,
+                               dang_theo_doi=self.truong_pmp is not None,
+                               dang_ac_tac=self.dang_ac_tac):
+            return False
+        bay_gio = time.time()
+        self.trang_thai["mo_ta"] = (f"Dịch chuyển: máu dưới {PHAN_TRAM_VE_TRI_LIEU}%, "
+                                    f"về {MAP_DAI_LY} trị liệu")
+        if bay_gio - self.luc_ve_tri_lieu < GIAY_RETRY_VE_THANH_THEO_DOI:
+            return True
+        self.luc_ve_tri_lieu = bay_gio
+        hp, hp_max = tt.get("hp") or 0, tt.get("hp_toi_da") or 0
+        if bay_gio - self.luc_log_ve_tri_lieu >= 60:
+            self.luc_log_ve_tri_lieu = bay_gio
+            self.in_log(f"{self.ten}: máu {hp}/{hp_max} dưới {PHAN_TRAM_VE_TRI_LIEU}%, "
+                        f"về {MAP_DAI_LY} trị liệu")
+        try:
+            chuan_bi_ve_thanh(self.game, self.in_log, self.ten)
+            if not self.game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH)):
+                self.in_log(f"{self.ten}: không có kỹ năng Quay về Đại Lý thành (trị liệu)")
+        except LoiLua as loi:
+            if str(loi) != getattr(self, "_loi_ve_tri_lieu", None):
+                self.in_log(f"{self.ten}: không về {MAP_DAI_LY} trị liệu được: {loi}")
+            self._loi_ve_tri_lieu = str(loi)
+        return True
 
     def can_an_don(self, cai_dat_nv, cai_dat):
         """Bật "Ẩn độn khi bị PK" (tab Chiến đấu), đang ở trong game và không dịch chuyển / chuyển sinh."""
@@ -1678,6 +1770,10 @@ class LuongNhanVat(threading.Thread):
                     self.doi_pmp = None
                 pmp_nv = cai_dat_pmp(cai_dat)
                 if not khoa_giao and not dang_at and cai_dat["bat_auto"] and tt["hp"] > 0 \
+                        and self.xu_ly_ve_tri_lieu(tt, cai_dat):
+                    self.dung.wait(chung["giay_giua_moi_lan_kiem_tra"])
+                    continue
+                if not khoa_giao and not dang_at and cai_dat["bat_auto"] and tt["hp"] > 0 \
                         and can_ve_khi_het_luot(pmp_nv, hom_nay(pmp_nv), tt["map"]) and not self.truong_pmp \
                         and not la_map_trong_pho_ban(tt["map"]):
                     self.trang_thai["mo_ta"] = f"{MO_TA_PHO_BAN}: hết lượt, về {MAP_DAI_LY}"
@@ -1691,6 +1787,9 @@ class LuongNhanVat(threading.Thread):
                     self.doi_pmp = None
                 if self.truong_pmp and tt["hp"] > 0:
                     self.theo_doi_pmp(self.truong_pmp, tt, cai_dat)
+                elif tt["hp"] <= 0 and la_sat_tinh(tt["map"]):
+                    self.trang_thai["mo_ta"] = (f"{MO_TA_PHO_BAN}: chết trong {MAP_SAT_TINH}, "
+                                                "chờ sống lại (không Đầu thai)")
                 elif di_pmp and doi is not False:
                     ten = self.ten
                     # Giữ đội giữa hai vòng (đội viên khỏi chạy đi train); không đi PMP nữa thì vòng sau xóa.
@@ -2648,9 +2747,14 @@ class UngDung:
         if bao_cao_telegram.tim_chay_bot_quan_ly():
             ttk.Button(nut, text="Chạy bot quản lý (máy chủ)", command=self.chay_bot_quan_ly_tu_gui).pack(
                 side="left", padx=(8, 0))
+        ttk.Button(
+            nut, text="Mã máy mới (clone VM)",
+            command=self._lam_moi_id_may_telegram,
+        ).pack(side="left", padx=(8, 0))
         ttk.Label(
             khung,
             text="Người dùng: điền 3 ô → bấm «Kết nối ngay» (tự bật gửi, lưu, gửi thử). "
+                 "Clone/copy cấu hình sang VM khác: mỗi VM bấm «Mã máy mới» một lần rồi Kết nối ngay. "
                  "Địa chỉ do admin gửi (IP hoặc https://….trycloudflare.com); mã trùng trên máy chủ. "
                  "Máy chủ: bấm «Chạy bot quản lý» một lần, giữ cửa sổ CMD mở.",
             foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left",
@@ -2777,6 +2881,17 @@ class UngDung:
             "Báo cáo Telegram",
             "Đã kết nối và gửi báo cáo.\nTrên Telegram (bot của admin) gõ: /ds hoặc /status",
             parent=self.root)
+
+    def _lam_moi_id_may_telegram(self):
+        if not messagebox.askyesno(
+                "Mã máy mới",
+                "Dùng khi clone VM / copy ket_noi_telegram.json — hub sẽ coi đây là máy riêng.\n\n"
+                "Tiếp tục?",
+                parent=self.root):
+            return
+        moi = bao_cao_telegram.lam_moi_id_may()
+        self.in_log(f"Báo cáo Telegram: mã máy mới {moi[:8]}… — bấm Kết nối ngay")
+        self.nhan_tele_da_luu.configure(text="Đã tạo mã máy mới — bấm «Kết nối ngay».")
 
     def _go_bao_doi_ten_may(self, truoc, moi):
         ten_cu = (truoc.get("ten_may") or "").strip()
@@ -3094,6 +3209,16 @@ class UngDung:
                               "mọi nhân vật; chạy cả khi không tích ô Auto / không bật Tự động đánh.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
 
+        khung = ttk.LabelFrame(tab, text="Hồi máu", padding=8)
+        khung.pack(fill="x", pady=(6, 0))
+        ttk.Checkbutton(khung, text=f"Máu dưới {PHAN_TRAM_VE_TRI_LIEU}% thì tự về Đại Lý trị liệu",
+                        variable=self.bien_cd["ve_tri_lieu"], command=self.luu_chien_dau).pack(anchor="w")
+        ttk.Label(khung, text="Còn sống mà máu dưới 20%: bấm kỹ năng Quay về Đại Lý thành, rồi tới NPC Trị Liệu "
+                              "(163, 147) chọn «Trị liệu». Mặc định bật cho mọi nhân vật. Không về khi đang trong "
+                              "phó bản (Phiêu Miểu Phong, Lôi đài sinh tử, Tặc Khấu) hoặc đang theo đội / đi Ác Tặc. "
+                              "Đã ở Đại Lý thì chỉ trị liệu, không bấm Về thành.",
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
+
         khung = ttk.LabelFrame(tab, text="Khi bật PK đội / PK cá nhân", padding=8)
         khung.pack(fill="x", pady=(6, 0))
         ttk.Checkbutton(khung, text="Bật PK: có người chơi thì đánh người trước quái, cả nhóm đánh theo trưởng nhóm",
@@ -3257,8 +3382,11 @@ class UngDung:
                            else ""))
         if cd["tu_tang_cap"] != cu["tu_tang_cap"]:
             self.in_log(f"{self.ten_dang_sua}: {'BẬT' if cd['tu_tang_cap'] else 'TẮT'} tự động tăng cấp")
+        if cd["ve_tri_lieu"] != cu["ve_tri_lieu"]:
+            self.in_log(f"{self.ten_dang_sua}: {'BẬT' if cd['ve_tri_lieu'] else 'TẮT'} về Đại Lý trị liệu khi máu dưới "
+                        f"{PHAN_TRAM_VE_TRI_LIEU}%")
         rieng = ("buff_mau", "phan_tram_buff", "an_don", "phan_tram_an_don", "xuat_chien_tran_thu",
-                 "hoan_hi_toi_thieu", "tu_tang_cap")
+                 "hoan_hi_toi_thieu", "tu_tang_cap", "ve_tri_lieu")
         if dict(cd, **{khoa: cu[khoa] for khoa in rieng}) == cu:
             return
         chi_tiet = [f"bán kính {cd['ban_kinh']}"]

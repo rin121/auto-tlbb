@@ -91,6 +91,29 @@ class TestHoiMauDaiLy(unittest.TestCase):
         self.assertFalse(pb.can_hoi_mau_tai_dai_ly({"hp": 60, "hp_toi_da": 100}))
         self.assertFalse(pb.can_hoi_mau_tai_dai_ly(None))
 
+    def test_dong_tri_lieu_khong_nham_tran_thu(self):
+        self.assertTrue(pb.la_dong_tri_lieu("Trị liệu"))
+        self.assertTrue(pb.la_dong_tri_lieu("  TRỊ LIỆU "))
+        self.assertFalse(pb.la_dong_tri_lieu("Trị thương cho trân thú"))
+        self.assertTrue(pb.PhoBanPMP._dong_khop((pb.DONG_TRI_LIEU,), 1, 2, "Trị liệu"))
+        self.assertFalse(pb.PhoBanPMP._dong_khop((pb.DONG_TRI_LIEU,), 1, 2, "Trị thương cho trân thú"))
+
+    def test_mau_thap_toi_npc_tri_lieu(self):
+        game = MagicMock()
+        game.thong_tin.return_value = {"map": pb.MAP_DAI_LY, "hp": 40, "hp_toi_da": 100}
+        with patch.object(pb, "_HoiMauDaiLy") as lop:
+            pb.cap_nhat_hoi_mau_dai_ly(game, pb.MAP_DAI_LY, "anhzero366", lambda _c: None, {})
+        lop.assert_called_once()
+        lop.return_value.thuc_hien.assert_called_once()
+        self.assertEqual(pb.TEN_NPC_HOI_MAU_DAI_LY, "TRỊ LIỆU")
+        self.assertEqual(pb.XY_NPC_HOI_MAU_DAI_LY, (163, 147))
+        self.assertEqual(pb.DONG_TRI_LIEU_SCRIPT, (129, 0))
+        self.assertEqual(pb.DONG_XAC_NHAN_TRI_LIEU_SCRIPT, (129, 1001))
+        self.assertTrue(pb.la_dong_dung("Có", "Có"))
+        self.assertFalse(pb.la_dong_dung("Có", "Các hạ cần tốn tới hồi phục huyết và khí, xác định có cần chữa trị không?"))
+        self.assertTrue(pb.la_bao_khong_can_chua("  Ngươi hiện rất khoẻ mạnh, không cần chữa trị!"))
+        self.assertFalse(pb.la_bao_khong_can_chua("Có"))
+
 
 class TestNpcLacDuong(unittest.TestCase):
     def test_uu_tien_pmp_truoc_sat_tinh(self):

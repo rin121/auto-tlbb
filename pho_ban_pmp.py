@@ -4,7 +4,7 @@ TỰ ĐI PHÓ BẢN PHIÊU MIỄU PHONG MỘT MÌNH (tab "Phó bản", cài riê
 Kịch bản ghi từ một vòng chơi tay:
     Đang ở map khác Đại Lý / Lạc Dương / Phiêu Miểu Phong: bấm ô F có kỹ năng về thành, chờ tới Đại Lý.
     Đại Lý     : NPC "Di Chuyển" -> "Bản Đồ Thành Thị" -> "Thành Thị Lạc Dương" -> sang Lạc Dương.
-                 Máu dưới 50% khi đứng ở Đại Lý: tới NPC Di Chuyển mở hội thoại để hồi máu (trước khi dịch chuyển).
+                 Máu dưới 50%: tới NPC "Trị Liệu" (163, 147), chọn dòng «Trị liệu» (không chọn trị thương trân thú).
     Lạc Dương  : NPC "Trịnh Thanh Sương" -> "Khiêu chiến Phiêu Miểu Phong" -> vào phó bản.
     Phó bản  : 4 ải + boss (CAC_AI). Nói chuyện với NPC, chọn dòng, game đếm 5 giây rồi NPC hóa quái.
     Giết boss Lý Thu Thuỷ xong vẫn ở trong ải — không như Sát Tinh (game tự đưa ra map); phải bấm kỹ năng Quay về Đại Lý thành: xong một vòng.
@@ -41,7 +41,7 @@ from auto_chuyen_sinh import chuan_hoa
 from bang_ma_viscii import giai_ma
 from chien_dau import (KY_NANG_KY_THUAT, KY_NANG_VE_THANH, MA_XUONG_THU, ChienDau, LoiChienDau, khoang_cach,
                        ma_co_ky_nang, ma_dung_ky_nang_theo_dinh_nghia)
-from dang_nhap import bo_dau, chuoi_lua, dang_hien, trong_cua_so
+from dang_nhap import bo_dau, bo_ma_mau, chuoi_lua, dang_hien, trong_cua_so
 from lua_game import LoiLua
 from tu_dung_vat_pham import LoiVatPham, TiemKNB, TuDungCanKhonHo
 
@@ -433,8 +433,15 @@ TEN_NPC_SAT_TINH = BUOC_VAO_SAT_TINH[1]
 XY_CHO_SAT_TINH = (154, 194)
 KHOANG_TOI_CHO_SAT_TINH = 5
 BUOC_DI_CHUYEN_LAC_DUONG = CAC_BUOC_VAO[0]
-TEN_NPC_HOI_MAU_DAI_LY = BUOC_DI_CHUYEN_LAC_DUONG[1]
-XY_NPC_HOI_MAU_DAI_LY = BUOC_DI_CHUYEN_LAC_DUONG[2]
+# ghi_thao_tac/ghi_20261107_224800.txt, cosato777, Đại Lý:
+# chọn NPC «TRỊ LIỆU» → QuestFrameOptionClicked(-1, 129, 0) «Trị liệu»
+# → QuestFrameOptionClicked(-1, 129, 1001) «Có» (tốn 10000, hồi huyết khí nộ).
+TEN_NPC_HOI_MAU_DAI_LY = "TRỊ LIỆU"
+XY_NPC_HOI_MAU_DAI_LY = (163, 147)
+DONG_TRI_LIEU = "Trị liệu"
+DONG_TRI_LIEU_SCRIPT = (129, 0)
+DONG_XAC_NHAN_TRI_LIEU = "Có"
+DONG_XAC_NHAN_TRI_LIEU_SCRIPT = (129, 1001)
 TY_LE_HOI_MAU_DAI_LY = 0.5
 GIAY_CHO_HOI_MAU_DAI_LY = 8
 GIAY_GIUA_HOI_MAU_DAI_LY = 3
@@ -546,6 +553,47 @@ def la_sat_tinh(ten_map):
     return chuan_hoa(ten_map or "") == chuan_hoa(MAP_SAT_TINH)
 
 
+# NPC cửa lôi đài (tên không đỏ). Sát Tinh ra thì tên đỏ, đánh được.
+TEN_NPC_CUA_SAT_TINH = "khô vinh"
+
+
+def la_npc_cua_sat_tinh(ten):
+    """Khô Vinh Đại Sư đứng ở cửa, không phải Sát Tinh."""
+    if isinstance(ten, (bytes, bytearray)):
+        ten = giai_ma(ten)
+    chu = chuan_hoa(ten or "")
+    return TEN_NPC_CUA_SAT_TINH in chu or "kho vinh" in bo_dau(ten or "")
+
+
+def npc_do_sat_tinh(cac_quai, vi_tri):
+    """
+    Sát Tinh còn sống (NPC chữ đỏ) gần nhất. Khô Vinh Đại Sư không tính.
+    None nếu trong tầm nhìn không có con nào còn máu.
+    """
+    ung = [q for q in cac_quai if getattr(q, "hp", 0) > 0 and not la_npc_cua_sat_tinh(getattr(q, "ten", ""))]
+    if not ung:
+        return None
+    if not vi_tri:
+        return ung[0]
+    return min(ung, key=lambda q: khoang_cach(vi_tri, (q.x, q.y)))
+
+
+def phai_huy_vong_vi_chet(tt):
+    """HP = 0 ngoài lôi đài thì hủy vòng. Trong lôi đài giữ vùng đánh, không Đầu thai (Đầu thai đẩy ra Địa phủ)."""
+    if not tt or not (tt.get("hp", 1) <= 0 < tt.get("hp_toi_da", 0)):
+        return False
+    return not la_sat_tinh(tt.get("map"))
+
+
+def roi_sat_tinh_la_xong(ten_map, da_bao_xong):
+    """Rời lôi đài là xong vòng khi game báo hoàn thành, hoặc đã về thành phố. Địa phủ không tính xong."""
+    if not ten_map or la_sat_tinh(ten_map):
+        return False
+    if da_bao_xong:
+        return True
+    return chuan_hoa(ten_map) in {chuan_hoa(m) for m in (MAP_DAI_LY, MAP_LAC_DUONG, MAP_LAU_LAN)}
+
+
 def can_ve_khi_het_luot_pmp(ten_map):
     """Hết lượt PMP mà còn đứng ở Lạc Dương / Lâu Lan (cũ) / trong PMP thì về Đại Lý."""
     return chuan_hoa(ten_map or "") in {chuan_hoa(MAP_LAC_DUONG), chuan_hoa(MAP_LAU_LAN), chuan_hoa(MAP_PMP)}
@@ -574,8 +622,23 @@ def can_hoi_mau_tai_dai_ly(tt, ty_le=TY_LE_HOI_MAU_DAI_LY):
     return hp_max > 0 and hp > 0 and hp < hp_max * ty_le
 
 
+def la_dong_dung(mau, chu):
+    """Khớp cả dòng, không khớp câu dài chỉ chứa vài chữ (vd. «Có» khác «có cần chữa trị»)."""
+    return chuan_hoa(bo_ma_mau(chu or "")) == chuan_hoa(bo_ma_mau(mau))
+
+
+def la_dong_tri_lieu(chu):
+    """Đúng dòng «Trị liệu», không phải «Trị thương cho trân thú»."""
+    return la_dong_dung(DONG_TRI_LIEU, chu)
+
+
+def la_bao_khong_can_chua(chu):
+    """NPC Trị Liệu: «Ngươi hiện rất khoẻ mạnh, không cần chữa trị!»."""
+    return "không cần chữa" in chuan_hoa(bo_ma_mau(chu or ""))
+
+
 def cap_nhat_hoi_mau_dai_ly(game, map_dang_o, ten, in_log, state, nen_dung=None):
-    """Ở Đại Lý: máu dưới 50% thì tới NPC Di Chuyển mở hội thoại để hồi máu."""
+    """Ở Đại Lý: máu dưới 50% thì tới NPC Trị Liệu, chọn dòng «Trị liệu»."""
     if not la_dai_ly(map_dang_o):
         return
     if nen_dung and nen_dung():
@@ -1143,7 +1206,7 @@ class PhoBanPMP:
             tt = self.game.thong_tin()
         except LoiLua:
             return None  # đang tải map
-        if tt and tt["hp"] <= 0 < tt["hp_toi_da"]:
+        if phai_huy_vong_vi_chet(tt):
             raise LoiPhoBan("nhân vật đã chết")
         return tt
 
@@ -1168,6 +1231,8 @@ class PhoBanPMP:
     def _dong_khop(dong, script, extra, chu):
         """dong là (script, extra) hoặc (chuỗi gợi ý,) để khớp dòng hội thoại theo chữ."""
         if isinstance(dong[0], str):
+            if dong == (DONG_TRI_LIEU,):
+                return la_dong_tri_lieu(chu)
             return chuan_hoa(dong[0]) in chuan_hoa(chu)
         if (script, extra) == dong:
             return True
@@ -2064,6 +2129,39 @@ class PhoBanPMP:
             raise LoiPhoBan(f"không thấy dòng «{dong[0]}» ({', '.join(ds)})")
         self._chon(dong)
 
+    def _bam_dong_dung(self, mau, mong_doi):
+        """Bấm dòng khớp đúng chữ. Mã ghi tay chỉ để đối chiếu, bấm theo mã hội thoại đang mở."""
+        ht = self._hoi_thoai()
+        if not ht:
+            raise LoiPhoBan(f"không mở hội thoại để chọn «{mau}»")
+        for _, s, e, chu in ht[1]:
+            if s >= 0 and la_dong_dung(mau, chu):
+                if (s, e) != mong_doi:
+                    self.in_log(f"{self.ten}: dòng «{mau}» mã {s}, {e} "
+                                f"(ghi tay {mong_doi[0]}, {mong_doi[1]})")
+                self._chon((s, e))
+                return
+        ds = [c[3] for c in ht[1] if c[3]]
+        raise LoiPhoBan(f"không thấy dòng «{mau}» ({', '.join(ds)})")
+
+    def _chon_tri_lieu(self):
+        """«Trị liệu» rồi «Có». ghi_20261107_224800: (-1, 129, 0) rồi (-1, 129, 1001)."""
+        self._bam_dong_dung(DONG_TRI_LIEU, DONG_TRI_LIEU_SCRIPT)
+        if not self._cho(lambda: self._thay_dong(DONG_XAC_NHAN_TRI_LIEU) or self._bao_khong_can_chua(), 5):
+            ht = self._hoi_thoai()
+            ds = [] if not ht else [f"{chu!r} ({s}, {e})" for _, s, e, chu in ht[1]]
+            raise LoiPhoBan("không thấy dòng «Có» sau khi chọn Trị liệu: " + " | ".join(ds))
+        if self._thay_dong(DONG_XAC_NHAN_TRI_LIEU):
+            self._bam_dong_dung(DONG_XAC_NHAN_TRI_LIEU, DONG_XAC_NHAN_TRI_LIEU_SCRIPT)
+
+    def _bao_khong_can_chua(self):
+        ht = self._hoi_thoai()
+        return bool(ht) and any(la_bao_khong_can_chua(chu) for _, _, _, chu in ht[1])
+
+    def _thay_dong(self, mau):
+        ht = self._hoi_thoai()
+        return bool(ht) and any(s >= 0 and la_dong_dung(mau, chu) for _, s, _, chu in ht[1])
+
     def _hoi_mau_dai_ly_neu_can(self):
         if not getattr(self, "ten", None):
             return
@@ -2787,19 +2885,43 @@ class PhoBanPMP:
         self.dat_vung_danh(vung)
         self._mo_ta("Sát Tinh: đánh giữa lôi đài")
         so_sat_tinh = 0
+        da_bao_xong = False
+        da_bao_chet = False
         while True:
             self._kiem_tra()
-            m = self._map()
+            tt = self._tt()
+            m = tt["map"] if tt else None
+            if tt and tt["hp"] <= 0 < tt["hp_toi_da"] and la_sat_tinh(m):
+                if not da_bao_chet:
+                    da_bao_chet = True
+                    self.in_log(f"{self.ten}: chết trong {MAP_SAT_TINH}, cả đội đánh tiếp, không Đầu thai")
+                time.sleep(0.5)
+                continue
+            da_bao_chet = False
             if m and not la_sat_tinh(m):
-                self.in_log(f"{self.ten}: Sát Tinh xong, game đưa về [{m}] (đã đánh {so_sat_tinh} Sát Tinh)")
+                if roi_sat_tinh_la_xong(m, da_bao_xong):
+                    self.in_log(f"{self.ten}: Sát Tinh xong, game đưa về [{m}] (đã đánh {so_sat_tinh} Sát Tinh)")
+                    return
+                self.in_log(f"{self.ten}: rời {MAP_SAT_TINH} tới [{m}] khi chưa xong, không tính hoàn thành")
+                self._giu_vung_sat_tinh = self._dong_doi_con_trong_sat_tinh()
+                self.nghi_den = time.time() + GIAY_NGHI_KHI_LOI
                 return
             for chu in self._doc_thong_bao():
                 if THONG_BAO_SAT_TINH_VAO in chuan_hoa(chu):
                     so_sat_tinh += 1
                     self._mo_ta(f"Sát Tinh: đánh {chu.split(THONG_BAO_SAT_TINH_VAO)[0].strip()} ({so_sat_tinh})")
                 elif chu.startswith(THONG_BAO_SAT_TINH_XONG):
+                    da_bao_xong = True
                     self._mo_ta("Sát Tinh: xong, chờ game đưa về")
             time.sleep(0.5)
+
+    def _dong_doi_con_trong_sat_tinh(self):
+        if not self.doi:
+            return False
+        try:
+            return any(la_sat_tinh(m) for m in self.doi.map_doi_vien().values())
+        except (LoiLua, OSError, AttributeError):
+            return False
 
     def _sua_dem(self, ten_ds, **gia_tri):
         def sua(cai_dat):
@@ -3064,17 +3186,23 @@ class PhoBanPMP:
                         f"Nghỉ {GIAY_NGHI_KHI_LOI // 60} phút rồi thử lại")
         finally:
             _dang_chay_vong.discard(chuan_hoa(ten))
-            if doi:
+            giu = getattr(self, "_giu_vung_sat_tinh", False)
+            self._giu_vung_sat_tinh = False
+            if doi and not giu:
                 doi.dat_buoc()
                 doi.truong_khong_danh = False
                 doi.truong_vao_danh = False
-            dat_vung(None)
+            if giu:
+                # Người này đã ra khỏi lôi đài; đồng đội còn trong đó vẫn đánh theo vùng cũ.
+                self.dat_vung_rieng(None)
+            else:
+                dat_vung(None)
             self.doi = None
             trang_thai["mo_ta"] = ""
 
 
 class _HoiMauDaiLy(PhoBanPMP):
-    """Nói chuyện NPC Di Chuyển ở Đại Lý để hồi máu (không chọn dòng dịch chuyển)."""
+    """Tới NPC Trị Liệu ở Đại Lý, chọn đúng dòng «Trị liệu»."""
 
     def __init__(self, game, ten, in_log, nen_dung=None):
         super().__init__(game, in_log or (lambda _: None))
@@ -3089,8 +3217,9 @@ class _HoiMauDaiLy(PhoBanPMP):
             return
         ten_npc, xy = TEN_NPC_HOI_MAU_DAI_LY, XY_NPC_HOI_MAU_DAI_LY
         try:
-            self.in_log(f"{self.ten}: máu dưới {int(ty_le * 100)}% — tới NPC {ten_npc} hồi máu")
-            self._mo_hoi_thoai(ten_npc, xy, (-1, -1), bo_qua_neu_khong_co=True, dan_doi=False)
+            self.in_log(f"{self.ten}: máu dưới {int(ty_le * 100)}% — tới NPC {ten_npc} ({xy[0]}, {xy[1]}) hồi máu")
+            self._mo_hoi_thoai(ten_npc, xy, (DONG_TRI_LIEU,), dan_doi=False)
+            self._chon_tri_lieu()
             day = lambda: (lambda t: t and t["hp"] >= t["hp_toi_da"])(self._tt())
             if self._cho(day, GIAY_CHO_HOI_MAU_DAI_LY):
                 self.in_log(f"{self.ten}: đã hồi máu ở NPC {ten_npc}")

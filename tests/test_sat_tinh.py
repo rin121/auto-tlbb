@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 
 import cau_hinh
 import pho_ban_pmp as pb
+from chien_dau import ChienDau
 from pho_ban_pmp import PhoBanPMP
 
 
@@ -46,6 +47,62 @@ class TestLaSatTinhMap(unittest.TestCase):
         self.assertTrue(pb.la_sat_tinh(pb.MAP_SAT_TINH))
         self.assertTrue(pb.la_sat_tinh("lôi đài sinh tử"))
         self.assertFalse(pb.la_sat_tinh(pb.MAP_PMP))
+
+
+class TestChetTrongSatTinh(unittest.TestCase):
+    def test_chet_trong_loi_dai_khong_huy_vong(self):
+        tt = {"hp": 0, "hp_toi_da": 100, "map": pb.MAP_SAT_TINH}
+        self.assertFalse(pb.phai_huy_vong_vi_chet(tt))
+
+    def test_chet_ngoai_loi_dai_van_huy_vong(self):
+        self.assertTrue(pb.phai_huy_vong_vi_chet({"hp": 0, "hp_toi_da": 100, "map": pb.MAP_DAI_LY}))
+        self.assertTrue(pb.phai_huy_vong_vi_chet({"hp": 0, "hp_toi_da": 100, "map": "Địa phủ"}))
+
+    def test_con_song_khong_huy(self):
+        self.assertFalse(pb.phai_huy_vong_vi_chet({"hp": 40, "hp_toi_da": 100, "map": pb.MAP_SAT_TINH}))
+        self.assertFalse(pb.phai_huy_vong_vi_chet(None))
+
+    def test_roi_dia_phu_khong_tinh_xong(self):
+        self.assertFalse(pb.roi_sat_tinh_la_xong("Địa phủ", False))
+        self.assertTrue(pb.roi_sat_tinh_la_xong(pb.MAP_LAC_DUONG, False))
+        self.assertTrue(pb.roi_sat_tinh_la_xong("Địa phủ", True))
+        self.assertFalse(pb.roi_sat_tinh_la_xong(pb.MAP_SAT_TINH, True))
+
+
+class TestNpcDoSatTinh(unittest.TestCase):
+    """Trong lôi đài: NPC chữ đỏ thì đánh. Khô Vinh Đại Sư ở cửa không tính."""
+
+    def _q(self, ten, hp, x, y):
+        quai = MagicMock()
+        quai.ten, quai.hp, quai.x, quai.y = ten, hp, x, y
+        return quai
+
+    def test_chi_co_npc_cua_thi_khong_danh(self):
+        self.assertTrue(pb.la_npc_cua_sat_tinh("Khô Vinh Đại Sư"))
+        self.assertIsNone(pb.npc_do_sat_tinh([self._q("Khô Vinh Đại Sư", 1, 12, 34)], (11, 34)))
+
+    def test_sat_tinh_dung_canh_cua_van_la_npc_do(self):
+        boss = self._q("Thiên Sát Tinh", 1, 13, 34)
+        cua = self._q("Khô Vinh Đại Sư", 1, 12, 34)
+        self.assertIs(pb.npc_do_sat_tinh([cua, boss], (11, 34)), boss)
+
+    def test_chet_thi_khong_tinh(self):
+        self.assertIsNone(pb.npc_do_sat_tinh([self._q("Thiên Sát Tinh", 0, 25, 32)], (25, 32)))
+
+    def test_chon_con_gan_nhat(self):
+        xa = self._q("Thiên Sát", 1, 40, 40)
+        gan = self._q("Địa Sát", 1, 26, 32)
+        self.assertIs(pb.npc_do_sat_tinh([xa, gan], pb.DIEM_SAT_TINH), gan)
+
+    def test_khong_chon_npc_cua_lam_muc_tieu(self):
+        cd = ChienDau(MagicMock(), lambda *_: None)
+        cd.ten_khong_danh = ("khô vinh",)
+        cua = self._q("Khô Vinh Đại Sư", 1, 12, 34)
+        cua.id = 1
+        boss = self._q("Thiên Sát Tinh", 1, 25, 32)
+        boss.id = 2
+        self.assertFalse(cd._danh_duoc(cua, 0))
+        self.assertTrue(cd._danh_duoc(boss, 0))
 
 
 class TestHoiThoaiNpcSatTinh(unittest.TestCase):

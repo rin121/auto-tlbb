@@ -36,7 +36,7 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | PMP-01c | Ở Đại Lý chạy tới NPC Di Chuyển 90 giây mà không mở được hội thoại (kẹt đường) | Log «không mở được hội thoại Di Chuyển…, dùng kỹ năng Về thành Đại Lý rồi thử lại», dùng Về thành rồi chạy lại tới Di Chuyển; không nghỉ 5 phút (chỉ báo lỗi khi kẹt cả 3 lần) |
 | ST-LD | Sát Tinh: NPC đã đưa cả đội vào Lôi đài sinh tử nhưng game đổi map chậm (luồng còn gom ở Lạc Dương) | Log «Sát Tinh đội đã vào Lôi đài sinh tử, dắt đội tới chỗ đánh», đội trưởng dẫn đội tới giữa lôi đài và đánh bình thường; không còn lỗi «đội trưởng đang ở [Lôi đài sinh tử], không phải Lạc Dương» |
 | PMP-01b | Nhân vật bị «Thân thể bị quản chế» (buff Buff0_16 «Không thể sử dụng bất kỳ chiêu thức nào», đứng yên còn mãi) cần về thành | Log «thân thể bị quản chế, di chuyển cho hết…», nhân vật chạy vài bước, «đã hết quản chế», rồi dùng Về thành về Đại Lý |
-| PMP-02 | Đại Lý, HP &lt; 50% | Tới NPC Di Chuyển, hồi máu, đóng Quest |
+| PMP-02 | Đại Lý, HP &lt; 50% | Tới NPC TRỊ LIỆU (163, 147), chọn «Trị liệu» rồi «Có» (không chọn trị thương trân thú). Huyết khí đầy, hết 10000 bạc, đóng Quest, sau đó mới Di Chuyển. Log «đã hồi máu ở NPC TRỊ LIỆU» |
 | PMP-03 | Đại Lý → Lạc Dương | Di Chuyển → Bản đồ thành → Lạc Dương |
 | PMP-04 | Lạc Dương → PMP | Trịnh Thanh Sương → vào ải, đánh 4 ải + boss |
 | PMP-05 | Xong 1 vòng | Log tăng `so_vong` hôm nay; về thành / tiếp vòng theo cấu hình |
@@ -59,6 +59,9 @@ Bắt buộc chạy lại sau **mỗi lần sửa code `.py`** (rule `.cursor/ru
 | ST-01 | Hết lượt PMP, bật “Hết PMP thì Sát Tinh” | NPC đích Lạc Dương: **SÁT TINH** (không còn Trịnh Thanh Sương cho lượt PMP) |
 | ST-02 | Hội thoại SÁT TINH | Chọn khiêu chiến → map **Lôi đài sinh tử** |
 | ST-03 | Trong lôi đài | Chạy giữa (25,32), đánh Sát Tinh; thông báo hoàn thành → về Lạc Dương/Đại Lý |
+| ST-06 | Chết trong lôi đài (HP = 0) | Không log «Sát Tinh lỗi: nhân vật đã chết», không bấm Đầu thai. Cả đội vẫn đánh. Sống lại tại chỗ thì đánh tiếp. Bị đẩy ra Địa phủ thì không tính xong vòng; đồng đội còn trong lôi đài vẫn đánh |
+| ST-07 | Đang trong lôi đài, có NPC chữ đỏ | Đánh ngay, kể cả đội trưởng còn ở Đại Lý chờ gom. Bỏ Theo đội. Không chọn Khô Vinh Đại Sư ở cửa. Hết NPC chữ đỏ thì thôi |
+| ST-08 | Máu dưới 20% (ô Chiến đấu, mặc định bật) | Map thường: về Đại Lý rồi NPC Trị Liệu. Trong Lôi đài / PMP / Tặc Khấu: không về, đánh tiếp |
 | ST-04 | Giữa các vòng ST | Đội viên đứng gần `XY_CHO_SAT_TINH` (154,194) |
 | ST-05 | NPC báo hết 20 lượt / ngày mai | Log hết Sát Tinh; `st_het` = true |
 

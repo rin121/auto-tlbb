@@ -113,11 +113,18 @@ powershell -ExecutionPolicy Bypass -File dong_goi\build_dung_thu.ps1 -SoNgay 3
 
 **Lần đầu trên máy chủ:** nhắn `/start` cho bot trên Telegram, rồi chạy `ChayBotQuanLy.bat` — bot **tự lấy** `TELEGRAM_CHAT_ID` vào `.env` (không cần getUpdates trên trình duyệt).
 
+**VMware / máy ảo:** trong `.env` đặt `LANG_NGHE=0.0.0.0` (mặc định mới). AutoHoc trên VM **không** gõ `127.0.0.1` — gõ IP host (NAT thường `http://192.168.253.1:8787`). Mở Windows Firewall cổng `8787` (mạng Private) trên **host**.
+
+**Nhiều VM:** mỗi máy có `id_may` riêng trong `ket_noi_telegram.json`. Copy file từ VM mẫu → trên **từng** VM bấm **Mã máy mới (clone VM)** rồi **Kết nối ngay**, nếu không `/ds` chỉ thấy một máy (các VM đè nhau).
+
 Mẫu phát cho user: `dong_goi\AutoHoc\ket_noi_telegram.mau.json` (đổi tên thành `ket_noi_telegram.json` cạnh exe, sửa `ten_may` trên máy họ).
 
 3. Đưa ra ngoài mạng (IP nhà đổi): trên máy chạy bot, `cloudflared tunnel --url http://127.0.0.1:8787`, copy URL vào mẫu `dia_chi`.
 
 4. Trên Telegram (sau khi AutoHoc báo cáo):
+
+- **`/menu`** hoặc **`/start`**: menu nút — chọn máy → Status / Ping / Nhóm / Acc / Lỗi; **Quay lại** về danh sách.
+- Sau khi cập nhật code hub: **restart** `bot_quan_ly\ChayBotQuanLy.bat`.
 
 ```
 /ds

@@ -7,7 +7,7 @@ Một round:
     0. Tài khoản chưa có nhân vật của round thì tạo + nhận đồ tân thủ ngay trong game của nó (cả nhóm cùng lúc).
     1. Đăng nhập cả nhóm vào nhân vật của round (game đang mở thì về chọn máy chủ rồi vào nhân vật mới). Server chỉ
        cho 4 tài khoản online cùng lúc nên game ngoài nhóm bị tắt trước.
-    2. Chụp túi đồ, hồi máu ở NPC Di Chuyển, bật tự mời nhóm (trưởng nhóm = nhân vật của tài khoản đầu), chờ cả đội vào nhóm.
+    2. Chụp túi đồ, máu dưới 50% thì hồi ở NPC Trị Liệu (Đại Lý), bật tự mời nhóm (trưởng nhóm = nhân vật của tài khoản đầu), chờ cả đội vào nhóm.
     3. Bật Auto + Phó bản cho cả đội; luồng của từng cửa sổ game (LuongNhanVat) tự đi PMP rồi Sát Tinh.
     4. Chờ trưởng nhóm xong (test: 1 lượt PMP; chỉ Sát Tinh: tới khi NPC báo hết lượt Sát Tinh;
        đủ PMP+ST: hết lượt PMP và Sát Tinh trong ngày trên nhân vật round đó).

@@ -1,0 +1,33 @@
+[22:48:00.461] GHI: bắt đầu ghi -> d:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261107_224800.txt (chỉ cosato777)
+[22:48:00.572] cosato777: (bọc thêm 1556 hàm giao diện để ghi nút bấm)
+[22:48:00.594] cosato777: ở map [Đại Lý] (163, 147)
+[22:48:00.615] cosato777: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_3, MessageBall, MiniMap, Packet, PartyFrame, PetFrame, PlayerFrame, PlayerImpactFrame
+[22:48:00.626] cosato777: túi lúc đầu: ô 0 #-09Mảnh Vỡ Bảo Thạch VIP (mã 30503236) x15; ô 1 #-09Mảnh Vỡ Trang Bị (mã 30503234) x33; ô 2 Phiếu KNB 2000 (mã 30004621) x3; ô 3 Phiếu KNB 300 (mã 30004607) x16; ô 4 Phiếu KNB 100 (mã 30004606) x39
+[22:48:00.658] cosato777: trang bị lúc đầu: ô 0 Minh Tôn (mã 10162570) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Cưỡi: Đà Điểu (mã 10158130) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Tân Thủ - Giới (mã 10162427) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Tân Thủ - Ngọc (mã 10162428) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[22:48:00.669] cosato777: chỉ số lúc đầu: LEVEL=128, MEMPAI=8, POINT_REMAIN=24, STR=316203, SPR=20316389, CON=316360, INT=316303, DEX=60316546, MAXHP=13298486, MAXMP=5285871, MONEY=100000000, YUANBAO=0, ZENGDIAN=1988420, EXP=54221310
+[22:48:23.421] cosato777: GỌI CompareTable_Quest(table: 39CE1740, table: 39CE1768)
+[22:48:23.421] cosato777: chọn mục tiêu TRỊ LIỆU
+[22:48:23.453] cosato777: MỞ cửa sổ Quest
+[22:48:23.454] cosato777: MỞ cửa sổ TargetBuff
+[22:48:23.454] cosato777: MỞ cửa sổ TargetFrame
+[22:48:23.527] cosato777: hội thoại NPC [TRỊ LIỆU]:
+        - #{OBJ_luoyang_BaTian} (mã -1, -1; loại text)
+        - Trị liệu (mã 129, 0; loại id)
+        - Trị thương cho trân thú (mã 701603, 40; loại id)
+[22:48:24.065] cosato777: GỌI QuestOption_Clicked()
+[22:48:24.065] cosato777: GỌI QuestFrameOptionClicked(-1, 129, 0)
+[22:48:24.065] cosato777: GỌI CompareTable_Quest(table: 39CF1E78, table: 39CF2788)
+[22:48:24.138] cosato777: hội thoại NPC [TRỊ LIỆU]:
+        - Các hạ cần tốn #{_EXCHG10000} tới hồi phục huyết và khí, xác định có cần chữa trị không? (mã -1, -1; loại text)
+        - Có (mã 129, 1001; loại id)
+        - Không (mã 129, 1000; loại id)
+[22:48:25.299] cosato777: GỌI QuestOption_Clicked()
+[22:48:25.299] cosato777: GỌI QuestFrameOptionClicked(-1, 129, 1001)
+[22:48:25.362] cosato777: thông báo: Khí huyết và nộ của các hạ đã được hồi phục hoàn toàn.
+[22:48:25.926] cosato777: GỌI City_Shop_SetCtl()
+[22:48:25.926] cosato777: GỌI StallBuy_modifymoney()
+[22:48:25.926] cosato777: GỌI GemCarve_UserMoneyChanged()
+[22:48:25.937] cosato777: ĐÓNG cửa sổ Quest
+[22:48:25.980] cosato777: chỉ số: MONEY 100000000 -> 99990000
+[22:48:25.991] cosato777: đóng hội thoại NPC
+[22:50:00.904] GHI: dừng ghi

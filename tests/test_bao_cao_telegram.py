@@ -1,6 +1,8 @@
 """Snapshot báo cáo Telegram: không mật khẩu, đủ nhóm / acc / lỗi."""
 import json
+import tempfile
 import unittest
+from pathlib import Path
 
 import bao_cao_telegram as bc
 
@@ -78,3 +80,21 @@ class TestSnapshot(unittest.TestCase):
         ket = bc.hub_dang_nghe("127.0.0.1")
         self.assertIn(ket, (True, False))
         self.assertIsNone(bc.hub_dang_nghe("https://example.com"))
+
+    def test_dam_bao_id_may_ngau_nhien(self):
+        a = bc.dam_bao_id_may({"id_may": ""})
+        b = bc.dam_bao_id_may({"id_may": ""})
+        self.assertNotEqual(a["id_may"], b["id_may"])
+        self.assertEqual(len(a["id_may"]), 16)
+
+    def test_lam_moi_id_may(self):
+        with tempfile.TemporaryDirectory() as td:
+            duong = Path(td) / "ket_noi_telegram.json"
+            duong.write_text(
+                json.dumps({"bat": True, "ten_may": "VM", "dia_chi": "http://x", "ma_ket_noi": "m", "id_may": "cu"}),
+                encoding="utf-8",
+            )
+            cu = bc.doc(duong)
+            moi = bc.lam_moi_id_may(duong)
+            self.assertNotEqual(moi, "cu")
+            self.assertEqual(bc.doc(duong)["id_may"], moi)

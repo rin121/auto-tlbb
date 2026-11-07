@@ -98,7 +98,10 @@ MAC_DINH = {
     "xuat_chien_tran_thu": False,
     "hoan_hi_toi_thieu": 80,
     "tu_tang_cap": True,
+    "ve_tri_lieu": True,
 }
+# Máu dưới mức này thì tự về Đại Lý, tới NPC Trị Liệu (tab Chiến đấu, mặc định bật).
+PHAN_TRAM_VE_TRI_LIEU = 20
 CHE_DO_PK_DANH_NGUOI = (1, 3)  # PK cá nhân, PK đội
 MON_PHAI_NGA_MY = 4
 MA_KY_NANG_BUFF_MAU = 424  # Thanh Tâm Phổ Thiện Chú (Nga My)
@@ -210,6 +213,37 @@ def cai_dat_chien_dau(cai_dat_nhan_vat):
         except (TypeError, ValueError):
             cai_dat[khoa] = MAC_DINH[khoa]
     return cai_dat
+
+
+def mau_duoi_phan_tram(tt, phan_tram):
+    """Còn sống và máu dưới phan_tram % HP tối đa (đúng mốc thì không tính)."""
+    if not tt:
+        return False
+    hp_max = tt.get("hp_toi_da") or 0
+    hp = tt.get("hp") or 0
+    return hp_max > 0 and 0 < hp < hp_max * (phan_tram / 100.0)
+
+
+def can_ve_tri_lieu(cai_dat_nhan_vat, tt):
+    """Bật «về Đại Lý trị liệu» và máu dưới 20%."""
+    if not cai_dat_chien_dau(cai_dat_nhan_vat).get("ve_tri_lieu", True):
+        return False
+    return mau_duoi_phan_tram(tt, PHAN_TRAM_VE_TRI_LIEU)
+
+
+def nen_ve_tri_lieu(cai_dat_nhan_vat, tt, map_bi_cam=None, dang_theo_doi=False, dang_ac_tac=False):
+    """
+    Tự về Đại Lý trị liệu: bật, máu dưới 20%, còn sống, không theo đội / Ác Tặc, không đứng map bị cấm
+    (Đại Lý đã ở sẵn, hoặc đang trong ải PMP / Lôi đài / Tặc Khấu).
+    """
+    if dang_theo_doi or dang_ac_tac:
+        return False
+    if not can_ve_tri_lieu(cai_dat_nhan_vat, tt):
+        return False
+    ten_map = (tt or {}).get("map")
+    if map_bi_cam and map_bi_cam(ten_map):
+        return False
+    return True
 
 
 def cac_phim_can_bam(cai_dat):
@@ -338,6 +372,7 @@ class ChienDau:
         self.ten_bo_qua = set()
         self.khong_bo_qua_ten = False
         self.chi_danh_ten = ()
+        self.ten_khong_danh = ()  # chuỗi nằm trong tên thì không chọn (vd. NPC cửa lôi đài)
         self.da_lua = set()
         self.dang_lua = None
         self.luc_bam_phim = 0.0
@@ -519,9 +554,20 @@ class ChienDau:
             raise
 
     def _danh_duoc(self, quai, bay_gio):
+        if self._la_ten_khong_danh(quai.ten):
+            return False
         if self.chi_danh_ten and chuan_hoa(giai_ma(quai.ten)) not in self.chi_danh_ten:
             return False
         return quai.hp > 0 and quai.ten not in self.ten_bo_qua and self.bo_qua_den.get(quai.id, 0) <= bay_gio
+
+    def _la_ten_khong_danh(self, ten):
+        mau = getattr(self, "ten_khong_danh", ())
+        if not mau:
+            return False
+        if isinstance(ten, (bytes, bytearray)):
+            ten = giai_ma(ten)
+        chu = chuan_hoa(ten or "")
+        return any(m in chu for m in mau)
 
     def _chon_muc_tieu_moi(self, cac_quai, vi_tri, cai_dat):
         """Chọn quái gần nhất (ưu tiên quái đã lùa). Trả về False nếu quanh đó không còn quái."""

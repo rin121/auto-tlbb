@@ -56,7 +56,12 @@ LB_GETITEMHEIGHT = 0x01A1
 LVM_FIRST = 0x1000
 LVM_GETITEMRECT = LVM_FIRST + 14
 LVM_ENSUREVISIBLE = LVM_FIRST + 19
+LVM_GETTOPINDEX = LVM_FIRST + 39
+LVM_GETCOUNTPERPAGE = LVM_FIRST + 40
+LVM_GETITEMSTATE = LVM_FIRST + 44
+LVM_GETITEMSPACING = LVM_FIRST + 51
 LVIR_BOUNDS = 0
+LVIS_STATEIMAGEMASK = 0xF000
 GIAY_CHO_DOI_NHAN_VAT = 0.8
 # Ngay sau khi đổi map GAuto bận lưu cài đặt, chọn dòng có lúc vài giây mới ăn.
 GIAY_CHO_CHON_DONG = 6
@@ -75,6 +80,9 @@ GIAY_GIU_MAP = 1.5
 # Máy ảo / màn nhỏ: cửa sổ game hay đè GAuto — thử lại vài lần, đẩy cửa sổ che xuống dưới.
 SO_LAN_THU_CHE = 4
 GIAY_GIUA_THU_CHE = 0.25
+# GAuto nạp lại bảng sau khi chọn dòng: MSAA accLocation hay chết (0x800706be). Thử lại vài lần.
+SO_LAN_THU_DAU_DONG = 3
+GIAY_GIUA_THU_DAU_DONG = 0.4
 _KHOA_CHUOT_AO = threading.Lock()
 _DA_BAO_CHUOT_THAT = set()
 _CHO_BAO = []
@@ -82,6 +90,15 @@ _CHO_BAO = []
 
 class LoiGautoAcTac(Exception):
     pass
+
+
+def _gui_con_tro_toi_gauto():
+    """
+    GAuto là process 32-bit. AutoHoc 64-bit mà SendMessage lParam = con trỏ RECT/buffer thì GAuto ghi vào địa chỉ
+    cắt còn 32-bit → AccessViolation, hộp .NET «Attempted to read or write protected memory».
+    Chỉ bản AutoHoc 32-bit mới gửi được LVM_GETITEMRECT / LB_GETITEMRECT / CB_GETLBTEXT.
+    """
+    return ctypes.sizeof(ctypes.c_void_p) == 4
 
 
 def la_cua_so_quan_ly_gauto(tieu_de):
@@ -504,6 +521,8 @@ def dat_o_chuot(hwnd, hwnd_o, bat, ten):
 
 
 def _chu_combo_theo_lenh(hwnd_combo, chi_so):
+    if not _gui_con_tro_toi_gauto():
+        return ""
     user32 = ctypes.windll.user32
     buf = ctypes.create_unicode_buffer(256)
     n = user32.SendMessageW(hwnd_combo, win32con.CB_GETLBTEXT, chi_so, buf)
@@ -541,14 +560,50 @@ def doc_map(hwnd_combo):
     return dang_chon
 
 
+def _info_combo(hwnd_combo):
+    """COMBOBOXINFO — cùng API chon_map dùng để lấy hwndList."""
+    info = _ComboInfo(cbSize=ctypes.sizeof(_ComboInfo))
+    if not ctypes.windll.user32.GetComboBoxInfo(hwnd_combo, ctypes.byref(info)):
+        return None
+    return info
+
+
+def _doc_ds_list_combo(hwnd_combo):
+    """Tên từng dòng trong list thả xuống (hwndList). AutoHoc 64-bit không dùng CB_GETLBTEXT."""
+    def doc(info):
+        h = int(info.hwndList or 0) if info else 0
+        if not h:
+            return []
+        _, ds = _ten_map_msaa(h)
+        return [m for m in ds if m]
+
+    ds = doc(_info_combo(hwnd_combo))
+    if ds:
+        return ds
+    da_mo = _dang_tha_xuong(hwnd_combo)
+    try:
+        if not da_mo:
+            win32gui.SendMessage(hwnd_combo, win32con.CB_SHOWDROPDOWN, 1, 0)
+            if not _cho_dk(lambda: _dang_tha_xuong(hwnd_combo), GIAY_CHO_THA_XUONG):
+                return []
+        return doc(_info_combo(hwnd_combo))
+    finally:
+        if not da_mo and _dang_tha_xuong(hwnd_combo):
+            win32gui.SendMessage(hwnd_combo, win32con.CB_SHOWDROPDOWN, 0, 0)
+
+
 def cac_map(hwnd_combo):
-    ds = []
-    for i in range(max(0, win32gui.SendMessage(hwnd_combo, win32con.CB_GETCOUNT, 0, 0))):
-        ds.append(_chu_combo_theo_lenh(hwnd_combo, i))
-    if any(ds):
+    """Danh sách map ô Map: GETLBTEXT (32-bit) hoặc hwndList của chon_map (64-bit)."""
+    if _gui_con_tro_toi_gauto():
+        ds = [_chu_combo_theo_lenh(hwnd_combo, i)
+              for i in range(max(0, win32gui.SendMessage(hwnd_combo, win32con.CB_GETCOUNT, 0, 0)))]
+        if any(ds):
+            return ds
+    ds = _doc_ds_list_combo(hwnd_combo)
+    if ds:
         return ds
     _, tu_msaa = _ten_map_msaa(hwnd_combo)
-    return tu_msaa or ds
+    return [m for m in tu_msaa if m]
 
 
 def vi_tri_map(cac, ten_map):
@@ -575,7 +630,6 @@ def _la_cua_so_autohoc(hwnd):
     return pid == os.getpid()
 
 
-@contextlib.contextmanager
 def _hien_cua_so_gauto(hwnd):
     """
     Mở GAuto trước khi bấm: đang thu nhỏ thì khôi phục, đang ẩn thì hiện, nằm ngoài màn thì kéo vào.
@@ -603,6 +657,7 @@ def _hien_cua_so_gauto(hwnd):
     return None
 
 
+@contextlib.contextmanager
 def _noi_len(hwnd):
     """Đưa GAuto lên trên cùng mà không lấy focus (chuột ảo cần ô không bị che); xong trả về dưới cửa sổ đang dùng."""
     co = win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE
@@ -918,20 +973,90 @@ def _rect_dong_bang(hwnd_list, chi_so_msaa):
     """
     Hình chữ nhật dòng trong bảng nhân vật, toạ độ client.
     MSAA con 1 là dòng listview 0. None nếu không phải listview hoặc dòng không có.
+    AutoHoc 64-bit gửi LVM_GETITEMRECT sang GAuto 32-bit không marshal RECT: lúc đó dùng chiều cao dòng
+    (LVM_GETCOUNTPERPAGE / LVM_GETITEMSPACING, số nguyên, chạy xuyên process).
     """
     i = int(chi_so_msaa) - 1
     if i < 0:
         return None
     try:
-        ctypes.windll.user32.SendMessageW(int(hwnd_list), LVM_ENSUREVISIBLE, i, 0)
-        rc = _RECT()
-        rc.left = LVIR_BOUNDS
-        ok = ctypes.windll.user32.SendMessageW(int(hwnd_list), LVM_GETITEMRECT, i, ctypes.byref(rc))
+        hwnd_list = int(hwnd_list)
+    except (TypeError, ValueError):
+        return None
+    if not hwnd_list:
+        return None
+    try:
+        ctypes.windll.user32.SendMessageW(hwnd_list, LVM_ENSUREVISIBLE, i, 0)
+        if _gui_con_tro_toi_gauto():
+            rc = _RECT()
+            rc.left = LVIR_BOUNDS
+            ok = ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETITEMRECT, i, ctypes.byref(rc))
+            if ok and rc.bottom > rc.top and rc.right > rc.left:
+                return rc.left, rc.top, rc.right, rc.bottom
     except (OSError, ValueError):
+        pass
+    return _rect_dong_bang_theo_cao(hwnd_list, i)
+
+
+def _cao_dong_listview(hwnd_list):
+    """Chiều cao một dòng report-view. 0 nếu không đọc được."""
+    try:
+        hwnd_list = int(hwnd_list)
+        if not hwnd_list:
+            return 0
+        so = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETCOUNTPERPAGE, 0, 0))
+        _l, _t, _r, b = win32gui.GetClientRect(hwnd_list)
+        if so > 0 and b > 0:
+            return max(1, b // so)
+        spacing = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETITEMSPACING, 1, 0))
+        cao = (spacing >> 16) & 0xFFFF
+        return cao if cao > 0 else 0
+    except (OSError, ValueError, win32gui.error, TypeError):
+        return 0
+
+
+def _rect_dong_bang_theo_cao(hwnd_list, i):
+    """Client rect dòng i (0-based) từ top-index × chiều cao — không cần con trỏ RECT sang process 32-bit."""
+    try:
+        hwnd_list = int(hwnd_list)
+        if not hwnd_list or i < 0:
+            return None
+        ctypes.windll.user32.SendMessageW(hwnd_list, LVM_ENSUREVISIBLE, i, 0)
+        dau = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETTOPINDEX, 0, 0))
+        cao = _cao_dong_listview(hwnd_list)
+        l, _t, r, _b = win32gui.GetClientRect(hwnd_list)
+    except (OSError, ValueError, win32gui.error, TypeError):
         return None
-    if not ok or rc.bottom <= rc.top or rc.right <= rc.left:
+    if cao <= 0:
         return None
-    return rc.left, rc.top, rc.right, rc.bottom
+    top = (i - dau) * cao
+    return l, top, r, top + cao
+
+
+def _dong_dang_tich(hwnd_list, chi_so_msaa, o=None):
+    """
+    Ô đầu dòng đang ☑. Ưu tiên LVM_GETITEMSTATE (số nguyên, 64-bit → GAuto 32-bit được).
+    None nếu không đọc được.
+    """
+    i = int(chi_so_msaa) - 1
+    try:
+        hwnd_list = int(hwnd_list)
+    except (TypeError, ValueError):
+        hwnd_list = 0
+    if hwnd_list and i >= 0:
+        try:
+            st = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETITEMSTATE, i, LVIS_STATEIMAGEMASK))
+            anh = (st >> 12) & 0xF
+            if anh:
+                return anh >= 2
+        except (OSError, ValueError):
+            pass
+    if o is not None:
+        try:
+            return o.da_tich(chi_so_msaa)
+        except msaa.LoiMsaa:
+            return None
+    return None
 
 
 def _diem_o_tich_client(left, top, right, bottom):
@@ -978,18 +1103,38 @@ def dat_dau_dong(hwnd, cac_ten, bat):
     if not can:
         return []
     _hien_cua_so_gauto(hwnd)
+    loi_cuoi = None
+    for lan in range(SO_LAN_THU_DAU_DONG):
+        try:
+            return _dat_dau_dong_lan(hwnd, can, bat)
+        except msaa.LoiMsaa as loi:
+            loi_cuoi = loi
+            time.sleep(GIAY_GIUA_THU_DAU_DONG)
+            bang = _bang_nhan_vat(hwnd, bat_buoc=False)
+            can = [(i, ten) for i, ten, _, tich in danh_sach_nhan_vat(hwnd)
+                   if tich != bat and any(_khop_ten(ten, t) for t in cac_ten)] or can
+            if not bang:
+                continue
+    viec = "tích" if bat else "bỏ tích"
+    raise LoiGautoAcTac(f"không {viec} được ô đầu dòng trên GAuto ({loi_cuoi})") from loi_cuoi
+
+
+def _dat_dau_dong_lan(hwnd, can, bat):
     da_doi = []
     bang = _bang_nhan_vat(hwnd)
     with _msaa(bang) as o:
         for i, ten in can:
+            da_xong = lambda i=i, o=o, bang=bang: _dong_dang_tich(bang, i, o) == bat
             rc = _rect_dong_bang(bang, i)
             if rc:
-                _bam_client_hoac_that(hwnd, bang, _diem_o_tich_client(*rc), "ô đầu dòng nhân vật",
-                                      lambda: o.da_tich(i) == bat)
+                _bam_client_hoac_that(hwnd, bang, _diem_o_tich_client(*rc), "ô đầu dòng nhân vật", da_xong)
             else:
-                _bam_ao_hoac_that(hwnd, bang, _diem_o_dau_dong(o.vi_tri(i)), "ô đầu dòng nhân vật",
-                                  lambda: o.da_tich(i) == bat)
-            if o.da_tich(i) != bat:
+                try:
+                    diem = _diem_o_dau_dong(o.vi_tri(i))
+                except msaa.LoiMsaa:
+                    raise
+                _bam_ao_hoac_that(hwnd, bang, diem, "ô đầu dòng nhân vật", da_xong)
+            if _dong_dang_tich(bang, i, o) != bat:
                 raise LoiGautoAcTac(f"không {'tích' if bat else 'bỏ tích'} được ô đầu dòng «{ten}» trên GAuto")
             da_doi.append(ten)
     return da_doi
@@ -1009,7 +1154,9 @@ def _tam_rect(left, top, right, bottom):
 
 
 def _rect_dong_list(hwnd_list, chi_so):
-    """Hình chữ nhật dòng chi_so trong list (client). None nếu không đọc được."""
+    """Hình chữ nhật dòng chi_so trong list (client). None nếu không đọc được / AutoHoc 64-bit."""
+    if not _gui_con_tro_toi_gauto():
+        return None
     rc = _RECT()
     ok = ctypes.windll.user32.SendMessageW(int(hwnd_list), LB_GETITEMRECT, int(chi_so), ctypes.byref(rc))
     if not ok or rc.bottom <= rc.top:
@@ -1018,7 +1165,10 @@ def _rect_dong_list(hwnd_list, chi_so):
 
 
 def _diem_dong_map(hwnd_combo, hwnd_list, dich):
-    """Tâm dòng dich. Ưu tiên LB_GETITEMRECT — CB_GETITEMHEIGHT trên màn 125/150% thấp hơn dòng thật, bấm lệch lên 1 dòng."""
+    """
+    Tâm dòng dich. AutoHoc 32-bit: LB_GETITEMRECT. AutoHoc 64-bit: LB_GETITEMHEIGHT (số nguyên, không crash GAuto).
+    Không dùng CB_GETITEMHEIGHT làm nguồn chính — màn 125/150% thấp hơn dòng thật, Vô Lượng Sơn thành Tung Sơn.
+    """
     win32gui.SendMessage(hwnd_list, LB_SETTOPINDEX, dich, 0)
     win32gui.SendMessage(hwnd_combo, win32con.CB_SETTOPINDEX, dich, 0)
     rc = _rect_dong_list(hwnd_list, dich)
@@ -1067,8 +1217,8 @@ def chon_map(hwnd, hwnd_combo, ten_map):
         raise LoiGautoAcTac(f"GAuto không có map «{ten_map}» (có: {', '.join(cac)}) — chọn map khác trong AutoHoc")
     if win32gui.SendMessage(hwnd_combo, win32con.CB_GETCURSEL, 0, 0) == dich:
         return False
-    info = _ComboInfo(cbSize=ctypes.sizeof(_ComboInfo))
-    if not ctypes.windll.user32.GetComboBoxInfo(hwnd_combo, ctypes.byref(info)):
+    info = _info_combo(hwnd_combo)
+    if not info:
         raise LoiGautoAcTac("không đọc được ô Map của GAuto")
     if CHUOT_AO:
         with _KHOA_CHUOT_AO, _noi_len(hwnd):

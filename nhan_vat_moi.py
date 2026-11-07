@@ -17,8 +17,7 @@ Theo nhân vật mẫu caychay999:
                     Quảng Trường Hình Tượng -> Thú Cưỡi Tân Thủ: mua Đà Điểu; -> Kỵ Thuật: mua Kỵ Thuật: Đà Điểu.
                     Đóng shop, mang Đà Điểu (ô trang bị 8), dùng Kỵ Thuật.
 Không xếp thanh phím tắt: phó bản dùng thẳng kỹ năng Kỵ thuật / Quay về Đại Lý thành (không cần ô F, không chiếm chuột).
-    Hồi máu       : Hộp Point tăng máu tối đa mà máu hiện tại không đầy; mở hội thoại NPC Di Chuyển (Đại Lý) là hồi đầy
-                    máu + nội lực, không cần chọn dòng nào.
+    Hồi máu       : Máu dưới 50% thì tới NPC Trị Liệu (Đại Lý 163, 147), chọn dòng «Trị liệu».
     Xong          : EnterQuitWait(1) (Hệ thống -> Về chọn máy chủ), đăng nhập lại để tạo / nhận đồ nhân vật sau.
 Tên nhân vật: tên tài khoản, rồi lặp thêm ký tự cuối (caychay10 -> caychay10, caychay100, caychay1000).
 Tên bị trùng thì thử thêm số 1, 2... ở cuối.
@@ -60,7 +59,6 @@ def da_gia_nhap_phai(mon_phai):
 
 NPC_TAN_THU = ("Tân Thủ", (160, 166))
 NPC_CONG_POINT = ("Cộng Point", (168, 142))
-NPC_HOI_MAU = ("Di Chuyển", (165, 156))
 DONG_VAO_PHAI = (111111, 9996)
 DONG_TIEU_DAO = ("Tiêu Dao",)
 DONG_VANG = (111111, 6666)
@@ -293,22 +291,8 @@ class NhanDoTanThu(PhoBanPMP):
         self.in_log(f"{self.ten}: dùng Về thành {SO_LAN_THU_MANG} lần vẫn chưa rời NPC Cộng Point")
 
     def hoi_mau(self):
-        """Máu / nội lực chưa đầy thì tới NPC Di Chuyển mở hội thoại (game hồi đầy), rồi đóng hội thoại."""
-        def day():
-            tt = self._tt()
-            return tt and tt["hp"] >= tt["hp_toi_da"] and tt["mp"] >= tt["mp_toi_da"]
-        if day():
-            return
-        try:
-            self._mo_hoi_thoai(*NPC_HOI_MAU, (-1, -1), bo_qua_neu_khong_co=True, dan_doi=False)
-            if self._cho(day, GIAY_CHO_GAME_TRA_LOI):
-                self.in_log(f"{self.ten}: đã hồi đầy máu ở NPC {NPC_HOI_MAU[0]}")
-            else:
-                self.in_log(f"{self.ten}: nói chuyện NPC {NPC_HOI_MAU[0]} mà máu chưa đầy")
-        except LoiPhoBan as loi:
-            self.in_log(f"{self.ten}: chưa hồi máu được: {loi}")
-        finally:
-            self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+        """Máu dưới 50% ở Đại Lý: NPC Trị Liệu, chọn dòng «Trị liệu»."""
+        self._hoi_mau_dai_ly_neu_can()
 
     def _vao_tieu_dao(self, tt):
         if tt["mon_phai"] == MON_PHAI_TIEU_DAO:

@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from bot_quan_ly.http_may import nhan_bao_cao
 from bot_quan_ly.kho_may import KhoMay
 from bot_quan_ly.lenh import cat_tin, phan_lenh, tra_loi
+from bot_quan_ly.menu import keyboard_danh_sach, xuly_callback
 
 THU_MUC = os.path.dirname(os.path.abspath(__file__))
 DUONG_DAN_ENV = os.path.join(THU_MUC, ".env")
@@ -107,12 +108,16 @@ def doc_env(duong_dan=DUONG_DAN_ENV):
         giay_im = int(gia.get("GIAY_IM") or 90)
     except ValueError as loi:
         raise SystemExit(f"CONG hoặc GIAY_IM không phải số: {loi}") from loi
+    lang = (gia.get("LANG_NGHE") or "0.0.0.0").strip() or "0.0.0.0"
+    if lang.lower() in ("*", "all", "mang", "lan"):
+        lang = "0.0.0.0"
     return {
         "token": token,
         "chat_id": str(chat),
         "ma": ma,
         "cong": cong,
         "giay_im": max(15, giay_im),
+        "lang_nghe": lang,
     }
 
 
@@ -130,20 +135,63 @@ def _goi_telegram(token, phuong_thuc, payload, timeout):
     return du_lieu
 
 
-def gui_telegram(token, chat_id, text):
-    for doan in cat_tin(text):
-        _goi_telegram(token, "sendMessage", {"chat_id": chat_id, "text": doan}, timeout=20)
+def gui_telegram(token, chat_id, text, reply_markup=None, markup_cuoi=False):
+    doan = cat_tin(text)
+    for so, phan in enumerate(doan):
+        payload = {"chat_id": chat_id, "text": phan}
+        la_cuoi = so == len(doan) - 1
+        gan = reply_markup is not None and (
+            (markup_cuoi and la_cuoi) or (not markup_cuoi and so == 0)
+        )
+        if gan:
+            payload["reply_markup"] = reply_markup
+        _goi_telegram(token, "sendMessage", payload, timeout=20)
+
+
+def gui_tin_menu(token, chat_id, ban):
+    _goi_telegram(
+        token,
+        "sendMessage",
+        {
+            "chat_id": chat_id,
+            "text": ban["text"],
+            "reply_markup": ban["reply_markup"],
+        },
+        timeout=20,
+    )
+
+
+def sua_tin_menu(token, chat_id, message_id, ban):
+    _goi_telegram(
+        token,
+        "editMessageText",
+        {
+            "chat_id": chat_id,
+            "message_id": message_id,
+            "text": ban["text"],
+            "reply_markup": ban["reply_markup"],
+        },
+        timeout=20,
+    )
+
+
+def tra_loi_callback(token, callback_query_id, text=None):
+    payload = {"callback_query_id": callback_query_id}
+    if text:
+        payload["text"] = text[:200]
+        payload["show_alert"] = False
+    _goi_telegram(token, "answerCallbackQuery", payload, timeout=15)
 
 
 def lay_cap_nhat(token, offset):
-    payload = {"timeout": 15, "allowed_updates": ["message"]}
+    payload = {"timeout": 15, "allowed_updates": ["message", "callback_query"]}
     if offset is not None:
         payload["offset"] = offset
     du_lieu = _goi_telegram(token, "getUpdates", payload, timeout=30)
     return du_lieu.get("result") or []
 
 
-def tao_may_chu(kho, ma, cong, hang_tin):
+def tao_may_chu(kho, ma, cong, hang_tin, lang_nghe="0.0.0.0"):
     class XuLy(BaseHTTPRequestHandler):
         def do_POST(self):
             duong = self.path.split("?", 1)[0]
@@ -169,7 +217,7 @@ def tao_may_chu(kho, ma, cong, hang_tin):
         def log_message(self, dinh_dang, *tham_so):
             log.info("%s - %s", self.address_string(), dinh_dang % tham_so)
 
-    return ThreadingHTTPServer(("127.0.0.1", cong), XuLy)
+    return ThreadingHTTPServer((lang_nghe, cong), XuLy)
 
 
 def _day_hang(hang, token, chat_id):
@@ -190,10 +238,46 @@ def _vong_im(kho, hang, dung):
             hang.put(dong)
 
 
+def _xu_ly_callback(kho, token, chat_id, cap_nhat):
+    for tin in cap_nhat:
+        cb = tin.get("callback_query") or {}
+        if not cb:
+            continue
+        chat = str((cb.get("message") or {}).get("chat", {}).get("id", ""))
+        if chat != chat_id:
+            continue
+        msg_id = (cb.get("message") or {}).get("message_id")
+        data = cb.get("data") or ""
+        cq_id = cb.get("id")
+        try:
+            tra_loi_callback(token, cq_id)
+            ket = xuly_callback(kho, data)
+            if ket["loai"] == "edit" and msg_id is not None:
+                sua_tin_menu(
+                    token,
+                    chat_id,
+                    msg_id,
+                    {"text": ket["text"], "reply_markup": ket["reply_markup"]},
+                )
+            elif ket.get("noi_dung_gui"):
+                gui_telegram(
+                    token,
+                    chat_id,
+                    ket["noi_dung_gui"],
+                    ket.get("reply_markup"),
+                    markup_cuoi=True,
+                )
+        except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as loi:
+            log.error("Không xử lý được callback: %s", _loi_mang(loi))
+
+
 def _xu_ly_tin(kho, token, chat_id, cap_nhat):
     offset = None
     for tin in cap_nhat:
         offset = tin["update_id"] + 1
+        if tin.get("callback_query"):
+            _xu_ly_callback(kho, token, chat_id, [tin])
+            continue
         msg = tin.get("message") or {}
         chat = str((msg.get("chat") or {}).get("id", ""))
         if chat != chat_id:
@@ -202,6 +286,9 @@ def _xu_ly_tin(kho, token, chat_id, cap_nhat):
         if not lenh:
             continue
         try:
+            if lenh in ("menu", "start"):
+                gui_tin_menu(token, chat_id, keyboard_danh_sach(kho))
+                continue
             gui_telegram(token, chat_id, tra_loi(kho, lenh, ten))
         except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as loi:
             log.error("Không trả lời được lệnh: %s", _loi_mang(loi))
@@ -217,13 +304,16 @@ def main():
     kho = KhoMay(DUONG_DAN_MAY, cfg["giay_im"])
     hang = queue.Queue()
     try:
-        may_chu = tao_may_chu(kho, cfg["ma"], cfg["cong"], hang)
+        may_chu = tao_may_chu(kho, cfg["ma"], cfg["cong"], hang, cfg["lang_nghe"])
     except OSError as loi:
-        raise SystemExit(f"Không mở được cổng {cfg['cong']} trên 127.0.0.1: {loi}") from loi
+        raise SystemExit(
+            f"Không mở được cổng {cfg['cong']} trên {cfg['lang_nghe']}: {loi}") from loi
     threading.Thread(target=may_chu.serve_forever, name="http-bao-cao", daemon=True).start()
     dung = threading.Event()
     threading.Thread(target=_vong_im, args=(kho, hang, dung), name="quet-im", daemon=True).start()
-    log.info("Nghe báo cáo tại http://127.0.0.1:%s/bao-cao , %d máy đã lưu", cfg["cong"], len(kho.danh_sach()))
+    log.info(
+        "Nghe báo cáo tại http://%s:%s/bao-cao (VM/LAN dùng IP host, không dùng 127.0.0.1), %d máy đã lưu",
+        cfg["lang_nghe"], cfg["cong"], len(kho.danh_sach()))
     offset = None
     try:
         while True:

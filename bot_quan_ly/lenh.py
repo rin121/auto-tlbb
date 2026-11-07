@@ -54,25 +54,28 @@ def _so_cua_so(snap):
     return len(snap.get("cua_so") or [])
 
 
+def _online_offline(kho, may, bay_gio=None):
+    """Chỉ online (còn báo cáo trong GIAY_IM) hoặc offline (im / đã tắt)."""
+    return "online" if kho.trang_thai_luc(may, bay_gio) == "online" else "offline"
+
+
 def tin_ds(kho, bay_gio=None):
-    ds = kho.danh_sach()
+    ds = kho.danh_sach_gom_ten(bay_gio)
     if not ds:
         return "Chưa có máy nào báo cáo."
     dong = [f"Máy ({len(ds)})"]
     for may in ds:
-        trang = _NHAN_TRANG[kho.trang_thai_luc(may, bay_gio)]
-        so = _so_cua_so(may["snapshot"])
-        dong.append(f"- {may['ten']}: {trang}, {so} cửa sổ, lần cuối {_luc(may)}")
+        dong.append(f"- {may['ten']}: {_online_offline(kho, may, bay_gio)}")
     return "\n".join(dong)
 
 
 def _chon(kho, ten, bay_gio):
     if ten:
-        may = kho.tim(ten)
+        may = kho.tim(ten, bay_gio)
         if may is None:
             return None, f"Không thấy máy «{ten}».\n" + tin_ds(kho, bay_gio)
         return may, None
-    ds = kho.danh_sach()
+    ds = kho.danh_sach_gom_ten(bay_gio)
     if len(ds) == 1:
         return ds[0], None
     if not ds:
@@ -173,7 +176,8 @@ def tin_loi(may):
 
 def tin_help():
     return (
-        "/ds — danh sách máy\n"
+        "/menu hoặc /start — menu nút (chọn máy → Status, Ping…)\n"
+        "/ds — danh sách máy (text)\n"
         "/ping [tên] — còn báo cáo không\n"
         "/status [tên] — nhân vật đang chạy\n"
         "/nhom [tên] — đội hình\n"

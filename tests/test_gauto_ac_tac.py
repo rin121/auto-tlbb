@@ -507,8 +507,60 @@ class TestOnDinhGAuto(unittest.TestCase):
 
     def test_cac_map_rong_thi_doc_msaa(self):
         with patch.object(g.win32gui, "SendMessage", return_value=0), \
+                patch.object(g, "_doc_ds_list_combo", return_value=[]), \
                 patch.object(g, "_ten_map_msaa", return_value=("", ["Kiếm Các", "Tung Sơn"])):
             self.assertEqual(g.cac_map(1), ["Kiếm Các", "Tung Sơn"])
+
+    def test_cac_map_doc_list_tha_xuong(self):
+        """MSAA của combo ra Đường đi/Open; list hwndList (cùng GetComboBoxInfo với chon_map) mới là map."""
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g, "_doc_ds_list_combo", return_value=["Kiếm Các", "Tung Sơn"]), \
+                patch.object(g, "_ten_map_msaa", return_value=("Đường đi", ["Đường đi", "Open"])):
+            self.assertEqual(g.cac_map(1), ["Kiếm Các", "Tung Sơn"])
+
+    def test_64bit_khong_gui_lvm_getitemrect(self):
+        """GAuto 32-bit + AutoHoc 64-bit: LVM_GETITEMRECT → hộp .NET protected memory."""
+        msgs = []
+
+        def send(_h, msg, _w, _l):
+            msgs.append(msg)
+            if msg == g.LVM_GETCOUNTPERPAGE:
+                return 10
+            if msg == g.LVM_GETTOPINDEX:
+                return 0
+            return 1
+
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW", send), \
+                patch.object(g.win32gui, "GetClientRect", return_value=(0, 0, 180, 170)):
+            rc = g._rect_dong_bang(9, 2)
+        self.assertNotIn(g.LVM_GETITEMRECT, msgs)
+        self.assertEqual(rc, (0, 17, 180, 34))
+
+    def test_64bit_khong_gui_lb_getitemrect(self):
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW") as sm:
+            self.assertIsNone(g._rect_dong_list(2, 4))
+            sm.assert_not_called()
+
+    def test_64bit_chu_combo_khong_gui_buffer(self):
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW") as sm:
+            self.assertEqual(g._chu_combo_theo_lenh(1, 0), "")
+            sm.assert_not_called()
+
+    def test_64bit_diem_dong_map_dung_itemheight(self):
+        def send(_h, msg, _w, _l):
+            if msg == g.LB_GETITEMHEIGHT:
+                return 20
+            if msg == g.LB_GETTOPINDEX:
+                return 0
+            return 0
+
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g.win32gui, "SendMessage", send), \
+                patch.object(g.win32gui, "GetClientRect", return_value=(0, 0, 120, 200)):
+            self.assertEqual(g._diem_dong_map(1, 2, 4), (60, 90))
 
 
 class TestNutTestGauto(unittest.TestCase):
@@ -578,6 +630,37 @@ class TestNutTestGauto(unittest.TestCase):
         self.assertIn("Test GAuto tắt: 6) tắt: bỏ tích ô đầu dòng", chu)
         self.assertIn("bỏ tích ô «Ác Tặc» bằng chuột ảo", chu)
         self.assertIn("OK — đã tắt: ô đầu dòng ☐, Ác Tặc ☐", chu)
+
+    def test_log_cua_so_vua_mo_khi_thu_nho(self):
+        """_hien_cua_so_gauto trả chuỗi, không phải context manager — nối log không TypeError."""
+        truoc = ((1, "beai47", True, False), {g.O_AC_TAC: False}, "Tung Sơn",
+                 ["Đôn Hoàng", "Tung Sơn", "Vô Lượng Sơn"])
+        sau = ((1, "beai47", True, True), {g.O_AC_TAC: True, g.O_CHAY_TIM: True}, "Vô Lượng Sơn",
+               ["Đôn Hoàng", "Tung Sơn", "Vô Lượng Sơn"])
+        log = self._chay(True, [truoc, sau], _hien_cua_so_gauto=lambda h: "đang thu nhỏ")
+        chu = "\n".join(log)
+        self.assertIn("cửa sổ vừa mở (đang thu nhỏ)", chu)
+        self.assertIn("OK — đã bật", chu)
+
+
+class TestHienCuaSoGauto(unittest.TestCase):
+    def test_thu_nho_tra_chuoi(self):
+        with patch.object(g.win32gui, "IsIconic", return_value=True), \
+                patch.object(g.win32gui, "ShowWindow"):
+            self.assertEqual(g._hien_cua_so_gauto(1), "đang thu nhỏ")
+
+    def test_noi_len_dung_duoc_trong_with(self):
+        da_vao = []
+        with patch.object(g, "_hien_cua_so_gauto", return_value=None), \
+                patch.object(g.win32gui, "GetWindowLong", return_value=0), \
+                patch.object(g.win32gui, "IsIconic", return_value=False), \
+                patch.object(g.win32gui, "GetForegroundWindow", return_value=9), \
+                patch.object(g.win32gui, "SetWindowPos"), \
+                patch.object(g.win32gui, "IsWindow", return_value=True), \
+                patch.object(g, "_la_cua_so_autohoc", return_value=False):
+            with g._noi_len(1):
+                da_vao.append(True)
+        self.assertEqual(da_vao, [True])
 
 
 if __name__ == "__main__":

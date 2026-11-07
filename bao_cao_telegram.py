@@ -1,6 +1,7 @@
 """Gửi snapshot AutoHoc tới bot quản lý. Không gọi Telegram, không gửi mật khẩu."""
 import json
 import os
+import secrets
 import socket
 import threading
 import time
@@ -20,11 +21,22 @@ MAC_DINH = {"bat": False, "ten_may": "", "dia_chi": "", "ma_ket_noi": "", "id_ma
 
 
 def dam_bao_id_may(gia):
-    """ID cố định mỗi máy (lần đầu = tên PC); đổi «tên máy» hiển thị không tạo máy mới trên hub."""
+    """ID cố định mỗi máy (lần đầu: mã ngẫu nhiên, không dùng tên PC — tránh clone VM trùng)."""
     gia["id_may"] = str(gia.get("id_may") or "").strip()
     if not gia["id_may"]:
-        gia["id_may"] = (socket.gethostname() or "may")[:40].strip()
+        gia["id_may"] = secrets.token_hex(8)
+    if len(gia["id_may"]) > 40:
+        gia["id_may"] = gia["id_may"][:40]
     return gia
+
+
+def lam_moi_id_may(duong_dan=None):
+    """Clone VM / copy ket_noi_telegram.json: bấm để hub nhận là máy mới (giữ tên hiển thị)."""
+    cau = doc(duong_dan)
+    cau["id_may"] = ""
+    cau = dam_bao_id_may(cau)
+    luu(cau, duong_dan)
+    return cau["id_may"]
 
 
 class LoiGui(Exception):

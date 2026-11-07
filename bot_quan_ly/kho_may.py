@@ -47,8 +47,21 @@ class KhoMay:
         for kk in list(self._may):
             if kk == giu_khoa:
                 continue
-            rid = (self._may[kk].get("id") or self._may[kk].get("ten") or "").casefold()
-            if rid == id_khoa:
+            rec = self._may[kk]
+            rid = (rec.get("id") or rec.get("ten") or "").casefold()
+            snap_id = str((rec.get("snapshot") or {}).get("id_may") or "").casefold()
+            if rid == id_khoa or snap_id == id_khoa:
+                self._may.pop(kk, None)
+
+    def _don_trung_ten(self, id_khoa, ten_hien):
+        """Một tên hiển thị — một máy trên /ds (bỏ id cũ / clone trùng tên)."""
+        ten_cf = (ten_hien or "").casefold()
+        if not ten_cf:
+            return
+        for kk in list(self._may):
+            if kk == id_khoa:
+                continue
+            if (self._may[kk].get("ten") or "").casefold() == ten_cf:
                 self._may.pop(kk, None)
 
     def nap(self, snapshot, bay_gio=None):
@@ -74,6 +87,7 @@ class KhoMay:
                 tin = [tin_lai(ten)] if trang_cu in (TRANG_IM, TRANG_TAT) else []
             if not tat:
                 self._xoa_trung_id(id_khoa, id_khoa)
+                self._don_trung_ten(id_khoa, ten)
             self._may[id_khoa] = {
                 "id": id_chu,
                 "ten": ten or (cu["ten"] if cu else id_chu),
@@ -108,7 +122,46 @@ class KhoMay:
         ban.sort(key=lambda rec: rec["ten"].casefold())
         return ban
 
-    def tim(self, ten):
+    def _uu_tien_trang(self, trang):
+        return {TRANG_ONLINE: 3, TRANG_IM: 2, TRANG_TAT: 1}.get(trang, 0)
+
+    def _chon_tot_nhat_theo_ten(self, danh_sach_may, bay_gio=None):
+        if not danh_sach_may:
+            return None
+        bay_gio = time.time() if bay_gio is None else bay_gio
+        tot = danh_sach_may[0]
+        tot_t = self.trang_thai_luc(tot, bay_gio)
+        for may in danh_sach_may[1:]:
+            trang = self.trang_thai_luc(may, bay_gio)
+            if self._uu_tien_trang(trang) > self._uu_tien_trang(tot_t):
+                tot, tot_t = may, trang
+            elif trang == tot_t and may["luc_thay"] > tot["luc_thay"]:
+                tot = may
+        return tot
+
+    def danh_sach_gom_ten(self, bay_gio=None):
+        """Một bản ghi / tên hiển thị (ưu tiên online, rồi lần cuối mới nhất)."""
+        bay_gio = time.time() if bay_gio is None else bay_gio
+        gom = {}
+        with self._khoa:
+            for rec in self._may.values():
+                may = self._sao(rec)
+                ten_cf = may["ten"].casefold()
+                trang = self.trang_thai_luc(may, bay_gio)
+                cu = gom.get(ten_cf)
+                if not cu:
+                    gom[ten_cf] = may
+                    continue
+                cu_trang = self.trang_thai_luc(cu, bay_gio)
+                if self._uu_tien_trang(trang) > self._uu_tien_trang(cu_trang):
+                    gom[ten_cf] = may
+                elif trang == cu_trang and may["luc_thay"] > cu["luc_thay"]:
+                    gom[ten_cf] = may
+        ban = list(gom.values())
+        ban.sort(key=lambda rec: rec["ten"].casefold())
+        return ban
+
+    def tim(self, ten, bay_gio=None):
         khoa = (ten or "").strip().casefold()
         if not khoa:
             return None
@@ -116,10 +169,12 @@ class KhoMay:
             rec = self._may.get(khoa)
             if rec:
                 return self._sao(rec)
-            for rec in self._may.values():
-                if rec["ten"].casefold() == khoa:
-                    return self._sao(rec)
+            trung = [self._sao(rec) for rec in self._may.values() if rec["ten"].casefold() == khoa]
+        if not trung:
             return None
+        if len(trung) == 1:
+            return trung[0]
+        return self._chon_tot_nhat_theo_ten(trung, bay_gio)
 
     def trang_thai_luc(self, rec, bay_gio=None):
         """online / im / tat tại thời điểm bay_gio, kể cả khi chưa kịp quét."""
