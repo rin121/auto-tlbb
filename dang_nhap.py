@@ -303,10 +303,20 @@ def dong_thong_bao(lua):
     lua.chay(trong_cua_so("LoginSelectServerQuest", "SelectServerQuest_Bn1Click()"))
 
 
-def con_chay(pid):
+def pid_hop_le(pid):
+    """PID Windows > 0. Cửa sổ đã tắt thì GetWindowThreadProcessId hay trả số âm (hwnd cắt 32-bit) — psutil nổ."""
     try:
-        return psutil.Process(pid).status() != psutil.STATUS_ZOMBIE
-    except psutil.Error:
+        return int(pid) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def con_chay(pid):
+    if not pid_hop_le(pid):
+        return False
+    try:
+        return psutil.Process(int(pid)).status() != psutil.STATUS_ZOMBIE
+    except (psutil.Error, ValueError):
         return False
 
 
@@ -314,10 +324,12 @@ GIAY_CHO_VE_CHON_MAY_CHU = 40
 
 
 def tat_game(pid):
+    if not pid_hop_le(pid):
+        return
     proxy_mang.nha(pid)
     try:
-        psutil.Process(pid).kill()
-    except psutil.Error:
+        psutil.Process(int(pid)).kill()
+    except (psutil.Error, ValueError):
         pass
 
 
@@ -481,8 +493,9 @@ def _luong_con_dung(luong):
 
 def giu_client(pid, luong):
     """Giữ client pid cho luong. False nếu luồng khác đang điều khiển client đó."""
-    if not pid:
+    if not pid_hop_le(pid):
         return False
+    pid = int(pid)
     with _KHOA_CLIENT:
         chu = _CHU_CLIENT.get(pid)
         if chu is not None and chu is not luong and _luong_con_dung(chu) and con_chay(pid):

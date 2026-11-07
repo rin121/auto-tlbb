@@ -549,14 +549,30 @@ def _ten_map_msaa(hwnd_combo):
         return "", []
 
 
+# MSAA trên HWND combo đôi khi trả nhãn kiểu đường, không phải tên map trong list thả xuống.
+_NHAN_KIEU_DUONG = frozenset({"đường đi", "open"})
+
+
+def _la_nhan_kieu_duong(ten):
+    return (ten or "").strip().casefold() in _NHAN_KIEU_DUONG
+
+
 def doc_map(hwnd_combo):
-    """Tên map đang chọn trong ô Map của GAuto, "" nếu chưa chọn."""
+    """Tên map đang chọn trong ô Map của GAuto, "" nếu chưa chọn.
+
+    Tên đọc được bằng lệnh (32-bit) hoặc MSAA là map thật thì trả ngay. MSAA ra «Đường đi» / «Open»
+    thì lấy tên theo CB_GETCURSEL trong hwndList — cùng list chon_map dùng.
+    """
     i = win32gui.SendMessage(hwnd_combo, win32con.CB_GETCURSEL, 0, 0)
     if i >= 0:
         chu = _chu_combo_theo_lenh(hwnd_combo, i)
         if chu:
             return chu
     dang_chon, _ = _ten_map_msaa(hwnd_combo)
+    if i >= 0 and _la_nhan_kieu_duong(dang_chon):
+        ds = _doc_ds_list_combo(hwnd_combo)
+        if 0 <= i < len(ds) and ds[i] and not _la_nhan_kieu_duong(ds[i]):
+            return ds[i]
     return dang_chon
 
 
@@ -998,16 +1014,50 @@ def _rect_dong_bang(hwnd_list, chi_so_msaa):
     return _rect_dong_bang_theo_cao(hwnd_list, i)
 
 
-def _cao_dong_listview(hwnd_list):
-    """Chiều cao một dòng report-view. 0 nếu không đọc được."""
+def _dpi_cua_so(hwnd):
+    """DPI cửa sổ. 0 nếu không đọc được — không coi 0 là 96."""
+    try:
+        dpi = int(ctypes.windll.user32.GetDpiForWindow(int(hwnd)))
+    except (AttributeError, OSError, ValueError, TypeError):
+        return 0
+    return dpi if dpi > 0 else 0
+
+
+def _y_duoi_header(hwnd_list):
+    """Client Y mép dưới SysHeader32. 0 nếu không thấy header (giữ công thức không trừ header)."""
+    thay = []
+
+    def thay_header(con, _):
+        try:
+            if win32gui.GetClassName(con) == "SysHeader32":
+                thay.append(con)
+                return False
+        except win32gui.error:
+            pass
+        return True
+
+    try:
+        win32gui.EnumChildWindows(int(hwnd_list), thay_header, None)
+        if not thay:
+            return 0
+        trai, _tren, _phai, duoi = win32gui.GetWindowRect(thay[0])
+        _x, y = win32gui.ScreenToClient(int(hwnd_list), (trai, duoi))
+    except (win32gui.error, TypeError, ValueError):
+        return 0
+    return y if y > 0 else 0
+
+
+def _cao_dong_listview(hwnd_list, tru_header=0):
+    """Chiều cao một dòng report-view. tru_header > 0 thì trừ phần header khỏi client. 0 nếu không đọc được."""
     try:
         hwnd_list = int(hwnd_list)
         if not hwnd_list:
             return 0
         so = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETCOUNTPERPAGE, 0, 0))
         _l, _t, _r, b = win32gui.GetClientRect(hwnd_list)
-        if so > 0 and b > 0:
-            return max(1, b // so)
+        vung = b - tru_header if 0 < tru_header < b else b
+        if so > 0 and vung > 0:
+            return max(1, vung // so)
         spacing = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETITEMSPACING, 1, 0))
         cao = (spacing >> 16) & 0xFFFF
         return cao if cao > 0 else 0
@@ -1016,20 +1066,25 @@ def _cao_dong_listview(hwnd_list):
 
 
 def _rect_dong_bang_theo_cao(hwnd_list, i):
-    """Client rect dòng i (0-based) từ top-index × chiều cao — không cần con trỏ RECT sang process 32-bit."""
+    """Client rect dòng i (0-based) từ top-index × chiều cao — không cần con trỏ RECT sang process 32-bit.
+
+    DPI khác 96 (laptop 125/150%) hoặc không đọc được DPI: công thức cũ, không trừ header.
+    DPI đúng 96 và đo được SysHeader32: dòng 0 bắt đầu dưới header.
+    """
     try:
         hwnd_list = int(hwnd_list)
         if not hwnd_list or i < 0:
             return None
         ctypes.windll.user32.SendMessageW(hwnd_list, LVM_ENSUREVISIBLE, i, 0)
         dau = int(ctypes.windll.user32.SendMessageW(hwnd_list, LVM_GETTOPINDEX, 0, 0))
-        cao = _cao_dong_listview(hwnd_list)
+        le_header = _y_duoi_header(hwnd_list) if _dpi_cua_so(hwnd_list) == 96 else 0
+        cao = _cao_dong_listview(hwnd_list, le_header)
         l, _t, r, _b = win32gui.GetClientRect(hwnd_list)
     except (OSError, ValueError, win32gui.error, TypeError):
         return None
     if cao <= 0:
         return None
-    top = (i - dau) * cao
+    top = le_header + (i - dau) * cao
     return l, top, r, top + cao
 
 

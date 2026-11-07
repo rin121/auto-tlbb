@@ -497,10 +497,11 @@ class LuongVaoNhanVat(LuongDangNhap):
         self.game = None
         if hwnd:
             try:
-                if not giu_client(win32process.GetWindowThreadProcessId(hwnd)[1], self):
+                if not win32gui.IsWindow(hwnd) or not giu_client(
+                        win32process.GetWindowThreadProcessId(hwnd)[1], self):
                     self.hwnd = None
-            except OSError:
-                pass
+            except (OSError, ValueError):
+                self.hwnd = None
         # Quy tắc tên (caychay10 -> caychay100...) chỉ áp cho acc phó bản, không áp cho acc chính.
         self.kiem_tra_rule_ten = kiem_tra_rule_ten
         self.tao_khi_thieu = kiem_tra_rule_ten

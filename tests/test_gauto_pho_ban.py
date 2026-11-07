@@ -156,14 +156,18 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         self.assertEqual(dat.call_count, 2)
         self.assertIsNone(luong.ac_tac.gauto_khung)
 
-    def test_toi_map_truoc_gio_bat_dau_thi_cho(self):
+    def test_toi_map_truoc_gio_thi_bat_ngay(self):
+        """Tới map trước giờ tròn (vd 01:59) thì bật GAuto liền. Giờ tắt vẫn là cuối khung."""
         luong = _luong()
         gd.luc_bat_dau_khung.return_value = time.time() + 90
-        with patch.object(gd.gauto_ac_tac, "dat_cai_dat_ac_tac") as dat:
+        with patch.object(gd.gauto_ac_tac, "dat_cai_dat_ac_tac") as dat, \
+                patch.object(gd.gauto_ac_tac, "tom_tat_cua_so", return_value="GAuto"), \
+                patch.object(gd.gauto_ac_tac, "tim_chi_so_dong_theo_ten", return_value=1):
             self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT))
-        dat.assert_not_called()
+        dat.assert_called_once()
         luong.ac_tac.di_den_map_gauto.assert_not_called()
-        self.assertIn("chờ", luong.trang_thai["mo_ta"])
+        self.assertNotIn("chờ", luong.trang_thai["mo_ta"])
+        self.assertEqual(luong.ac_tac.gauto_het_luc, gd.luc_het_khung.return_value)
 
     def test_bat_gauto_thi_het_luc_la_cuoi_khung(self):
         luong = _luong()
@@ -290,6 +294,15 @@ class TestKhungAcTac(unittest.TestCase):
         self.assertEqual(self._khung(21, 19), ("2026-10-30", 21))
         self.assertIsNone(self._khung(21, 20))
         self.assertIsNone(self._khung(21, 45))
+
+    def test_khung_02h_luon_di(self):
+        """Không còn bỏ khung 02h: 01:58 đã tính khung 02, kể cả json cũ còn bo_khung_02h."""
+        self.assertEqual(self._khung(1, 58), ("2026-10-30", 2))
+        self.assertEqual(self._khung(2, 0), ("2026-10-30", 2))
+        self.assertEqual(self._khung(2, 19), ("2026-10-30", 2))
+        self.assertIsNone(self._khung(2, 20))
+        self.assertEqual(sk.cac_khung({"bo_khung_02h": True}), sk.KHUNG_GIO)
+        self.assertIn("02:00-02:20", sk.mo_ta_lich(self.AT20))
 
     def test_gio_bat_dau_va_het(self):
         khung = ("2026-10-30", 21)

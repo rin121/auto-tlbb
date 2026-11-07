@@ -1147,12 +1147,6 @@ class LuongNhanVat(threading.Thread):
                                              map_dich, self.doi_ac_tac)
                 return True
             self.doi_ac_tac = None
-            bat_dau = luc_bat_dau_khung(khung)
-            if self.ac_tac.gauto_khung != khung and time.time() < bat_dau:
-                con = int(bat_dau - time.time())
-                self.trang_thai["mo_ta"] = (f"{MO_TA_AC_TAC} (GAuto): đã tới {map_dich}, "
-                                            f"chờ {con // 60}p{con % 60:02d}s tới giờ bật GAuto")
-                return True
             if self.ac_tac.gauto_khung != khung:
                 try:
                     hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
@@ -3749,7 +3743,6 @@ class UngDung:
             phut_g = 30
         phut_g = max(5, min(phut_g, 120))
         return {"bat": self.bien_at_bat.get(),
-                "bo_khung_02h": cu["bo_khung_02h"],
                 "route": cu.get("route", "moi"),
                 "ten_quai": cu.get("ten_quai") or "Ác Tặc",
                 "chay_pathpoints": bool(cu.get("chay_pathpoints", False)),

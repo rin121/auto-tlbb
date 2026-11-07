@@ -43,7 +43,6 @@ from pho_ban_pmp import (GIAY_CHO_BO_THEO, GIAY_CHO_DOI_MAP, GIAY_CHO_QUAI_XUAT_
 
 MO_TA = "Ác Tặc"
 KHUNG_GIO = (2, 13, 15, 17, 19, 21)
-KHUNG_SANG = 2
 PHUT_DI_TRUOC = 2
 PHUT_KHUNG_MAC_DINH = 30
 MAP_TO_CHAU = "Tô Châu"
@@ -130,11 +129,12 @@ def cai_dat_ac_tac(cai_dat_nhan_vat=None):
     """Cài Ác Tặc chung (mac_dinh): chỉ đội trưởng trong game chạy; đội viên theo đội."""
     gia_tri = dict(cau_hinh.MAC_DINH_AC_TAC)
     gia_tri.update(cau_hinh.mac_dinh().get("ac_tac") or {})
+    gia_tri.pop("bo_khung_02h", None)
     return gia_tri
 
 
-def cac_khung(at):
-    return tuple(gio for gio in KHUNG_GIO if not (gio == KHUNG_SANG and at.get("bo_khung_02h")))
+def cac_khung(at=None):
+    return KHUNG_GIO
 
 
 def phut_khung(at):
@@ -164,7 +164,10 @@ def dang_khung_ac_tac(at, bay_gio=None):
 
 
 def luc_bat_dau_khung(khung):
-    """Thời điểm (time.time()) giờ bắt đầu khung (vd 21:00) — lúc bật GAuto."""
+    """Thời điểm (time.time()) giờ tròn của khung (vd 21:00). Giờ tắt = mốc này + phút GAuto.
+
+    Bật GAuto lúc nhân vật tới map (từ phút 58), không chờ mốc này.
+    """
     ngay, gio = khung
     return (datetime.fromisoformat(ngay) + timedelta(hours=gio)).timestamp()
 

@@ -344,7 +344,7 @@ MAC_DINH_PHO_BAN_PMP = {"bat": False, "so_vong": 0, "to_doi": False,
 CAC_MAP_AC_TAC = ["Vô Lượng Sơn", "Kiếm Các", "Tây Hồ", "Đôn Hoàng", "Thái Hồ", "Tung Sơn"]
 # chay_pathpoints / cho_party / tu_tim: GAuto tab Ác Tặc — cboxATRunPP (thường tắt), cboxChoParty, cboxIsTrungAc (Tự tìm).
 # Tắt pathpoints = «Chạy tìm»: quét lỏng quanh mốc ACTAC, không đi từng điểm cố định.
-MAC_DINH_AC_TAC = {"bat": False, "bo_khung_02h": False, "route": "moi", "ten_quai": "Ác Tặc",
+MAC_DINH_AC_TAC = {"bat": False, "route": "moi", "ten_quai": "Ác Tặc",
                    "ten_npc": "Ác Tặc Tạo Phản", "dong_khieu": "chẳng lẽ",
                    "chay_pathpoints": False, "cho_party": True, "tu_tim": True,
                    "dung_gauto": False, "duong_dan_gauto": "", "phut_gauto": 30,

@@ -537,6 +537,59 @@ class TestOnDinhGAuto(unittest.TestCase):
         self.assertNotIn(g.LVM_GETITEMRECT, msgs)
         self.assertEqual(rc, (0, 17, 180, 34))
 
+    def _send_cao_dong(self, _h, msg, _w, _l):
+        if msg == g.LVM_GETCOUNTPERPAGE:
+            return 10
+        if msg == g.LVM_GETTOPINDEX:
+            return 0
+        return 1
+
+    def test_dpi_144_khong_tru_header(self):
+        """Laptop 125/150%: dù có header, giữ công thức client // số dòng."""
+        header = []
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g, "_dpi_cua_so", return_value=144), \
+                patch.object(g, "_y_duoi_header", side_effect=lambda h: header.append(h) or 18), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW", self._send_cao_dong), \
+                patch.object(g.win32gui, "GetClientRect", return_value=(0, 0, 180, 170)):
+            rc = g._rect_dong_bang(9, 2)
+        self.assertEqual(header, [])
+        self.assertEqual(rc, (0, 17, 180, 34))
+
+    def test_dpi_96_tru_header(self):
+        """Máy ảo 100%: dòng 0 bắt đầu dưới SysHeader32, không còn y=0."""
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g, "_dpi_cua_so", return_value=96), \
+                patch.object(g, "_y_duoi_header", return_value=18), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW", self._send_cao_dong), \
+                patch.object(g.win32gui, "GetClientRect", return_value=(0, 0, 180, 170)):
+            rc = g._rect_dong_bang(9, 2)
+        # client 170 - header 18 = 152, 152 // 10 = 15; MSAA 2 → dòng 1 → top 18+15
+        self.assertEqual(rc, (0, 33, 180, 48))
+
+    def test_dpi_khong_doc_duoc_giu_cong_thuc_cu(self):
+        with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
+                patch.object(g, "_dpi_cua_so", return_value=0), \
+                patch.object(g, "_y_duoi_header", return_value=18), \
+                patch.object(g.ctypes.windll.user32, "SendMessageW", self._send_cao_dong), \
+                patch.object(g.win32gui, "GetClientRect", return_value=(0, 0, 180, 170)):
+            self.assertEqual(g._rect_dong_bang(9, 2), (0, 17, 180, 34))
+
+    def test_doc_map_nhan_duong_lay_theo_chi_so(self):
+        with patch.object(g.win32gui, "SendMessage", return_value=0), \
+                patch.object(g, "_chu_combo_theo_lenh", return_value=""), \
+                patch.object(g, "_ten_map_msaa", return_value=("Đường đi", ["Đường đi", "Open"])), \
+                patch.object(g, "_doc_ds_list_combo", return_value=["Đôn Hoàng", "Kiếm Các"]):
+            self.assertEqual(g.doc_map(1), "Đôn Hoàng")
+
+    def test_doc_map_ten_that_khong_doc_list(self):
+        with patch.object(g.win32gui, "SendMessage", return_value=0), \
+                patch.object(g, "_chu_combo_theo_lenh", return_value=""), \
+                patch.object(g, "_ten_map_msaa", return_value=("Kiếm Các", [])), \
+                patch.object(g, "_doc_ds_list_combo") as ds:
+            self.assertEqual(g.doc_map(1), "Kiếm Các")
+            ds.assert_not_called()
+
     def test_64bit_khong_gui_lb_getitemrect(self):
         with patch.object(g, "_gui_con_tro_toi_gauto", return_value=False), \
                 patch.object(g.ctypes.windll.user32, "SendMessageW") as sm:

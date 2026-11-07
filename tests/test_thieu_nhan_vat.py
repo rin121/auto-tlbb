@@ -2,6 +2,7 @@
 import os
 import queue
 import sys
+import threading
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -84,6 +85,43 @@ class TestLamBuocThieuNhanVat(unittest.TestCase):
         tk = {"ten_dang_nhap": "caychay30", "mat_khau": "x", "nhan_vat": "caychay30"}
         self.assertTrue(xv.LuongVaoNhanVat(tk, {}, queue.Queue()).tao_khi_thieu)
         self.assertFalse(xv.LuongVaoNhanVat(tk, {}, queue.Queue(), kiem_tra_rule_ten=False).tao_khi_thieu)
+
+
+class TestPidCuaSoChet(unittest.TestCase):
+    """XV: cửa sổ game đã tắt → GetWindowThreadProcessId trả PID âm; xoay vòng không được nổ psutil."""
+
+    PID_AM = -1406896960
+
+    def test_con_chay_pid_am_thi_false(self):
+        self.assertFalse(dang_nhap.pid_hop_le(self.PID_AM))
+        self.assertFalse(dang_nhap.pid_hop_le(0))
+        self.assertFalse(dang_nhap.pid_hop_le(None))
+        self.assertFalse(dang_nhap.con_chay(self.PID_AM))
+        self.assertFalse(dang_nhap.con_chay(0))
+        self.assertFalse(dang_nhap.con_chay(None))
+
+    def test_giu_client_pid_am_thi_false(self):
+        self.assertFalse(dang_nhap.giu_client(self.PID_AM, threading.current_thread()))
+        self.assertFalse(dang_nhap.giu_client(0, threading.current_thread()))
+
+    def test_tat_game_pid_am_khong_crash(self):
+        dang_nhap.tat_game(self.PID_AM)
+        dang_nhap.tat_game(0)
+        dang_nhap.tat_game(None)
+
+    def test_luong_vao_hwnd_chet_khong_crash(self):
+        tk = {"ten_dang_nhap": "caychay30", "mat_khau": "x", "nhan_vat": "caychay30"}
+        with patch.object(xv.win32gui, "IsWindow", return_value=False):
+            luong = xv.LuongVaoNhanVat(tk, {}, queue.Queue(), hwnd=123)
+        self.assertIsNone(luong.hwnd)
+
+    def test_luong_vao_pid_am_khong_crash(self):
+        tk = {"ten_dang_nhap": "caychay30", "mat_khau": "x", "nhan_vat": "caychay30"}
+        with patch.object(xv.win32gui, "IsWindow", return_value=True), \
+                patch.object(xv.win32process, "GetWindowThreadProcessId",
+                             return_value=(0, self.PID_AM)):
+            luong = xv.LuongVaoNhanVat(tk, {}, queue.Queue(), hwnd=123)
+        self.assertIsNone(luong.hwnd)
 
 
 class TestDongBoDaXong(unittest.TestCase):

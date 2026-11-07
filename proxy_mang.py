@@ -162,8 +162,10 @@ def _phan_tich_mot_proxy(dong):
 
 def _con_chay(pid):
     try:
-        return psutil.Process(pid).status() != psutil.STATUS_ZOMBIE
-    except psutil.Error:
+        if int(pid) <= 0:
+            return False
+        return psutil.Process(int(pid)).status() != psutil.STATUS_ZOMBIE
+    except (psutil.Error, TypeError, ValueError):
         return False
 
 
