@@ -9,7 +9,8 @@ lần lượt các acc giao dịch đăng nhập trên chính các client đó, 
 
 Túi acc chính còn dưới SO_O_TOI_THIEU ô trống thì cất đồ đã nhận:
     Thiên Cơ Cẩm Nang (cửa sổ Packet_Temporary, mở bằng MainMenuBar_KuaiJieYiZhan()):
-        Packet_Temporary_PutInItem(ô túi Đạo cụ); món không nhận (Phiếu KNB...) thì nằm lại trong túi.
+        Packet_Temporary_PutInItem(ô túi Đạo cụ); Phiếu KNB 2000 cũng cất TCCN; phiếu 100/300 giữ túi để hợp thành.
+        Nếu Thương khố đầy mà túi vẫn chật: cất tạm mọi món Đạo cụ vào TCCN.
     Thương khố (NPC Tân Thủ, dòng (111111, 9993)): chuột phải ô túi khi cửa sổ Bank đang mở là cất vào kho.
         Số ô kho = Bank:GetRentBoxInfo(r) (ô đầu, số ô) của các ngăn r = 1..Bank:GetRentBoxNum().
 Cả hai đều đầy thì dừng, giữ tiến trình. Tiến trình (trưởng nhóm đã giao xong trong ngày, mã đồ đã nhận) lưu ở
@@ -235,13 +236,13 @@ GIAY_CHO_VE_DAI_LY = 90
 GIAY_GIUA_HAI_LAN_VE_THANH = 15
 GIAY_CHO_CUA_SO = 6
 GIAY_CHO_CAT = 2.5
-# Lệnh cất gửi liền sau lệnh trước (dưới ~1 giây) thì game bỏ qua.
-GIAY_GIUA_HAI_LAN_CAT = 1.5
-# Rút Thương khố (Tiền Trang) bằng MoveItemToPacket: 1 giây giữa hai lần. Thiên Cơ vẫn 3 giây.
-GIAY_GIUA_RUT_KHO = 1
+# Nghỉ giữa hai lần cất túi→rương / túi→TCCN (đổi phiếu + dọn túi).
+GIAY_GIUA_HAI_LAN_CAT = 0.5
+# Rút Thương khố (MoveItemToPacket) giữa hai lần — đổi phiếu rút 100/300. Thiên Cơ vẫn 3 giây.
+GIAY_GIUA_RUT_KHO = 0.5
 SO_LAN_THU_CAT = 2
 SO_LAN_HOP_THANH_TOI_DA = 40
-GIAY_XAC_NHAN_PHIEU = 0.35
+GIAY_XAC_NHAN_PHIEU = 0.5
 # Giữ hằng cũ cho test / tool — auto không còn quét từng ô để tìm tên.
 SO_O_DOI_TIM_TOI_DA = 36
 GIAY_GIUA_HAI_LAN_TIM_O_DOI = 0.35
@@ -433,6 +434,11 @@ def la_phieu_nho(ten):
     return muc_phieu_knb(ten) in (100, 300)
 
 
+def la_phieu_cat_tccn(ten):
+    """Phiếu KNB 2000 (kể cả «2K»): acc chính cất vào Thiên Cơ Cẩm Nang."""
+    return muc_phieu_knb(ten) == 2000
+
+
 def la_cong_thuc_phieu(ten, muc):
     """Tên ô công thức «Phiếu KNB 20K» / «Phiếu KNB 30K» (kể cả 20000 / 30000)."""
     k = bo_dau(re.sub(r"#[-0-9a-fA-F]*", "", ten or ""))
@@ -608,21 +614,28 @@ def cac_truong_nhom(tk_chinh, chi_hom_nay, bo_qua=None):
 
 
 def cac_nhan_vat_pho_ban(tk_chinh, chi_hom_nay, bo_qua=None):
-    """[(tài khoản, tên nhân vật)] mọi acc trong nhóm xoay vòng (từng round), không chỉ trưởng nhóm."""
+    """[(tài khoản, tên nhân vật)] mọi tài khoản XV theo thứ tự bảng; một NV/acc (cột Nhân vật hoặc round 1)."""
     kiem_tra = _KiemTraNhanVat(bo_qua)
-    ds = [tk for tk in cac_tai_khoan_dang_tich() if tk["ten_dang_nhap"].lower() != tk_chinh.lower()]
-    kq, da_co = [], set()
-    for nhom in chia_nhom(ds):
-        for tk in nhom:
-            for r in range(SO_ROUND_TOI_DA):
-                ten = ten_round(tk["ten_dang_nhap"], r)
-                khoa = chuan_hoa(ten)
-                if khoa in da_co:
-                    continue
-                da_co.add(khoa)
-                if not kiem_tra.co(tk, ten) or not _loc_nhan_vat_pho_ban(tk, ten, chi_hom_nay):
-                    continue
-                kq.append((tk, ten))
+    tk_chinh_l = (tk_chinh or "").lower()
+    thu_muc = kiem_tra.thu_muc
+    online = kiem_tra.online
+    kq = []
+    for tk in cac_tai_khoan_dang_tich():
+        if (tk.get("ten_dang_nhap") or "").lower() == tk_chinh_l:
+            continue
+        ten_nv = (tk.get("nhan_vat") or "").strip()
+        ten = ten_nv if ten_nv else ten_round(tk["ten_dang_nhap"], 0)
+        if not ten_nv:
+            ly_do = ly_do_khong_co_nhan_vat(
+                tk["ten_dang_nhap"], ten, thu_muc,
+                {chuan_hoa(t) for t in da_xong(tk["ten_dang_nhap"])}, online)
+            if ly_do:
+                if bo_qua is not None:
+                    bo_qua.append((tk["ten_dang_nhap"], ten, ly_do))
+                continue
+        if not kiem_tra.co(tk, ten) or not _loc_nhan_vat_pho_ban(tk, ten, chi_hom_nay):
+            continue
+        kq.append((tk, ten))
     return kq
 
 
@@ -1355,12 +1368,20 @@ class GiaoAccChinhEngine:
         ten = self.tk_chinh["nhan_vat"]
         self.in_log(f"{ten}: túi còn {trong['base']} ô Đạo cụ, {trong['material']} ô Nguyên liệu trống, cất đồ")
         self.bao_trang_thai(f"{ten}: cất đồ vào Thiên Cơ Cẩm Nang / Thương khố")
-        # Gộp đồ: cất TCCN → đổi phiếu KNB → cất Thương khố. Giao dịch cho acc chính: chỉ cất TCCN + Thương khố.
+        # Gộp đồ: cất TCCN → rút 100/300 từ rương + đổi 20K/30K → cất Thương khố.
+        # Giao dịch cho acc chính: chỉ cất TCCN + Thương khố.
         self._cat_tccn()
         if getattr(self, "chi_giao_gop", False):
             self._hop_thanh_phieu()
-        self._cat_kho(cat_het=True)
+        kho_day = self._cat_kho(cat_het=True)
         trong = self._o_trong()
+        if min(trong.values()) < SO_O_TOI_THIEU:
+            # Rương đầy (hoặc không cất hết) mà túi vẫn chật → cất tạm mọi món Đạo cụ vào TCCN.
+            self.in_log(f"{ten}: túi vẫn chật"
+                        + (" — Thương khố đã đầy" if kho_day else "")
+                        + ", cất tạm mọi món Đạo cụ vào Thiên Cơ Cẩm Nang")
+            self._cat_tccn(cat_bat_ky=True)
+            trong = self._o_trong()
         if min(trong.values()) < SO_O_TOI_THIEU:
             raise LoiGiaoAccChinh(f"Thiên Cơ Cẩm Nang và Thương khố đã đầy (túi {ten} còn {trong['base']} ô Đạo cụ, "
                                   f"{trong['material']} ô Nguyên liệu trống)")
@@ -1380,10 +1401,18 @@ class GiaoAccChinhEngine:
                 return "1"
         return "0"
 
-    def _cat_tccn(self):
+    def _cat_tccn(self, cat_bat_ky=False):
+        """Cất Đạo cụ vào TCCN.
+
+        Mặc định: đồ thường + Phiếu KNB 2000 (giữ 100/300 để hợp thành).
+        cat_bat_ky: cất mọi ô Đạo cụ (kể cả phiếu) — dùng khi rương đầy, tạm giải phóng túi.
+        """
         lua = self.chinh.lua
-        cac_o = [o for o, (_, _, ten) in sorted(self._tui_chinh().items())
-                 if o[0] == "base" and not la_phieu_knb(ten)]
+        if cat_bat_ky:
+            cac_o = [o for o, _ in sorted(self._tui_chinh().items()) if o[0] == "base"]
+        else:
+            cac_o = [o for o, (_, _, ten) in sorted(self._tui_chinh().items())
+                     if o[0] == "base" and (not la_phieu_knb(ten) or la_phieu_cat_tccn(ten))]
         if not cac_o:
             return
         lua.chay(MA_DONG_CUA_SO)
@@ -1399,7 +1428,8 @@ class GiaoAccChinhEngine:
                 break
             da_cat += kq == "1"
         lua.chay(MA_DONG_CUA_SO)
-        self.in_log(f"Đã cất {da_cat}/{len(cac_o)} ô vào Thiên Cơ Cẩm Nang")
+        self.in_log(f"Đã cất {da_cat}/{len(cac_o)} ô vào Thiên Cơ Cẩm Nang"
+                    + (" (tạm, mọi món)" if cat_bat_ky else ""))
 
     def _mo_kho(self):
         lua = self.chinh.lua
@@ -1431,8 +1461,9 @@ class GiaoAccChinhEngine:
         return tong
 
     def _chua_o_truoc_doi(self):
-        """Đổi phiếu cần túi Đạo cụ còn hơn 1 ô trống để nhận phiếu lớn."""
-        while self._o_trong()["base"] <= 1:
+        """Chừa ≥1 ô trống Đạo cụ để nhận phiếu 20K/30K; nếu vừa mở rương cất đồ thì rút 100/300."""
+        da_mo_kho = False
+        while self._o_trong()["base"] < 1:
             self._kiem_tra_dung()
             tui = self._tui_chinh()
             nho = [o for o, (_, _, ten) in tui.items() if o[0] == "base" and la_phieu_nho(ten)]
@@ -1443,12 +1474,29 @@ class GiaoAccChinhEngine:
                 return False
             if not self._mo_kho():
                 return False
+            da_mo_kho = True
             if self._cat_mot_o(o, MA_CAT_KHO.replace("{tui}", o[0]).replace("{o}", str(o[1]))) != "1":
                 self.chinh.lua.chay(MA_DONG_CUA_SO)
                 return False
-        if getattr(self, "chinh", None):
+        if da_mo_kho:
+            self._rut_phieu_nho_tu_kho()
+        elif getattr(self, "chinh", None):
             self.chinh.lua.chay(MA_DONG_CUA_SO)
         return True
+
+    def _rut_phieu_nho_tu_kho(self):
+        """Mở Thương khố, rút Phiếu KNB 100/300 ra túi; dừng khi túi còn ≤1 ô trống (chừa chỗ đổi 20K/30K)."""
+        ten = self.tk_chinh["nhan_vat"]
+        if not getattr(self, "chinh", None):
+            return False
+        self.in_log(f"{ten}: rút Phiếu KNB 100/300 từ Thương khố (chừa 1 ô trống)")
+        kq = self._rut_mot_kho(
+            self.chinh, ten, "Thương khố",
+            lambda _g: self._mo_kho(),
+            MA_LIET_KE_KHO, MA_RUT_KHO, GIAY_GIUA_RUT_KHO,
+            loc=la_phieu_nho,
+        )
+        return bool(kq)
 
     def _mo_cua_so_doi(self, ten):
         """Mở NPC Trao Đổi → Hợp Thành Vật Phẩm, trả về tên cửa sổ hoặc ""."""
@@ -1526,12 +1574,14 @@ class GiaoAccChinhEngine:
         return False
 
     def _hop_thanh_phieu(self):
-        """Đổi đúng ô 6 (20K) rồi ô 7 (30K): Clicked → OK, không đụng công thức khác."""
+        """Rút 100/300 từ rương (chừa 1 ô) rồi đổi ô 6 (20K) / 7 (30K)."""
         ten = self.tk_chinh["nhan_vat"]
         lua = self.chinh.lua
-        if not self._co_phieu_nho():
-            return
         self.bao_trang_thai(f"{ten}: hợp thành Phiếu KNB 100/300 → 20K/30K")
+        self._rut_phieu_nho_tu_kho()
+        if not self._co_phieu_nho():
+            self.in_log(f"{ten}: không có Phiếu KNB 100/300 trong túi/rương — bỏ qua hợp thành")
+            return
         mo = ""
         da_doi = 0
         o_ten = list(O_DOI_PHIEU)
@@ -1543,10 +1593,17 @@ class GiaoAccChinhEngine:
                 self.in_log(f"{ten}: dừng hợp thành — đọc túi lỗi ({loi})")
                 break
             if muc[100] <= 0 and muc[300] <= 0:
-                self.in_log(f"{ten}: hết phiếu KNB 100/300 trong túi sau {da_doi} lần đổi")
-                break
+                self._rut_phieu_nho_tu_kho()
+                try:
+                    muc = self._so_phieu_theo_muc()
+                except LoiLua:
+                    break
+                if muc[100] <= 0 and muc[300] <= 0:
+                    self.in_log(f"{ten}: hết phiếu KNB 100/300 trong túi/rương sau {da_doi} lần đổi")
+                    break
+                mo = ""
             if not self._chua_o_truoc_doi():
-                self.in_log(f"{ten}: túi không còn hơn 1 ô trống, dừng hợp thành (đã đổi {da_doi} lần)")
+                self.in_log(f"{ten}: túi không còn ô trống để nhận 20K/30K, dừng hợp thành (đã đổi {da_doi} lần)")
                 break
             try:
                 con_mo = mo and lua.chay(f'return tostring(IsWindowShow("{mo}"))') == b"true"

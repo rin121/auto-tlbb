@@ -52,6 +52,22 @@ from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, cai_dat_ac_tac, khung_hien_ta
 
 SO_TAI_KHOAN_MOT_NHOM = 4  # mặc định; số thật lấy từ cau_hinh.chung()["so_nguoi_mot_nhom"]
 SO_NGUOI_MOT_NHOM_TOI_DA = 6
+# Nhân vật user bấm tắt ô Auto (tab chính): xoay vòng không bật lại đến khi user bật Auto lại.
+NV_USER_TAT_AUTO = set()
+
+
+def dat_nv_user_tat_auto(ten, tat=True):
+    k = chuan_hoa(ten)
+    if not k:
+        return
+    if tat:
+        NV_USER_TAT_AUTO.add(k)
+    else:
+        NV_USER_TAT_AUTO.discard(k)
+
+
+def xoa_danh_dau_user_tat_auto():
+    NV_USER_TAT_AUTO.clear()
 # Gộp đồ cần ~2 client riêng: chỉ cho chạy song song XV khi mỗi nhóm ≤ số này (4+2 ≈ giới hạn server).
 SO_NGUOI_CHO_PHEP_GOP_SONG_SONG = 4
 SO_ROUND_TOI_DA = 3
@@ -212,6 +228,25 @@ def thoat_game_khac(giu_hwnd, in_log, nen_dung=None):
 def ten_round(tk, r):
     """Nhân vật chơi round r của tài khoản tk (tên theo quy tắc, hoặc tên đã tạo thay khi trùng tên)."""
     return ten_thuc(tk, cac_ten_nhan_vat(tk, SO_ROUND_TOI_DA)[r])
+
+
+def tai_khoan_trung_ten_nv_khac(tk, ds, so_round=SO_ROUND_TOI_DA):
+    """
+    Tên đăng nhập của tk trùng tên nhân vật (quy tắc) của tài khoản khác — ví dụ acc bacmori22 trùng NV
+    round 2 của bacmori2 (caychay10 -> caychay100). Trả về (ten_tk_goc, round) hoặc (None, None).
+    """
+    ten = (tk.get("ten_dang_nhap") if isinstance(tk, dict) else str(tk or "")).strip()
+    if not ten:
+        return None, None
+    khoa, ten_tk = ten.lower(), chuan_hoa(ten)
+    for other in ds:
+        ot = (other.get("ten_dang_nhap") or "")
+        if not ot or ot.lower() == khoa:
+            continue
+        for r in range(so_round):
+            if chuan_hoa(ten_round(ot, r)) == ten_tk:
+                return ot, r
+    return None, None
 
 
 def _hang_cho_mac_dinh(ds, so_round):
@@ -697,6 +732,7 @@ class LuongXoayVong(threading.Thread):
                 self.chung_cu = None
             if _luong_xv_hien_tai is self:
                 _luong_xv_hien_tai = None
+            xoa_danh_dau_user_tat_auto()
 
     def luu_tien_trinh_ngay(self):
         """Gọi từ luồng giao diện khi tắt app (trước khi dừng luồng xoay vòng)."""
@@ -941,37 +977,26 @@ class LuongXoayVong(threading.Thread):
                 if self._neu_qua_ngay(ngay):
                     return True
                 choi = []
-                while hang_cho[r] and len(choi) < n_mot_nhom:
-                    tk = hang_cho[r].pop(0)
-                    ten = tk["ten_dang_nhap"]
-                    if ten.lower() in self.tk_sai_rule:
-                        continue
-                    if not self.che_do_test and da_xong_hom_nay(ten_round(ten, r)):
-                        continue
-                    choi.append(tv_theo_tk.setdefault(ten.lower(), ThanhVien(tk)))
+                self._them_acc_tu_hang_cho(hang_cho, r, choi, n_mot_nhom, tv_theo_tk)
                 if not choi:
                     continue
                 ca_nhom += [tv for tv in choi if tv not in ca_nhom]
                 self.in_log(f"Nhóm {so_nhom} round {r + 1}: ghép {', '.join(ten_round(tv.tk, r) for tv in choi)}")
                 self._chuan_bi(so_nhom, r, choi)
                 choi = self._bo_sai_rule(choi)
-                # Acc vừa bị loại (sai rule / mật khẩu): lấy thêm từ hàng chờ cho đủ N, không đi phó bản thiếu người.
+                # Acc vừa bị loại (sai rule / mật khẩu / trùng tên): lấy thêm từ hàng chờ cho đủ N.
                 while hang_cho[r] and len(choi) < n_mot_nhom:
+                    truoc = len(choi)
                     them = []
-                    while hang_cho[r] and len(choi) + len(them) < n_mot_nhom:
-                        tk = hang_cho[r].pop(0)
-                        ten = tk["ten_dang_nhap"]
-                        if ten.lower() in self.tk_sai_rule:
-                            continue
-                        if not self.che_do_test and da_xong_hom_nay(ten_round(ten, r)):
-                            continue
-                        them.append(tv_theo_tk.setdefault(ten.lower(), ThanhVien(tk)))
+                    self._them_acc_tu_hang_cho(hang_cho, r, them, n_mot_nhom - len(choi), tv_theo_tk)
                     if not them:
                         break
                     self.in_log(f"Nhóm {so_nhom} round {r + 1}: thiếu người, bù thêm "
                                 f"{', '.join(ten_round(tv.tk, r) for tv in them)}")
                     self._chuan_bi(so_nhom, r, them)
                     choi = self._bo_sai_rule(choi + them)
+                    if len(choi) == truoc:
+                        break
                 ca_nhom += [tv for tv in choi if tv not in ca_nhom]
                 if self._neu_qua_ngay(ngay):
                     return True
@@ -1121,6 +1146,29 @@ class LuongXoayVong(threading.Thread):
         self.in_log(f"{tk}: {ly_do}, bỏ tích khỏi danh sách phó bản")
         self.hang_doi.put(("nap_bang_tai_khoan",))
 
+    def _loai_neu_trung_ten_nv(self, tk):
+        """Acc có tên đăng nhập trùng NV quy tắc của acc khác → bỏ tích, không ghép nhóm."""
+        tk_khac, r = tai_khoan_trung_ten_nv_khac(tk, self.ds_tai_khoan or cac_tai_khoan_dang_tich())
+        if not tk_khac:
+            return False
+        ten = tk["ten_dang_nhap"] if isinstance(tk, dict) else tk
+        self._loai_tai_khoan(ten, f"tên đăng nhập trùng nhân vật round {r + 1} của {tk_khac}")
+        return True
+
+    def _them_acc_tu_hang_cho(self, hang_cho, r, choi, n_mot_nhom, tv_theo_tk):
+        """Lấy acc tiếp theo trong hàng chờ round r cho đủ nhóm; bỏ qua acc trùng tên / hết lượt."""
+        while hang_cho[r] and len(choi) < n_mot_nhom:
+            tk = hang_cho[r].pop(0)
+            ten = tk["ten_dang_nhap"]
+            if ten.lower() in self.tk_sai_rule:
+                continue
+            if self._loai_neu_trung_ten_nv(tk):
+                continue
+            if not self.che_do_test and da_xong_hom_nay(ten_round(ten, r)):
+                continue
+            choi.append(tv_theo_tk.setdefault(ten.lower(), ThanhVien(tk)))
+        return choi
+
     def _bo_sai_rule(self, thanh_vien):
         return [tv for tv in thanh_vien if tv.tk.lower() not in self.tk_sai_rule]
 
@@ -1162,7 +1210,11 @@ class LuongXoayVong(threading.Thread):
 
     def _di_round(self, mo_ta, thanh_vien):
         """Cả nhóm đã trong game (tv.game, tv.ten): lập nhóm, đi phó bản, về thành, giao dịch."""
-        truong, doi_vien = thanh_vien[0], thanh_vien[1:]
+        truong = next((tv for tv in thanh_vien if getattr(tv, "game", None)), None)
+        if truong is None:
+            self.in_log(f"{mo_ta}: không có ai trong game, bỏ round")
+            return []
+        doi_vien = [tv for tv in thanh_vien if tv is not truong]
         self._ghi_truong_nhom(truong)
         for tv in thanh_vien:
             so_tui_do.ghi_chua_ro(tv.tk, tv.ten)
@@ -1280,6 +1332,8 @@ class LuongXoayVong(threading.Thread):
                     self._danh_dau_sai_rule(tv.tk, luong.sai_rule)
                 elif luong.sai_tai_khoan:
                     self._loai_tai_khoan(tv.tk, "game báo sai tài khoản/mật khẩu")
+                elif luong.thieu_nhan_vat is not None and self._loai_neu_trung_ten_nv(tv.tai_khoan):
+                    pass
                 else:
                     self.in_log(f"Bỏ tài khoản {tv.tk}: đăng nhập {tv.ten} thất bại nhiều lần (xem log Đăng nhập)")
                     self._bo_dang_nhap.append(tv)
@@ -1357,6 +1411,8 @@ class LuongXoayVong(threading.Thread):
             cau_hinh.sua_nhan_vat(tv.ten, sua)
 
     def _du_nhom(self, truong, thanh_vien):
+        if not getattr(truong, "game", None):
+            return False
         try:
             trong = [chuan_hoa(t) for t in doc_nhom(truong.game.lua)["thanh_vien"]]
         except (LoiLua, OSError, ValueError):
@@ -1509,7 +1565,7 @@ class LuongXoayVong(threading.Thread):
         chi_st = self.chi_sat_tinh
         sat_tinh = self.chi_sat_tinh or not self.che_do_test
         for tv in thanh_vien:
-            def sua(cai_dat, la_truong=tv is truong):
+            def sua(cai_dat, la_truong=tv is truong, ten_nv=tv.ten):
                 # xoay_vong: hết lượt thì luồng PMP không bật chuyển sinh (kẻo dịch chuyển đi trước khi giao dịch).
                 pmp = dict(cai_dat_pmp(cai_dat), bat=True, sat_tinh=sat_tinh, chi_sat_tinh=chi_st, xoay_vong=True)
                 if not chi_st and not self.che_do_test:
@@ -1525,7 +1581,7 @@ class LuongXoayVong(threading.Thread):
                             )
                 pmp["so_vong"] = dich if (la_truong and dich and not chi_st) else 0
                 cai_dat["pho_ban_pmp"] = pmp
-                cai_dat["bat_auto"] = True
+                cai_dat["bat_auto"] = chuan_hoa(ten_nv) not in NV_USER_TAT_AUTO
                 cai_dat["bat_chuyen_sinh"] = False
                 cai_dat["chien_dau"] = dict(cai_dat.get("chien_dau") or {}, bat=True)
             cau_hinh.sua_nhan_vat(tv.ten, sua)
@@ -1533,12 +1589,17 @@ class LuongXoayVong(threading.Thread):
 
     def _dat_chay_pb(self, thanh_vien, bat):
         """Bật / tắt Auto + Phó bản, giữ bộ đếm và cờ xoay vòng (tạm dừng khi thiếu người)."""
-        def sua(cai_dat):
+        def sua(cai_dat, ten_nv):
             cai_dat["pho_ban_pmp"] = dict(cai_dat_pmp(cai_dat), bat=bat)
-            cai_dat["bat_auto"] = bat
+            if not bat:
+                cai_dat["bat_auto"] = False
+            elif chuan_hoa(ten_nv) in NV_USER_TAT_AUTO:
+                cai_dat["bat_auto"] = False
+            else:
+                cai_dat["bat_auto"] = True
         for tv in thanh_vien:
             if tv.ten:
-                cau_hinh.sua_nhan_vat(tv.ten, sua)
+                cau_hinh.sua_nhan_vat(tv.ten, lambda c, t=tv.ten: sua(c, t))
 
     def _xong_pho_ban(self, truong, dich):
         pmp = cai_dat_pmp(cau_hinh.cua_nhan_vat(truong.ten))

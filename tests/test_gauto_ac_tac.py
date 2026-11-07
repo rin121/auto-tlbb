@@ -21,6 +21,7 @@ class TestTenDong(unittest.TestCase):
 
     def test_nhan_dien_cua_so_quan_ly(self):
         self.assertTrue(g.la_cua_so_quan_ly_gauto("GAuto TLBB-2.5.3.3 | 0,0 GG"))
+        self.assertTrue(g.la_cua_so_quan_ly_gauto("GAuto_2025"))
         self.assertTrue(g.la_cua_so_quan_ly_gauto("ChickenAuto (ver.116)"))
         self.assertFalse(g.la_cua_so_quan_ly_gauto("caychay10 - ChickenAuto"))
 
@@ -285,7 +286,7 @@ class TestChuotAo(unittest.TestCase):
             self.addCleanup(p.stop)
 
     def _bam(self, ao_an):
-        def ao(h, diem):
+        def ao(h, diem, he_so=0):
             if ao_an:
                 self.tt["v"] = True
 
@@ -363,6 +364,26 @@ class TestBamChuotKhiChe(unittest.TestCase):
         self.assertEqual(me.call_count, 2)
         self.assertTrue(any(c.args[1] == g.win32con.HWND_TOPMOST for c in swp.call_args_list))
 
+    def test_ha_cua_so_topmost_thi_go_co_truoc(self):
+        swp = []
+
+        def set_pos(hwnd, sau, *a):
+            swp.append(sau)
+
+        with patch.object(g.win32gui, "WindowFromPoint", return_value=5), \
+                patch.object(g.win32gui, "GetAncestor", return_value=5), \
+                patch.object(g.win32gui, "IsWindow", return_value=True), \
+                patch.object(g, "_ten_lop", return_value="TianLongBaBu WndClass"), \
+                patch.object(g.win32gui, "GetWindowLong", return_value=g.win32con.WS_EX_TOPMOST), \
+                patch.object(g.win32gui, "SetWindowPos", side_effect=set_pos):
+            self.assertEqual(g._ha_cua_so_che(1, (10, 10)), 5)
+        self.assertEqual(swp, [g.win32con.HWND_NOTOPMOST, g.win32con.HWND_BOTTOM])
+
+    def test_diem_trong_khung_nhung_game_de_thi_chua_san_sang(self):
+        with patch.object(g, "_thuoc_gauto", return_value=False), \
+                patch.object(g, "_diem_trong_cua_so", return_value=True):
+            self.assertFalse(g._san_sang_bam(1, (10, 10)))
+
     def test_van_che_thi_bao_loi(self):
         with patch.object(g, "SO_LAN_THU_CHE", 2), patch.object(g, "GIAY_GIUA_THU_CHE", 0), \
                 patch.object(g, "_thuoc_gauto", return_value=False), \
@@ -412,6 +433,151 @@ class TestQuyenAdmin(unittest.TestCase):
     def test_cung_quyen_thi_qua(self):
         with patch.object(g, "gauto_la_admin", return_value=True), patch.object(g, "autohoc_la_admin", return_value=True):
             g.kiem_tra_quyen(1)
+
+    def test_khong_doc_duoc_token_gauto_thi_coi_la_admin(self):
+        with patch.object(g, "_tien_trinh_admin", return_value=None), \
+                patch.object(g.win32process, "GetWindowThreadProcessId", return_value=(0, 9)):
+            self.assertTrue(g.gauto_la_admin(1))
+
+
+class TestOnDinhGAuto(unittest.TestCase):
+    def test_diem_dong_map_lay_tam_rect(self):
+        """Màn 125/150%: bấm tâm dòng thật, không dùng CB_GETITEMHEIGHT (lệch lên 1 dòng, Vô Lượng Sơn thành Tung Sơn)."""
+        self.assertEqual(g._tam_rect(0, 80, 120, 100), (60, 90))
+
+        def send(hwnd, msg, w, l):
+            return 0
+
+        def rect(hwnd, chi_so):
+            self.assertEqual(chi_so, 4)
+            return 0, 80, 120, 100
+
+        with patch.object(g.win32gui, "SendMessage", send), patch.object(g, "_rect_dong_list", rect):
+            self.assertEqual(g._diem_dong_map(1, 2, 4), (60, 90))
+
+    def test_bam_ao_chi_mot_click(self):
+        posts = []
+        with patch.object(g.win32gui, "ScreenToClient", return_value=(144, 72)), \
+                patch.object(g.win32gui, "PostMessage", side_effect=lambda *a: posts.append(a[1])), \
+                patch.object(g, "_he_so_logic_cua_so", return_value=96 / 144), \
+                patch.object(g.time, "sleep"):
+            g._bam_ao(1, (100, 200))
+        self.assertEqual(posts.count(g.win32con.WM_LBUTTONDOWN), 1)
+
+    def test_diem_o_tich_sat_mep_trai(self):
+        self.assertEqual(g._diem_o_tich_client(0, 20, 180, 36), (8, 28))
+
+    def test_sua_diem_logic_vao_cua_so_vat_ly(self):
+        """MSAA trả (80, 60) trong khi GAuto vật lý nằm ở (120, 90)-(400, 300) — 150%."""
+        def trong(_h, diem):
+            x, y = diem
+            return 120 <= x < 400 and 90 <= y < 300
+
+        with patch.object(g, "_diem_trong_cua_so", side_effect=trong), \
+                patch.object(g.ctypes.windll.user32, "GetDpiForWindow", return_value=144):
+            self.assertEqual(g._sua_diem_man_hinh(1, (80, 60)), (120, 90))
+
+    def test_o_dau_dong_bam_rect_listview(self):
+        bang = _BangTich({"caychay32": False})
+        da_bam = []
+
+        def bam_client(h, hd, xy, cho, da_xong, giay=g.GIAY_CHO_O_TICH):
+            da_bam.append((xy, cho))
+            bang.tich["caychay32"] = True
+            return "ảo"
+
+        with patch.object(g, "danh_sach_nhan_vat", bang.ds), patch.object(g, "_bang_nhan_vat", lambda h: 9), \
+                patch.object(g, "_msaa", lambda h: bang), patch.object(g, "_hien_cua_so_gauto", lambda h: None), \
+                patch.object(g, "_rect_dong_bang", lambda h, i: (0, 20, 180, 36)), \
+                patch.object(g, "_bam_client_hoac_that", bam_client):
+            self.assertEqual(g.dat_dau_dong(1, ("caychay32",), True), ["caychay32"])
+        self.assertEqual(da_bam, [((8, 28), "ô đầu dòng nhân vật")])
+
+    def test_lp_chuot_doi_pixel_logic_khi_khong_dpi(self):
+        self.assertEqual(g._lp_chuot(144, 72, 96 / 144), g._lp_chuot(96, 48))
+        self.assertEqual(g._lp_chuot(10, 20), g.win32api.MAKELONG(10, 20))
+
+    def test_chon_hwnd_uu_tien_dung_duong_dan_co_bang(self):
+        with patch.object(g, "_bang_nhan_vat", side_effect=lambda h, bat_buoc=False: h == 2):
+            self.assertEqual(g._chon_hwnd_gauto([1, 2], [3]), 2)
+
+    def test_chon_hwnd_thu_muc_khac_neu_khong_khop_duong(self):
+        with patch.object(g, "_bang_nhan_vat", side_effect=lambda h, bat_buoc=False: h == 8):
+            self.assertEqual(g._chon_hwnd_gauto([], [7, 8]), 8)
+
+    def test_cac_map_rong_thi_doc_msaa(self):
+        with patch.object(g.win32gui, "SendMessage", return_value=0), \
+                patch.object(g, "_ten_map_msaa", return_value=("", ["Kiếm Các", "Tung Sơn"])):
+            self.assertEqual(g.cac_map(1), ["Kiếm Các", "Tung Sơn"])
+
+
+class TestNutTestGauto(unittest.TestCase):
+    """Hai nút bật / tắt: OK chỉ khi đọc lại ô trên GAuto đúng, không ghi theo cú bấm."""
+
+    def _chay(self, bat, doc_lan, **them):
+        log = []
+        lan = {"n": 0}
+
+        def doc(_h, ten):
+            lan["n"] += 1
+            return doc_lan[min(lan["n"], len(doc_lan)) - 1]
+
+        moi = dict(
+            tim_cua_so_quan_ly=lambda d: 1,
+            tom_tat_cua_so=lambda h: "GAuto TLBB",
+            _hien_cua_so_gauto=lambda h: None,
+            gauto_la_admin=lambda h: True,
+            autohoc_la_admin=lambda: True,
+            kiem_tra_quyen=lambda h: None,
+            danh_sach_nhan_vat=lambda h: [(1, "beai47", True, False)],
+            tim_chi_so_dong_theo_ten=lambda h, t, c=None: 1,
+            chon_dong=lambda h, i, t: None,
+            nhan_vat_dang_cai=lambda h: "beai47",
+            _doc_lai_gauto=doc,
+            dat_cai_dat_ac_tac=lambda *a, **k: "",
+            _doi_dau_dong=lambda *a, **k: False,
+            _chon_nhan_vat=lambda *a, **k: {g.O_AC_TAC: 9},
+            dat_o_chuot=lambda *a, **k: "ảo",
+        )
+        moi.update(them)
+        patches = [patch.object(g, ten, fn) for ten, fn in moi.items()]
+        for p in patches:
+            p.start()
+        try:
+            g.test_gauto("C:/GAuto_2025.exe", "beai47", log.append, bat, ["Vô Lượng Sơn"], {})
+        finally:
+            for p in patches:
+                p.stop()
+        return log
+
+    def test_bat_ok_khi_doc_lai_dung(self):
+        truoc = ((1, "beai47", True, False), {g.O_AC_TAC: False}, "Tung Sơn",
+                 ["Đôn Hoàng", "Tung Sơn", "Vô Lượng Sơn"])
+        sau = ((1, "beai47", True, True), {g.O_AC_TAC: True, g.O_CHAY_TIM: True}, "Vô Lượng Sơn",
+               ["Đôn Hoàng", "Tung Sơn", "Vô Lượng Sơn"])
+        log = self._chay(True, [truoc, sau])
+        chu = "\n".join(log)
+        self.assertIn("Test GAuto bật: 7) đọc lại trên GAuto", chu)
+        self.assertIn("OK — đã bật, để nguyên: ô đầu dòng ☑, Ác Tặc ☑, map «Vô Lượng Sơn»", chu)
+        self.assertNotIn("3 giây", chu)
+
+    def test_bat_khong_ok_khi_map_lech(self):
+        truoc = ((1, "beai47", True, False), {g.O_AC_TAC: False}, "Tung Sơn", ["Tung Sơn", "Vô Lượng Sơn"])
+        sau = ((1, "beai47", True, True), {g.O_AC_TAC: True}, "Tung Sơn", ["Tung Sơn", "Vô Lượng Sơn"])
+        with self.assertRaises(g.LoiGautoAcTac) as ng:
+            self._chay(True, [truoc, sau])
+        self.assertIn("bật không ăn", str(ng.exception))
+        self.assertIn("Tung Sơn", str(ng.exception))
+        self.assertNotIn("OK", str(ng.exception))
+
+    def test_tat_ok_khi_doc_lai_tat(self):
+        truoc = ((1, "beai47", True, True), {g.O_AC_TAC: True}, "Vô Lượng Sơn", ["Vô Lượng Sơn"])
+        sau = ((1, "beai47", True, False), {g.O_AC_TAC: False}, "Vô Lượng Sơn", ["Vô Lượng Sơn"])
+        log = self._chay(False, [truoc, sau])
+        chu = "\n".join(log)
+        self.assertIn("Test GAuto tắt: 6) tắt: bỏ tích ô đầu dòng", chu)
+        self.assertIn("bỏ tích ô «Ác Tặc» bằng chuột ảo", chu)
+        self.assertIn("OK — đã tắt: ô đầu dòng ☐, Ác Tặc ☐", chu)
 
 
 if __name__ == "__main__":

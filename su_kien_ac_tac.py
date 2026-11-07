@@ -201,6 +201,15 @@ def nguoi_nhan_khung(khung):
         return _NHAN_KHUNG.get(tuple(khung))
 
 
+def gianh_khung(khung, ten_truong, ten_cu):
+    """Trưởng nhóm mời giành lại khung mà đồng đội nhận nhầm lúc danh sách PT còn trống."""
+    with _KHOA_NHAN_KHUNG:
+        if chuan_hoa(_NHAN_KHUNG.get(tuple(khung))) != chuan_hoa(ten_cu):
+            return False
+        _NHAN_KHUNG[tuple(khung)] = ten_truong
+    return True
+
+
 # ---------- map / đường đi ----------
 
 def cung_ten_map(a, b):
@@ -222,6 +231,24 @@ CAC_MAP_PHO_BAN_AC_TAC = ("Tặc Khấu doanh địa",)
 
 def la_pho_ban_ac_tac(ten_map):
     return any(cung_ten_map(m, ten_map) for m in CAC_MAP_PHO_BAN_AC_TAC)
+
+
+def ca_doi_trong_pho_ban_ac_tac(map_ban_than, thanh_vien, map_cua_nhan_vat):
+    """
+    True nếu bản thân đang ở ải Ác Tặc (Tặc Khấu…) và không có thành viên PT nào đọc được map mà đã ra khỏi ải.
+    Dùng khi hết phút GAuto: cả đội còn trong ải thì chờ đánh xong rồi mới kết thúc khung.
+    """
+    if not la_pho_ban_ac_tac(map_ban_than):
+        return False
+    if not thanh_vien:
+        return True
+    for ten in thanh_vien:
+        m = map_cua_nhan_vat(ten)
+        if m is None:
+            continue
+        if not la_pho_ban_ac_tac(m):
+            return False
+    return True
 
 
 def nen_bao_roi_map_ac_tac(map_hien, map_tuan_tra):
@@ -503,11 +530,14 @@ def buoc_doi_vien(game, doi, tt, state, bay_gio=None, at=None):
     if dang_theo:
         return "mo_ta", f"theo đội trưởng {doi.truong} sang [{vt[2]}]"
     if vt and not cung_ten_map(map_dv, vt[2]) and not o_thanh_trung_chuyen_ac_tac(map_dv):
-        if bay_gio - state.get("luc_moi_theo", 0) >= GIAY_GIUA_HAI_LAN_MOI_THEO:
-            state["luc_moi_theo"] = bay_gio
-            game.lua.chay(MA_THEO_DOI)
-        if la_map_ac_tac(map_dv) or (doi.map_dich and la_map_ac_tac(doi.map_dich)):
+        if la_map_ac_tac(map_dv) or la_pho_ban_ac_tac(map_dv):
+            if bay_gio - state.get("luc_moi_theo", 0) >= GIAY_GIUA_HAI_LAN_MOI_THEO:
+                state["luc_moi_theo"] = bay_gio
+                game.lua.chay(MA_THEO_DOI)
             return "mo_ta", f"mời theo đội trưởng sang [{vt[2]}] (không tự về {MAP_DAI_LY})"
+        # Đích đã là map Ác Tặc nhưng mình còn trong PMP: về thành, không bấm Theo đội.
+        ve_dai_ly_neu_ket_truoc_ac_tac(game, map_dv, state, bay_gio)
+        return "mo_ta", f"về {MAP_DAI_LY} để ra map Ác Tặc (đang ở [{map_dv}])"
     if doi.map_dich and cung_ten_map(vt[2], doi.map_dich) and not cung_ten_map(map_dv, doi.map_dich):
         if o_thanh_trung_chuyen_ac_tac(map_dv):
             if bay_gio - state.get("luc_di_rieng", 0) >= GIAY_GIUA_HAI_LAN_DI_RIENG:
@@ -519,6 +549,26 @@ def buoc_doi_vien(game, doi, tt, state, bay_gio=None, at=None):
             game.lua.chay(MA_THEO_DOI)
         return "mo_ta", f"mời theo đội trưởng vào {doi.map_dich} (đang ở [{map_dv}])"
     return "mo_ta", f"chờ đội trưởng {doi.truong} ([{vt[2]}])"
+
+
+def ve_dai_ly_neu_ket_truoc_ac_tac(game, ten_map, state, bay_gio=None):
+    """
+    Trước giờ Ác Tặc mà còn đứng trong phó bản khác (PMP, Sát Tinh…): tự về Đại Lý.
+    Không bấm khi đã ở thành, map Ác Tặc, hoặc ải Tặc Khấu — Theo đội trong ải hủy phép về thành.
+    """
+    if not ten_map or o_thanh_trung_chuyen_ac_tac(ten_map) or la_dai_ly(ten_map) \
+            or la_map_ac_tac(ten_map) or la_pho_ban_ac_tac(ten_map):
+        return False
+    bay_gio = bay_gio or time.time()
+    if bay_gio - state.get("luc_ve_thanh", 0) < GIAY_GIUA_HAI_LAN_VE_THANH:
+        return True
+    state["luc_ve_thanh"] = bay_gio
+    try:
+        chuan_bi_ve_thanh(game, None, "")
+        game.lua.chay(ma_dung_ky_nang_theo_dinh_nghia(KY_NANG_VE_THANH))
+    except LoiLua:
+        return False
+    return True
 
 
 def ve_thanh_neu_o_map_ac_tac(game, tt, state, in_log, ten):
@@ -579,6 +629,8 @@ class AcTacRunner(PhoBanPMP):
         if self.nen_dung():
             raise _Dung()
         if not self.dang_ket_thuc and time.time() >= self.het_khung:
+            if la_pho_ban_ac_tac(self._map()):
+                return
             raise _HetKhung()
 
     def _tt(self):

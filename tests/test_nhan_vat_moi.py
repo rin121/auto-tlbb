@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 from dang_nhap import LoiDangNhap, LoiSaiRuleNhanVat
 from nhan_vat_moi import (DONG_TIEU_DAO, MON_PHAI_TIEU_DAO, LuongTaoNhanVat, NhanDoTanThu,
-                          la_loi_ten_da_ton_tai)
+                          da_gia_nhap_phai, la_loi_ten_da_ton_tai)
 
 
 class TestNhanVatMoiHoiThoai(unittest.TestCase):
@@ -21,19 +21,38 @@ class TestNhanVatMoiHoiThoai(unittest.TestCase):
         self.assertTrue(nc._dong_hien_trong_hoi_thoai(DONG_TIEU_DAO))
         self.assertFalse(nc._dong_hien_trong_hoi_thoai(("Cái Bang",)))
 
-    def test_vao_tieu_dao_khong_bo_qua_phai_khac(self):
+    def test_da_co_phai_thi_bo_gia_nhap(self):
+        self.assertTrue(da_gia_nhap_phai(-1))
+        self.assertTrue(da_gia_nhap_phai(3))
+        self.assertTrue(da_gia_nhap_phai(MON_PHAI_TIEU_DAO))
+        self.assertFalse(da_gia_nhap_phai(9))
+        self.assertFalse(da_gia_nhap_phai(None))
         nc = NhanDoTanThu.__new__(NhanDoTanThu)
-        nc.ten = "testnv"
+        nc.ten = "azumi44"
         nc.in_log = lambda _: None
-        nc._cho = lambda *a, **k: True
-        nc._chu_hoi_thoai = lambda: ""
         goi = []
         nc._noi_chuyen = lambda *a: goi.append(a)
+        nc._vao_tieu_dao({"mon_phai": -1})
         nc._vao_tieu_dao({"mon_phai": 3})
-        self.assertEqual(len(goi), 1)
-        goi.clear()
         nc._vao_tieu_dao({"mon_phai": MON_PHAI_TIEU_DAO})
-        self.assertEqual(len(goi), 0)
+        self.assertEqual(goi, [])
+        nc._cho = lambda *a, **k: True
+        nc._chu_hoi_thoai = lambda: ""
+        nc._vao_tieu_dao({"mon_phai": 9})
+        self.assertEqual(len(goi), 1)
+
+    def test_da_co_phai_khac_thi_sang_nang_cap(self):
+        nc = NhanDoTanThu.__new__(NhanDoTanThu)
+        nc.ten = "azumi44"
+        log = []
+        nc.in_log = log.append
+        nc._tt = lambda: {"map": "Lạc Dương", "x": 160, "y": 166, "mon_phai": -1}
+        goi = []
+        nc._vao_tieu_dao = lambda tt: goi.append("vao")
+        nc._nhan_vang = lambda: goi.append("vang")
+        nc.chay()
+        self.assertEqual(goi, [])
+        self.assertTrue(any("sang nâng cấp" in d for d in log))
 
 
 class TestDangKyKhongDuoc(unittest.TestCase):

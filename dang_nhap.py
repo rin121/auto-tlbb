@@ -651,7 +651,7 @@ class LuongDangNhap(threading.Thread):
         Chưa gia nhập phái / chưa nhận đồ tân thủ: không nâng cấp (tab Tạo nhân vật làm bước 1 gia nhập phái trước).
         """
         import nang_cap_nhan_vat  # nang_cap_nhan_vat import dang_nhap
-        from nhan_vat_moi import CHUA_VAO_PHAI, MON_PHAI_TIEU_DAO, NhanDoTanThu, da_xong, cung_ten
+        from nhan_vat_moi import CHUA_VAO_PHAI, MON_PHAI_TIEU_DAO, NhanDoTanThu, da_gia_nhap_phai, da_xong, cung_ten
         try:
             hwnd = next((c["hwnd"] for c in tim_cua_so_game() if c["pid"] == self.pid), None)
             if not hwnd:
@@ -665,14 +665,16 @@ class LuongDangNhap(threading.Thread):
                 if tt.get("mon_phai") == CHUA_VAO_PHAI:
                     self.in_log(f"{tt['ten']}: chưa gia nhập phái — chờ nhận đồ tân thủ (bước 1: Tiêu Dao)")
                 return
-            if tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
+            if not da_gia_nhap_phai(tt.get("mon_phai")):
                 self.in_log(f"{tt['ten']}: bước 1 — gia nhập phái Tiêu Dao (trước nâng cấp)")
                 NhanDoTanThu(game, tt["ten"], self.in_log, self.dung.is_set,
                              lambda chu: self.bao_trang_thai(chu))._vao_tieu_dao(tt)
                 tt = game.thong_tin()
-                if not tt or tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
-                    self.in_log(f"{tt['ten'] if tt else '?'}: chưa vào Tiêu Dao — bỏ qua nâng cấp lần này")
+                if not tt or not da_gia_nhap_phai(tt.get("mon_phai")):
+                    self.in_log(f"{tt['ten'] if tt else '?'}: chưa vào phái — bỏ qua nâng cấp lần này")
                     return
+            elif tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
+                self.in_log(f"{tt['ten']}: đã gia nhập phái (mã {tt['mon_phai']}), bỏ qua gia nhập, sang nâng cấp")
             self.bao_trang_thai("Nâng cấp nhân vật")
             nang_cap_nhan_vat.nang_cap(game, tt["ten"], self.in_log, self.dung.is_set,
                                        lambda chu: self.bao_trang_thai(f"Nâng cấp: {chu}"))

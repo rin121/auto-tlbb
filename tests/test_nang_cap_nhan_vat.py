@@ -116,6 +116,17 @@ class TestNangCapLogic(unittest.TestCase):
         self.assertFalse(ncnv.can_cong_noi_luc(300_000_000, 50_000_000, 10_000_000))
         self.assertFalse(ncnv.can_cong_noi_luc(4_316_278, 9_999_999, 10_000_000))
 
+    def test_thong_bao_giftcode_da_kich_hoat(self):
+        self.assertTrue(ncnv.thong_bao_giftcode_da_kich_hoat("Tài khoản đã kích hoạt GiftCode rồi"))
+        self.assertTrue(ncnv.thong_bao_giftcode_da_kich_hoat("Mã giftcode đã được sử dụng"))
+        self.assertTrue(ncnv.thong_bao_giftcode_da_kich_hoat("Các hạ đã nhận giftcode này rồi!"))
+        self.assertTrue(ncnv.thong_bao_giftcode_da_kich_hoat("Nhan vat da nhan giftcode nay."))
+        self.assertTrue(ncnv.thong_bao_giftcode_da_kich_hoat(
+            "Nhan vat da nhan code 150 thanh vien Zalo."))
+        self.assertFalse(ncnv.thong_bao_giftcode_da_kich_hoat("Nhận được Hoàng Kim - Khôi"))
+        self.assertFalse(ncnv.thong_bao_giftcode_da_kich_hoat("Nhận giftcode thành công"))
+        self.assertTrue(ncnv.co_thong_bao_giftcode_da_kich_hoat(["", "Tài khoản đã kích hoạt mã quà tặng"]))
+
     def test_vut_theo_ma_khong_co_mon_thi_khong_mo_bo_nho(self):
         import vut_rac
 
@@ -147,6 +158,7 @@ class TestVeDaiLyTruoc(unittest.TestCase):
                                     lambda chu: None, self.file)
         self.nc._tt = lambda: {"ten": "caychay24"}
         self.nc._ve_thanh = lambda: self.goi.append("ve_thanh")
+        self.nc._thu_giftcode_da_kich_hoat_tai_khoan = lambda: False
         for so in range(1, 7):
             setattr(self.nc, f"buoc_{so}", lambda so=so: self.goi.append(so))
 
@@ -198,6 +210,7 @@ class TestVeThanhSauCongPoint(unittest.TestCase):
         self.nc._map = lambda: "Đại Lý"
         self.nc._noi_chuyen = lambda npc, cac_dong: setattr(self.nc, "da_toi_cong_point", True)
         self.nc._ve_thanh_tai_dai_ly = self._ve_thanh
+        self.nc._thu_giftcode_da_kich_hoat_tai_khoan = lambda: False
         for so in range(1, 7):
             setattr(self.nc, f"buoc_{so}", lambda so=so: self.goi.append(so))
         self.nc.buoc_6 = lambda: (self.goi.append(6), self.nc._noi_chuyen(None, ()))
@@ -298,6 +311,52 @@ class TestMangKhiGameCham(unittest.TestCase):
         self.assertEqual(self.so_click, pho_ban_pmp.SO_LAN_THU_MANG)
 
 
+class TestGiftcodeDaKichHoatTuTruoc(unittest.TestCase):
+    """NC-11: giftcode đã kích hoạt — không làm tiếp bước mua / cộng điểm, ghi đã nâng cấp."""
+
+    def setUp(self):
+        self.thu_muc = tempfile.mkdtemp()
+        self.file = os.path.join(self.thu_muc, "nang_cap_da_xong.json")
+        self.log = []
+        self.goi = []
+
+        class LuaGia:
+            def chay(self, ma):
+                return b""
+
+        class GameGia:
+            lua = LuaGia()
+        self.nc = ncnv.tao_nang_cap(GameGia(), "caychay24", self.log.append, lambda: False,
+                                    lambda chu: None, self.file)
+        self.nc._tt = lambda: {"ten": "caychay24"}
+        self.nc._map = lambda: "Đại Lý"
+        self.nc._ve_thanh = lambda: None
+        for so in range(1, 7):
+            setattr(self.nc, f"buoc_{so}", lambda so=so: self.goi.append(so))
+
+    def tearDown(self):
+        shutil.rmtree(self.thu_muc, ignore_errors=True)
+
+    def test_thu_giftcode_bao_da_kich_hoat_thi_khong_chay_buoc_1(self):
+        self.nc._thu_giftcode_da_kich_hoat_tai_khoan = lambda: setattr(
+            self.nc, "_giftcode_tai_khoan_da_kich_hoat", True) or True
+        self.nc.chay()
+        self.assertEqual(self.goi, [])
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+        self.assertTrue(any("giftcode đã kích hoạt từ trước" in d for d in self.log))
+
+    def test_giftcode_da_kich_hoat_giua_buoc_3_thi_dung(self):
+        self.nc._thu_giftcode_da_kich_hoat_tai_khoan = lambda: False
+
+        def buoc_3():
+            self.goi.append(3)
+            self.nc._giftcode_tai_khoan_da_kich_hoat = True
+        self.nc.buoc_3 = buoc_3
+        self.nc.chay()
+        self.assertEqual(self.goi, [1, 2, 3])
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+
+
 class TestNangCapSauDangNhap(unittest.TestCase):
     """LuongDangNhap.nang_cap_sau_dang_nhap: tự nâng cấp khi vừa vào game (NC-06)."""
 
@@ -338,6 +397,12 @@ class TestNangCapSauDangNhap(unittest.TestCase):
                 mock.patch.object(ncnv, "nang_cap", nang_cap), \
                 mock.patch("nhan_vat_moi.da_xong", lambda tk: ["caychay24"]):
             self.dang_nhap.LuongDangNhap.nang_cap_sau_dang_nhap(self.luong)
+
+    def test_da_co_phai_khac_thi_nang_cap_khong_gia_nhap(self):
+        self.dang_nhap.Game.thong_tin = lambda self: {"ten": "caychay24", "mon_phai": -1}
+        self._chay(False, lambda game, ten, *a: self.goi.append(ten))
+        self.assertEqual(self.goi, ["caychay24"])
+        self.assertTrue(any("bỏ qua gia nhập" in d for d in self.log))
 
     def test_chua_lam_thi_nang_cap(self):
         self._chay(False, lambda game, ten, *a: self.goi.append((game.hwnd, ten)))

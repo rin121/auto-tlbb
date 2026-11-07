@@ -95,6 +95,40 @@ powershell -ExecutionPolicy Bypass -File dong_goi\build_dung_thu.ps1 -SoNgay 3
 - Cấu hình người dùng: `dong_goi\AutoHoc\cau_hinh.json`, `dong_goi\AutoHoc\tai_khoan.json` (không ghi đè khi build).
 - Log: `dong_goi\AutoHoc\nhat_ky_auto.log`.
 - Mật khẩu tài khoản lưu trong `tai_khoan.json` — không chia sẻ file này.
+- Kết nối báo cáo Telegram: `ket_noi_telegram.json` cạnh exe (không commit). Token bot không nằm trong file này.
+
+## Báo cáo Telegram (nhiều máy, một bot)
+
+**Người chơi / máy farm:** chỉ mở AutoHoc → tab **Cài đặt** → **Báo cáo Telegram**: tên máy, địa chỉ + mã anh gửi, bật gửi, **Thử kết nối**. **Không** chạy CMD, **không** cầm token bot.
+
+**Anh (một máy chủ / VPS):** chạy bot quản lý + (nếu cần) tunnel — **một lần**, rồi phát địa chỉ + mã cho user.
+
+| Việc | Ai làm |
+|------|--------|
+| Tạo bot BotFather, điền `bot_quan_ly\.env` (token + `MA_KET_NOI`) | Anh |
+| Double-click `bot_quan_ly\ChayBotQuanLy.bat` (giữ cửa sổ mở) | Anh |
+| `cloudflared` ra internet (máy khác nhà) | Anh (tùy chọn) |
+| Copy `ket_noi_telegram.mau.json` → `ket_noi_telegram.json`, sửa địa chỉ, gói kèm zip | Anh |
+| Tab Cài đặt → Báo cáo Telegram | User |
+
+**Lần đầu trên máy chủ:** nhắn `/start` cho bot trên Telegram, rồi chạy `ChayBotQuanLy.bat` — bot **tự lấy** `TELEGRAM_CHAT_ID` vào `.env` (không cần getUpdates trên trình duyệt).
+
+Mẫu phát cho user: `dong_goi\AutoHoc\ket_noi_telegram.mau.json` (đổi tên thành `ket_noi_telegram.json` cạnh exe, sửa `ten_may` trên máy họ).
+
+3. Đưa ra ngoài mạng (IP nhà đổi): trên máy chạy bot, `cloudflared tunnel --url http://127.0.0.1:8787`, copy URL vào mẫu `dia_chi`.
+
+4. Trên Telegram (sau khi AutoHoc báo cáo):
+
+```
+/ds
+/status PhongKhach
+/nhom PhongKhach
+/acc PhongKhach
+/loi PhongKhach
+/ping PhongKhach
+```
+
+Chỉ một máy thì có thể bỏ tên. Máy im quá `GIAY_IM` giây (mặc định 90) thì bot nhắn một lần. Tắt AutoHoc thì nhắn «đã tắt».
 
 
 - Cấp license (GUI: HWID + số ngày, `0` = không giới hạn):
@@ -123,6 +157,6 @@ powershell -ExecutionPolicy Bypass -File ".\dong_goi\build_va_deploy.ps1"
 
 # đăng ký tk
 python scripts\auto_register_tlbbnhatkiem.py
-
+ python scripts/auto_register_tlbbnhatkiem.py --queue
 
 powershell -ExecutionPolicy Bypass -File "d:\Games\ThienLongCityCSClientFull2026\AutoHoc\dong_goi\build_va_deploy.ps1" -ChiX86

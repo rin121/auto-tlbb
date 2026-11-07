@@ -174,6 +174,32 @@ def can_cong_noi_luc(noi_luc, diem, diem_moi_lan):
     return noi_luc < NOI_LUC_TOI_DA and diem >= diem_moi_lan
 
 
+def thong_bao_giftcode_da_kich_hoat(chu):
+    """
+    Game báo giftcode đã dùng (nhân vật cũ, mất file nang_cap_da_xong.json).
+    Bản server này nói «đã nhận giftcode này rồi» / «da nhan giftcode» / «da nhan code», không chỉ «đã kích hoạt».
+    """
+    c = bo_dau(chu or "")
+    if not c or "thanh cong" in c:
+        return False
+    co_ma = any(x in c for x in ("gift", "giftcode", "ma qua tang", "ma tang", "code"))
+    if not co_ma:
+        return False
+    if "tai khoan" in c and "kich hoat" in c:
+        return True
+    if "da kich hoat" in c or "da duoc su dung" in c or ("su dung" in c and "da" in c):
+        return True
+    if "khong the" in c and "kich hoat" in c:
+        return True
+    if "da nhan" in c or "nhan roi" in c:
+        return True
+    return False
+
+
+def co_thong_bao_giftcode_da_kich_hoat(cac_chu):
+    return any(thong_bao_giftcode_da_kich_hoat(chu) for chu in cac_chu if chu)
+
+
 def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
     """NangCapNhanVat (lớp con NhanDoTanThu, import muộn vì nhan_vat_moi cũng import module này)."""
     from nhan_vat_moi import NhanDoTanThu, NPC_CONG_POINT, DONG_CONG_10_TRIEU, DONG_NOI_LUC, DIEM_MOI_LAN_CONG
@@ -200,19 +226,43 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
             if self._tt() is None:
                 raise LoiPhoBan("chưa vào game")
             xong = cac_buoc_da_xong(self.ten, self.duong_dan)
+            self._giftcode_da_nhap = set()
+            self._giftcode_tai_khoan_da_kich_hoat = False
             self.in_log(f"{self.ten}: bắt đầu nâng cấp nhân vật"
                         + (f" (đã xong bước {', '.join(map(str, sorted(xong)))})" if xong else ""))
             self._ve_dai_ly_truoc()
+            if 3 not in xong and self._thu_giftcode_da_kich_hoat_tai_khoan():
+                self._ket_thuc_nang_cap_tu_truoc()
+                return
             for so, buoc in enumerate((self.buoc_1, self.buoc_2, self.buoc_3, self.buoc_4, self.buoc_5,
                                        self.buoc_6), 1):
                 if so in xong:
                     continue
                 self._kiem_tra()
                 buoc()
+                if self._giftcode_tai_khoan_da_kich_hoat:
+                    self._ket_thuc_nang_cap_tu_truoc()
+                    return
                 danh_dau_buoc(self.ten, so, self.duong_dan)
             self.roi_cong_point()
             danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
             self.in_log(f"{self.ten}: đã nâng cấp xong nhân vật")
+
+        def _ket_thuc_nang_cap_tu_truoc(self):
+            self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+            self.game.lua.chay('if IsWindowShow("NewbieCardActivation") then '
+                               'CloseWindow("NewbieCardActivation", true) end')
+            self.roi_cong_point()
+            danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
+            self.in_log(f"{self.ten}: giftcode đã kích hoạt từ trước — coi như đã nâng cấp, giữ nhân vật đi phó bản")
+
+        def _thu_giftcode_da_kich_hoat_tai_khoan(self):
+            """Nhập thử mã đầu: báo tài khoản đã kích hoạt giftcode thì bỏ các bước mua / tặng / cộng điểm."""
+            ten_npc, xy = NPC_GIFTCODE
+            code = GIFTCODE[0]
+            if self._nhap_code(ten_npc, xy, code, 1):
+                self._giftcode_da_nhap.add(code)
+            return self._giftcode_tai_khoan_da_kich_hoat
 
         # 0. NPC GIFTCODE / Cộng Point và các bước đều ở Đại Lý.
         def _ve_dai_ly_truoc(self):
@@ -326,11 +376,16 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
         def buoc_3(self):
             ten_npc, xy = NPC_GIFTCODE
             for code in GIFTCODE:
+                if code in self._giftcode_da_nhap:
+                    continue
                 for lan in range(1, SO_LAN_THU_MANG + 1):
                     if self._nhap_code(ten_npc, xy, code, lan):
+                        self._giftcode_da_nhap.add(code)
                         break
                 else:
                     self.in_log(f"{self.ten}: giftcode {code} nhập {SO_LAN_THU_MANG} lần game không trả lời, bỏ qua")
+                if self._giftcode_tai_khoan_da_kich_hoat:
+                    return
             self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
 
         def _nhap_code(self, ten_npc, xy, code, lan):
@@ -359,6 +414,10 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
                 self._cho(lambda: self._tui_ten() != tui, GIAY_CHO_GAME_TRA_LOI)
             self.game.lua.chay('if IsWindowShow("NewbieCardActivation") then '
                                'CloseWindow("NewbieCardActivation", true) end')
+            if co_thong_bao_giftcode_da_kich_hoat(bao):
+                self._giftcode_tai_khoan_da_kich_hoat = True
+                self.in_log(f"{self.ten}: giftcode — {' / '.join(bao[-2:])}")
+                return True
             if self._tui_ten() != tui:
                 self.in_log(f"{self.ten}: đã nhập giftcode {code}")
                 return True

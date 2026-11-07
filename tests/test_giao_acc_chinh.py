@@ -53,7 +53,59 @@ class TestBoQuaTaiKhoanChuaCoNhanVat(unittest.TestCase):
             kq = gac.cac_nhan_vat_pho_ban("acc_chinh", True, bo_qua)
         self.assertEqual([ten for _, ten in kq], ["caychay47"])
         self.assertIn(("caychay48", "caychay48", "tài khoản chưa từng đăng nhập"), bo_qua)
-        self.assertIn(("caychay47", "caychay477", "chưa có nhân vật"), bo_qua)
+        self.assertEqual(len(bo_qua), 1)
+
+
+class TestTatCaAccTheoBangTaiKhoan(unittest.TestCase):
+    """GAC-28: «Tất cả acc phó bản» — thứ tự bảng XV, một NV/acc; resume qua da_xong."""
+
+    class _KiemTraCo:
+        def __init__(self, bo_qua=None):
+            self.thu_muc = ""
+            self.online = set()
+
+        def co(self, tk, ten):
+            return True
+
+    def test_thu_tu_bang_mot_nv_khong_chia_nhom(self):
+        ds = [
+            {"ten_dang_nhap": "acc_b", "nhan_vat": "NvB"},
+            {"ten_dang_nhap": "acc_a", "nhan_vat": "NvA"},
+        ]
+
+        def _chia_nhom_khong_go(*_a, **_k):
+            raise AssertionError("chia_nhom không dùng trong cac_nhan_vat_pho_ban")
+
+        with patch.object(gac, "cac_tai_khoan_dang_tich", return_value=ds), \
+                patch.object(gac, "chia_nhom", side_effect=_chia_nhom_khong_go), \
+                patch.object(gac, "_KiemTraNhanVat", self._KiemTraCo), \
+                patch.object(gac, "_loc_nhan_vat_pho_ban", return_value=True):
+            kq = gac.cac_nhan_vat_pho_ban("acc_chinh", True)
+        self.assertEqual([(tk["ten_dang_nhap"], ten) for tk, ten in kq],
+                         [("acc_b", "NvB"), ("acc_a", "NvA")])
+
+    def test_dung_cot_nhan_vat_khong_goi_ten_round(self):
+        ds = [{"ten_dang_nhap": "tk1", "nhan_vat": "  TenBang  "}]
+
+        def _ten_round_fail(*_a, **_k):
+            raise AssertionError("ten_round không gọi khi đã có cột Nhân vật")
+
+        with patch.object(gac, "cac_tai_khoan_dang_tich", return_value=ds), \
+                patch.object(gac, "ten_round", side_effect=_ten_round_fail), \
+                patch.object(gac, "_KiemTraNhanVat", self._KiemTraCo), \
+                patch.object(gac, "_loc_nhan_vat_pho_ban", return_value=True):
+            kq = gac.cac_nhan_vat_pho_ban("main", True)
+        self.assertEqual(kq, [(ds[0], "TenBang")])
+
+    def test_resume_loc_bo_qua_da_xong(self):
+        ds_truong = [
+            ({"ten_dang_nhap": "x"}, "nv1"),
+            ({"ten_dang_nhap": "y"}, "nv2"),
+            ({"ten_dang_nhap": "z"}, "nv3"),
+        ]
+        da_xong_ds = {gac.chuan_hoa("nv1"), gac.chuan_hoa("nv2")}
+        con = [(tk, ten) for tk, ten in ds_truong if gac.chuan_hoa(ten) not in da_xong_ds]
+        self.assertEqual([(tk["ten_dang_nhap"], ten) for tk, ten in con], [("z", "nv3")])
 
 
 class TestBoQuaCungTaiKhoanKhongCoDo(unittest.TestCase):

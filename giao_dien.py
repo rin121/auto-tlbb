@@ -31,6 +31,7 @@ import ctypes.wintypes
 import json
 import os
 import queue
+import socket
 import re
 import subprocess
 import sys
@@ -61,6 +62,7 @@ from chien_dau import (CAC_PHIM_SKILL, KY_NANG_VE_THANH, MAU_HET_AN_THAN, MON_PH
 from cua_so_game import (an_cua_so, bat_dpi_awareness, cac_cua_so_da_an, duy_tri_an, hien_cua_so,
                          hien_lai_cua_so_an_lan_truoc, tim_cua_so_game, tim_hwnd_chinh_game_pid)
 from dang_nhap import LoiDangNhap, LuongDangNhap, chuoi_lua, client_dang_dang_nhap, con_chay
+import dang_ky_tai_khoan
 import proxy_mang
 import proxy_broker_ui
 from game_api import Game
@@ -81,8 +83,10 @@ from pho_ban_pmp import (MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, MAP_PMP, M
                          la_lac_duong, la_map_pho_ban, la_map_trong_pho_ban, GIAY_RETRY_VE_THANH_THEO_DOI)
 from chien_dau import khoang_cach
 from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC_TAC, AcTacRunner, DoiAcTac, buoc_doi_vien,
-                            cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai, la_pho_ban_ac_tac,
-                            luc_bat_dau_khung, luc_het_khung, mo_ta_khung, mo_ta_lich, nhan_khung,
+                            ca_doi_trong_pho_ban_ac_tac, cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai,
+                            la_pho_ban_ac_tac, luc_bat_dau_khung, luc_het_khung, mo_ta_khung, mo_ta_lich, nhan_khung,
+                            gianh_khung,
+                            ve_dai_ly_neu_ket_truoc_ac_tac,
                             nguoi_nhan_khung, phut_khung, ten_map_chuan, ve_thanh_neu_o_map_ac_tac)
 import gauto_ac_tac
 from giao_dich import anh_tui_goc
@@ -92,7 +96,8 @@ from nhat_do import NhatDo
 from nang_cap_nhan_vat import LuongNangCapOnline
 from nhan_vat_moi import LuongTaoNhanVat, doc_danh_sach
 from xoay_vong import (SO_NGUOI_CHO_PHEP_GOP_SONG_SONG, SO_NGUOI_MOT_NHOM_TOI_DA, SO_ROUND_TOI_DA, LuongXoayVong,
-                       cac_tai_khoan_dang_tich, co_the_gop_song_song_xv, nhom_dang_online, xoa_xv_tien_trinh)
+                       cac_tai_khoan_dang_tich, co_the_gop_song_song_xv, dat_nv_user_tat_auto, nhom_dang_online,
+                       xoa_xv_tien_trinh)
 from tao_nhan_vat import dang_hoi_ma_kiem_tra, giai_ma_kiem_tra
 from tu_dung_vat_pham import TuDungCanKhonHo, TuDungX2
 from tang_cap import GIAY_GIUA_MOI_LAN as GIAY_GIUA_MOI_LAN_TANG_CAP, thu_tang_cap
@@ -100,6 +105,7 @@ from tu_duyet import LoiTuDuyet, TuDuyet
 from tran_thu import TuXuatChien
 from vut_rac import LoiVutRac, vut_rac
 from thu_muc import THU_MUC_APP
+import bao_cao_telegram
 
 O_BAT, O_TAT = "☑", "☐"
 SO_DONG_LOG_TOI_DA = 500
@@ -878,6 +884,33 @@ class LuongNhanVat(threading.Thread):
         except LoiLua:
             return None
 
+    def ca_doi_trong_pho_ban_ac_tac(self, tt):
+        """Cả PT (đọc được map) còn trong ải Tặc Khấu — hết giờ GAuto vẫn chờ xong ải."""
+        try:
+            game = getattr(self, "game", None)
+            thanh_vien = doc_nhom(game.lua)["thanh_vien"] if game else []
+        except LoiLua:
+            thanh_vien = []
+
+        def map_nv(ten):
+            if chuan_hoa(ten) == chuan_hoa(self.ten):
+                return tt.get("map")
+            luong = self.tim_luong(ten)
+            if luong is None:
+                return None
+            try:
+                return luong.game.thong_tin()["map"]
+            except (LoiLua, AttributeError, OSError):
+                return None
+
+        return ca_doi_trong_pho_ban_ac_tac(tt.get("map"), thanh_vien, map_nv)
+
+    def uu_tien_ac_tac(self, tt, cai_dat):
+        """Ưu tiên Ác Tặc hơn PMP / chuyển sinh (kể cả sau hết phút GAuto nếu cả đội còn trong ải)."""
+        if self.ca_doi_trong_pho_ban_ac_tac(tt):
+            return True
+        return self.ac_tac_dang_chen(cai_dat) or self.dang_theo_ac_tac(cai_dat)
+
     def truong_ac_tac_trong_auto(self):
         """Luồng của đội trưởng (người đầu nhóm trong game) nếu đội trưởng là nhân vật khác trong auto đã bật Ác Tặc."""
         try:
@@ -958,15 +991,27 @@ class LuongNhanVat(threading.Thread):
         AutoHoc đưa đội trưởng tới map Ác Tặc; khi đã tới map thì bật Ác Tặc GAuto chỉ cho đội trưởng (vd. caychay28).
         """
         truong, thanh_vien = self.truong_ac_tac_trong_auto()
-        khung = khung_hien_tai(at)
+        khung = khung_hien_tai(at) or self.ac_tac.gauto_khung
         if khung is None:
+            if self.ca_doi_trong_pho_ban_ac_tac(tt):
+                self.dang_ac_tac = True
+                self.trang_thai["mo_ta"] = (
+                    f"{MO_TA_AC_TAC} (GAuto): hết khung giờ, chờ cả đội xong ải [{tt.get('map') or 'Tặc Khấu'}]")
+                return True
             return False
         maps = cac_map_da_chon(at)
         map_dich = maps[0] if maps else None
         gauto_dang_chay = bool(self.ac_tac.gauto_het_luc > time.time())
+        if not gauto_dang_chay and not la_pho_ban_ac_tac(tt.get("map")) and getattr(self, "game", None) is not None:
+            ve_dai_ly_neu_ket_truoc_ac_tac(self.game, tt.get("map"), self.ac_tac_state)
 
         if truong is not None:
             if truong.ac_tac.khung_xong == khung:
+                if self.ca_doi_trong_pho_ban_ac_tac(tt):
+                    ten_aoi = tt.get("map") or "Tặc Khấu doanh địa"
+                    self.dang_ac_tac = True
+                    self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): chờ cả đội xong [{ten_aoi}]"
+                    return True
                 self.ket_thuc_ac_tac(tt)
                 return False
             self.dang_ac_tac = True
@@ -1000,17 +1045,36 @@ class LuongNhanVat(threading.Thread):
         tr_nhom = self.truong_nhom_xoay_vong()
         if not thanh_vien and not self.ac_tac.gauto_het_luc and tr_nhom \
                 and chuan_hoa(tr_nhom) != chuan_hoa(self.ten):
-            # Chưa vào PT: chỉ trưởng nhóm xoay vòng mới được thao tác GAuto, đội viên không tự coi mình là trưởng.
-            self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): chờ vào PT của {tr_nhom}"
-            return True
+            # Trưởng mời đang online (hoặc không đọc được danh sách luồng): chờ vào PT.
+            # Trưởng mời không có trong phiên này: tự ra map, không đứng yên cả khung.
+            co_truong, _ = self._co_luong_ten(tr_nhom)
+            if co_truong is not False:
+                self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): chờ vào PT của {tr_nhom}"
+                return True
         if not self.ac_tac.gauto_het_luc and not nhan_khung(khung, self.ten):
-            self.ac_tac.khung_xong = khung
-            self.dang_ac_tac = False
-            self.in_log(f"{self.ten}: {MO_TA_AC_TAC} khung {mo_ta_khung(khung, at)} đã do nhóm "
-                        f"{nguoi_nhan_khung(khung)} đi — nhóm này không đi, tiếp tục phó bản")
-            return False
+            nguoi = nguoi_nhan_khung(khung)
+            co, luong_nhan = self._co_luong_ten(nguoi)
+            cung_phien = co is True and nguoi and chuan_hoa(nguoi) != chuan_hoa(self.ten)
+            if cung_phien and not thanh_vien:
+                dang_di = luong_nhan is not None and getattr(luong_nhan, "doi_ac_tac", None) is not None
+                if not dang_di and tr_nhom and chuan_hoa(tr_nhom) == chuan_hoa(self.ten) \
+                        and gianh_khung(khung, self.ten, nguoi):
+                    pass  # Đồng đội nhận nhầm lúc chưa có PT: trưởng mời giành lại rồi ra map.
+                else:
+                    self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC}: {nguoi} đang đưa đội ra map, chờ vào nhóm"
+                    return True
+            else:
+                self.ac_tac.khung_xong = khung
+                self.dang_ac_tac = False
+                self.in_log(f"{self.ten}: {MO_TA_AC_TAC} khung {mo_ta_khung(khung, at)} đã do nhóm "
+                            f"{nguoi} đi — nhóm này không đi, tiếp tục phó bản")
+                return False
 
         if self.ac_tac.gauto_het_luc and time.time() >= self.ac_tac.gauto_het_luc:
+            if self.ca_doi_trong_pho_ban_ac_tac(tt):
+                ten_aoi = tt.get("map") or "Tặc Khấu doanh địa"
+                self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): hết giờ khung, chờ cả đội xong [{ten_aoi}]"
+                return True
             self.tat_gauto_ac_tac(at, khung)
             return False
 
@@ -1067,15 +1131,41 @@ class LuongNhanVat(threading.Thread):
                         self.in_log(f"{self.ten}: GAuto Ác Tặc: {loi} — không thử lại khung này, kiểm tra GAuto "
                                     f"(vẫn tự tắt lúc {datetime.fromtimestamp(self.ac_tac.gauto_het_luc):%H:%M})")
                         return True
-                    if str(loi) != self.ac_tac.gauto_loi_cuoi:
-                        self.in_log(f"{self.ten}: GAuto Ác Tặc: {loi}")
-                    self.ac_tac.gauto_loi_cuoi = str(loi)
+                    self._log_loi_gauto(loi)
                     self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): {loi}"
                     return True
 
+        if gauto_dang_chay and la_pho_ban_ac_tac(tt.get("map")):
+            self._giu_auto_gauto_trong_pho_ban(at)
         con = max(0, int(self.ac_tac.gauto_het_luc - time.time()))
         self.trang_thai["mo_ta"] = f"{MO_TA_AC_TAC} (GAuto): đang chạy trên {map_dich or 'map'}, còn {con // 60}p{con % 60:02d}s"
         return True
+
+    def _giu_auto_gauto_trong_pho_ban(self, at):
+        """Vào Tặc Khấu thì GAuto hay bỏ ô auto. Tích lại nếu đang tắt; đang bật thì không bấm."""
+        if self.ac_tac_state.get("lan_giu_gauto", 0) >= 3:
+            return
+        bay_gio = time.time()
+        if bay_gio - self.ac_tac_state.get("luc_giu_gauto", 0) < 5:
+            return
+        self.ac_tac_state["luc_giu_gauto"] = bay_gio
+        try:
+            hwnd_ql = gauto_ac_tac.tim_cua_so_quan_ly(at["duong_dan_gauto"])
+            if not gauto_ac_tac.bat_lai_auto_neu_tat(hwnd_ql, self.ten):
+                return
+            self.ac_tac_state["lan_giu_gauto"] = self.ac_tac_state.get("lan_giu_gauto", 0) + 1
+            self.in_log(f"{self.ten}: GAuto Ác Tặc: vào phó bản làm tắt auto, tích lại ô đầu dòng «{self.ten}»")
+        except gauto_ac_tac.LoiGautoAcTac as loi:
+            self._log_loi_gauto(f"không tích lại auto được ({loi})")
+
+    def _log_loi_gauto(self, loi):
+        """Cùng một lỗi GAuto chỉ ghi lại mỗi phút, để khung 20 phút không im lặng khi cửa sổ game vẫn đè."""
+        chu = str(loi)
+        bay_gio = time.time()
+        if chu != self.ac_tac.gauto_loi_cuoi or bay_gio - getattr(self.ac_tac, "luc_log_gauto_loi", 0) >= 60:
+            self.in_log(f"{self.ten}: GAuto Ác Tặc: {chu}")
+            self.ac_tac.luc_log_gauto_loi = bay_gio
+        self.ac_tac.gauto_loi_cuoi = chu
 
     def tat_gauto_ac_tac(self, at, khung=None):
         """Hết giờ khung: bỏ tích Ác Tặc (và ô đầu dòng) của đội trưởng trên GAuto đúng một lần."""
@@ -1099,6 +1189,9 @@ class LuongNhanVat(threading.Thread):
         """Ra khỏi khung Ác Tặc: thôi chế độ Ác Tặc; còn đứng ở map Ác Tặc (đội viên) thì về Đại Lý."""
         at = cai_dat_ac_tac()
         if self.ac_tac.gauto_het_luc and time.time() >= self.ac_tac.gauto_het_luc:
+            if self.ca_doi_trong_pho_ban_ac_tac(tt):
+                self.dang_ac_tac = True
+                return
             self.tat_gauto_ac_tac(at)
             self.dang_ac_tac = True
         if not self.dang_ac_tac:
@@ -1371,6 +1464,16 @@ class LuongNhanVat(threading.Thread):
         khoa = chuan_hoa(ten)
         return next((luong for luong in self.lay_cac_luong() if luong.ten and chuan_hoa(luong.ten) == khoa), None)
 
+    def _co_luong_ten(self, ten):
+        """(đang online, luồng). None ở vế đầu nếu luồng giả không có danh sách (giữ hành vi cũ)."""
+        if not ten:
+            return False, None
+        try:
+            luong = self.tim_luong(ten)
+        except AttributeError:
+            return None, None
+        return luong is not None, luong
+
     def bao_ke_danh(self, chien_dau):
         ke_danh = chien_dau.ke_danh_gan_day()
         self.ke_danh = None if ke_danh is None else (ke_danh, self.map_hien_tai, time.time())
@@ -1564,7 +1667,7 @@ class LuongNhanVat(threading.Thread):
                 # Đang đi phó bản (tự đi hoặc theo đội trưởng) thì chuyển sinh / mốc map train chờ đi xong mới chạy.
                 khoa_giao = self.dang_giao_acc_chinh()
                 # Giờ Ác Tặc được ưu tiên hơn PMP / Sát Tinh / chuyển sinh; chết thì để nhánh dưới Đầu thai trước.
-                dang_at = not khoa_giao and (self.ac_tac_dang_chen(cai_dat) or self.dang_theo_ac_tac(cai_dat))
+                dang_at = not khoa_giao and self.uu_tien_ac_tac(tt, cai_dat)
                 if dang_at and tt["hp"] > 0 and self.xu_ly_ac_tac(tt, cai_dat):
                     self.dung.wait(chung["giay_giua_moi_lan_kiem_tra"])
                     continue
@@ -1649,6 +1752,9 @@ class UngDung:
     def __init__(self, root):
         self.root = root
         self.hang_doi = queue.Queue()
+        self._luc_mo_auto = time.time()
+        self._luc_snapshot_tele = 0.0
+        self.luong_bao_cao = None
         cau_hinh.dang_ky_thong_bao_sua_nv(lambda ten: self.hang_doi.put(("cai_dat_doi", ten)))
         self.cac_luong = {}
         self.thong_tin = {}
@@ -1745,6 +1851,9 @@ class UngDung:
             self.in_log(canh_bao_ocr)
         else:
             threading.Thread(target=lam_nong_ocr, daemon=True, name="lam-nong-ocr").start()
+        self.luong_bao_cao = bao_cao_telegram.LuongBaoCao(
+            bao_cao_telegram.doc, lambda chu: self.hang_doi.put(("log", chu)))
+        self._bat_bao_cao_neu_can()
         self.quet_cua_so()
         self._chon_tab("Phó bản")
         self.xu_ly_hang_doi()
@@ -2026,6 +2135,7 @@ class UngDung:
     def dat_bat_auto(self, ten, bat):
         if bat and self._chan_neu_chua_kich_hoat():
             return
+        dat_nv_user_tat_auto(ten, tat=not bat)
         cai_dat = cau_hinh.cua_nhan_vat(ten)
         cai_dat["bat_auto"] = bat
         cau_hinh.dat_nhan_vat(ten, cai_dat)
@@ -2033,7 +2143,10 @@ class UngDung:
             for luong in self.cac_luong.values():
                 if luong.ten == ten:
                     luong.chay_lai()
-        self.in_log(f"{'BẬT' if bat else 'TẮT'} auto cho {ten}")
+        thong_them = ""
+        if not bat and self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
+            thong_them = " (xoay vòng đang chạy — không tự bật lại đến khi anh bật Auto lại)"
+        self.in_log(f"{'BẬT' if bat else 'TẮT'} auto cho {ten}{thong_them}")
         if bat:
             self._chon_tab("Phó bản")
         self.ve_lai_bang()
@@ -2500,6 +2613,304 @@ class UngDung:
                             "Tắt hết hiệu ứng: ép áp lại ViewSetup + View_* mỗi ~10 giây và khi đổi map "
                             "(thần khí / trang phục gắn particle phía server có thể vẫn sáng nhẹ).",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(4, 0))
+        self._tao_khung_telegram(tab)
+
+    def _tao_khung_telegram(self, tab):
+        kn = bao_cao_telegram.doc()
+        ten_mac = kn["ten_may"] or socket.gethostname()[:40]
+        khung = ttk.LabelFrame(tab, text="Báo cáo Telegram", padding=6)
+        khung.pack(fill="x", pady=(8, 0))
+        self.bien_tele_bat = tk.BooleanVar(value=kn["bat"])
+        self.bien_tele_ten = tk.StringVar(value=ten_mac)
+        self.bien_tele_dia_chi = tk.StringVar(value=kn["dia_chi"])
+        self.bien_tele_ma = tk.StringVar(value=kn["ma_ket_noi"])
+        ttk.Checkbutton(khung, text="Bật gửi báo cáo tới bot quản lý",
+                        variable=self.bien_tele_bat,
+                        command=lambda: self._luu_ket_noi_telegram(im_lang=False)).pack(anchor="w")
+        o = ttk.Frame(khung)
+        o.pack(fill="x", pady=(4, 0))
+        self._o_tele = []
+        for hang, (nhan, bien, an) in enumerate((
+                ("Tên máy", self.bien_tele_ten, ""),
+                ("Địa chỉ bot quản lý", self.bien_tele_dia_chi, ""),
+                ("Mã bí mật", self.bien_tele_ma, "*"),
+        )):
+            ttk.Label(o, text=nhan).grid(row=hang, column=0, sticky="w", pady=1, padx=(0, 6))
+            ent = ttk.Entry(o, textvariable=bien, width=42, show=an)
+            ent.grid(row=hang, column=1, sticky="w")
+            self._o_tele.append(ent)
+        for ent in self._o_tele:
+            ent.bind("<FocusOut>", lambda _e: self._luu_ket_noi_telegram(im_lang=False))
+            ent.bind("<Return>", lambda _e: self._luu_ket_noi_telegram(im_lang=False))
+        nut = ttk.Frame(khung)
+        nut.pack(anchor="w", pady=(6, 0))
+        ttk.Button(nut, text="Kết nối ngay", command=self.ket_noi_telegram_ngay).pack(side="left")
+        if bao_cao_telegram.tim_chay_bot_quan_ly():
+            ttk.Button(nut, text="Chạy bot quản lý (máy chủ)", command=self.chay_bot_quan_ly_tu_gui).pack(
+                side="left", padx=(8, 0))
+        ttk.Label(
+            khung,
+            text="Người dùng: điền 3 ô → bấm «Kết nối ngay» (tự bật gửi, lưu, gửi thử). "
+                 "Địa chỉ do admin gửi (IP hoặc https://….trycloudflare.com); mã trùng trên máy chủ. "
+                 "Máy chủ: bấm «Chạy bot quản lý» một lần, giữ cửa sổ CMD mở.",
+            foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left",
+        ).pack(anchor="w", pady=(4, 0))
+        self.nhan_tele_da_luu = ttk.Label(khung, text="", foreground="gray")
+        self.nhan_tele_da_luu.pack(anchor="w")
+
+    def _doc_o_telegram(self):
+        return bao_cao_telegram.doc_tu_dict({
+            "bat": self.bien_tele_bat.get(),
+            "ten_may": self.bien_tele_ten.get(),
+            "dia_chi": self.bien_tele_dia_chi.get(),
+            "ma_ket_noi": self.bien_tele_ma.get(),
+        })
+
+    def _cap_nhat_o_telegram_tu_cau(self, cau):
+        if cau["dia_chi"] and cau["dia_chi"] != self.bien_tele_dia_chi.get():
+            self.bien_tele_dia_chi.set(cau["dia_chi"])
+
+    def _luu_ket_noi_telegram(self, im_lang=False):
+        truoc = bao_cao_telegram.doc()
+        cau = self._doc_o_telegram()
+        self._cap_nhat_o_telegram_tu_cau(cau)
+        if not cau["bat"]:
+            ban = bao_cao_telegram.doc_tu_dict(cau)
+            bao_cao_telegram.luu(ban)
+            self._go_bao_doi_ten_may(truoc, ban)
+            self._bat_bao_cao_neu_can()
+            self.nhan_tele_da_luu.configure(text="Đã lưu (chưa bật gửi báo cáo).")
+            return True
+        try:
+            cau = bao_cao_telegram.kiem_tra(cau)
+        except ValueError as loi:
+            if im_lang:
+                messagebox.showerror("Báo cáo Telegram", str(loi), parent=self.root)
+            else:
+                self.nhan_tele_da_luu.configure(text=str(loi))
+            return False
+        bao_cao_telegram.luu(cau)
+        self._go_bao_doi_ten_may(truoc, cau)
+        self._bat_bao_cao_neu_can()
+        goi_y = "Đã lưu — đang gửi báo cáo." if cau["bat"] else "Đã lưu."
+        self.nhan_tele_da_luu.configure(text=goi_y)
+        if im_lang:
+            self.in_log(f"Báo cáo Telegram: {goi_y}")
+        return True
+
+    def _dam_bao_luong_bao_cao(self):
+        if self.luong_bao_cao is None:
+            self.luong_bao_cao = bao_cao_telegram.LuongBaoCao(
+                bao_cao_telegram.doc, lambda chu: self.hang_doi.put(("log", chu)))
+        return self.luong_bao_cao
+
+    def _bat_bao_cao_neu_can(self):
+        luong = self._dam_bao_luong_bao_cao()
+        cau = bao_cao_telegram.doc()
+        if not cau["bat"]:
+            if luong.dang_chay():
+                luong.dung()
+            return
+        try:
+            bao_cao_telegram.kiem_tra(cau)
+        except ValueError as loi:
+            if luong.dang_chay():
+                luong.dung()
+            self.in_log(f"Báo cáo Telegram chưa bật: {loi}")
+            return
+        luong.cap_nhat_snapshot(self._dung_snapshot_telegram())
+        if not luong.dang_chay():
+            luong.bat()
+
+    def ket_noi_telegram_ngay(self):
+        """Một nút cho user: bật gửi, lưu, gửi thử, bật luồng báo cáo."""
+        self.bien_tele_bat.set(True)
+        cau = self._doc_o_telegram()
+        if bao_cao_telegram.hub_dang_nghe(cau.get("dia_chi")) is False:
+            goi_y = (
+                "Máy chủ chưa chạy bot quản lý (không mở được cổng báo cáo).\n\n"
+                "Nếu đây là máy chủ: bấm «Chạy bot quản lý» trước, rồi «Kết nối ngay» lại.\n"
+                "Nếu là máy farm: hỏi admin địa chỉ + bảo admin bật bot trên máy chủ."
+            )
+            if not messagebox.askyesno("Báo cáo Telegram", goi_y + "\n\nVẫn thử gửi?", parent=self.root):
+                return
+        self.thu_ket_noi_telegram()
+
+    def chay_bot_quan_ly_tu_gui(self):
+        bat = bao_cao_telegram.tim_chay_bot_quan_ly()
+        if not bat:
+            messagebox.showerror(
+                "Báo cáo Telegram",
+                "Không thấy ChayBotQuanLy.bat — chỉ dùng trên máy chủ đã cài bot_quan_ly.",
+                parent=self.root)
+            return
+        try:
+            os.startfile(bat)
+        except OSError as loi:
+            messagebox.showerror("Báo cáo Telegram", f"Không mở được: {loi}", parent=self.root)
+            return
+        self.in_log("Đã mở bot quản lý Telegram (cửa sổ CMD — giữ mở).")
+        self.nhan_tele_da_luu.configure(
+            text="Đã mở bot quản lý. Chờ vài giây rồi bấm «Kết nối ngay».")
+
+    def thu_ket_noi_telegram(self):
+        if not self._luu_ket_noi_telegram(im_lang=True):
+            return
+        cau = bao_cao_telegram.doc()
+        try:
+            cau = bao_cao_telegram.kiem_tra(cau, bat_buoc=True)
+        except ValueError as loi:
+            messagebox.showerror("Báo cáo Telegram", str(loi), parent=self.root)
+            return
+        snap = self._dung_snapshot_telegram()
+        snap["ten_may"] = cau["ten_may"]
+        try:
+            bao_cao_telegram.gui_bao_cao(cau["dia_chi"], cau["ma_ket_noi"], snap, timeout=10)
+        except bao_cao_telegram.LoiGui as loi:
+            messagebox.showerror(
+                "Báo cáo Telegram",
+                f"Không gửi được: {loi}\n\nMáy chủ phải đang chạy bot quản lý.",
+                parent=self.root)
+            return
+        self._bat_bao_cao_neu_can()
+        messagebox.showinfo(
+            "Báo cáo Telegram",
+            "Đã kết nối và gửi báo cáo.\nTrên Telegram (bot của admin) gõ: /ds hoặc /status",
+            parent=self.root)
+
+    def _go_bao_doi_ten_may(self, truoc, moi):
+        ten_cu = (truoc.get("ten_may") or "").strip()
+        ten_moi = (moi.get("ten_may") or "").strip()
+        if not ten_cu or not ten_moi or ten_cu == ten_moi:
+            return
+        if not moi.get("dia_chi") or not str(moi.get("ma_ket_noi") or "").strip():
+            return
+        snap = self._dung_snapshot_telegram(ten_may_cu=ten_cu)
+        try:
+            bao_cao_telegram.gui_bao_cao(moi["dia_chi"], moi["ma_ket_noi"], snap, timeout=8)
+            self.in_log(f"Báo cáo Telegram: đổi tên «{ten_cu}» → «{ten_moi}» (đã gỡ tên cũ trên bot)")
+        except bao_cao_telegram.LoiGui as loi:
+            self.in_log(f"Báo cáo Telegram: không gỡ được tên cũ «{ten_cu}»: {loi}")
+
+    def _dung_snapshot_telegram(self, tat=False, ten_may_cu=None):
+        cau = bao_cao_telegram.doc()
+        ten = (cau["ten_may"] or self.bien_tele_ten.get() or socket.gethostname())[:40]
+        return bao_cao_telegram.hop_snapshot(
+            ten,
+            time.time() - self._luc_mo_auto,
+            self._cua_so_telegram(),
+            self._acc_telegram(),
+            self._chu_xoay_vong(),
+            tat=tat,
+            id_may=cau["id_may"],
+            ten_may_cu=ten_may_cu or "",
+        )
+
+    def _chu_xoay_vong(self):
+        nhan = getattr(self, "nhan_xoay_vong", None)
+        if nhan is None:
+            return ""
+        try:
+            return nhan.cget("text") or ""
+        except tk.TclError:
+            return ""
+
+    def _cua_so_telegram(self):
+        ds = []
+        for hwnd, luong in self.cac_luong.items():
+            tt = self.thong_tin.get(hwnd) or {}
+            loi = self.loi.get(hwnd) or ""
+            co_tt = bool(luong.ten and tt)
+            bat = False
+            if luong.ten:
+                try:
+                    bat = self._cau_nv_cho_bang(luong.ten)[0]
+                except (KeyError, TypeError):
+                    bat = False
+            mo_ta = bao_cao_telegram.mo_ta_auto(
+                bool(loi), co_tt,
+                (luong.trang_thai or {}).get("mo_ta", ""),
+                getattr(luong, "mo_ta_chien_dau", "") or "",
+                getattr(luong, "mo_ta_auto_click", "") or "",
+                bat,
+            )
+            doi = self.doi_hinh_nhom.get(hwnd)
+            thanh_vien = []
+            if isinstance(doi, (list, tuple)) and len(doi) >= 2 and isinstance(doi[1], (list, tuple)):
+                thanh_vien = [str(x) for x in doi[1] if x]
+            ds.append(bao_cao_telegram.cua_so_bao_cao(
+                ten=tt.get("ten") or luong.ten or "",
+                tai_khoan=tt.get("tai_khoan") or luong.tai_khoan or "",
+                map=tt.get("map") or "",
+                hp=tt.get("hp") if tt else None,
+                level=tt.get("level") if tt else None,
+                mon_phai=tt.get("mon_phai") or getattr(luong, "mon_phai", "") or "",
+                trong_game=bool(getattr(luong, "dang_trong_game", False)),
+                mo_ta=mo_ta,
+                loi=str(loi) if loi else "",
+                nhom=thanh_vien,
+                mo_ta_nhom=self.trang_thai_nhom.get(hwnd) or "",
+            ))
+        return ds
+
+    def _luong_online_tai_khoan(self, ten, nhan_vat):
+        theo_tk, theo_ten = {}, {}
+        for luong in self.cac_luong.values():
+            if luong.tai_khoan:
+                theo_tk.setdefault(luong.tai_khoan.lower(), luong)
+        for luong in self.cac_luong.values():
+            if luong.tai_khoan:
+                continue
+            ten_cua = luong.ten or ten_trong_tieu_de(luong.hwnd)
+            if ten_cua:
+                theo_ten.setdefault(chuan_hoa(ten_cua), luong)
+        return theo_tk.get((ten or "").lower()) or theo_ten.get(chuan_hoa(nhan_vat or ""))
+
+    def _acc_telegram(self):
+        cai = cau_hinh.doc_tai_khoan()
+        acc = []
+        for loai, khoa in (("pho_ban", cau_hinh.KHOA_TK_PHO_BAN), ("train", cau_hinh.KHOA_TK_TRAIN)):
+            for tk in cai.get(khoa) or []:
+                ten = (tk.get("ten_dang_nhap") or "").strip()
+                if not ten:
+                    continue
+                luong = self._luong_online_tai_khoan(ten, tk.get("nhan_vat"))
+                ten_online = ""
+                if luong:
+                    ten_online = luong.ten or ten_trong_tieu_de(luong.hwnd) or ten
+                mo_ta_luong = self.trang_thai_tai_khoan.get(ten, "")
+                acc.append(bao_cao_telegram.acc_bao_cao(
+                    ten, loai, tk.get("nhan_vat") or "", bool(tk.get("bat")),
+                    bao_cao_telegram.trang_thai_acc(
+                        luong is not None, ten_online,
+                        ten in self.cac_luong_dang_nhap, mo_ta_luong,
+                        ten in self.tai_khoan_tam_dung, mo_ta_luong,
+                        self._tu_dang_nhap_khi_diss(tk),
+                    ),
+                ))
+        return acc
+
+    def _cap_nhat_snapshot_telegram(self):
+        luong = self.luong_bao_cao
+        if luong is None or not luong.dang_chay():
+            return
+        bay_gio = time.monotonic()
+        if bay_gio - self._luc_snapshot_tele < 5:
+            return
+        self._luc_snapshot_tele = bay_gio
+        luong.cap_nhat_snapshot(self._dung_snapshot_telegram())
+
+    def _gui_tat_telegram(self):
+        luong = self.luong_bao_cao
+        if luong is None:
+            return
+        try:
+            snap = self._dung_snapshot_telegram(tat=True)
+        except Exception as loi:
+            self.in_log(f"Không dựng được báo cáo lúc tắt: {loi}")
+            luong.dung()
+            return
+        luong.gui_tat(snap)
 
     def luu_cai_dat_fps(self):
         try:
@@ -3038,8 +3449,8 @@ class UngDung:
         ttk.Checkbutton(khung, text="Chỉ nhân vật đã đi phó bản hôm nay (bỏ tích: mọi nhân vật round đã tạo)",
                         variable=self.bien_gac_hom_nay).grid(row=4, column=0, columnspan=2, sticky="w", pady=(4, 0))
         self.bien_gac_tat_ca_pb = tk.BooleanVar(value=cd.get("tat_ca_pho_ban", False))
-        ttk.Checkbutton(khung, text="Tất cả acc phó bản (mọi acc trong nhóm, từng nhân vật round;\n"
-                                    "không có đồ thì thoát game, sang acc tiếp theo)",
+        ttk.Checkbutton(khung, text="Tất cả acc phó bản (mọi tài khoản XV theo thứ tự bảng;\n"
+                                    "một nhân vật/acc; không có NV thì bỏ qua; không đồ thì thoát sang acc sau)",
                         variable=self.bien_gac_tat_ca_pb).grid(row=5, column=0, columnspan=2, sticky="w", pady=(2, 0))
         self._gan_tu_dong_luu_giao_acc_chinh()
         dong = ttk.Frame(khung)
@@ -3051,8 +3462,8 @@ class UngDung:
         self.nhan_giao_acc_chinh.pack(side="left", padx=8)
         ttk.Label(khung, text="Bấm Bắt đầu: mọi client đang trong game về chọn máy chủ (giữ client, không mở game mới). "
                               "Đăng nhập acc chính (đứng ở NPC Tân Thủ, Đại Lý), rồi lần lượt đăng nhập acc phó bản "
-                              "(mặc định: chỉ trưởng nhóm; tích «Tất cả acc phó bản»: mọi tài khoản trong nhóm xoay vòng, "
-                              "từng nhân vật round 1-3). Kiểm tra túi Đạo cụ + Nguyên liệu: có đồ thì giao cho acc chính "
+                              "(mặc định: chỉ trưởng nhóm; tích «Tất cả acc phó bản»: mọi tài khoản XV theo thứ tự bảng, "
+                              "một nhân vật/acc). Kiểm tra túi Đạo cụ + Nguyên liệu: có đồ thì giao cho acc chính "
                               "(trừ ô Không giao, đồ khóa bỏ qua), không có đồ thì thoát game và sang acc tiếp (chế độ "
                               "tất cả acc). Túi acc chính còn dưới 5 ô trống thì cất vào Thiên Cơ Cẩm Nang / Thương khố. "
                               "Cả hai đầy thì dừng. Bấm Dừng rồi Bắt đầu đi tiếp nhân vật chưa xong (tiến trình theo ngày).",
@@ -3122,14 +3533,16 @@ class UngDung:
         ttk.Button(dong_g2, text="Chọn...", command=self.chon_duong_dan_gauto).pack(side="left")
         dong_g3 = ttk.Frame(khung)
         dong_g3.pack(fill="x", pady=(2, 0))
-        ttk.Button(dong_g3, text="Test GAuto", command=self.test_gauto).pack(side="left")
+        ttk.Button(dong_g3, text="Test GAuto bật", command=lambda: self.test_gauto(True)).pack(side="left")
+        ttk.Button(dong_g3, text="Test GAuto tắt", command=lambda: self.test_gauto(False)).pack(side="left", padx=4)
         ttk.Label(dong_g3, text="Phút / khung").pack(side="left", padx=(8, 0))
         ttk.Spinbox(dong_g3, from_=5, to=120, width=4, textvariable=self.bien_at_phut_gauto,
                     command=self.luu_ac_tac).pack(side="left", padx=4)
         ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập đội trưởng trước; GAuto tự chạy quyền Admin nên "
-                              "AutoHoc cũng phải chạy quyền Admin. Tới giờ AutoHoc đưa đội tới map đầu danh sách ☑, chọn "
-                              "map đó trên GAuto (bấm chuột thật ~1 giây) rồi tích Ác Tặc cho dòng đội trưởng; hết «Phút "
-                              "/ khung» thì bỏ tích, đi tiếp phó bản. GAuto không có Tây Hồ. Bấm «Test GAuto» để thử.",
+                              "AutoHoc cũng phải chạy quyền Admin. Tới giờ AutoHoc đưa đội tới map đầu danh sách ☑, mở "
+                              "cửa sổ GAuto, tích ô đầu dòng, chọn map rồi tích Ác Tặc; hết «Phút / khung» thì bỏ tích, "
+                              "đi tiếp phó bản. GAuto không có Tây Hồ. «Test GAuto bật» làm đúng bước đó và để nguyên; "
+                              "«Test GAuto tắt» bỏ tích ô đầu dòng và ô Ác Tặc. Log chỉ ghi OK sau khi đọc lại ô trên GAuto.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(2, 0))
         dong = ttk.Frame(khung)
         dong.pack(fill="x", pady=(6, 0))
@@ -4328,6 +4741,31 @@ class UngDung:
         ttk.Button(nut, text="Xóa tất cả", command=self.xoa_tat_ca_tai_khoan).pack(side="left")
         ttk.Button(nut, text="Lưu cài đặt", command=self.luu_cai_dat_dang_nhap).pack(side="left", padx=4)
 
+        khung_dk = ttk.LabelFrame(tab, text="Đăng ký tài khoản web (tlbbnhatkiem.online)", padding=4)
+        khung_dk.pack(fill="x", pady=(8, 0))
+        self.bien_dk_prefix = tk.StringVar()
+        self.bien_dk_mk = tk.StringVar(value=dang_ky_tai_khoan.MAT_KHAU_MAC_DINH)
+        self.bien_dk_tu = tk.StringVar(value="1")
+        self.bien_dk_den = tk.StringVar(value="10")
+        self._dung_dang_ky_web = threading.Event()
+        dong_dk = ttk.Frame(khung_dk)
+        dong_dk.pack(fill="x")
+        ttk.Label(dong_dk, text="Tài khoản").pack(side="left")
+        ttk.Entry(dong_dk, textvariable=self.bien_dk_prefix, width=14).pack(side="left", padx=(2, 8))
+        ttk.Label(dong_dk, text="Mật khẩu").pack(side="left")
+        ttk.Entry(dong_dk, textvariable=self.bien_dk_mk, width=12, show="●").pack(side="left", padx=(2, 8))
+        ttk.Label(dong_dk, text="Từ").pack(side="left")
+        ttk.Entry(dong_dk, textvariable=self.bien_dk_tu, width=5).pack(side="left", padx=(2, 4))
+        ttk.Label(dong_dk, text="đến").pack(side="left")
+        ttk.Entry(dong_dk, textvariable=self.bien_dk_den, width=5).pack(side="left", padx=(2, 8))
+        self.nut_dang_ky_web = ttk.Button(dong_dk, text="Đăng ký", command=self.bat_dau_dang_ky_web)
+        self.nut_dang_ky_web.pack(side="left")
+        ttk.Button(dong_dk, text="Dừng", command=self.dung_dang_ky_web).pack(side="left", padx=4)
+        self.nhan_dk_web = ttk.Label(khung_dk, text="sonoko + 1→3 = sonoko1, sonoko2, sonoko3. "
+                                     "Mỗi tài khoản cách nhau 20 giây (web giới hạn tốc độ).",
+                                     foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left")
+        self.nhan_dk_web.pack(anchor="w", pady=(4, 0))
+
         ttk.Label(tab, text="Phó bản — cột XV: tham gia xoay vòng (chỉ mở game khi bấm Bắt đầu ở tab Phó bản). Train — "
                             "cột Bật: bật auto train. Double-click dòng tài khoản (không phải cột XV/Bật) để mở game và "
                             "đăng nhập ngay; nếu chưa có nhân vật thì tự chạy tạo nhân vật + nhận đồ / nâng cấp (tab Tạo "
@@ -4925,6 +5363,78 @@ class UngDung:
         pre = m1.group(1)
         return [f"{pre}{i}" for i in range(a, b + 1)]
 
+    def dung_dang_ky_web(self):
+        self._dung_dang_ky_web.set()
+
+    def bat_dau_dang_ky_web(self):
+        tien_to = self.bien_dk_prefix.get().strip()
+        mat_khau = self.bien_dk_mk.get()
+        if not tien_to or not mat_khau:
+            messagebox.showerror("Thiếu thông tin", "Cần nhập tài khoản (tiền tố) và mật khẩu")
+            return
+        try:
+            tu = int(self.bien_dk_tu.get().strip())
+            den = int(self.bien_dk_den.get().strip())
+        except ValueError:
+            messagebox.showerror("Sai số", "Từ và đến phải là số nguyên (vd. 1 và 21)")
+            return
+        if tu < 1 or den < tu:
+            messagebox.showerror("Sai khoảng", "Cần 1 ≤ Từ ≤ Đến")
+            return
+        if den - tu + 1 > 200:
+            messagebox.showerror("Quá nhiều", "Tối đa 200 tài khoản mỗi lần")
+            return
+        ds = dang_ky_tai_khoan.danh_sach_tai_khoan(tien_to, tu, den)
+        if not messagebox.askyesno(
+                "Đăng ký web",
+                f"Đăng ký {len(ds)} tài khoản trên tlbbnhatkiem.online?\n"
+                f"{ds[0]} … {ds[-1]}\nMỗi lần cách nhau {int(dang_ky_tai_khoan.GIAY_GIUA_LAN)} giây."):
+            return
+        self._dung_dang_ky_web.clear()
+        self.nut_dang_ky_web.state(["disabled"])
+        self.nhan_dk_web.configure(text=f"Đang đăng ký {ds[0]} … {ds[-1]}")
+
+        def bao(chu):
+            self.root.after(0, lambda c=chu: self._bao_dang_ky_web(c))
+
+        def chay():
+            ok = ton_tai = loi = 0
+            try:
+                for i, ten in enumerate(ds):
+                    if self._dung_dang_ky_web.is_set():
+                        bao(f"Đã dừng. OK={ok}, đã có={ton_tai}, lỗi={loi}")
+                        return
+                    bao(f"[{i + 1}/{len(ds)}] {ten}")
+                    kq = dang_ky_tai_khoan.dang_ky_mot(dang_ky_tai_khoan.mo_trinh_duyet(), ten, mat_khau)
+                    if kq.ok:
+                        ok += 1
+                        trang = "OK"
+                    elif kq.skipped_exists:
+                        ton_tai += 1
+                        trang = "ĐÃ CÓ"
+                    else:
+                        loi += 1
+                        trang = "LỖI"
+                    bao(f"Đăng ký {ten}: {trang} — {kq.message}")
+                    if i >= len(ds) - 1:
+                        break
+                    _, _, gioi_han = dang_ky_tai_khoan.phan_loai_thong_bao(kq.message)
+                    cho = max(dang_ky_tai_khoan.GIAY_GIUA_LAN, 20.0) if gioi_han else dang_ky_tai_khoan.GIAY_GIUA_LAN
+                    if dang_ky_tai_khoan.cho_giay(cho, self._dung_dang_ky_web.is_set):
+                        bao(f"Đã dừng. OK={ok}, đã có={ton_tai}, lỗi={loi}")
+                        return
+                bao(f"Xong đăng ký: thành công={ok}, đã có={ton_tai}, lỗi={loi}")
+            except Exception as exc:
+                bao(f"Đăng ký web lỗi: {exc}")
+            finally:
+                self.root.after(0, lambda: self.nut_dang_ky_web.state(["!disabled"]))
+
+        threading.Thread(target=chay, daemon=True, name="dang-ky-web").start()
+
+    def _bao_dang_ky_web(self, chu):
+        self.nhan_dk_web.configure(text=chu)
+        self.in_log(chu)
+
     def them_tai_khoan_hang_loat(self):
         dau = self.bien_tai_khoan["ten_dang_nhap"].get().strip()
         cuoi = self.bien_tai_khoan_den.get().strip()
@@ -5091,32 +5601,40 @@ class UngDung:
             self.bien_at_duong_dan_gauto.set(duong)
             self.luu_ac_tac()
 
-    def test_gauto(self):
-        """Chạy thử điều khiển GAuto từng bước (log ở khung Nhật ký), không cần tới giờ Ác Tặc."""
+    def test_gauto(self, bat=True):
+        """Bật hoặc tắt GAuto y như lúc tới khung (log ở khung Nhật ký), không cần tới giờ Ác Tặc."""
+        tieu = "Test GAuto bật" if bat else "Test GAuto tắt"
         duong = self.bien_at_duong_dan_gauto.get().strip()
         if not duong:
-            messagebox.showwarning("Test GAuto", "Chọn đường dẫn GAuto_2025.exe trước (nút Chọn...)", parent=self.root)
+            messagebox.showwarning(tieu, "Chọn đường dẫn GAuto_2025.exe trước (nút Chọn...)", parent=self.root)
             return
-        ten = simpledialog.askstring("Test GAuto", "Tên nhân vật (đội trưởng) trong bảng GAuto để test\n"
-                                                   "(để trống = dòng đang chọn trong GAuto)", parent=self.root)
+        ten = simpledialog.askstring(tieu, "Tên nhân vật (đội trưởng) trong bảng GAuto\n"
+                                            "(để trống = dòng đang chọn trong GAuto)", parent=self.root)
         if ten is None:
             return
         cac_map = [m for m in self.at_thu_tu if m in self.at_da_chon]
-        bat_thu = messagebox.askyesno(
-            "Test GAuto", f"Chọn map «{cac_map[0] if cac_map else '?'}» (map đầu danh sách AutoHoc) trên GAuto bằng chuột, "
-                          "tích thử ô «Ác Tặc» 3 giây rồi bỏ tích?\nTrong lúc chọn map (~1 giây) đừng động chuột.\n\n"
-                          "Không = chỉ đọc, không bấm gì trên GAuto.", parent=self.root)
+        if bat:
+            if not cac_map:
+                messagebox.showwarning(tieu, "Chưa tích map Ác Tặc nào", parent=self.root)
+                return
+            hoi = (f"Bật GAuto cho «{ten.strip() or 'dòng đang chọn'}»: tích ô đầu dòng, chọn map "
+                   f"«{cac_map[0]}», tích Ác Tặc và để nguyên.\nGAuto sẽ đi tìm Ác Tặc. Tiếp tục?")
+        else:
+            hoi = (f"Tắt GAuto cho «{ten.strip() or 'dòng đang chọn'}»: bỏ tích ô đầu dòng và ô Ác Tặc. Tiếp tục?")
+        if not messagebox.askyesno(tieu, hoi, parent=self.root):
+            return
 
         def chay():
             log = lambda chu: self.hang_doi.put(("log", chu))  # noqa: E731
             try:
-                gauto_ac_tac.test_gauto(duong, ten.strip(), log, bat_thu, cac_map_autohoc=cac_map)
+                gauto_ac_tac.test_gauto(duong, ten.strip(), log, bat, cac_map_autohoc=cac_map,
+                                        at=self.doc_form_ac_tac())
             except gauto_ac_tac.LoiGautoAcTac as loi:
-                log(f"Test GAuto: LỖI — {loi}")
+                log(f"{tieu}: LỖI — {loi}")
                 if str(loi) == gauto_ac_tac.THONG_BAO_CAN_ADMIN:
                     self.root.after(0, self.hoi_chay_lai_quyen_admin)
             except Exception:
-                log(f"Test GAuto: lỗi không mong đợi\n{traceback.format_exc()}")
+                log(f"{tieu}: lỗi không mong đợi\n{traceback.format_exc()}")
 
         threading.Thread(target=chay, daemon=True).start()
 
@@ -5763,6 +6281,7 @@ class UngDung:
                     self.ve_lai_bang_nhom()
                 if can_ve_xung_quanh or cach_phu >= GIAY_VE_LAI_BANG_PHU:
                     self.ve_lai_xung_quanh()
+        self._cap_nhat_snapshot_telegram()
         self.root.after(300, self.xu_ly_hang_doi)
 
     def _cau_nv_cho_bang(self, ten):
@@ -5852,6 +6371,8 @@ class UngDung:
             # Chờ luồng bật lại auto đã tạm tắt, kẻo cau_hinh.json lưu nhân vật ở trạng thái tắt auto.
             self.luong_giao_dich_ngay.dung.set()
             self.luong_giao_dich_ngay.join(10)
+        if not self.dang_khoi_dong:
+            self._gui_tat_telegram()
         self.root.destroy()
 
 

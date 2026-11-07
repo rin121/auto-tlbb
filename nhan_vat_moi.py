@@ -53,6 +53,11 @@ from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 MON_PHAI_TIEU_DAO = 8
 CHUA_VAO_PHAI = 9
 
+
+def da_gia_nhap_phai(mon_phai):
+    """Đã có môn phái. 9 là chưa vào; None là chưa đọc được. Mã khác (kể cả -1) là đã gia nhập."""
+    return mon_phai is not None and mon_phai != CHUA_VAO_PHAI
+
 NPC_TAN_THU = ("Tân Thủ", (160, 166))
 NPC_CONG_POINT = ("Cộng Point", (168, 142))
 NPC_HOI_MAU = ("Di Chuyển", (165, 156))
@@ -240,6 +245,10 @@ class NhanDoTanThu(PhoBanPMP):
         if tt is None:
             raise LoiPhoBan("chưa vào game")
         self.in_log(f"{self.ten}: bắt đầu nhận đồ tân thủ [{tt['map']} ({tt['x']}, {tt['y']})]")
+        if da_gia_nhap_phai(tt.get("mon_phai")) and tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
+            self.in_log(f"{self.ten}: đã gia nhập phái (mã {tt['mon_phai']}), "
+                        "bỏ qua nhận đồ tân thủ, sang nâng cấp")
+            return
         self.in_log(f"{self.ten}: bước 1 — gia nhập phái Tiêu Dao")
         self._vao_tieu_dao(tt)
         self._nhan_vang()
@@ -305,8 +314,9 @@ class NhanDoTanThu(PhoBanPMP):
         if tt["mon_phai"] == MON_PHAI_TIEU_DAO:
             self.in_log(f"{self.ten}: đã ở phái Tiêu Dao (bước 1 xong)")
             return
-        if tt["mon_phai"] != CHUA_VAO_PHAI:
-            self.in_log(f"{self.ten}: đang ở môn phái khác (mã {tt['mon_phai']}), vẫn thử gia nhập Tiêu Dao")
+        if da_gia_nhap_phai(tt["mon_phai"]):
+            self.in_log(f"{self.ten}: đã gia nhập phái (mã {tt['mon_phai']}), bỏ qua gia nhập Tiêu Dao")
+            return
         self._noi_chuyen(NPC_TAN_THU, (DONG_VAO_PHAI, DONG_TIEU_DAO))
         if not self._cho(lambda: (self._tt() or {}).get("mon_phai") == MON_PHAI_TIEU_DAO,
                          GIAY_CHO_GAME_TRA_LOI + GIAY_CHO_LAG):

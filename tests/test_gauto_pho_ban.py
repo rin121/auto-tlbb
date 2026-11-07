@@ -63,6 +63,30 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT)
         luong.ac_tac.di_den_map_gauto.assert_called_once()
 
+    def test_trong_pho_ban_o_auto_tat_thi_tich_lai(self):
+        luong = _luong(het_luc=time.time() + 600)
+        luong.ac_tac.gauto_khung = ("2026-10-30", 13)
+        with patch.object(gd.gauto_ac_tac, "bat_lai_auto_neu_tat", return_value=True) as giu:
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
+        giu.assert_called_once()
+        self.assertIn("tích lại", luong.in_log.call_args[0][0])
+
+    def test_trong_pho_ban_auto_dang_bat_thi_khong_bam_lai(self):
+        luong = _luong(het_luc=time.time() + 600)
+        luong.ac_tac.gauto_khung = ("2026-10-30", 13)
+        with patch.object(gd.gauto_ac_tac, "bat_lai_auto_neu_tat", return_value=False) as giu:
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
+        giu.assert_called_once()
+        luong.in_log.assert_not_called()
+
+    def test_ngoai_pho_ban_khong_cham_o_auto(self):
+        luong = _luong(het_luc=time.time() + 600)
+        luong.ac_tac.gauto_khung = ("2026-10-30", 13)
+        with patch.object(gd.gauto_ac_tac, "bat_lai_auto_neu_tat") as giu:
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT))
+        giu.assert_not_called()
+
     def test_doi_vien_trong_pho_ban_khong_tu_di(self):
         truong = MagicMock()
         truong.ac_tac = MagicMock(khung_xong=None, gauto_het_luc=0.0)
@@ -78,11 +102,25 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         self.assertEqual(luong.ac_tac.gauto_het_luc, 0.0)
         self.assertEqual(luong.ac_tac.khung_xong, ("2026-10-30", 13))
 
-    def test_het_gio_trong_pho_ban_van_tat_ngay(self):
+    def test_het_gio_trong_pho_ban_cho_xong_aoi(self):
         luong = _luong(het_luc=time.time() - 1)
-        self.assertFalse(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
+        luong.game = MagicMock()
+        sk.nhan_khung(("2026-10-30", 13), luong.ten)
+        with patch.object(gd, "doc_nhom", return_value={"thanh_vien": [luong.ten]}):
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
+        gd.gauto_ac_tac.tat_ac_tac.assert_not_called()
+        self.assertIn("chờ", luong.trang_thai["mo_ta"])
+
+    def test_het_gio_trong_pho_ban_do_vien_ngoai_thi_tat(self):
+        luong = _luong(het_luc=time.time() - 1)
+        luong.game = MagicMock()
+        dv = MagicMock()
+        dv.game.thong_tin.return_value = {"map": "Kiếm Các"}
+        luong.tim_luong = lambda ten: dv if ten != luong.ten else None
+        sk.nhan_khung(("2026-10-30", 13), luong.ten)
+        with patch.object(gd, "doc_nhom", return_value={"thanh_vien": [luong.ten, "doi_vien"]}):
+            self.assertFalse(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
         gd.gauto_ac_tac.tat_ac_tac.assert_called_once()
-        self.assertEqual(luong.ac_tac.khung_xong, ("2026-10-30", 13))
 
     def test_ngoai_pt_khong_phai_truong_nhom_thi_khong_dung_gauto(self):
         luong = _luong()
@@ -136,6 +174,38 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         dat.assert_called_once()
         self.assertEqual(luong.ac_tac.gauto_het_luc, gd.luc_het_khung.return_value)
 
+    def test_nguoi_nhan_con_online_thi_cho_khong_khoa_khung(self):
+        sk.nhan_khung(("2026-10-30", 13), "truongnhom")
+        luong = _luong()
+        khac = MagicMock()
+        khac.doi_ac_tac = None
+        luong.tim_luong = lambda ten: khac if ten == "truongnhom" else None
+        with patch.object(gd, "doc_nhom", return_value={"thanh_vien": []}):
+            self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT))
+        self.assertIsNone(luong.ac_tac.khung_xong)
+        self.assertIn("chờ vào nhóm", luong.trang_thai["mo_ta"])
+        luong.ac_tac.di_den_map_gauto.assert_not_called()
+
+    def test_truong_moi_gianh_lai_khung_roi_ra_map(self):
+        sk.nhan_khung(("2026-10-30", 13), "doi_vien")
+        luong = _luong()
+        luong.truong_nhom_xoay_vong = lambda: luong.ten
+        khac = MagicMock()
+        khac.doi_ac_tac = None
+        luong.tim_luong = lambda ten: khac if ten == "doi_vien" else None
+        luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT)
+        luong.ac_tac.di_den_map_gauto.assert_called_once()
+        self.assertIsNone(luong.ac_tac.khung_xong)
+        self.assertEqual(sk.nguoi_nhan_khung(("2026-10-30", 13)), luong.ten)
+
+    def test_truong_moi_khong_online_thi_tu_ra_map(self):
+        luong = _luong()
+        luong.ten = "caychay35"
+        luong.truong_nhom_xoay_vong = lambda: "caychay32"
+        luong.tim_luong = lambda ten: None
+        luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT)
+        luong.ac_tac.di_den_map_gauto.assert_called_once()
+
     def test_nhom_khac_da_nhan_khung_thi_khong_di(self):
         sk.nhan_khung(("2026-10-30", 13), "caychay322")
         luong = _luong()
@@ -161,6 +231,48 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
         self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT))
         gd.gauto_ac_tac.tat_ac_tac.assert_not_called()
         luong.ac_tac.di_den_map_gauto.assert_not_called()
+
+
+class TestRaMapTruocAcTac(unittest.TestCase):
+    def test_ket_pmp_thi_ve_dai_ly_khong_bam_theo_doi(self):
+        game = MagicMock()
+        game.lua.chay.return_value = b"0"
+        doi = MagicMock(vi_tri=(10, 10, "Đại Lý"), map_dich="Kiếm Các", truong="truong")
+        doi.vung_cho.return_value = None
+        with patch.object(sk, "chuan_bi_ve_thanh", return_value=True) as chuan_bi, \
+                patch.object(sk, "dong_y_theo_doi_popup"):
+            loai, chu = sk.buoc_doi_vien(
+                game, doi, {"map": "Phiêu Miễu Phong", "x": 1, "y": 1}, {})
+        self.assertEqual(loai, "mo_ta")
+        self.assertIn("Đại Lý", chu)
+        self.assertNotIn("không tự về", chu)
+        chuan_bi.assert_called_once()
+        self.assertNotIn(sk.MA_THEO_DOI, [c.args[0] for c in game.lua.chay.call_args_list])
+
+    def test_dang_o_map_ac_tac_thi_khong_ve_thanh(self):
+        game = MagicMock()
+        game.lua.chay.return_value = b"0"
+        doi = MagicMock(vi_tri=(10, 10, "Đại Lý"), map_dich="Kiếm Các", truong="truong")
+        doi.vung_cho.return_value = None
+        with patch.object(sk, "chuan_bi_ve_thanh") as chuan_bi, \
+                patch.object(sk, "dong_y_theo_doi_popup"):
+            _, chu = sk.buoc_doi_vien(game, doi, {"map": "Kiếm Các", "x": 1, "y": 1}, {})
+        self.assertIn("không tự về", chu)
+        chuan_bi.assert_not_called()
+
+
+class TestCaDoiPhoBanAcTac(unittest.TestCase):
+    def test_ca_doi_mot_minh_trong_pho_ban(self):
+        self.assertTrue(sk.ca_doi_trong_pho_ban_ac_tac(PHO_BAN, [], lambda t: PHO_BAN))
+
+    def test_ca_doi_co_nguoi_ngoai_aoi(self):
+        ds = ["a", "b"]
+        self.assertFalse(sk.ca_doi_trong_pho_ban_ac_tac(
+            PHO_BAN, ds, lambda t: PHO_BAN if t == "a" else "Kiếm Các"))
+
+    def test_ca_doi_ca_hai_trong_aoi(self):
+        ds = ["a", "b"]
+        self.assertTrue(sk.ca_doi_trong_pho_ban_ac_tac(PHO_BAN, ds, lambda t: PHO_BAN))
 
 
 class TestKhungAcTac(unittest.TestCase):
