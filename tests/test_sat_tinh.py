@@ -389,5 +389,26 @@ class TestKetDiChuyenThiVeThanh(unittest.TestCase):
         self.assertEqual(self.ve_thanh, 0)
 
 
+class TestManhBaDiaPhu(unittest.TestCase):
+    def test_ten_map(self):
+        self.assertTrue(pb.la_dia_phu("Địa phủ"))
+        self.assertTrue(pb.la_dia_phu("Địa Phủ"))
+        self.assertFalse(pb.la_dia_phu(pb.MAP_DAI_LY))
+
+    def test_chon_dung_dong_dai_ly(self):
+        inst = pb._RoiDiaPhu.__new__(pb._RoiDiaPhu)
+        inst.ten = "anhzero3444"
+        inst.in_log = lambda *_: None
+        inst._hoi_thoai = lambda: ("Mạnh Bà", [
+            ("info", -1, -1, "ngươi muốn đi đâu"),
+            ("id", 12, 3, "Đại Lý"),
+            ("id", 12, 4, "Lạc Dương"),
+        ])
+        da_chon = []
+        inst._chon = da_chon.append
+        inst._bam_dong_dung(pb.DONG_MANH_BA_DAI_LY, (0, 0))
+        self.assertEqual(da_chon, [(12, 3)])
+
+
 if __name__ == "__main__":
     unittest.main()

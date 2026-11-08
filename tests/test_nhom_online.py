@@ -398,5 +398,20 @@ class TestMoDuClient(unittest.TestCase):
         self.assertTrue(any("mở thêm 1" in dong for dong in log))
 
 
+class TestChuaXongThiKhongPhoBan(unittest.TestCase):
+    def test_chua_nhan_do_thi_khong_bat_pho_ban(self):
+        luong = xv.LuongXoayVong.__new__(xv.LuongXoayVong)
+        luong.in_log = lambda *_: None
+        luong._bo_dang_nhap = []
+        luong.dung = MagicMock()
+        luong.dung.is_set.return_value = False
+        tv = MagicMock()
+        tv.game, tv.ten, tv.tk = MagicMock(), "anhzero111", "anhzero11"
+        with patch.object(xv, "san_sang_di_pho_ban", return_value=False):
+            kq = luong._di_round("Nhóm 1 round 2", [tv])
+        self.assertEqual(kq, [])
+        self.assertEqual(luong._bo_dang_nhap, [tv])
+
+
 if __name__ == "__main__":
     unittest.main()

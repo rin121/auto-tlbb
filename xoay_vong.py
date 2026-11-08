@@ -43,10 +43,11 @@ from giao_dich import (GIAY_GUI_LAI_VI_TRI, KHOANG_CACH_GIAO_DICH, GiaoDich, Loi
 from giao_dich_ngay import bat_lai_auto, tam_dung_auto
 from lua_game import LoiLua
 from moi_nhom import doc_nhom
-from nhan_vat_moi import LuongTaoNhanVat, NhanDoTanThu, cac_ten_nhan_vat, da_xong, ten_sai_rule, ten_thuc
+from nhan_vat_moi import (LuongTaoNhanVat, NhanDoTanThu, cac_ten_nhan_vat, da_xong, san_sang_di_pho_ban,
+                          ten_sai_rule, ten_thuc)
 from pho_ban_pmp import (GIAY_MOT_VONG, MAP_DAI_LY, MAP_LAC_DUONG, cai_dat_pmp, chuan_bi_ve_thanh, dang_chay_vong,
-                         dat_chan_vong_moi, dat_phien_xoay_vong, hom_nay, la_dai_ly, la_lac_duong,
-                         la_map_trong_pho_ban)
+                         dat_chan_vong_moi, dat_phien_xoay_vong, hom_nay, la_dai_ly, la_dia_phu, la_lac_duong,
+                         la_map_trong_pho_ban, roi_dia_phu)
 from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung,
                             nguoi_nhan_khung)
 
@@ -1215,6 +1216,17 @@ class LuongXoayVong(threading.Thread):
         if truong is None:
             self.in_log(f"{mo_ta}: không có ai trong game, bỏ round")
             return []
+        chua = [tv for tv in thanh_vien if not getattr(tv, "game", None)
+                or not san_sang_di_pho_ban(tv.game, tv.ten, tv.tk, self.in_log, self.dung.is_set)]
+        if chua:
+            self.in_log(f"{mo_ta}: {', '.join(tv.ten for tv in chua)} chưa nhận tiền / nhận đồ / nâng cấp "
+                        "hoặc còn ở Địa Phủ, chưa bật phó bản")
+            co = {tv.tk.lower() for tv in self._bo_dang_nhap}
+            for tv in thanh_vien:
+                if tv.tk.lower() not in co:
+                    self._bo_dang_nhap.append(tv)
+                    co.add(tv.tk.lower())
+            return []
         doi_vien = [tv for tv in thanh_vien if tv is not truong]
         self._ghi_truong_nhom(truong)
         for tv in thanh_vien:
@@ -1781,6 +1793,12 @@ class LuongXoayVong(threading.Thread):
             for tv in thanh_vien:
                 tt = self._doc(tv)
                 if tt and la_dai_ly(tt["map"]):
+                    continue
+                if tt and la_dia_phu(tt["map"]):
+                    roi_dia_phu(tv.game, tv.ten, self.in_log, self.dung.is_set)
+                    if la_dai_ly((self._doc(tv) or {}).get("map")):
+                        continue
+                    chua.append(tv)
                     continue
                 chua.append(tv)
                 if tt and time.time() - luc_ve.get(tv.tk, 0) >= GIAY_GIUA_HAI_LAN_VE_THANH:

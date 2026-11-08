@@ -440,6 +440,12 @@ TEN_NPC_HOI_MAU_DAI_LY = "TRỊ LIỆU"
 XY_NPC_HOI_MAU_DAI_LY = (163, 147)
 DONG_TRI_LIEU = "Trị liệu"
 DONG_TRI_LIEU_SCRIPT = (129, 0)
+# Ảnh 2026-11-08, anhzero3444 đứng cạnh Mạnh Bà, minimap «Địa phủ» 19 30.
+# Dòng «Đại Lý» / «Lạc Dương» chọn theo chữ đang mở, cùng cách NPC Trị Liệu.
+MAP_DIA_PHU = "Địa Phủ"
+TEN_NPC_MANH_BA = "Mạnh Bà"
+XY_NPC_MANH_BA = (19, 30)
+DONG_MANH_BA_DAI_LY = "Đại Lý"
 DONG_XAC_NHAN_TRI_LIEU = "Có"
 DONG_XAC_NHAN_TRI_LIEU_SCRIPT = (129, 1001)
 TY_LE_HOI_MAU_DAI_LY = 0.5
@@ -611,6 +617,10 @@ def can_ve_khi_het_luot(pmp, dem, ten_map):
 
 def la_dai_ly(ten_map):
     return chuan_hoa(ten_map or "") == chuan_hoa(MAP_DAI_LY)
+
+
+def la_dia_phu(ten_map):
+    return chuan_hoa(ten_map or "") == chuan_hoa(MAP_DIA_PHU)
 
 
 def can_hoi_mau_tai_dai_ly(tt, ty_le=TY_LE_HOI_MAU_DAI_LY):
@@ -3229,3 +3239,47 @@ class _HoiMauDaiLy(PhoBanPMP):
             self.in_log(f"{self.ten}: hồi máu Đại Lý: {loi}")
         finally:
             self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+
+
+class _RoiDiaPhu(PhoBanPMP):
+    """Ở Địa Phủ: tới NPC Mạnh Bà, chọn đúng dòng «Đại Lý» (cùng cách bấm dòng với Trị Liệu)."""
+
+    def __init__(self, game, ten, in_log, nen_dung=None):
+        super().__init__(game, in_log or (lambda _: None))
+        self.ten = ten
+        self.nen_dung = nen_dung or (lambda: False)
+        self.het_han_vong = time.time() + 120
+        self.che_do = "dia_phu"
+
+    def thuc_hien(self):
+        tt = self._tt()
+        if not tt or not la_dia_phu(tt["map"]):
+            return
+        try:
+            self.in_log(f"{self.ten}: đang ở Địa Phủ, nói chuyện {TEN_NPC_MANH_BA} "
+                        f"({XY_NPC_MANH_BA[0]}, {XY_NPC_MANH_BA[1]}) chọn {DONG_MANH_BA_DAI_LY}")
+            self._mo_hoi_thoai(TEN_NPC_MANH_BA, XY_NPC_MANH_BA, (DONG_MANH_BA_DAI_LY,), dan_doi=False)
+            self._bam_dong_dung(DONG_MANH_BA_DAI_LY, (0, 0))
+            if not self._cho(lambda: not la_dia_phu(self._map() or ""), GIAY_CHO_VE_THANH):
+                raise LoiPhoBan(f"chọn {DONG_MANH_BA_DAI_LY} ở {TEN_NPC_MANH_BA} mà chưa rời Địa Phủ")
+            self.in_log(f"{self.ten}: đã rời Địa Phủ về {self._map()}")
+        finally:
+            self.game.lua.chay('if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+
+
+def roi_dia_phu(game, ten, in_log, nen_dung=None):
+    """Đang ở Địa Phủ thì về Đại Lý qua Mạnh Bà. Không ở Địa Phủ thì coi là xong."""
+    try:
+        tt = game.thong_tin()
+    except LoiLua:
+        return False
+    if not tt or not la_dia_phu(tt.get("map")):
+        return True
+    try:
+        _RoiDiaPhu(game, ten, in_log, nen_dung).thuc_hien()
+    except _Dung:
+        raise
+    except LoiPhoBan as loi:
+        (in_log or (lambda *_: None))(f"{ten}: chưa về được từ Địa Phủ ({loi})")
+        return False
+    return True

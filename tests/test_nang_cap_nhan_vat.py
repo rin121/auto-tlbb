@@ -144,6 +144,89 @@ class TestNangCapLogic(unittest.TestCase):
         self.assertIn("Packet_PackUp_Clicked()", ncnv.MA_XEP_TUI)
 
 
+# Thứ tự cứng trong NangCapNhanVat.chay() — không được bỏ / đảo bước.
+THU_TU_NANG_CAP = (
+    "buoc_1_bach_bao_9_sao",
+    "buoc_2_mua_than_khi_trung",
+    "buoc_3_giftcode",
+    "buoc_4_hoang_kim_hop_point",
+    "buoc_5_rut_noi_luc",
+    "buoc_6_cong_diem",
+    "roi_cong_point",
+)
+
+
+class TestThuTuNangCap(unittest.TestCase):
+    """NC-13: nâng cấp nhân vật chạy đúng 6 bước + rời Cộng Point, không bỏ bước."""
+
+    def setUp(self):
+        self.thu_muc = tempfile.mkdtemp()
+        self.file = os.path.join(self.thu_muc, "nang_cap_da_xong.json")
+        self.goi = []
+
+        class GameGia:
+            lua = object()
+        self.nc = ncnv.tao_nang_cap(GameGia(), "caychay24", lambda chu: None, lambda: False,
+                                    lambda chu: None, self.file)
+        self.nc._tt = lambda: {"ten": "caychay24"}
+        self.nc._map = lambda: "Đại Lý"
+        self.nc._thu_giftcode_da_kich_hoat_tai_khoan = lambda: False
+        ten_buoc = list(THU_TU_NANG_CAP[:-1])
+        for so, ten in enumerate(ten_buoc, 1):
+            setattr(self.nc, f"buoc_{so}", lambda ten=ten: self.goi.append(ten))
+        self.nc.roi_cong_point = lambda: self.goi.append("roi_cong_point")
+
+    def tearDown(self):
+        shutil.rmtree(self.thu_muc, ignore_errors=True)
+
+    def test_chay_du_6_buoc_theo_thu_tu(self):
+        self.nc.chay()
+        self.assertEqual(tuple(self.goi), THU_TU_NANG_CAP)
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+
+    def test_loi_giua_chung_thi_dung_khong_nhay_buoc_sau(self):
+        from pho_ban_pmp import LoiPhoBan
+
+        def loi_giftcode():
+            self.goi.append("buoc_3_giftcode")
+            raise LoiPhoBan("không mở được hội thoại GIFTCODE")
+
+        self.nc.buoc_3 = loi_giftcode
+        with self.assertRaises(LoiPhoBan):
+            self.nc.chay()
+        self.assertEqual(self.goi, [
+            "buoc_1_bach_bao_9_sao",
+            "buoc_2_mua_than_khi_trung",
+            "buoc_3_giftcode",
+        ])
+        self.assertNotIn("buoc_4_hoang_kim_hop_point", self.goi)
+        self.assertNotIn("buoc_5_rut_noi_luc", self.goi)
+        self.assertNotIn("buoc_6_cong_diem", self.goi)
+        self.assertNotIn("roi_cong_point", self.goi)
+        self.assertFalse(ncnv.da_lam("caychay24", self.file))
+        self.assertEqual(ncnv.cac_buoc_da_xong("caychay24", self.file), {1, 2})
+
+    def test_chay_lai_bo_buoc_da_xong_lam_tiep_dung_thu_tu(self):
+        ncnv.danh_dau_buoc("caychay24", 1, self.file)
+        ncnv.danh_dau_buoc("caychay24", 2, self.file)
+        ncnv.danh_dau_buoc("caychay24", 3, self.file)
+        self.nc.chay()
+        self.assertEqual(self.goi, [
+            "buoc_4_hoang_kim_hop_point",
+            "buoc_5_rut_noi_luc",
+            "buoc_6_cong_diem",
+            "roi_cong_point",
+        ])
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+
+    def test_ve_dai_ly_truoc_roi_moi_toi_buoc_1(self):
+        self.nc._map = lambda: "Lạc Dương"
+        self.nc._ve_thanh = lambda: self.goi.append("ve_dai_ly")
+        self.nc.chay()
+        self.assertEqual(self.goi[0], "ve_dai_ly")
+        self.assertEqual(tuple(self.goi[1:]), THU_TU_NANG_CAP)
+
+
 class TestVeDaiLyTruoc(unittest.TestCase):
     """NC-08: chưa ở Đại Lý thì về Đại Lý trước rồi mới làm các bước."""
 
@@ -399,10 +482,19 @@ class TestNangCapSauDangNhap(unittest.TestCase):
             self.dang_nhap.LuongDangNhap.nang_cap_sau_dang_nhap(self.luong)
 
     def test_da_co_phai_khac_thi_nang_cap_khong_gia_nhap(self):
-        self.dang_nhap.Game.thong_tin = lambda self: {"ten": "caychay24", "mon_phai": -1}
+        self.dang_nhap.Game.thong_tin = lambda self: {"ten": "caychay24", "mon_phai": 3}
         self._chay(False, lambda game, ten, *a: self.goi.append(ten))
         self.assertEqual(self.goi, ["caychay24"])
         self.assertTrue(any("bỏ qua gia nhập" in d for d in self.log))
+
+    def test_ma_am_mot_thi_gia_nhap_truoc_khong_nang_cap(self):
+        self.dang_nhap.Game.thong_tin = lambda self: {"ten": "caychay24", "mon_phai": -1}
+        from unittest import mock
+        with mock.patch("nhan_vat_moi.NhanDoTanThu") as lop:
+            self._chay(False, lambda game, ten, *a: self.goi.append(ten))
+        lop.return_value._vao_tieu_dao.assert_called_once()
+        self.assertEqual(self.goi, [])
+        self.assertTrue(any("bước 1" in d for d in self.log))
 
     def test_chua_lam_thi_nang_cap(self):
         self._chay(False, lambda game, ten, *a: self.goi.append((game.hwnd, ten)))

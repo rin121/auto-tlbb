@@ -45,7 +45,7 @@ from game_api import Game
 from giai_captcha import LoiGiaiCaptcha
 from lua_game import LoiLua
 from pho_ban_pmp import (GIAY_CHO_GAME_TRA_LOI, GIAY_CHO_LAG, MA_DA_MANG, MAP_DAI_LY, SO_LAN_DUNG_TOI_DA,
-                         SO_LAN_THU_MANG, LoiPhoBan, PhoBanPMP)
+                         SO_LAN_THU_MANG, LoiPhoBan, PhoBanPMP, _Dung as _DungPhoBan, la_dia_phu, roi_dia_phu)
 from tao_nhan_vat import giai_ma_kiem_tra
 from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 
@@ -54,8 +54,8 @@ CHUA_VAO_PHAI = 9
 
 
 def da_gia_nhap_phai(mon_phai):
-    """Đã có môn phái. 9 là chưa vào; None là chưa đọc được. Mã khác (kể cả -1) là đã gia nhập."""
-    return mon_phai is not None and mon_phai != CHUA_VAO_PHAI
+    """Đã có môn phái thật. 9 là chưa vào. None và -1 là game chưa trả mã (vừa vào Đại Lý), không tính là đã vào."""
+    return mon_phai is not None and mon_phai != CHUA_VAO_PHAI and mon_phai != -1
 
 NPC_TAN_THU = ("Tân Thủ", (160, 166))
 NPC_CONG_POINT = ("Cộng Point", (168, 142))
@@ -95,6 +95,9 @@ KHOA_TAO = threading.Lock()
 SO_LAN_CONG_TOI_DA = 10
 
 MA_DA_MANG_KHOI = MA_DA_MANG.replace("{o}", str(O_TRANG_BI_KHOI))
+# Định nghĩa mũ đang mang — Tân Thủ - Khôi (10162420) ≠ Hoàng Kim - Khôi (10162450).
+MA_MA_KHOI = ('local a = EnumAction({o}, "equip") if a and a:GetID() ~= 0 then '
+              'return tostring(a:GetDefineID()) end return "0"').replace("{o}", str(O_TRANG_BI_KHOI))
 MA_TIEN = 'return tostring(Player:GetData("MONEY"))'
 MA_DS_NHAN_VAT = ('local s = "" for i = 0, GameProduceLogin:GetRoleCount() - 1 do '
                   's = s .. GameProduceLogin:GetRoleInfo(i) .. "\\n" end return s')
@@ -130,6 +133,105 @@ def ds_nhan_vat(lua):
 
 def da_xong(tai_khoan):
     return cau_hinh.doc_tai_khoan()["tao_nhan_vat_moi"]["da_xong"].get(tai_khoan.lower(), [])
+
+
+def da_nhan_do_tan_thu(tai_khoan, ten):
+    return any(cung_ten(ten, t) for t in da_xong(tai_khoan))
+
+
+def dang_mac_do(game):
+    """Đang mang mũ (tân thủ hoặc hoàng kim). Không mặc thì chưa được đi phó bản."""
+    try:
+        return game.lua.chay(MA_DA_MANG_KHOI) == b"1"
+    except (LoiLua, OSError, AttributeError):
+        return False
+
+
+def ma_khoi_dang_mang(game):
+    """Mã định nghĩa mũ đang mang; 0 nếu chưa mặc / đọc lỗi."""
+    try:
+        return int(float(game.lua.chay(MA_MA_KHOI)))
+    except (LoiLua, OSError, AttributeError, TypeError, ValueError):
+        return 0
+
+
+def dang_mac_do_nang_cap(game):
+    """Đã mang mũ Hoàng Kim (nâng cấp xong). Còn Tân Thủ - Khôi thì chưa nâng cấp thật."""
+    return ma_khoi_dang_mang(game) in nang_cap_nhan_vat.MA_HOANG_KIM
+
+
+def da_co_tien_tan_thu(game):
+    try:
+        return int(float(game.lua.chay(MA_TIEN))) >= TIEN_VANG_TAN_THU
+    except (LoiLua, OSError, AttributeError, TypeError, ValueError):
+        return False
+
+
+def buoc_truoc_pho_ban_xong(game, ten):
+    """Đã vào phái, đang mặc Hoàng Kim, cờ nâng cấp có, không còn kẹt Địa Phủ."""
+    try:
+        tt = game.thong_tin()
+    except LoiLua:
+        return False
+    if not tt or la_dia_phu(tt.get("map")) or not da_gia_nhap_phai(tt.get("mon_phai")):
+        return False
+    if not dang_mac_do_nang_cap(game) or not nang_cap_nhan_vat.da_lam(ten):
+        return False
+    return True
+
+
+def _thieu_nhan_tien_do(game, ten):
+    try:
+        tt = game.thong_tin() or {}
+    except LoiLua:
+        return True
+    if la_dia_phu(tt.get("map")) or not da_gia_nhap_phai(tt.get("mon_phai")) or not dang_mac_do(game):
+        return True
+    return not da_co_tien_tan_thu(game) and not nang_cap_nhan_vat.da_lam(ten)
+
+
+def _can_chay_nang_cap(game, ten, vua_nhan_do):
+    """Vừa nhận đồ tân thủ, chưa có cờ, hoặc còn mặc mũ Tân Thủ → phải chạy nâng cấp."""
+    if vua_nhan_do or not nang_cap_nhan_vat.da_lam(ten):
+        return True
+    return not dang_mac_do_nang_cap(game)
+
+
+def san_sang_di_pho_ban(game, ten, tai_khoan, in_log, nen_dung):
+    """
+    Về Đại Lý nếu đang ở Địa Phủ, rồi nhận tiền, nhận đồ, nâng cấp (giftcode, thần khí, pet…).
+    True chỉ khi đã mang Hoàng Kim và cờ nâng cấp. Cờ da_lam giả (còn mũ Tân Thủ) thì làm lại nâng cấp.
+    """
+    if not roi_dia_phu(game, ten, in_log, nen_dung):
+        in_log(f"{ten}: còn ở Địa Phủ, chưa cho đi phó bản")
+        return False
+    if buoc_truoc_pho_ban_xong(game, ten):
+        return True
+    in_log(f"{ten}: chưa nhận tiền / nhận đồ / nâng cấp, làm trước khi đi phó bản")
+    try:
+        vua_nhan_do = False
+        if _thieu_nhan_tien_do(game, ten):
+            NhanDoTanThu(game, ten, in_log, nen_dung, lambda chu: None).chay()
+            if tai_khoan:
+                ghi_da_xong(tai_khoan, ten)
+            vua_nhan_do = True
+        if _can_chay_nang_cap(game, ten, vua_nhan_do):
+            if nang_cap_nhan_vat.da_lam(ten):
+                in_log(f"{ten}: cờ nâng cấp có nhưng chưa mang Hoàng Kim — xóa cờ, làm lại nâng cấp "
+                       "(giftcode, thần khí, pet, cộng điểm)")
+                nang_cap_nhan_vat.bo_danh_dau(ten)
+            nang_cap_nhan_vat.nang_cap(game, ten, in_log, nen_dung)
+    except _DungPhoBan:
+        raise
+    except Exception as loi:
+        if nen_dung and nen_dung():
+            raise
+        in_log(f"{ten}: chưa xong trước phó bản ({loi})")
+        return False
+    if buoc_truoc_pho_ban_xong(game, ten):
+        return True
+    in_log(f"{ten}: nhận tiền / nhận đồ / nâng cấp chưa pass, chưa cho đi phó bản")
+    return False
 
 
 def ghi_da_xong(tai_khoan, ten):
@@ -238,16 +340,30 @@ class NhanDoTanThu(PhoBanPMP):
             self._chon_dong(dong)
             time.sleep(0.5)
 
-    def chay(self):
+    def _tt_on_dinh(self):
+        """Vừa vào game MEMPAI hay trả -1. Đọc lại vài lần trước khi coi là chưa vào phái."""
         tt = self._tt()
+        for _ in range(4):
+            if not tt or tt.get("mon_phai") != -1:
+                return tt
+            time.sleep(0.4)
+            tt = self._tt()
+        return tt
+
+    def chay(self):
+        tt = self._tt_on_dinh()
         if tt is None:
             raise LoiPhoBan("chưa vào game")
         self.in_log(f"{self.ten}: bắt đầu nhận đồ tân thủ [{tt['map']} ({tt['x']}, {tt['y']})]")
+        if la_dia_phu(tt.get("map")):
+            if not roi_dia_phu(self.game, self.ten, self.in_log, self.nen_dung):
+                raise LoiPhoBan("đang ở Địa Phủ, chưa về Đại Lý được qua Mạnh Bà")
+            tt = self._tt_on_dinh() or tt
         if da_gia_nhap_phai(tt.get("mon_phai")) and tt.get("mon_phai") != MON_PHAI_TIEU_DAO:
             self.in_log(f"{self.ten}: đã gia nhập phái (mã {tt['mon_phai']}), "
-                        "bỏ qua nhận đồ tân thủ, sang nâng cấp")
-            return
-        self.in_log(f"{self.ten}: bước 1 — gia nhập phái Tiêu Dao")
+                        "không vào Tiêu Dao lại — vẫn nhận tiền, nhận đồ rồi mới nâng cấp")
+        else:
+            self.in_log(f"{self.ten}: bước 1 — gia nhập phái Tiêu Dao")
         self._vao_tieu_dao(tt)
         self._nhan_vang()
         self._mang(MA_TUI_BACH_BAO)
