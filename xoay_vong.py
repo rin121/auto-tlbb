@@ -48,7 +48,7 @@ from nhan_vat_moi import (LuongTaoNhanVat, NhanDoTanThu, cac_ten_nhan_vat, da_xo
 from pho_ban_pmp import (GIAY_MOT_VONG, MAP_DAI_LY, MAP_LAC_DUONG, cai_dat_pmp, chuan_bi_ve_thanh, dang_chay_vong,
                          dat_chan_vong_moi, dat_phien_xoay_vong, hom_nay, la_dai_ly, la_dia_phu, la_lac_duong,
                          la_map_trong_pho_ban, roi_dia_phu)
-from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung,
+from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, ac_tac_dang_bat, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung,
                             nguoi_nhan_khung)
 
 SO_TAI_KHOAN_MOT_NHOM = 4  # mặc định; số thật lấy từ cau_hinh.chung()["so_nguoi_mot_nhom"]
@@ -1652,7 +1652,7 @@ class LuongXoayVong(threading.Thread):
             at = cai_dat_ac_tac()
             khung_at = khung_hien_tai(at)
             nhom_at = nguoi_nhan_khung(khung_at) if khung_at is not None else None
-            if khung_at is not None and at["bat"] and nhom_at and khung_at != khung_at_da_bao:
+            if khung_at is not None and ac_tac_dang_bat(at) and nhom_at and khung_at != khung_at_da_bao:
                 khung_at_da_bao = khung_at
                 if chuan_hoa(nhom_at) == chuan_hoa(truong.ten):
                     self.in_log(f"{mo_ta}: khung {MO_TA_AC_TAC} {mo_ta_khung(khung_at, at)} — nhóm đi "

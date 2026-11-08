@@ -13,9 +13,11 @@ Cách chạy: bấm đúp chay_auto.bat, hoặc
 - Mỗi cửa sổ game có một luồng riêng đọc game và dùng vật phẩm, nên nhân vật này đang chờ
   dịch chuyển không làm chậm nhân vật khác. Giao diện chỉ nhận tin qua hàng đợi, không gọi game trực tiếp.
 - Tab "Tài khoản": hai bảng — phó bản (xoay vòng) và train (chỉ train). Mỗi tài khoản là một cửa sổ game.
-  Tài khoản không có cửa sổ (bị diss) thì auto tự mở game đăng nhập lại nếu được bật (dang_nhap.py).
-  Nhiều tài khoản thì mở game theo từng đợt (vd. 2 game mỗi 2 giây), mở dồn một lúc thì client bị chặn.
-  Mất kết nối thì game không tự tắt mà hiện hộp hỏi: auto bấm Duyệt / Đóng cho game tắt (mat_ket_noi.py).
+  Nút Xóa chỉ xóa các dòng đang chọn trên bảng (Ctrl/Shift chọn nhiều), không xóa theo ô tick XV/Bật;
+  «Xóa tất cả» mới xóa hết. Tài khoản không có cửa sổ (bị diss) thì auto tự mở game đăng nhập lại nếu được
+  bật (dang_nhap.py). Nhiều tài khoản thì mở game theo từng đợt (vd. 2 game mỗi 2 giây), mở dồn một lúc thì
+  client bị chặn. Mất kết nối thì game không tự tắt mà hiện hộp hỏi: auto bấm Duyệt / Đóng cho game tắt
+  (mat_ket_noi.py).
 - Tab "Tạo nhân vật": bấm Tạo nhân vật trong game thì auto tự nhập mã kiểm tra (tao_nhan_vat.py).
 - Tab "Tiện ích": vứt rác (vut_rac.py), auto duyệt popup hỏi xác nhận (tu_duyet.py),
   tự mua và dùng Thiên Linh Đan / Càn Khôn Hồ khi hết hiệu ứng (tu_dung_vat_pham.py), auto chat Thế giới
@@ -41,7 +43,7 @@ import unicodedata
 import tkinter as tk
 import traceback
 from datetime import date, datetime
-from tkinter import filedialog, messagebox, simpledialog, ttk
+from tkinter import filedialog, messagebox, ttk
 from tkinter import font as tkfont
 
 import psutil
@@ -84,6 +86,7 @@ from pho_ban_pmp import (MA_BO_THEO_DOI, MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_D
                          MAP_SAT_TINH, BAN_KINH_SAT_TINH)
 from chien_dau import khoang_cach
 from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC_TAC, AcTacRunner, DoiAcTac, buoc_doi_vien,
+                            ac_tac_dang_bat, bat_gia_lap_ac_tac,
                             ca_doi_trong_pho_ban_ac_tac, cac_map_da_chon, cai_dat_ac_tac, cung_ten_map, khung_hien_tai,
                             la_pho_ban_ac_tac, luc_bat_dau_khung, luc_het_khung, mo_ta_khung, mo_ta_lich, nhan_khung,
                             gianh_khung,
@@ -603,7 +606,7 @@ class LuongNhanVat(threading.Thread):
             or (self.doi_pmp is None and self.doi_theo_truong() is not None)
 
     def nen_dung_ac_tac(self):
-        return self.nen_dung() or self.dang_giao_acc_chinh() or not cai_dat_ac_tac()["bat"]
+        return self.nen_dung() or self.dang_giao_acc_chinh() or not ac_tac_dang_bat()
 
     def la_doi_truong_nhom_game(self):
         """Người đầu danh sách nhóm trong game (đội trưởng); không nhóm / một mình coi như trưởng."""
@@ -623,7 +626,7 @@ class LuongNhanVat(threading.Thread):
 
     def dang_theo_ac_tac(self, cai_dat):
         """Đội viên: đội trưởng trong auto đang đi Ác Tặc (cài chung mac_dinh)."""
-        if not cai_dat["bat_auto"] or not cai_dat_ac_tac()["bat"]:
+        if not cai_dat["bat_auto"] or not ac_tac_dang_bat():
             return False
         at = cai_dat_ac_tac()
         if khung_hien_tai(at) is None:
@@ -634,7 +637,7 @@ class LuongNhanVat(threading.Thread):
     def ac_tac_dang_chen(self, cai_dat):
         """Bật Ác Tặc, đang trong khung giờ và chưa đi xong khung này: Ác Tặc được ưu tiên hơn PMP / Sát Tinh."""
         at = cai_dat_ac_tac()
-        return bool(cai_dat["bat_auto"]) and at["bat"] and self.la_doi_truong_nhom_game() \
+        return bool(cai_dat["bat_auto"]) and ac_tac_dang_bat(at) and self.la_doi_truong_nhom_game() \
             and self.ac_tac.can_chen(at)
 
     def dat_vung_pho_ban(self, vung):
@@ -971,7 +974,7 @@ class LuongNhanVat(threading.Thread):
         if truong is None or not truong.ten:
             return None, []
         cai_dat_tr = cau_hinh.cua_nhan_vat(truong.ten)
-        if not (cai_dat_tr["bat_auto"] and cai_dat_ac_tac()["bat"]):
+        if not (cai_dat_tr["bat_auto"] and ac_tac_dang_bat()):
             return None, []
         return truong, thanh_vien
 
@@ -1238,7 +1241,7 @@ class LuongNhanVat(threading.Thread):
             self.dang_ac_tac = True
         if not self.dang_ac_tac:
             return
-        if at["bat"] and self.ac_tac.can_chen(at):
+        if ac_tac_dang_bat(at) and self.ac_tac.can_chen(at):
             self.dang_ac_tac = False
             self.doi_ac_tac = self.truong_ac_tac = None
             self.ac_tac_state = {}
@@ -3655,16 +3658,15 @@ class UngDung:
         ttk.Button(dong_g2, text="Chọn...", command=self.chon_duong_dan_gauto).pack(side="left")
         dong_g3 = ttk.Frame(khung)
         dong_g3.pack(fill="x", pady=(2, 0))
-        ttk.Button(dong_g3, text="Test GAuto bật", command=lambda: self.test_gauto(True)).pack(side="left")
-        ttk.Button(dong_g3, text="Test GAuto tắt", command=lambda: self.test_gauto(False)).pack(side="left", padx=4)
+        ttk.Button(dong_g3, text="Giả Lập Ác Tặc", command=self.gia_lap_ac_tac).pack(side="left")
         ttk.Label(dong_g3, text="Phút / khung").pack(side="left", padx=(8, 0))
         ttk.Spinbox(dong_g3, from_=5, to=120, width=4, textvariable=self.bien_at_phut_gauto,
                     command=self.luu_ac_tac).pack(side="left", padx=4)
         ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập đội trưởng trước; GAuto tự chạy quyền Admin nên "
                               "AutoHoc cũng phải chạy quyền Admin. Tới giờ AutoHoc đưa đội tới map đầu danh sách ☑, mở "
                               "cửa sổ GAuto, tích ô đầu dòng, chọn map rồi tích Ác Tặc; hết «Phút / khung» thì bỏ tích, "
-                              "đi tiếp phó bản. GAuto không có Tây Hồ. «Test GAuto bật» làm đúng bước đó và để nguyên; "
-                              "«Test GAuto tắt» bỏ tích ô đầu dòng và ô Ác Tặc. Log chỉ ghi OK sau khi đọc lại ô trên GAuto.",
+                              "đi tiếp phó bản. GAuto không có Tây Hồ. «Giả Lập Ác Tặc» chạy ngay luồng đó "
+                              "(ra map, cả đội theo, rồi bật GAuto nếu đang tích) trong số phút đã chọn, không chờ khung giờ.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(2, 0))
         dong = ttk.Frame(khung)
         dong.pack(fill="x", pady=(6, 0))
@@ -4810,7 +4812,7 @@ class UngDung:
             khung_tk = ttk.LabelFrame(tab, text=tieu_de_khung, padding=4)
             khung_tk.pack(fill="x", pady=(6, 0))
             bang = ttk.Treeview(khung_tk, columns=("bat", "ten_dang_nhap", "nhan_vat", "trang_thai"),
-                                show="headings", height=4, selectmode="browse")
+                                show="headings", height=4, selectmode="extended")
             for cot, tieu_de, rong in (("bat", cot_bat, 40), ("ten_dang_nhap", "Tài khoản", 110),
                                        ("nhan_vat", "Nhân vật", 110),
                                        ("trang_thai", "Trạng thái", 190)):
@@ -5619,18 +5621,26 @@ class UngDung:
         self.tai_khoan_tam_dung.discard(moi["ten_dang_nhap"])
         self._sua_tai_khoan(sua)
 
-    def xoa_tai_khoan(self):
-        """Xóa tài khoản đang chọn hoặc đang tích XV/Bật trong bảng đang thao tác."""
+    @staticmethod
+    def ten_tai_khoan_dang_chon(bang_tk):
+        """Tên đăng nhập từ các dòng Treeview đang chọn (multi-select); không gồm chỉ đang tick XV/Bật."""
         xoa = set()
-        for khoa_ds, bang in self.bang_tk.items():
+        for bang in bang_tk.values():
             for iid in bang.selection():
-                _, ten = self._phan_tich_iid_tai_khoan(iid)
-                xoa.add(ten)
-            for tai_khoan in cau_hinh.doc_tai_khoan()[khoa_ds]:
-                if tai_khoan.get("bat"):
-                    xoa.add(tai_khoan["ten_dang_nhap"])
-        if not xoa or not messagebox.askyesno("Xóa tài khoản",
-                                              f"Xóa {len(xoa)} tài khoản khỏi danh sách?\n" + ", ".join(sorted(xoa))):
+                _, ten = UngDung._phan_tich_iid_tai_khoan(iid)
+                if ten:
+                    xoa.add(ten)
+        return xoa
+
+    def xoa_tai_khoan(self):
+        """Xóa các dòng đang chọn trên bảng (Ctrl/Shift chọn nhiều). Không xóa theo ô tick XV/Bật."""
+        xoa = self.ten_tai_khoan_dang_chon(self.bang_tk)
+        if not xoa:
+            messagebox.showinfo("Xóa tài khoản", "Chọn một hoặc nhiều dòng trên bảng rồi bấm Xóa "
+                                "(Ctrl+click / Shift+click để chọn nhiều).")
+            return
+        if not messagebox.askyesno("Xóa tài khoản",
+                                   f"Xóa {len(xoa)} tài khoản đang chọn?\n" + ", ".join(sorted(xoa))):
             return
 
         def sua(cai_dat):
@@ -5722,53 +5732,37 @@ class UngDung:
             self.bien_at_duong_dan_gauto.set(duong)
             self.luu_ac_tac()
 
-    def test_gauto(self, bat=True):
-        """Bật hoặc tắt GAuto y như lúc tới khung (log ở khung Nhật ký), không cần tới giờ Ác Tặc."""
-        tieu = "Test GAuto bật" if bat else "Test GAuto tắt"
-        duong = self.bien_at_duong_dan_gauto.get().strip()
-        if not duong:
-            messagebox.showwarning(tieu, "Chọn đường dẫn GAuto_2025.exe trước (nút Chọn...)", parent=self.root)
+    def gia_lap_ac_tac(self):
+        """Chạy ngay luồng Ác Tặc (ra map, đội theo, bật GAuto nếu đang tích), không chờ khung giờ."""
+        self.luu_ac_tac()
+        at = self.doc_form_ac_tac()
+        cac_map = at["map_uu_tien"]
+        if not cac_map:
+            messagebox.showwarning("Giả Lập Ác Tặc", "Chưa tích map Ác Tặc nào", parent=self.root)
             return
-        ten = simpledialog.askstring(tieu, "Tên nhân vật (đội trưởng) trong bảng GAuto\n"
-                                            "(để trống = dòng đang chọn trong GAuto)", parent=self.root)
-        if ten is None:
+        if at["dung_gauto"] and not at["duong_dan_gauto"]:
+            messagebox.showwarning("Giả Lập Ác Tặc", "Đang tích GAuto nhưng chưa chọn đường dẫn GAuto", parent=self.root)
             return
-        cac_map = [m for m in self.at_thu_tu if m in self.at_da_chon]
-        if bat:
-            if not cac_map:
-                messagebox.showwarning(tieu, "Chưa tích map Ác Tặc nào", parent=self.root)
-                return
-            hoi = (f"Bật GAuto cho «{ten.strip() or 'dòng đang chọn'}»: tích ô đầu dòng, chọn map "
-                   f"«{cac_map[0]}», tích Ác Tặc và để nguyên.\nGAuto sẽ đi tìm Ác Tặc. Tiếp tục?")
-        else:
-            hoi = (f"Tắt GAuto cho «{ten.strip() or 'dòng đang chọn'}»: bỏ tích ô đầu dòng và ô Ác Tặc. Tiếp tục?")
-        if not messagebox.askyesno(tieu, hoi, parent=self.root):
+        phut = at["phut_gauto"]
+        cach = (f"tới {cac_map[0]} rồi bật GAuto {phut} phút" if at["dung_gauto"]
+                else f"đi Ác Tặc map {cac_map[0]} trong {phut} phút")
+        if not messagebox.askyesno(
+                "Giả Lập Ác Tặc",
+                f"Nhân vật đang bật Auto sẽ {cach} ngay, không chờ khung giờ.\n"
+                "Đội trưởng dẫn, đội viên theo sau. Tiếp tục?",
+                parent=self.root):
             return
-
-        def chay():
-            log = lambda chu: self.hang_doi.put(("log", chu))  # noqa: E731
-            try:
-                gauto_ac_tac.test_gauto(duong, ten.strip(), log, bat, cac_map_autohoc=cac_map,
-                                        at=self.doc_form_ac_tac())
-            except gauto_ac_tac.LoiGautoAcTac as loi:
-                log(f"{tieu}: LỖI — {loi}")
-                if str(loi) == gauto_ac_tac.THONG_BAO_CAN_ADMIN:
-                    self.root.after(0, self.hoi_chay_lai_quyen_admin)
-            except Exception:
-                log(f"{tieu}: lỗi không mong đợi\n{traceback.format_exc()}")
-
-        threading.Thread(target=chay, daemon=True).start()
-
-    def hoi_chay_lai_quyen_admin(self):
-        if not messagebox.askyesno("Test GAuto", "GAuto chạy quyền Admin nên AutoHoc cũng phải chạy quyền Admin mới "
-                                                 "điều khiển được.\n\nĐóng AutoHoc và mở lại bằng quyền Admin ngay "
-                                                 "(Windows sẽ hỏi xác nhận)?", parent=self.root):
-            return
-        if not gauto_ac_tac.chay_lai_quyen_admin():
-            messagebox.showerror("Test GAuto", "Không mở lại được AutoHoc quyền Admin (đã bấm No ở hộp Windows?) — "
-                                               "chuột phải AutoHoc.exe → Run as administrator", parent=self.root)
-            return
-        self.thoat()
+        khung = bat_gia_lap_ac_tac(phut)
+        for luong in self.cac_luong.values():
+            ac = getattr(luong, "ac_tac", None)
+            if ac is None:
+                continue
+            ac.khung_xong = None
+            ac.khung = None
+            ac.gauto_khung = None
+            ac.gauto_het_luc = 0.0
+            ac.gauto_chi_so = None
+        self.in_log(f"Giả Lập Ác Tặc: {mo_ta_khung(khung, at)} — {cach}")
 
     def chon_thu_muc_game(self):
         """Chọn file Game.exe của máy đang dùng; thư mục game là thư mục chứa Bin."""

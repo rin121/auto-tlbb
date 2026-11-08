@@ -9,6 +9,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import gauto_ac_tac as g  # noqa: E402
 
 
+class TestNhipBamGAuto(unittest.TestCase):
+    """Máy yếu: mỗi cú bấm GAuto phải có khoảng nghỉ, không bấm liền."""
+
+    def test_nghi_sau_moi_thao_tac(self):
+        self.assertGreaterEqual(g.GIAY_NGHI_SAU_THAO_TAC, 1.0)
+        self.assertGreaterEqual(g.GIAY_GIU_NUT_CHUOT, 0.2)
+        self.assertGreaterEqual(g.GIAY_CHO_DOI_NHAN_VAT, 1.5)
+        self.assertGreaterEqual(g.GIAY_GIUA_PHIM_TAB, 0.8)
+        self.assertGreaterEqual(g.GIAY_GIU_MAP, 2.5)
+
+
 class TestTenDong(unittest.TestCase):
     def test_bo_hau_to_server(self):
         self.assertEqual(g.ten_tu_dong_gauto("caychay10 (TL/123)"), "caychay10")
@@ -132,7 +143,8 @@ class TestChonDongDungNhanVat(unittest.TestCase):
     def _chon(self, bang, id_dong, ten):
         with patch.object(g, "_bang_nhan_vat", lambda h: 0), patch.object(g, "_msaa", lambda h: bang), \
                 patch.object(g, "nhan_vat_dang_cai", lambda h: bang.doc_dang_cai()), \
-                patch.object(g, "GIAY_CHO_DOI_NHAN_VAT", 0):
+                patch.object(g, "GIAY_CHO_DOI_NHAN_VAT", 0), \
+                patch.object(g, "GIAY_NGHI_SAU_THAO_TAC", 0):
             g.chon_dong(1, id_dong, ten)
 
     def test_dong_dang_chon_nhung_gauto_cai_nhan_vat_khac_thi_chon_lai(self):
@@ -309,34 +321,64 @@ class TestChuotAo(unittest.TestCase):
         g.rut_bao_chuot(log.append)
         self.assertEqual(log, ["GAuto không nhận chuột ảo ở ô «Ác Tặc», dùng chuột thật"])
 
-    def _chon_map(self, ao_an):
-        def gui(h, msg, w, l):
-            return self.tt["sel"] if msg == g.win32con.CB_GETCURSEL else 0
+    def _chon_map_phim(self, an=True, dang="Kiếm Các"):
+        """Danh sách như GAuto: Đôn Hoàng, Kiếm Các, Thái Hồ, Tung Sơn. an=False thì mũi tên không đổi dòng."""
+        ds = ["Đôn Hoàng", "Kiếm Các", "Thái Hồ", "Tung Sơn"]
+        self.tt["sel"] = ds.index(dang)
+        self.tt["drop"] = False
+        self.phim = []
 
-        def chon_dong_map(hc, info, dich, bam):
-            if bam is g._bam_ao:
-                if ao_an:
-                    self.tt["sel"] = dich
-            else:
-                self.that.append("map")
-                self.tt["sel"] = dich
-            return True
-        with patch.object(g, "cac_map", return_value=["Kiếm Các", "Tung Sơn"]), \
+        def gui(h, msg, w, l):
+            if msg == g.win32con.CB_GETCURSEL:
+                return self.tt["sel"]
+            if msg == g.win32con.CB_GETDROPPEDSTATE:
+                return 1 if self.tt["drop"] else 0
+            if msg == g.win32con.CB_SHOWDROPDOWN:
+                self.tt["drop"] = bool(w)
+            return 0
+
+        def keybd(vk, _scan, co, _extra):
+            if co & g.win32con.KEYEVENTF_KEYUP:
+                return
+            self.phim.append(vk)
+            if vk == g.win32con.VK_F4:
+                self.tt["drop"] = True
+            elif an and self.tt["drop"] and vk == g.win32con.VK_DOWN:
+                self.tt["sel"] += 1
+            elif an and self.tt["drop"] and vk == g.win32con.VK_UP:
+                self.tt["sel"] -= 1
+            elif vk == g.win32con.VK_RETURN:
+                self.tt["drop"] = False
+
+        with patch.object(g, "cac_map", return_value=ds), \
                 patch.object(g.win32gui, "SendMessage", gui), \
-                patch.object(g.ctypes.windll.user32, "GetComboBoxInfo", return_value=1), \
-                patch.object(g, "_chon_dong_map", chon_dong_map), patch.object(g, "GIAY_GIU_MAP", 0):
+                patch.object(g.win32gui, "GetForegroundWindow", return_value=1), \
+                patch.object(g.win32api, "keybd_event", keybd), \
+                patch.object(g, "_focus_cua_so_gauto", return_value=0), \
+                patch.object(g, "_tra_focus_gauto"), \
+                patch.object(g, "_dat_focus_combo"), \
+                patch.object(g, "doc_map", return_value=dang), \
+                patch.object(g, "GIAY_GIU_MAP", 0), \
+                patch.object(g, "GIAY_NGHI_SAU_THAO_TAC", 0), \
+                patch.object(g.time, "sleep"):
             return g.chon_map(1, 5, "Tung Sơn")
 
-    def test_chon_map_chuot_ao(self):
-        self.assertEqual(self._chon_map(ao_an=True), "ảo")
-        self.assertEqual(self.that, [])
+    def test_chon_map_phim_tu_kiem_cac_xuong_tung_son(self):
+        self.assertEqual(self._chon_map_phim(), "phím")
+        self.assertEqual(self.tt["sel"], 3)
+        self.assertEqual(self.phim.count(g.win32con.VK_DOWN), 2)
+        self.assertIn(g.win32con.VK_F4, self.phim)
+        self.assertEqual(self.phim[-1], g.win32con.VK_RETURN)
 
-    def test_chon_map_chuot_ao_khong_an_thi_chuot_that(self):
-        self.assertEqual(self._chon_map(ao_an=False), "thật")
-        self.assertEqual(self.that, ["map"])
-        log = []
-        g.rut_bao_chuot(log.append)
-        self.assertEqual(log, ["GAuto không nhận chuột ảo ở ô Map, dùng chuột thật"])
+    def test_chon_map_dang_dung_thi_khong_bam_phim(self):
+        self.assertFalse(self._chon_map_phim(dang="Tung Sơn"))
+        self.assertEqual(self.phim, [])
+
+    def test_chon_map_phim_khong_doi_dong_thi_bao(self):
+        with self.assertRaises(g.LoiGautoAcTac) as ng:
+            self._chon_map_phim(an=False)
+        self.assertIn("không ăn", str(ng.exception))
+        self.assertIn("Tung Sơn", str(ng.exception))
 
 
 class TestBamChuotKhiChe(unittest.TestCase):

@@ -551,7 +551,7 @@ def thay_tat_ca_nhan_vat(ham):
 
 
 def duong_dan_gauto():
-    """Đường dẫn GAuto.exe (tab Phó bản → Ác Tặc), dùng chung cho ẩn kiểu 2 / Test GAuto."""
+    """Đường dẫn GAuto.exe (tab Phó bản → Ác Tặc), dùng chung cho ẩn kiểu 2 / Giả Lập Ác Tặc."""
     return ((mac_dinh().get("ac_tac") or {}).get("duong_dan_gauto") or "").strip()
 
 

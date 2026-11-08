@@ -280,7 +280,7 @@ class TestCaDoiPhoBanAcTac(unittest.TestCase):
 
 
 class TestKhungAcTac(unittest.TestCase):
-    """GA-07: khung 21h, 20 phút → ra map 20:58, bật GAuto 21:00, ngưng 21:20; mỗi khung một nhóm."""
+    """GA-07: khung 21h, 20 phút → ra map 20:57, bật GAuto 21:00, ngưng 21:20; mỗi khung một nhóm."""
 
     AT20 = {"phut_gauto": 20}
 
@@ -288,7 +288,8 @@ class TestKhungAcTac(unittest.TestCase):
         return sk.khung_hien_tai(self.AT20, datetime(2026, 10, 30, gio, phut))
 
     def test_cua_so_khung(self):
-        self.assertIsNone(self._khung(20, 57))
+        self.assertIsNone(self._khung(20, 56))
+        self.assertEqual(self._khung(20, 57), ("2026-10-30", 21))
         self.assertEqual(self._khung(20, 58), ("2026-10-30", 21))
         self.assertEqual(self._khung(21, 0), ("2026-10-30", 21))
         self.assertEqual(self._khung(21, 19), ("2026-10-30", 21))
@@ -296,8 +297,8 @@ class TestKhungAcTac(unittest.TestCase):
         self.assertIsNone(self._khung(21, 45))
 
     def test_khung_02h_luon_di(self):
-        """Không còn bỏ khung 02h: 01:58 đã tính khung 02, kể cả json cũ còn bo_khung_02h."""
-        self.assertEqual(self._khung(1, 58), ("2026-10-30", 2))
+        """Không còn bỏ khung 02h: 01:57 đã tính khung 02, kể cả json cũ còn bo_khung_02h."""
+        self.assertEqual(self._khung(1, 57), ("2026-10-30", 2))
         self.assertEqual(self._khung(2, 0), ("2026-10-30", 2))
         self.assertEqual(self._khung(2, 19), ("2026-10-30", 2))
         self.assertIsNone(self._khung(2, 20))
@@ -320,12 +321,101 @@ class TestKhungAcTac(unittest.TestCase):
             self.assertTrue(sk.nhan_khung(("2026-10-30", 22), "caychay30"))
 
 
-class TestDiThangTuThanhTrungChuyen(unittest.TestCase):
-    """GA-09: đứng ở Lạc Dương đi Tung Sơn / Đôn Hoàng thì đi thẳng; map đi từ Đại Lý (Kiếm Các) thì vẫn về Đại Lý."""
+class TestGiaLapAcTac(unittest.TestCase):
+    def tearDown(self):
+        sk.huy_gia_lap_ac_tac()
 
-    def _di(self, map_hien, ten_map):
+    def test_gia_lap_mo_khung_ngay_va_het_sau_phut(self):
+        truoc = time.time()
+        khung = sk.bat_gia_lap_ac_tac(20, bay_gio=truoc)
+        self.assertTrue(sk.gia_lap_con_hieu_luc(truoc + 10))
+        self.assertFalse(sk.gia_lap_con_hieu_luc(truoc + 20 * 60))
+        self.assertEqual(sk.khung_hien_tai({"bat": False}), khung)
+        self.assertEqual(sk.luc_het_khung(khung, {}), truoc + 20 * 60)
+        self.assertTrue(sk.ac_tac_dang_bat({"bat": False}))
+        self.assertIn("giả lập", sk.mo_ta_khung(khung, {}))
+        # Đồng hồ truyền vào vẫn là lịch thật, không bị giả lập nuốt.
+        self.assertIsNone(sk.khung_hien_tai({"bat": False}, datetime(2026, 10, 30, 10, 0)))
+
+    def test_het_gio_thi_khong_con_khung(self):
+        sk.huy_gia_lap_ac_tac()
+        self.assertFalse(sk.ac_tac_dang_bat({"bat": False}))
+
+
+class TestChoCaDoiTheoKhiDiMap(unittest.TestCase):
+    """Đội trưởng không dịch chuyển khi còn đội viên chưa cùng map hoặc chưa Theo đội."""
+
+    def _runner(self, maps, theo, map_truong="Lạc Dương"):
         r = sk.AcTacRunner.__new__(sk.AcTacRunner)
-        r.ten, r.la_truong, r.doi_at, r.in_log = "caychay32", True, MagicMock(), MagicMock()
+        r.ten, r.la_truong, r.in_log = "truong", True, MagicMock()
+        r.trang_thai = {}
+        r.nen_dung = lambda: False
+        r.het_khung = float("inf")
+        r.dang_ket_thuc = False
+        r._map = lambda: map_truong
+        r._trieu_at_state = {}
+        r.game = MagicMock()
+        doi = MagicMock()
+        doi.cac_doi_vien = {"a": MagicMock(), "b": MagicMock()}
+        doi.lam_moi = MagicMock()
+        doi.map_doi_vien.side_effect = lambda: dict(maps)
+        doi.chua_theo.side_effect = lambda: list(theo)
+        doi.gui_trieu_tap = MagicMock()
+        r.doi_at = doi
+        return r
+
+    def test_du_theo_thi_di(self):
+        r = self._runner({"a": "Lạc Dương", "b": "Lạc Dương"}, [])
+        r._cho_tat_ca_theo_truoc_khi_di()
+        r.game.lua.chay.assert_not_called()
+
+    def test_chua_theo_thi_khong_di(self):
+        r = self._runner({"a": "Lạc Dương", "b": "Lạc Dương"}, ["b"])
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=[0, 0, 1000]):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._cho_tat_ca_theo_truoc_khi_di()
+        self.assertIn("chưa theo đội: b", str(cm.exception))
+
+    def test_gom_dai_ly_thieu_nguoi_thi_khong_di(self):
+        r = self._runner({"a": "Đại Lý", "b": "Kiếm Các"}, [], map_truong="Đại Lý")
+        r._goi_doi_vien_ve_thanh = lambda bat_buoc=False: ["b"]
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=[0, 0, 1000]):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._gom_doi_dai_ly()
+        self.assertIn("b chưa về Đại Lý", str(cm.exception))
+
+    def test_doi_vien_o_hub_khi_truong_dai_ly_thi_ve_gom(self):
+        game, doi = MagicMock(), MagicMock()
+        doi.vi_tri = (1, 2, "Đại Lý")
+        doi.vung_cho = lambda m: None
+        doi.map_dich = "Tung Sơn"
+        doi.truong = "truong"
+        state = {}
+        with patch.object(sk, "dong_y_theo_doi_popup"), \
+                patch.object(sk, "_ve_dai_ly_gom_doi", return_value=True) as ve, \
+                patch.object(game.lua, "chay", return_value=b"0"):
+            loai, chu = sk.buoc_doi_vien(game, doi, {"map": "Lạc Dương", "x": 1, "y": 1}, state)
+        self.assertEqual(loai, "mo_ta")
+        self.assertIn("về Đại Lý gom đội", chu)
+        ve.assert_called_once()
+
+    def test_da_toi_map_thi_cho_doi_vien(self):
+        r = self._runner({"a": "Tung Sơn", "b": "Lạc Dương"}, [])
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=[0, 0, 1000]):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._cho_doi_vien_toi_map("Tung Sơn")
+        self.assertIn("b chưa tới Tung Sơn", str(cm.exception))
+
+
+class TestDiThangTuThanhTrungChuyen(unittest.TestCase):
+    """Có đội: luôn về Đại Lý gom rồi mới đi. Một mình ở hub: vẫn đi thẳng Tung Sơn / Đôn Hoàng."""
+
+    def _di(self, map_hien, ten_map, co_doi=True):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r.ten, r.la_truong, r.in_log = "caychay32", True, MagicMock()
+        doi = MagicMock()
+        doi.cac_doi_vien = {"a": MagicMock()} if co_doi else {}
+        r.doi_at = doi
         r.vi_tri = {"map": map_hien}
         r.da_lam = []
         r._map = lambda: r.vi_tri["map"]
@@ -345,11 +435,17 @@ class TestDiThangTuThanhTrungChuyen(unittest.TestCase):
             r._di_toi_map(ten_map, ve_thanh_truoc=True, gom_doi=True)
         return r.da_lam
 
-    def test_lac_duong_di_thang_tung_son(self):
-        self.assertEqual(self._di("Lạc Dương", "Tung Sơn"), ["gom_tai_cho", ("Lạc Dương", "Tung Sơn")])
+    def test_co_doi_o_lac_duong_ve_dai_ly_truoc_tung_son(self):
+        self.assertEqual(self._di("Lạc Dương", "Tung Sơn"),
+                         ["ve_dai_ly", "gom_dai_ly", ("Đại Lý", "Lạc Dương"), ("Lạc Dương", "Tung Sơn")])
 
-    def test_lac_duong_di_thang_don_hoang(self):
-        self.assertEqual(self._di("Lạc Dương", "Đôn Hoàng"), ["gom_tai_cho", ("Lạc Dương", "Đôn Hoàng")])
+    def test_co_doi_o_lac_duong_ve_dai_ly_truoc_don_hoang(self):
+        self.assertEqual(self._di("Lạc Dương", "Đôn Hoàng"),
+                         ["ve_dai_ly", "gom_dai_ly", ("Đại Lý", "Lạc Dương"), ("Lạc Dương", "Đôn Hoàng")])
+
+    def test_mot_minh_lac_duong_di_thang_tung_son(self):
+        self.assertEqual(self._di("Lạc Dương", "Tung Sơn", co_doi=False),
+                         ["gom_tai_cho", ("Lạc Dương", "Tung Sơn")])
 
     def test_lac_duong_di_kiem_cac_thi_ve_dai_ly(self):
         da_lam = self._di("Lạc Dương", "Kiếm Các")

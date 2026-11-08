@@ -69,10 +69,12 @@ class TestSoTuiDo(unittest.TestCase):
 
 
 class TestApDungSoTui(unittest.TestCase):
-    TK = {f"caychay{i}": {"ten_dang_nhap": f"caychay{i}", "mat_khau": "x"} for i in (14, 16, 18)}
+    TK = {f"caychay{i}": {"ten_dang_nhap": f"caychay{i}", "mat_khau": "x", "bat": True}
+          for i in (14, 16, 18)}
 
-    def _chay(self, ds, so):
-        with patch.object(gac.cau_hinh, "tai_khoan_pho_ban", return_value=list(self.TK.values())):
+    def _chay(self, ds, so, dang_tich=None):
+        dang_tich = list(self.TK.values()) if dang_tich is None else dang_tich
+        with patch.object(gac, "cac_tai_khoan_dang_tich", return_value=dang_tich):
             return gac.ap_dung_so_tui([(self.TK[tk], ten) for tk, ten in ds], "acc_chinh", so)
 
     def test_bo_nhan_vat_so_ghi_khong_co_do(self):
@@ -96,6 +98,16 @@ class TestApDungSoTui(unittest.TestCase):
         kq, _, them = self._chay([("caychay14", "caychay14")], so)
         self.assertEqual([ten for _, ten in kq], ["caychay14"])
         self.assertEqual(them, [])
+
+    def test_khong_them_acc_bo_tich_du_so_chua_ro(self):
+        """Acc bỏ tick không bị sổ túi kéo vào (vd. cosato33 / cosato3333 chua_ro)."""
+        so = {"caychay166": {"tk": "caychay16", "ten": "caychay166", "trang_thai": "chua_ro"},
+              "caychay1666": {"tk": "caychay16", "ten": "caychay1666", "trang_thai": "da_ghi", "so_o": 4}}
+        dang_tich = [self.TK["caychay14"], self.TK["caychay18"]]  # không có caychay16
+        kq, _, them = self._chay([("caychay14", "caychay14"), ("caychay18", "caychay18")], so,
+                                 dang_tich=dang_tich)
+        self.assertEqual(them, [])
+        self.assertEqual([ten for _, ten in kq], ["caychay14", "caychay18"])
 
 
 if __name__ == "__main__":

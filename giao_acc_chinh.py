@@ -642,7 +642,8 @@ def cac_nhan_vat_pho_ban(tk_chinh, chi_hom_nay, bo_qua=None):
 def ap_dung_so_tui(ds, tk_chinh, so):
     """
     Lọc danh sách [(tài khoản, tên)] theo sổ túi đồ: bỏ nhân vật sổ ghi chắc 0 ô; thêm nhân vật sổ ghi còn đồ / chưa rõ
-    mà chưa có trong danh sách (đội viên giao lỗi, nhân vật không đi hôm nay...). Trả về (danh sách, tên bỏ, thêm).
+    mà chưa có trong danh sách (đội viên giao lỗi, nhân vật không đi hôm nay...). Chỉ thêm acc đang tick (bat);
+    acc bỏ tích không bị kéo vào dù sổ còn chua_ro / còn đồ. Trả về (danh sách, tên bỏ, thêm).
     """
     kq, bo = [], []
     for tk, ten in ds:
@@ -651,8 +652,8 @@ def ap_dung_so_tui(ds, tk_chinh, so):
         else:
             kq.append((tk, ten))
     co = {chuan_hoa(ten) for _, ten in ds}
-    theo_tk = {tk["ten_dang_nhap"].lower(): tk for tk in cau_hinh.tai_khoan_pho_ban()
-               if tk.get("ten_dang_nhap") and tk.get("mat_khau")}
+    # Chỉ acc đã tick — tránh sổ túi (vd. chua_ro của cosato3333) kéo lại acc đã bỏ tích.
+    theo_tk = {tk["ten_dang_nhap"].lower(): tk for tk in cac_tai_khoan_dang_tich()}
     them = []
     for khoa, muc in so.items():
         tk = theo_tk.get((muc.get("tk") or "").lower())
