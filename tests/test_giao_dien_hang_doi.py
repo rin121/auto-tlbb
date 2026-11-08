@@ -76,5 +76,24 @@ class TestCatNhatKyFile(unittest.TestCase):
             os.remove(duong)
 
 
+class TestLuongRuntimeKhongGoiTk(unittest.TestCase):
+    """Luồng đóng hộp Runtime Error chạy nền: log qua hàng đợi, không gọi in_log của giao diện (Tk)."""
+
+    def test_log_qua_hang_doi(self):
+        from unittest.mock import MagicMock, patch
+        import gioi_han_client
+        app = MagicMock()
+        app.hang_doi = queue.Queue()
+        dung = MagicMock()
+
+        def vong(in_log, nen_dung):
+            in_log("Game.exe crash (Runtime Error)")
+
+        with patch.object(gioi_han_client, "vong_dong_hop_runtime", vong):
+            giao_dien._vong_runtime(app, dung)
+        app.in_log.assert_not_called()
+        self.assertEqual(app.hang_doi.get_nowait(), ("log", "Game.exe crash (Runtime Error)"))
+
+
 if __name__ == "__main__":
     unittest.main()

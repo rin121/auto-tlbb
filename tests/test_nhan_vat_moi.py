@@ -356,5 +356,100 @@ class TestTenDaTonTai(unittest.TestCase):
             self.fail("cần LoiDangNhap để đăng nhập lại")
 
 
+class TestDissKhiTaoNhanVat(unittest.TestCase):
+    """Game diss / cửa sổ đóng giữa lúc tạo + nhận đồ: mở game mới làm tiếp, không trừ lần thử."""
+
+    def _luong(self, so_lan=3):
+        import nhan_vat_moi as nvm
+        luong = LuongTaoNhanVat.__new__(LuongTaoNhanVat)
+        luong.cai_dat = {"so_lan_thu_toi_da": so_lan}
+        luong.dung = MagicMock()
+        luong.dung.is_set.return_value = False
+        luong.giu_game = True
+        luong.pid = None
+        luong.game = None
+        luong.log = []
+        luong.in_log = luong.log.append
+        luong.sai_tai_khoan = luong.sai_rule = None
+        self.so_mo = 0
+        self.song = set()
+
+        def mo(_lan, _so_lan):
+            self.so_mo += 1
+            luong.pid = 100 + self.so_mo
+            self.song.add(luong.pid)
+            luong.game = MagicMock()
+            luong.game.lua.hwnd = luong.pid
+
+        luong.mo_game_moi = mo
+        self.nvm = nvm
+        return luong
+
+    def _chay(self, luong, xu_ly):
+        luong.xu_ly = xu_ly
+        p = [patch.object(self.nvm, "con_chay", side_effect=lambda pid: pid in self.song),
+             patch.object(self.nvm.win32gui, "IsWindow", side_effect=lambda h: h in self.song),
+             patch.object(self.nvm, "tim_hwnd_chinh_game_pid", return_value=None),
+             patch.object(self.nvm, "tat_game", side_effect=lambda pid: self.song.discard(pid)),
+             patch.object(self.nvm, "nha_cac_client"),
+             patch.object(self.nvm, "thoat_ve_chon_may_chu"),
+             patch.object(self.nvm, "GIAY_CHO_SAU_DISS", 0)]
+        for x in p:
+            x.start()
+        try:
+            return luong.lam_tai_khoan()
+        finally:
+            for x in p:
+                x.stop()
+
+    def test_diss_lan_cuoi_van_mo_lai_va_xong(self):
+        luong = self._luong(so_lan=3)
+        lan = {"n": 0}
+
+        def xu_ly(_game):
+            lan["n"] += 1
+            if lan["n"] <= 3:
+                self.song.discard(luong.pid)
+                raise self.nvm.LoiLua("cửa sổ game đã đóng (Invalid window handle.)")
+
+        self.assertEqual(self._chay(luong, xu_ly), "xong")
+        self.assertEqual(self.so_mo, 4)
+        self.assertTrue(any("diss" in d and "không tính lần thử" in d for d in luong.log))
+
+    def test_process_con_ma_mat_cua_so_thi_tat_roi_mo_moi(self):
+        luong = self._luong(so_lan=1)
+        lan = {"n": 0}
+
+        def xu_ly(_game):
+            lan["n"] += 1
+            if lan["n"] == 1:
+                luong.game.lua.hwnd = -1
+                raise self.nvm.LoiLua("cửa sổ game đã đóng")
+
+        self.assertEqual(self._chay(luong, xu_ly), "xong")
+        self.assertEqual(self.so_mo, 2)
+        self.assertNotIn(101, self.song)
+
+    def test_diss_qua_gioi_han_thi_that_bai(self):
+        luong = self._luong(so_lan=1)
+
+        def xu_ly(_game):
+            self.song.discard(luong.pid)
+            raise self.nvm.LoiLua("cửa sổ game đã đóng")
+
+        self.assertEqual(self._chay(luong, xu_ly), "thất bại")
+        self.assertEqual(self.so_mo, self.nvm.SO_LAN_MO_LAI_KHI_DISS + 1)
+
+    def test_loi_trong_game_con_song_van_tinh_lan_thu(self):
+        luong = self._luong(so_lan=2)
+
+        def xu_ly(_game):
+            raise LoiPhoBan("dùng Hộp Point không được")
+
+        self.assertEqual(self._chay(luong, xu_ly), "thất bại")
+        self.assertEqual(self.so_mo, 1)
+        self.assertFalse(any("diss" in d for d in luong.log))
+
+
 if __name__ == "__main__":
     unittest.main()

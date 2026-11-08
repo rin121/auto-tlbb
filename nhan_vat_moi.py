@@ -30,6 +30,7 @@ import time
 import traceback
 
 import psutil
+import win32gui
 
 import cau_hinh
 import nang_cap_nhan_vat
@@ -41,6 +42,7 @@ from dang_nhap import (CONG_MO_GAME, LoiDangNhap, LoiSaiRuleNhanVat, LoiSaiTaiKh
                        noi_dung_thong_bao, tai_khoan_cua_pid, tat_game, thoat_ve_chon_may_chu,
                        trong_cua_so,
                        ve_chon_may_chu as ve_chon_may_chu_game)
+from cua_so_game import tim_hwnd_chinh_game_pid
 from game_api import Game
 from giai_captcha import LoiGiaiCaptcha
 from lua_game import LoiLua
@@ -51,6 +53,9 @@ from tu_dung_vat_pham import LoiVatPham, TuDungCanKhonHo
 
 MON_PHAI_TIEU_DAO = 8
 CHUA_VAO_PHAI = 9
+# Game bị diss / cửa sổ đóng giữa chừng: mở lại game, không trừ vào số lần thử (server diss cả loạt).
+SO_LAN_MO_LAI_KHI_DISS = 6
+GIAY_CHO_SAU_DISS = 30
 
 
 def da_gia_nhap_phai(mon_phai):
@@ -547,10 +552,13 @@ class LuongTaoNhanVat(LuongDangNhap):
     def lam_tai_khoan(self):
         so_lan = self.cai_dat["so_lan_thu_toi_da"]
         xong = False
+        lan = so_diss = 0
         try:
-            for lan in range(1, so_lan + 1):
+            while lan < so_lan:
+                lan += 1
                 try:
-                    if not (self.pid and con_chay(self.pid)):
+                    if self._mat_game():
+                        self._bo_game_mat()
                         self.mo_game_moi(lan, so_lan)
                     self.xu_ly(self.game)
                     xong = True
@@ -584,6 +592,15 @@ class LuongTaoNhanVat(LuongDangNhap):
                     if self.dung.is_set():
                         return "đã dừng"
                     self.in_log(f"Lần {lan}/{so_lan} lỗi không mong đợi\n{traceback.format_exc()}")
+                if self._mat_game() and so_diss < SO_LAN_MO_LAI_KHI_DISS:
+                    so_diss += 1
+                    lan -= 1
+                    self.in_log(f"Game bị diss / cửa sổ đã đóng — tắt client cũ, chờ {GIAY_CHO_SAU_DISS} giây rồi "
+                                f"mở game mới làm tiếp (mở lại {so_diss}/{SO_LAN_MO_LAI_KHI_DISS}, "
+                                "không tính lần thử)")
+                    self._bo_game_mat()
+                    self.dung.wait(GIAY_CHO_SAU_DISS)
+                    continue
                 if self.pid:
                     thoat_ve_chon_may_chu(self.pid, self.in_log, self.dung.is_set)
                     if not con_chay(self.pid):
@@ -595,6 +612,31 @@ class LuongTaoNhanVat(LuongDangNhap):
                 thoat_ve_chon_may_chu(self.pid, self.in_log, self.dung.is_set)
                 self.pid = None
                 nha_cac_client(self)
+
+    def _mat_game(self):
+        """Không còn game dùng được: process đã tắt, hoặc còn chạy mà không còn cửa sổ (diss / crash)."""
+        if not (self.pid and con_chay(self.pid)):
+            return True
+        hwnd = getattr(getattr(self.game, "lua", None), "hwnd", None)
+        if hwnd and win32gui.IsWindow(hwnd):
+            return False
+        moi = tim_hwnd_chinh_game_pid(self.pid)
+        if not moi:
+            return True
+        try:
+            self.game = Game(moi)
+        except (LoiLua, OSError):
+            return True
+        return False
+
+    def _bo_game_mat(self):
+        """Tắt process còn sót (không còn cửa sổ) để lần sau mở game mới."""
+        if self.pid and con_chay(self.pid):
+            tat_game(self.pid)
+        if self.pid:
+            nha_cac_client(self)
+        self.pid = None
+        self.game = None
 
     def mo_game_moi(self, lan, so_lan):
         cd = self.cai_dat

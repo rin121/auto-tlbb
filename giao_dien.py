@@ -6491,7 +6491,25 @@ class UngDung:
         self.root.destroy()
 
 
+_FILE_LOI_CHET_CUNG = None
+
+
+def _bat_ghi_loi_chet_cung():
+    """AutoHoc chết cứng (access violation trong tk86t.dll…) không kịp ghi nhật ký: faulthandler ghi stack ra file."""
+    global _FILE_LOI_CHET_CUNG
+    import faulthandler
+    duong = os.path.join(os.path.dirname(DUONG_DAN_NHAT_KY), "loi_chet_cung.log")
+    try:
+        _FILE_LOI_CHET_CUNG = open(duong, "a", encoding="utf-8")
+        _FILE_LOI_CHET_CUNG.write(f"\n===== Mở AutoHoc {time.strftime('%Y-%m-%d %H:%M:%S')} =====\n")
+        _FILE_LOI_CHET_CUNG.flush()
+        faulthandler.enable(file=_FILE_LOI_CHET_CUNG, all_threads=True)
+    except (OSError, RuntimeError):
+        _FILE_LOI_CHET_CUNG = None
+
+
 def main():
+    _bat_ghi_loi_chet_cung()
     bat_dpi_awareness()
     root = tk.Tk()
     # Windows đang để locale hệ thống cp936 (game). Tk đọc phím Unikey qua bảng mã đó nên chữ có dấu
@@ -6517,8 +6535,9 @@ def main():
 
 
 def _vong_runtime(app, dung_runtime):
+    """Luồng nền: không gọi app.in_log (ghi ô Text Tk) — Tk gọi từ luồng phụ làm tk86t.dll access violation."""
     from gioi_han_client import vong_dong_hop_runtime
-    vong_dong_hop_runtime(app.in_log, dung_runtime.is_set)
+    vong_dong_hop_runtime(lambda chu: app.hang_doi.put(("log", chu)), dung_runtime.is_set)
 
 
 if __name__ == "__main__":
