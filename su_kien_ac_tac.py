@@ -39,7 +39,7 @@ from pho_ban_pmp import (GIAY_CHO_BO_THEO, GIAY_CHO_DOI_MAP, GIAY_CHO_QUAI_XUAT_
                          KHOANG_CACH_LEN_THU, KHOANG_TOI_DIEM, MA_BO_THEO_DOI, MA_DANG_CUOI,
                          MA_DANG_THEO_DOI, MA_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, SO_LAN_THU,
                          LoiPhoBan, PhoBanPMP, _doc_dang_theo_doi, _Dung, bo_theo_doi, chuan_bi_ve_thanh,
-                         dong_y_theo_doi_popup, la_dai_ly, xuong_thu)
+                         dong_y_theo_doi_popup, hom_nay, la_dai_ly, xuong_thu)
 
 MO_TA = "Ác Tặc"
 KHUNG_GIO = (2, 13, 15, 17, 19, 21)
@@ -82,7 +82,13 @@ GIAY_TOI_DA_MOI_THEO = 10
 # Trước khi NPC / cổng đưa cả đội đi: chờ mọi đội viên cùng map và đang Theo đội.
 GIAY_CHO_TAT_CA_THEO = 90
 # Đội trưởng đã sang map: chờ đội viên (đang theo) xuất hiện cùng map rồi mới sang chặng tiếp.
-GIAY_CHO_DOI_SANG_MAP = 30
+GIAY_CHO_DOI_SANG_MAP = 60
+# NPC dịch chuyển chỉ kéo đội viên đang theo và đứng gần: chờ cả đội tới cạnh NPC rồi mới chọn dòng.
+KHOANG_DOI_GAN_NPC = 8
+GIAY_CHO_DOI_GAN_NPC = 60
+# Đội viên vừa Về thành: tên map đổi sang Đại Lý trước khi tải xong cảnh (đọc máu 0 / Lua không trả lời).
+# Bấm Theo đội lúc đó thì người đang chuyển cảnh không theo được: chờ đọc ổn định chừng này giây.
+GIAY_DOI_VIEN_TAI_XONG = 3
 GIAY_GIUA_HAI_LAN_MOI_THEO = 3
 # Đội viên cùng map mà đứng xa đội trưởng (không theo đội) thì tự chạy tới.
 KHOANG_GAN_TRUONG = 10
@@ -699,6 +705,7 @@ class AcTacRunner(PhoBanPMP):
         self.la_truong = False
         self.khung = None
         self.khung_xong = None
+        self.khung_da_dem = None
         self.map_da_het = set()
         self.map_loi = {}
         self.lan_roi_map = {}
@@ -720,6 +727,14 @@ class AcTacRunner(PhoBanPMP):
         """Đang trong khung Ác Tặc chưa đi xong: bỏ PMP / Sát Tinh để đi Ác Tặc."""
         khung = khung_hien_tai(at, bay_gio)
         return khung is not None and khung != self.khung_xong
+
+    def dem_xong_khung(self, ten, khung):
+        """Đội trưởng đi xong một khung (hết map / hết giờ / tắt GAuto): +1 «Hôm nay Ác Tặc», mỗi khung một lần."""
+        if khung is None or khung == self.khung_da_dem:
+            return
+        self.khung_da_dem = khung
+        moi = self._sua_dem([ten], at_lan=lambda v: v + 1)[0]
+        self.in_log(f"{ten}: {MO_TA} xong lần {hom_nay(moi['pho_ban_pmp'])['at_lan']} hôm nay")
 
     def _kiem_tra(self):
         if self.nen_dung():
@@ -841,8 +856,48 @@ class AcTacRunner(PhoBanPMP):
                 chua = [ten for ten, m in self.doi_at.map_doi_vien().items() if not la_dai_ly(m)]
         if chua:
             raise LoiAcTac(f"{', '.join(chua)} chưa về {MAP_DAI_LY}, chưa đi")
-        self._log(f"cả đội đã ở {MAP_DAI_LY}, mời Theo đội")
+        self._cho_doi_vien_tai_xong(MAP_DAI_LY, max(het_han, time.time() + GIAY_CHO_DOI_VIEN_VE // 3))
+        # Cờ Theo đội còn từ PMP / Sát Tinh (trước khi Về thành) thì đọc «đang theo» mà thật ra không theo: bỏ trước.
+        self._bo_theo_doi_doi_vien()
+        self._log(f"cả đội đã ở {MAP_DAI_LY} và tải xong, mời Theo đội")
         self._cho_tat_ca_theo_truoc_khi_di()
+
+    def _doi_vien_chua_tai_xong(self, ten_map, luc_on_dinh, bay_gio):
+        chua = []
+        for ten, luong in self.doi_at.cac_doi_vien.items():
+            try:
+                tt = luong.game.thong_tin()
+            except (LoiLua, OSError, AttributeError):
+                tt = None
+            if not tt or not cung_ten_map(tt.get("map"), ten_map) or (tt.get("hp") or 0) <= 0:
+                luc_on_dinh.pop(ten, None)
+                chua.append(ten)
+                continue
+            if bay_gio - luc_on_dinh.setdefault(ten, bay_gio) < GIAY_DOI_VIEN_TAI_XONG:
+                chua.append(ten)
+        return chua
+
+    def _cho_doi_vien_tai_xong(self, ten_map, het_han):
+        """Đội viên đã đổi tên map: chờ đọc được map + máu ổn định GIAY_DOI_VIEN_TAI_XONG giây (qua màn chuyển cảnh)."""
+        luc_on_dinh = {}
+        while True:
+            self._kiem_tra()
+            chua = self._doi_vien_chua_tai_xong(ten_map, luc_on_dinh, time.time())
+            if not chua:
+                return
+            if time.time() >= het_han:
+                raise LoiAcTac(f"{', '.join(chua)} chưa tải xong {ten_map} (còn ở màn hình chuyển cảnh), "
+                               "chưa mời Theo đội")
+            self._mo_ta(f"chờ {', '.join(chua)} tải xong {ten_map}")
+            time.sleep(0.5)
+
+    def _bo_theo_doi_doi_vien(self):
+        for luong in self.doi_at.cac_doi_vien.values():
+            try:
+                luong.game.lua.chay(MA_BO_THEO_DOI)
+            except (LoiLua, OSError, AttributeError):
+                pass
+        time.sleep(0.5)
 
     def _gom_doi_tai_cho(self):
         """Một mình / không có đội viên auto ở hub: mời Theo (nếu còn ai) rồi đi thẳng cổng."""
@@ -887,6 +942,49 @@ class AcTacRunner(PhoBanPMP):
                 luc_moi = time.time()
                 if khac and la_dai_ly(map_tr):
                     self._goi_doi_vien_ve_thanh(bat_buoc=True)
+                self._moi_theo_doi()
+            time.sleep(0.5)
+
+    def _doi_vien_xa_npc(self, xy, map_tr):
+        xa = []
+        for ten, luong in self.doi_at.cac_doi_vien.items():
+            try:
+                tt = luong.game.thong_tin()
+            except (LoiLua, OSError, AttributeError):
+                tt = None
+            if not tt or not cung_ten_map(tt["map"], map_tr) \
+                    or khoang_cach((tt["x"], tt["y"]), xy) > KHOANG_DOI_GAN_NPC:
+                xa.append(ten)
+        return xa
+
+    def _cho_doi_gan_npc(self, ten_npc, xy):
+        """
+        Đội trưởng chạy tới cạnh NPC dịch chuyển, chờ mọi đội viên (đang theo) đứng gần rồi mới chọn dòng —
+        dịch chuyển khi đội viên còn xa thì game bỏ họ lại.
+        """
+        if not self.la_truong or not self.doi_at or not self.doi_at.cac_doi_vien or xy is None:
+            return
+        map_tr = self._map()
+        het_han = time.time() + GIAY_CHO_DOI_GAN_NPC
+        luc_chay = luc_moi = 0.0
+        while True:
+            self._kiem_tra()
+            bay_gio = time.time()
+            tt = self._tt()
+            truong_gan = bool(tt) and khoang_cach((tt["x"], tt["y"]), xy) <= KHOANG_DOI_GAN_NPC
+            if tt and not truong_gan and bay_gio - luc_chay >= GIAY_GIUA_HAI_LAN_CHAY:
+                luc_chay = bay_gio
+                self.game.lua.chay(f"AutoRunToTarget({int(xy[0])}, {int(xy[1])})")
+            xa = self._doi_vien_xa_npc(xy, map_tr)
+            if truong_gan and not xa:
+                self._log(f"cả đội đã tới cạnh {ten_npc}, dịch chuyển")
+                return
+            if bay_gio >= het_han:
+                ai = ", ".join(xa) if xa else "đội trưởng"
+                raise LoiAcTac(f"{ai} chưa tới cạnh {ten_npc} ({int(xy[0])}, {int(xy[1])}), chưa dịch chuyển")
+            self._mo_ta(f"chờ {', '.join(xa) or 'đội trưởng'} tới cạnh {ten_npc}")
+            if xa and bay_gio - luc_moi >= GIAY_GIUA_HAI_LAN_MOI_THEO:
+                luc_moi = bay_gio
                 self._moi_theo_doi()
             time.sleep(0.5)
 
@@ -1083,6 +1181,7 @@ class AcTacRunner(PhoBanPMP):
             self._mo_ta(f"{chang.ten_npc} ({chang.map_tu}) → {chang.map_toi}")
             if self.la_truong:
                 self._cho_tat_ca_theo_truoc_khi_di()
+                self._cho_doi_gan_npc(chang.ten_npc, chang.xy)
             try:
                 cac_dong = self._mo_npc(chang.ten_npc, chang.xy)
                 cac_buoc = chang.cac_buoc or self.duong_da_tim.get(khoa)
@@ -1564,6 +1663,7 @@ class AcTacRunner(PhoBanPMP):
                 ten_map = map_tiep_theo(at, self.map_da_het | set(self.map_loi))
                 if ten_map is None:
                     self.khung_xong = khung
+                    self.dem_xong_khung(ten, khung)
                     self._log(f"đã đi hết các map khung {mo_ta_khung(khung, at)}, quay lại PMP / Sát Tinh")
                     self.dang_ket_thuc = True
                     self._ve_thanh_at()
@@ -1593,6 +1693,7 @@ class AcTacRunner(PhoBanPMP):
         except _HetKhung:
             self._log(f"hết giờ khung {mo_ta_khung(khung, at)}, về {MAP_DAI_LY}")
             self.khung_xong = khung
+            self.dem_xong_khung(ten, khung)
             self.dang_ket_thuc = True
             try:
                 self._ve_thanh_at()

@@ -744,11 +744,14 @@ class LuongXoayVong(threading.Thread):
         hang_cho = self._xv_hang_cho
         if hang_cho is None:
             return
-        if self._xv_dang_round:
-            _hoan_tac_dang_round(hang_cho, self._xv_dang_round, self._xv_ds_map)
+        # Giữ dang_round khi lưu: Bắt đầu lại phải đi tiếp đúng round / nhóm đang dở, không mở nhóm mới từ round 1
+        # (round dở bị bỏ lại đầu hàng chờ rồi bị ghép chen vào nhóm sau).
+        dang_round = self._xv_dang_round
+        if dang_round:
+            _hoan_tac_dang_round(hang_cho, dang_round, self._xv_ds_map)
             self._xv_dang_round = None
         luu_xv_tien_trinh(self._xv_so_nhom, hang_cho, self.che_do_test, self.chi_sat_tinh, self.so_round,
-                          thu_lai=self._xv_thu_lai)
+                          dang_round=dang_round, thu_lai=self._xv_thu_lai)
 
     def _chay_nhom_online(self):
         thanh_vien = self.nhom_online
@@ -978,7 +981,7 @@ class LuongXoayVong(threading.Thread):
             for r in range(r_bat_dau, so_round):
                 if self._neu_qua_ngay(ngay):
                     return True
-                choi = []
+                choi = self._lay_thanh_vien_nhom(hang_cho, r, ca_nhom, n_mot_nhom)
                 self._them_acc_tu_hang_cho(hang_cho, r, choi, n_mot_nhom, tv_theo_tk)
                 if not choi:
                     continue
@@ -1169,6 +1172,26 @@ class LuongXoayVong(threading.Thread):
             if not self.che_do_test and da_xong_hom_nay(ten_round(ten, r)):
                 continue
             choi.append(tv_theo_tk.setdefault(ten.lower(), ThanhVien(tk)))
+        return choi
+
+    def _lay_thanh_vien_nhom(self, hang_cho, r, ca_nhom, n_mot_nhom):
+        """
+        Round sau của cùng một nhóm: lấy đúng các tài khoản nhóm đã đi round trước (theo thứ tự nhóm), không để acc
+        còn dở ở đầu hàng chờ (vd. round 3 của nhóm trước) chen vào. Thiếu người thì người gọi bù từ đầu hàng chờ.
+        """
+        choi = []
+        for tv in ca_nhom:
+            if len(choi) >= n_mot_nhom:
+                break
+            tk = next((t for t in hang_cho[r] if t["ten_dang_nhap"].lower() == tv.tk.lower()), None)
+            if tk is None:
+                continue
+            hang_cho[r].remove(tk)
+            if tv.tk.lower() in self.tk_sai_rule:
+                continue
+            if not self.che_do_test and da_xong_hom_nay(ten_round(tk["ten_dang_nhap"], r)):
+                continue
+            choi.append(tv)
         return choi
 
     def _bo_sai_rule(self, thanh_vien):

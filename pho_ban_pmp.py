@@ -384,9 +384,9 @@ class _TruongSaiMap(LoiPhoBan):
 
 
 def hom_nay(cai_dat_pmp):
-    """Bộ đếm của hôm nay (sang ngày khác thì coi như chưa đi vòng nào). st_*: Thập Nhị Sát Tinh."""
+    """Bộ đếm của hôm nay (sang ngày khác thì coi như chưa đi vòng nào). st_*: Thập Nhị Sát Tinh, at_lan: Ác Tặc."""
     moi = {"ngay": date.today().isoformat(), "so_vong": 0, "so_het_luot": False, "het_luot": False,
-           "st_vong": 0, "st_het": False}
+           "st_vong": 0, "st_het": False, "at_lan": 0}
     dem = cai_dat_pmp.get("hom_nay") or {}
     if dem.get("ngay") != moi["ngay"]:
         return moi
@@ -541,7 +541,14 @@ def cac_doan_hom_nay(cai_dat_nhan_vat):
     if pmp.get("sat_tinh", True):
         doan += [("\nHôm nay Sát Tinh: ", False), (str(dem["st_vong"]), True),
                  (" vòng" + (", hết lượt" if dem["st_het"] else ""), False)]
+    doan += [("\nHôm nay Ác Tặc: ", False), (str(dem["at_lan"]), True), (" lần", False)]
     return doan
+
+
+def so_luot_hom_nay(cai_dat_nhan_vat):
+    """Số lượt hôm nay gửi kèm báo cáo Telegram."""
+    dem = hom_nay(cai_dat_pmp(cai_dat_nhan_vat))
+    return {"pmp": dem["so_vong"], "sat_tinh": dem["st_vong"], "ac_tac": dem["at_lan"]}
 
 
 def la_map_pho_ban(ten_map):

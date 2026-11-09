@@ -80,7 +80,7 @@ from pho_ban_pmp import (MA_BO_THEO_DOI, MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_D
                          cap_nhat_hoi_mau_dai_ly, cap_nhat_trieu_tap_doi_vien,
                          cac_doan_hom_nay, chuan_bi_ve_thanh,
                          can_ve_khi_het_luot, cai_dat_pmp, con_sat_tinh, nen_ve_thanh_theo_doi,
-                         dat_phien_xoay_vong,
+                         dat_phien_xoay_vong, so_luot_hom_nay,
                          hom_nay, la_dai_ly, la_sat_tinh, npc_do_sat_tinh, pmp_dang_duoc_phep_chay, xoa_co_xoay_vong_luu_tat_ca,
                          la_lac_duong, la_map_pho_ban, la_map_trong_pho_ban, GIAY_RETRY_VE_THANH_THEO_DOI,
                          MAP_SAT_TINH, BAN_KINH_SAT_TINH)
@@ -1223,6 +1223,8 @@ class LuongNhanVat(threading.Thread):
             self.in_log(f"{self.ten}: GAuto Ác Tặc: không bỏ tích được Ác Tặc trên GAuto ({loi}) — bỏ tích tay")
         if khung is not None:
             self.ac_tac.khung_xong = khung
+            if self.ac_tac.gauto_het_luc:
+                self.ac_tac.dem_xong_khung(self.ten, khung)
         self.ac_tac.gauto_khung = None
         self.ac_tac.gauto_het_luc = 0.0
         self.ac_tac.gauto_chi_so = None
@@ -2950,6 +2952,12 @@ class UngDung:
             thanh_vien = []
             if isinstance(doi, (list, tuple)) and len(doi) >= 2 and isinstance(doi[1], (list, tuple)):
                 thanh_vien = [str(x) for x in doi[1] if x]
+            luot = None
+            if luong.ten:
+                try:
+                    luot = so_luot_hom_nay(cau_hinh.cua_nhan_vat(luong.ten))
+                except (KeyError, TypeError):
+                    luot = None
             ds.append(bao_cao_telegram.cua_so_bao_cao(
                 ten=tt.get("ten") or luong.ten or "",
                 tai_khoan=tt.get("tai_khoan") or luong.tai_khoan or "",
@@ -2962,6 +2970,7 @@ class UngDung:
                 loi=str(loi) if loi else "",
                 nhom=thanh_vien,
                 mo_ta_nhom=self.trang_thai_nhom.get(hwnd) or "",
+                luot_hom_nay=luot,
             ))
         return ds
 
@@ -3504,7 +3513,7 @@ class UngDung:
                         variable=self.bien_pmp_truong_khong_danh, command=self.luu_pho_ban).pack(anchor="w",
                                                                                                  pady=(6, 0))
         nen = ttk.Style().lookup("TFrame", "background") or "SystemButtonFace"
-        self.nhan_pmp_hom_nay = tk.Text(khung, height=2, width=60, relief="flat", borderwidth=0,
+        self.nhan_pmp_hom_nay = tk.Text(khung, height=3, width=60, relief="flat", borderwidth=0,
                                         highlightthickness=0, background=nen, font=("Segoe UI", 9),
                                         cursor="arrow", state="disabled")
         self.nhan_pmp_hom_nay.tag_configure("so", foreground="green", font=("Segoe UI", 9, "bold"))

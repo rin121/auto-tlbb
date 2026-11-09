@@ -1,6 +1,7 @@
 """Vòng Telegram + HTTP 127.0.0.1. Chạy: python -m bot_quan_ly (thư mục AutoHoc)."""
 import json
 import logging
+import logging.handlers
 import os
 import queue
 import sys
@@ -18,6 +19,7 @@ THU_MUC = os.path.dirname(os.path.abspath(__file__))
 DUONG_DAN_ENV = os.path.join(THU_MUC, ".env")
 DUONG_DAN_MAY = os.path.join(THU_MUC, "data", "may.json")
 DUONG_DAN_LOG = os.path.join(THU_MUC, "bot_quan_ly.log")
+SO_NGAY_GIU_LOG = 7
 
 log = logging.getLogger("bot_quan_ly")
 
@@ -29,9 +31,15 @@ def _loi_mang(loi):
     return chu
 
 
+def tao_file_log(duong_dan=DUONG_DAN_LOG, so_ngay=SO_NGAY_GIU_LOG):
+    """00:00 mỗi ngày đổi tên file thành bot_quan_ly.log.YYYY-MM-DD, chỉ giữ so_ngay file cũ gần nhất."""
+    return logging.handlers.TimedRotatingFileHandler(
+        duong_dan, when="midnight", backupCount=so_ngay, encoding="utf-8")
+
+
 def _cau_hinh_log():
     os.makedirs(THU_MUC, exist_ok=True)
-    handlers = [logging.FileHandler(DUONG_DAN_LOG, encoding="utf-8")]
+    handlers = [tao_file_log()]
     if sys.stdout is not None:
         handlers.append(logging.StreamHandler(sys.stdout))
     logging.basicConfig(
@@ -128,8 +136,15 @@ def _goi_telegram(token, phuong_thuc, payload, timeout):
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        du_lieu = json.loads(resp.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            du_lieu = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as loi:
+        try:
+            mo_ta = json.loads(loi.read().decode("utf-8")).get("description") or ""
+        except (OSError, ValueError):
+            mo_ta = ""
+        raise RuntimeError(f"{phuong_thuc} HTTP {loi.code}: {mo_ta or loi.reason}") from loi
     if not du_lieu.get("ok"):
         raise RuntimeError(du_lieu.get("description") or phuong_thuc)
     return du_lieu
@@ -148,31 +163,21 @@ def gui_telegram(token, chat_id, text, reply_markup=None, markup_cuoi=False):
         _goi_telegram(token, "sendMessage", payload, timeout=20)
 
 
+def _payload_menu(ban, chat_id, message_id=None):
+    payload = {"chat_id": chat_id, "text": ban["text"], "reply_markup": ban["reply_markup"]}
+    if ban.get("parse_mode"):
+        payload["parse_mode"] = ban["parse_mode"]
+    if message_id is not None:
+        payload["message_id"] = message_id
+    return payload
+
+
 def gui_tin_menu(token, chat_id, ban):
-    _goi_telegram(
-        token,
-        "sendMessage",
-        {
-            "chat_id": chat_id,
-            "text": ban["text"],
-            "reply_markup": ban["reply_markup"],
-        },
-        timeout=20,
-    )
+    _goi_telegram(token, "sendMessage", _payload_menu(ban, chat_id), timeout=20)
 
 
 def sua_tin_menu(token, chat_id, message_id, ban):
-    _goi_telegram(
-        token,
-        "editMessageText",
-        {
-            "chat_id": chat_id,
-            "message_id": message_id,
-            "text": ban["text"],
-            "reply_markup": ban["reply_markup"],
-        },
-        timeout=20,
-    )
+    _goi_telegram(token, "editMessageText", _payload_menu(ban, chat_id, message_id), timeout=20)
 
 
 def tra_loi_callback(token, callback_query_id, text=None):
@@ -251,14 +256,22 @@ def _xu_ly_callback(kho, token, chat_id, cap_nhat):
         cq_id = cb.get("id")
         try:
             tra_loi_callback(token, cq_id)
+        except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as loi:
+            # Nút quá ~15 giây (mạng tới Telegram chậm) thì answerCallbackQuery lỗi, menu vẫn phải cập nhật.
+            log.warning("answerCallbackQuery lỗi (bỏ qua): %s", _loi_mang(loi))
+        try:
             ket = xuly_callback(kho, data)
             if ket["loai"] == "edit" and msg_id is not None:
-                sua_tin_menu(
-                    token,
-                    chat_id,
-                    msg_id,
-                    {"text": ket["text"], "reply_markup": ket["reply_markup"]},
-                )
+                ban = {"text": ket["text"], "reply_markup": ket["reply_markup"]}
+                if ket.get("parse_mode"):
+                    ban["parse_mode"] = ket["parse_mode"]
+                try:
+                    sua_tin_menu(token, chat_id, msg_id, ban)
+                except RuntimeError as loi:
+                    if "message is not modified" in str(loi):
+                        continue
+                    log.warning("Không sửa được tin menu, gửi tin mới: %s", _loi_mang(loi))
+                    gui_tin_menu(token, chat_id, ban)
             elif ket.get("noi_dung_gui"):
                 gui_telegram(
                     token,

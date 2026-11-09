@@ -5,6 +5,7 @@ ket_noi_telegram.json
 bot_quan_ly/.env
 bot_quan_ly/data/
 bot_quan_ly/*.log
+bot_quan_ly/*.log.*
 proxy_pool.txt
 tmac/
 nhat_ky_auto.log

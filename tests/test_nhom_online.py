@@ -182,6 +182,52 @@ class TestBatDauLaiKhiNhomDangOnline(unittest.TestCase):
                          ["caychay11", "caychay12", "caychay13", "caychay14"])
 
 
+class TestDungGiuaRoundThiDiTiepDungNhom(unittest.TestCase):
+    """XV: Dừng lúc nhóm đang ở round 3 rồi Bắt đầu lại → đi tiếp round 3 của nhóm đó, không mở nhóm mới từ round 1."""
+
+    DS = [{"ten_dang_nhap": f"anhzero{i}"} for i in (57, 58, 59, 60, 61, 62)]
+
+    def test_dung_luu_round_dang_do(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, False, False)
+        a57, a58, a59, a60, a61, a62 = self.DS
+        luong._xv_ds_map = xv._map_tk_theo_ten(self.DS)
+        luong._xv_hang_cho = [[a60, a61, a62], [a60, a61, a62], [a60, a61, a62]]
+        luong._xv_so_nhom = 9
+        luong._xv_thu_lai = {}
+        luong._xv_dang_round = {"r": 2, "thanh_vien": ["anhzero57", "anhzero58", "anhzero59"]}
+        luu = {}
+        with patch.object(xv.cau_hinh, "dat_chung", lambda d: luu.update(d)), \
+                patch.object(xv.cau_hinh, "chung", lambda: luu):
+            luong._luu_xv_tien_trinh_neu_can()
+            tt = xv.doc_xv_tien_trinh(self.DS, False, False, 3)
+        self.assertEqual(tt["r_dang"], 2)
+        self.assertEqual(tt["so_nhom"], 9)
+        self.assertEqual([t["ten_dang_nhap"] for t in tt["hang_cho"][2]][:3],
+                         ["anhzero57", "anhzero58", "anhzero59"])
+
+    def test_round_sau_uu_tien_dung_nhom(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, False, False)
+        a57, a58, a59, a60, a61, a62 = self.DS
+        nhom = [xv.ThanhVien(a60), xv.ThanhVien(a61), xv.ThanhVien(a62)]
+        hang_cho = [[], [], [a57, a58, a59, a60, a61, a62]]
+        with patch.object(xv, "da_xong_hom_nay", return_value=False):
+            choi = luong._lay_thanh_vien_nhom(hang_cho, 2, nhom, 3)
+        self.assertEqual([tv.tk for tv in choi], ["anhzero60", "anhzero61", "anhzero62"])
+        self.assertEqual([t["ten_dang_nhap"] for t in hang_cho[2]], ["anhzero57", "anhzero58", "anhzero59"])
+
+    def test_nhom_thieu_nguoi_thi_bu_tu_dau_hang(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 3, False, False, False, False)
+        a57, a58, a59, a60, a61, a62 = self.DS
+        nhom = [xv.ThanhVien(a60), xv.ThanhVien(a61), xv.ThanhVien(a62)]
+        hang_cho = [[], [], [a57, a60, a61]]
+        tv_map = {tv.tk.lower(): tv for tv in nhom}
+        with patch.object(xv, "da_xong_hom_nay", return_value=False), \
+                patch.object(luong, "_loai_neu_trung_ten_nv", return_value=False):
+            choi = luong._lay_thanh_vien_nhom(hang_cho, 2, nhom, 3)
+            luong._them_acc_tu_hang_cho(hang_cho, 2, choi, 3, tv_map)
+        self.assertEqual([tv.tk for tv in choi], ["anhzero60", "anhzero61", "anhzero57"])
+
+
 class TestTuNhom1KhongGiuNhomOnline(unittest.TestCase):
     """XV-20: qua 0h / Làm mới danh sách / Chạy lại từ đầu thì đi từ nhóm 1 round 1, không giữ nhóm đang online."""
 

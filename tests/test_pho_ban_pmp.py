@@ -352,6 +352,20 @@ class TestMoTaHomNay(unittest.TestCase):
         self.assertIn("hết lượt", chu)
         self.assertIn("Sát Tinh", chu)
 
+    def test_dong_ac_tac_va_so_luot(self):
+        hom = date.today().isoformat()
+        cai_dat = {"pho_ban_pmp": _pmp(sat_tinh=True, hom_nay={"ngay": hom, "so_vong": 1, "st_vong": 8,
+                                                                 "at_lan": 2})}
+        doan = pb.cac_doan_hom_nay(cai_dat)
+        self.assertIn("\nHôm nay Ác Tặc: 2 lần", "".join(s for s, _ in doan))
+        self.assertIn(("2", True), doan)
+        self.assertEqual(pb.so_luot_hom_nay(cai_dat), {"pmp": 1, "sat_tinh": 8, "ac_tac": 2})
+
+    def test_bo_dem_cu_chua_co_ac_tac(self):
+        cai_dat = {"pho_ban_pmp": _pmp(hom_nay={"ngay": date.today().isoformat(), "st_vong": 3})}
+        self.assertEqual(pb.so_luot_hom_nay(cai_dat)["ac_tac"], 0)
+        self.assertIn("Hôm nay Ác Tặc: 0 lần", "".join(s for s, _ in pb.cac_doan_hom_nay(cai_dat)))
+
 
 class TestKetAiPmp(unittest.TestCase):
     """Ải đánh quá lâu chưa chết quái: lần 2 đội trưởng đánh cùng, vẫn không được thì về Đại Lý chạy vòng mới."""

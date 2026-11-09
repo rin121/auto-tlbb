@@ -1,4 +1,5 @@
 """GA-05: GAuto khiêu chiến Ác Tặc, cả đội vào «Tặc Khấu doanh địa» thì AutoHoc không kéo về Đại Lý."""
+import itertools
 import os
 import sys
 import time
@@ -405,6 +406,136 @@ class TestChoCaDoiTheoKhiDiMap(unittest.TestCase):
             with self.assertRaises(sk.LoiAcTac) as cm:
                 r._cho_doi_vien_toi_map("Tung Sơn")
         self.assertIn("b chưa tới Tung Sơn", str(cm.exception))
+
+
+class TestChoDoiGanNpcDiChuyen(unittest.TestCase):
+    """Cả đội đang theo ở Đại Lý: đội trưởng chờ 2 đội viên tới cạnh NPC Di Chuyển rồi mới chọn dịch chuyển."""
+
+    NPC = (165, 156)
+
+    def _runner(self, vi_tri_dv, vi_tri_truong=(165, 156)):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r.ten, r.la_truong, r.in_log = "cosato11", True, MagicMock()
+        r.trang_thai = {}
+        r.nen_dung = lambda: False
+        r.het_khung = float("inf")
+        r.dang_ket_thuc = False
+        r._map = lambda: "Đại Lý"
+        r._tt = lambda: {"map": "Đại Lý", "x": vi_tri_truong[0], "y": vi_tri_truong[1]}
+        r._trieu_at_state = {}
+        r.game = MagicMock()
+        r._moi_theo_doi = MagicMock()
+        doi = MagicMock()
+        doi.cac_doi_vien = {}
+        for ten, (m, x, y) in vi_tri_dv.items():
+            luong = MagicMock()
+            luong.game.thong_tin.return_value = {"map": m, "x": x, "y": y}
+            doi.cac_doi_vien[ten] = luong
+        r.doi_at = doi
+        return r
+
+    def test_ca_doi_gan_npc_thi_di(self):
+        r = self._runner({"cosato22": ("Đại Lý", 164, 157), "cosato33": ("Đại Lý", 166, 155)})
+        r._cho_doi_gan_npc("Di Chuyển", self.NPC)
+        r._moi_theo_doi.assert_not_called()
+        self.assertIn("cả đội đã tới cạnh Di Chuyển", r.in_log.call_args[0][0])
+
+    def test_doi_vien_con_o_cho_gom_thi_khong_dich_chuyen(self):
+        r = self._runner({"cosato22": ("Đại Lý", 164, 157), "cosato33": ("Đại Lý", 140, 157)})
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=itertools.count(0, 20)):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._cho_doi_gan_npc("Di Chuyển", self.NPC)
+        self.assertIn("cosato33 chưa tới cạnh Di Chuyển", str(cm.exception))
+        self.assertNotIn("cosato22", str(cm.exception))
+        r._moi_theo_doi.assert_called()
+
+    def test_truong_xa_npc_thi_chay_toi_truoc(self):
+        r = self._runner({"cosato22": ("Đại Lý", 164, 157)}, vi_tri_truong=(150, 157))
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=itertools.count(0, 20)):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._cho_doi_gan_npc("Di Chuyển", self.NPC)
+        self.assertIn("đội trưởng chưa tới cạnh", str(cm.exception))
+        self.assertIn("AutoRunToTarget(165, 156)", r.game.lua.chay.call_args[0][0])
+
+    def test_qua_chang_npc_cho_doi_gan_truoc_khi_mo_npc(self):
+        r = self._runner({"cosato22": ("Đại Lý", 164, 157)})
+        thu_tu = []
+        r._cho_tat_ca_theo_truoc_khi_di = lambda: thu_tu.append("theo")
+        r._cho_doi_gan_npc = lambda ten, xy: thu_tu.append(("gan_npc", ten, xy))
+
+        def mo_npc(ten, xy):
+            thu_tu.append("mo_npc")
+            raise sk.LoiAcTac("dừng test")
+
+        r._mo_npc = mo_npc
+        r._dong_hoi_thoai = MagicMock()
+        r._log = MagicMock()
+        r._mo_ta = MagicMock()
+        chang = sk.Chang("Đại Lý", "Di Chuyển", self.NPC, ((111116, 5555),), "Kiếm Các")
+        with self.assertRaises(sk.LoiAcTac):
+            r._qua_chang(chang)
+        self.assertEqual(thu_tu[:3], ["theo", ("gan_npc", "Di Chuyển", self.NPC), "mo_npc"])
+
+
+class TestChoDoiVienTaiXongDaiLy(unittest.TestCase):
+    """Về thành cả đội: chỉ bấm Theo đội khi mọi đội viên đã qua màn chuyển cảnh (đọc được Đại Lý + máu ổn định)."""
+
+    def _runner(self, cac_tt):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r.ten, r.la_truong, r.in_log = "cosato144", True, MagicMock()
+        r.trang_thai = {}
+        r.nen_dung = lambda: False
+        r.het_khung = float("inf")
+        r.dang_ket_thuc = False
+        r._map = lambda: "Đại Lý"
+        r._goi_doi_vien_ve_thanh = lambda bat_buoc=False: []
+        r._cho_tat_ca_theo_truoc_khi_di = MagicMock()
+        doi = MagicMock()
+        doi.cac_doi_vien = {}
+        for ten, tt in cac_tt.items():
+            luong = MagicMock()
+            if isinstance(tt, Exception):
+                luong.game.thong_tin.side_effect = tt
+            else:
+                luong.game.thong_tin.return_value = tt
+            doi.cac_doi_vien[ten] = luong
+        doi.map_doi_vien.side_effect = lambda: {t: "Đại Lý" for t in cac_tt}
+        r.doi_at = doi
+        return r
+
+    DA_TAI = {"map": "Đại Lý", "x": 160, "y": 157, "hp": 1000, "hp_toi_da": 1000}
+
+    def test_da_tai_xong_thi_bo_theo_cu_roi_moi_theo(self):
+        r = self._runner({"cosato155": dict(self.DA_TAI), "cosato166": dict(self.DA_TAI)})
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=itertools.count(0, 1)):
+            r._gom_doi_dai_ly()
+        for luong in r.doi_at.cac_doi_vien.values():
+            luong.game.lua.chay.assert_any_call(sk.MA_BO_THEO_DOI)
+        r._cho_tat_ca_theo_truoc_khi_di.assert_called_once()
+        self.assertIn("tải xong, mời Theo đội", r.in_log.call_args[0][0])
+
+    def test_con_chuyen_canh_thi_chua_moi_theo(self):
+        dang_tai = {"map": "Đại Lý", "x": 0, "y": 0, "hp": 0, "hp_toi_da": 0}
+        r = self._runner({"cosato155": dict(self.DA_TAI), "cosato166": dang_tai})
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=itertools.count(0, 5)):
+            with self.assertRaises(sk.LoiAcTac) as cm:
+                r._gom_doi_dai_ly()
+        self.assertIn("cosato166 chưa tải xong Đại Lý", str(cm.exception))
+        self.assertNotIn("cosato155", str(cm.exception))
+        r._cho_tat_ca_theo_truoc_khi_di.assert_not_called()
+
+    def test_lua_khong_tra_loi_tinh_la_dang_tai(self):
+        r = self._runner({"cosato166": sk.LoiLua("Game không phản hồi (đang loading hoặc bị treo?)")})
+        with patch.object(sk.time, "sleep"), patch.object(sk.time, "time", side_effect=itertools.count(0, 5)):
+            with self.assertRaises(sk.LoiAcTac):
+                r._gom_doi_dai_ly()
+        r._cho_tat_ca_theo_truoc_khi_di.assert_not_called()
+
+    def test_vua_doc_duoc_thi_cho_on_dinh_moi_tinh_xong(self):
+        r = self._runner({"cosato155": dict(self.DA_TAI)})
+        luc = {}
+        self.assertEqual(r._doi_vien_chua_tai_xong("Đại Lý", luc, 100), ["cosato155"])
+        self.assertEqual(r._doi_vien_chua_tai_xong("Đại Lý", luc, 100 + sk.GIAY_DOI_VIEN_TAI_XONG), [])
 
 
 class TestDiThangTuThanhTrungChuyen(unittest.TestCase):

@@ -45,6 +45,14 @@ class TestSnapshot(unittest.TestCase):
         self.assertEqual(online["trang_thai"], "Đang online (Kiem)")
         self.assertEqual(cho["trang_thai"], "Chờ mở game")
         self.assertEqual(snap["xoay_vong"], "vòng 1")
+        self.assertEqual(dang_chay["luot_hom_nay"], {"pmp": 0, "sat_tinh": 0, "ac_tac": 0})
+
+    def test_cua_so_kem_so_luot(self):
+        cs = bc.cua_so_bao_cao(
+            ten="cosato1", tai_khoan="", map="", hp=None, level=None, mon_phai="", trong_game=True,
+            mo_ta="", loi="", nhom=[], mo_ta_nhom="", luot_hom_nay={"pmp": 2, "sat_tinh": 8, "ac_tac": 1},
+        )
+        self.assertEqual(cs["luot_hom_nay"], {"pmp": 2, "sat_tinh": 8, "ac_tac": 1})
 
     def test_mo_ta_chua_vao_game_va_tam_dung(self):
         self.assertEqual(bc.mo_ta_auto(False, False, "", "", "", False), "Đang kết nối...")

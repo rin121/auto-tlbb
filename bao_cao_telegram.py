@@ -210,7 +210,10 @@ def trang_thai_acc(dang_online, ten_online, dang_mo, mo_ta_mo, tam_dung, mo_ta_t
     return "Chờ mở game"
 
 
-def cua_so_bao_cao(ten, tai_khoan, map, hp, level, mon_phai, trong_game, mo_ta, loi, nhom, mo_ta_nhom):
+def cua_so_bao_cao(ten, tai_khoan, map, hp, level, mon_phai, trong_game, mo_ta, loi, nhom, mo_ta_nhom,
+                   luot_hom_nay=None):
+    """luot_hom_nay: {"pmp", "sat_tinh", "ac_tac"} — số lượt đội trưởng đã đi hôm nay."""
+    luot = luot_hom_nay or {}
     return {
         "ten": ten or "",
         "tai_khoan": tai_khoan or "",
@@ -223,6 +226,7 @@ def cua_so_bao_cao(ten, tai_khoan, map, hp, level, mon_phai, trong_game, mo_ta, 
         "loi": loi or "",
         "nhom": [str(x) for x in (nhom or []) if x],
         "mo_ta_nhom": mo_ta_nhom or "",
+        "luot_hom_nay": {khoa: int(luot.get(khoa) or 0) for khoa in ("pmp", "sat_tinh", "ac_tac")},
     }
 
 
