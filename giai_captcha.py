@@ -12,6 +12,7 @@ còn nét chữ số -> bỏ các đốm nhỏ -> ddddocr đọc. ddddocr hay b�
 đọc cả ảnh (vài độ phóng, chỉ lấy lần ra đủ 4 số) và đọc riêng từng ô 32 điểm (mỗi chữ số nằm trong một ô),
 rồi bỏ phiếu theo từng vị trí. Vị trí nào không có phiếu thì coi như ảnh khó đọc (nên đổi ảnh khác).
 """
+import gc
 import io
 import os
 import platform
@@ -19,6 +20,7 @@ import struct
 import subprocess
 import sys
 import threading
+import time
 import types
 import zlib
 from collections import Counter
@@ -55,6 +57,10 @@ DOI_KY_TU = str.maketrans({"O": "0", "o": "0", "D": "0", "Q": "0", "U": "0", "u"
 _khoa = threading.Lock()
 _khoa_khoi_tao_ocr = threading.Lock()
 _ocr = None
+# Model OCR (onnx) giữ vài trăm MB: rảnh chừng này giây thì bỏ, lần giải mã sau _lay_ocr nạp lại.
+GIAY_RANH_GIAI_PHONG_OCR = 30 * 60
+_luc_dung_ocr = 0.0
+_so_dang_giai = 0
 
 
 def _dam_bao_cv2_gia():
@@ -194,9 +200,11 @@ def doc_anh(pid):
 
 
 def _lay_ocr():
-    global _ocr
-    if _ocr is not None:
-        return _ocr
+    global _ocr, _luc_dung_ocr
+    _luc_dung_ocr = time.time()
+    ocr = _ocr
+    if ocr is not None:
+        return ocr
     with _khoa_khoi_tao_ocr:
         if _ocr is not None:
             return _ocr
@@ -242,6 +250,25 @@ def lam_nong_ocr():
         _lay_ocr()
     except LoiGiaiCaptcha:
         pass
+
+
+def ocr_dang_nap():
+    return _ocr is not None
+
+
+def giai_phong_ocr_neu_ranh(giay_ranh=GIAY_RANH_GIAI_PHONG_OCR, bay_gio=None):
+    """Bỏ model OCR khi không giải mã quá giay_ranh giây. True nếu vừa giải phóng."""
+    global _ocr
+    bay_gio = time.time() if bay_gio is None else bay_gio
+    with _khoa_khoi_tao_ocr:
+        if _ocr is None or _so_dang_giai or bay_gio - _luc_dung_ocr < giay_ranh:
+            return False
+        ocr, _ocr = _ocr, None
+    if isinstance(ocr, _OcrSubprocess):
+        ocr._tat()
+    del ocr
+    gc.collect()
+    return True
 
 
 def _bo_dom_nho(anh):
@@ -304,6 +331,18 @@ def _ket_qua_tu_phieu(phieu):
 
 def giai(anh):
     """Trả về mã 4 chữ số đọc được từ 576 byte ảnh, None nếu ảnh khó đọc."""
+    global _so_dang_giai, _luc_dung_ocr
+    with _khoa_khoi_tao_ocr:
+        _so_dang_giai += 1
+    try:
+        return _giai(anh)
+    finally:
+        with _khoa_khoi_tao_ocr:
+            _so_dang_giai -= 1
+            _luc_dung_ocr = time.time()
+
+
+def _giai(anh):
     anh_goc = Image.frombytes("1", (RONG, CAO), anh).convert("L")
     phieu = [Counter() for _ in range(SO_CHU_SO)]
     ocr = _lay_ocr()

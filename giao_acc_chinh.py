@@ -313,12 +313,14 @@ MA_RUT_TCCN_THAT = (
     'while i < 15 do '
     'local n = debug.getupvalue(sel, i) '
     'if n == nil then break end '
-    'if n == "g_EveryNum" then debug.setupvalue(sel, i, 250) dat = 1 end '
+    'if n == "g_EveryNum" then debug.setupvalue(sel, i, {so}) dat = 1 end '
     'if n == "nIsMbuy" then debug.setupvalue(sel, i, 0) end '
     'i = i + 1 end '
     'if dat == 0 then return "khong" end '
-    'sel({i}) return "1|250"')
-MA_RUT_TCCN = trong_cua_so("Packet_Temporary", MA_RUT_TCCN_THAT)
+    'sel({i}) return "1|{so}"')
+# {i}: ô Thiên Cơ, {so}: số lượng mỗi lần rút (g_EveryNum). Gộp đồ luôn rút 250.
+MA_RUT_TCCN_SO = trong_cua_so("Packet_Temporary", MA_RUT_TCCN_THAT)
+MA_RUT_TCCN = MA_RUT_TCCN_SO.replace("{so}", "250")
 MA_LIET_KE_KHO = (
     'if not IsWindowShow("Bank") then return "dong" end local s = "" '
     'local tong = 0 for r = 1, (tonumber(Bank:GetRentBoxNum()) or 0) do '
@@ -1658,13 +1660,15 @@ class GiaoAccChinhEngine:
         except LoiLua:
             pass
 
-    def _cat_kho(self, cat_het=False):
+    def _cat_kho(self, cat_het=False, cac_o=None):
+        """Cất túi vào Thương khố (cac_o: chỉ các ô này). True nếu Thương khố đã đầy."""
         lua = self.chinh.lua
-        tui = self._tui_chinh()
-        if cat_het or getattr(self, "chi_giao_gop", False):
-            cac_o = [o for o in sorted(tui)]
+        if cac_o is not None:
+            cac_o = list(cac_o)
+        elif cat_het or getattr(self, "chi_giao_gop", False):
+            cac_o = [o for o in sorted(self._tui_chinh())]
         else:
-            cac_o = [o for o, (_, _, ten_vat) in sorted(tui.items()) if not la_phieu_nho(ten_vat)]
+            cac_o = [o for o, (_, _, ten_vat) in sorted(self._tui_chinh().items()) if not la_phieu_nho(ten_vat)]
         if not cac_o:
             return False
         if not self._mo_kho():

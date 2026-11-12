@@ -96,6 +96,46 @@ class TestGautoPhoBanAcTac(unittest.TestCase):
             self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": PHO_BAN}, {}, AT))
         buoc.assert_not_called()
 
+    def _doi_vien_gauto(self, map_truong, het_luc_truong):
+        truong = MagicMock()
+        truong.ten = "cosato144"
+        truong.ac_tac = MagicMock(khung_xong=None, gauto_het_luc=het_luc_truong)
+        truong.game.thong_tin.return_value = {"map": map_truong}
+        luong = _luong(truong=truong)
+        return luong
+
+    def test_doi_vien_bi_bo_lai_dai_ly_khi_gauto_dang_chay_thi_tu_di(self):
+        """20:57 khung 21h: game bỏ đội viên ở Đại Lý, đội trưởng bật GAuto ở Kiếm Các → đội viên tự đi."""
+        luong = self._doi_vien_gauto("Kiếm Các", time.time() + 600)
+        self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT))
+        luong.ac_tac.di_rieng.assert_not_called()
+        luong.ac_tac_state["luc_bi_bo_lai"] -= sk.GIAY_BI_BO_LAI_DAI_LY
+        self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT))
+        luong.ac_tac.di_rieng.assert_called_once()
+        self.assertEqual(luong.ac_tac.di_rieng.call_args[0][4], "Kiếm Các")
+        self.assertIn("bị bỏ lại", luong.in_log.call_args[0][0])
+
+    def test_doi_vien_bi_bo_lai_khi_truong_toi_map_chua_bat_gauto(self):
+        luong = self._doi_vien_gauto("Kiếm Các", 0.0)
+        luong.ac_tac_state["luc_bi_bo_lai"] = time.time() - sk.GIAY_BI_BO_LAI_DAI_LY
+        self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT))
+        luong.ac_tac.di_rieng.assert_called_once()
+
+    def test_doi_vien_cung_map_truong_khong_tu_di(self):
+        luong = self._doi_vien_gauto("Kiếm Các", time.time() + 600)
+        luong.ac_tac_state["luc_bi_bo_lai"] = time.time() - 100
+        self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT))
+        luong.ac_tac.di_rieng.assert_not_called()
+        self.assertIn("theo đội trưởng", luong.trang_thai["mo_ta"])
+        self.assertNotIn("luc_bi_bo_lai", luong.ac_tac_state)
+
+    def test_truong_con_o_dai_ly_thi_doi_vien_khong_tu_di(self):
+        luong = self._doi_vien_gauto("Đại Lý", 0.0)
+        luong.ac_tac_state["luc_bi_bo_lai"] = time.time() - 100
+        luong.truong_ac_tac_trong_auto()[0].doi_ac_tac = None
+        self.assertTrue(luong.xu_ly_gauto_ac_tac({"map": "Đại Lý"}, {}, AT))
+        luong.ac_tac.di_rieng.assert_not_called()
+
     def test_het_gio_gauto_thi_bo_tich(self):
         luong = _luong(het_luc=time.time() - 1)
         self.assertFalse(luong.xu_ly_gauto_ac_tac({"map": "Kiếm Các"}, {}, AT))
@@ -266,6 +306,69 @@ class TestRaMapTruocAcTac(unittest.TestCase):
         chuan_bi.assert_not_called()
 
 
+class TestDoiVienBiBoLaiDaiLy(unittest.TestCase):
+    """Đội trưởng đã ở map đích, đội viên còn Đại Lý quá 20 giây thì tự đi (di_rieng)."""
+
+    def test_chua_du_giay_thi_chua_di(self):
+        state = {}
+        self.assertIsNone(sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state, bay_gio=100))
+        self.assertIsNone(sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state, bay_gio=119))
+
+    def test_du_giay_thi_di_roi_cho_lan_thu_lai(self):
+        state = {}
+        sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state, bay_gio=100)
+        self.assertEqual(sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state, bay_gio=120),
+                         ("di", "Kiếm Các"))
+        loai, chu = sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state, bay_gio=130)
+        self.assertEqual(loai, "mo_ta")
+        self.assertIn("bị bỏ lại", chu)
+        self.assertEqual(sk.doi_vien_bi_bo_lai("Đại Lý", "Kiếm Các", "Kiếm Các", state,
+                                               bay_gio=120 + sk.GIAY_GIUA_HAI_LAN_DI_RIENG),
+                         ("di", "Kiếm Các"))
+
+    def test_khong_bi_bo_lai_thi_xoa_moc(self):
+        state = {"luc_bi_bo_lai": 0}
+        for map_dv, map_tr in (("Kiếm Các", "Kiếm Các"), ("Đại Lý", "Đại Lý"), ("Lạc Dương", "Kiếm Các"),
+                               ("Đại Lý", PHO_BAN), ("Đại Lý", None)):
+            state["luc_bi_bo_lai"] = 0
+            self.assertIsNone(sk.doi_vien_bi_bo_lai(map_dv, map_tr, "Kiếm Các", state, bay_gio=1000))
+            self.assertNotIn("luc_bi_bo_lai", state)
+
+    def _buoc(self, state, dang_theo=b"1"):
+        game = MagicMock()
+        game.lua.chay.return_value = dang_theo
+        doi = MagicMock(vi_tri=(98, 78, "Kiếm Các"), map_dich="Kiếm Các", truong="cosato144")
+        doi.vung_cho.return_value = None
+        with patch.object(sk, "dong_y_theo_doi_popup"):
+            return sk.buoc_doi_vien(game, doi, {"map": "Đại Lý", "x": 160, "y": 157}, state)
+
+    def test_buoc_doi_vien_co_theo_doi_cu_van_tu_di(self):
+        """Cờ Theo đội đọc «đang theo» mà game đã bỏ lại ở Đại Lý: quá 20 giây vẫn tự đi."""
+        state = {}
+        loai, chu = self._buoc(state)
+        self.assertEqual(loai, "mo_ta")
+        self.assertIn("theo đội trưởng", chu)
+        state["luc_bi_bo_lai"] -= sk.GIAY_BI_BO_LAI_DAI_LY
+        self.assertEqual(self._buoc(state), ("di", "Kiếm Các"))
+
+    def test_buoc_doi_vien_khong_theo_doi_cung_tu_di(self):
+        state = {"luc_bi_bo_lai": time.time() - sk.GIAY_BI_BO_LAI_DAI_LY}
+        self.assertEqual(self._buoc(state, dang_theo=b"0"), ("di", "Kiếm Các"))
+
+    def test_di_rieng_bo_theo_doi_truoc_khi_di(self):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r._bat_dau = lambda *a: ({}, ("2026-11-10", 21))
+        r.nen_dung = lambda: False
+        r._tt = lambda: {"map": "Đại Lý"}
+        r._log = MagicMock()
+        r._di_toi_map = MagicMock()
+        r.game = MagicMock()
+        with patch.object(sk, "bo_theo_doi") as bo:
+            r.di_rieng("cosato155", {}, {}, lambda: False, "Kiếm Các")
+        bo.assert_called_once_with(r.game)
+        r._di_toi_map.assert_called_once_with("Kiếm Các", ve_thanh_truoc=True, gom_doi=False)
+
+
 class TestCaDoiPhoBanAcTac(unittest.TestCase):
     def test_ca_doi_mot_minh_trong_pho_ban(self):
         self.assertTrue(sk.ca_doi_trong_pho_ban_ac_tac(PHO_BAN, [], lambda t: PHO_BAN))
@@ -322,6 +425,39 @@ class TestKhungAcTac(unittest.TestCase):
             self.assertTrue(sk.nhan_khung(("2026-10-30", 22), "caychay30"))
 
 
+class TestMapKinhHo(unittest.TestCase):
+    """Map Ác Tặc qua Tô Châu là Kính Hồ (không phải Tây Hồ)."""
+
+    def test_danh_sach_map_co_kinh_ho(self):
+        self.assertIn("Kính Hồ", gd.cau_hinh.CAC_MAP_AC_TAC)
+        self.assertNotIn("Tây Hồ", gd.cau_hinh.CAC_MAP_AC_TAC)
+        self.assertEqual(sk.ten_map_chuan("kinh ho"), "Kính Hồ")
+        self.assertIsNone(sk.ten_map_chuan("Tây Hồ"))
+
+    def test_kinh_ho_di_qua_to_chau(self):
+        self.assertEqual(sk.hub_cua_map("Kính Hồ"), sk.MAP_TO_CHAU)
+        chang = sk.chuoi_buoc_toi("Kính Hồ", {})
+        self.assertEqual([c.map_toi for c in chang], [sk.MAP_TO_CHAU, "Kính Hồ"])
+        self.assertIsNone(chang[-1].ten_npc)
+        self.assertEqual(chang[-1].xy, sk.CONG_TOI_MAP["Kính Hồ"])
+
+    def test_cong_tien_nhan_chi_lo(self):
+        """Tọa độ cổng theo Tiên Nhân Chỉ Lộ (Config.axp, loại 99 «Vận chuyển»): Tô Châu scene 1, Lạc Dương scene 0."""
+        self.assertEqual(sk.CONG_TOI_MAP["Kính Hồ"], (32, 162))
+        self.assertNotEqual(sk.CONG_TOI_MAP["Kính Hồ"], (182, 287))  # cổng Tây Hồ
+        self.assertEqual(sk.CONG_TOI_MAP["Thái Hồ"], (181, 33))
+        self.assertEqual(sk.CONG_TOI_MAP["Đôn Hoàng"], (33, 130))
+        self.assertEqual(sk.CONG_TOI_MAP["Tung Sơn"], (159, 287))
+
+    def test_json_cu_tay_ho_doi_sang_kinh_ho(self):
+        cai_dat = {"ac_tac": {"map_uu_tien": ["Kiếm Các", "Tây Hồ"],
+                              "thu_tu_map": ["Vô Lượng Sơn", "Kiếm Các", "Tây Hồ", "Đôn Hoàng", "Thái Hồ", "Tung Sơn"]}}
+        self.assertTrue(gd.cau_hinh._them_ac_tac(cai_dat))
+        self.assertEqual(cai_dat["ac_tac"]["map_uu_tien"], ["Kiếm Các", "Kính Hồ"])
+        self.assertEqual(cai_dat["ac_tac"]["thu_tu_map"], gd.cau_hinh.CAC_MAP_AC_TAC)
+        self.assertFalse(gd.cau_hinh._them_ac_tac(cai_dat))
+
+
 class TestGiaLapAcTac(unittest.TestCase):
     def tearDown(self):
         sk.huy_gia_lap_ac_tac()
@@ -341,6 +477,56 @@ class TestGiaLapAcTac(unittest.TestCase):
     def test_het_gio_thi_khong_con_khung(self):
         sk.huy_gia_lap_ac_tac()
         self.assertFalse(sk.ac_tac_dang_bat({"bat": False}))
+
+    def test_dung_gia_lap_tra_khung_va_tat_ngay(self):
+        khung = sk.bat_gia_lap_ac_tac(20)
+        self.assertEqual(sk.huy_gia_lap_ac_tac(), khung)
+        self.assertIsNone(sk.huy_gia_lap_ac_tac())
+        self.assertFalse(sk.gia_lap_con_hieu_luc())
+        self.assertNotEqual(sk.khung_hien_tai({"bat": False}), khung)
+        # Khung đã hủy: giờ hết rơi về mốc bắt đầu, luồng nào còn giữ khóa khung cũng coi là hết giờ.
+        self.assertLessEqual(sk.luc_het_khung(khung, {}), time.time())
+
+    def _runner(self, khung, gauto_het_luc):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r.khung = r.gauto_khung = khung
+        r.het_khung = time.time() + 1200
+        r.gauto_het_luc = gauto_het_luc
+        return r
+
+    def test_dung_gia_lap_het_khung_runner_va_gauto(self):
+        bay_gio = time.time()
+        khung = ("gia_lap", int(bay_gio))
+        r = self._runner(khung, bay_gio + 1200)
+        r.dung_gia_lap(khung, bay_gio=bay_gio)
+        self.assertEqual(r.het_khung, bay_gio)
+        self.assertEqual(r.gauto_het_luc, bay_gio)
+
+    def test_dung_gia_lap_khong_dong_khung_khac_va_gauto_chua_bat(self):
+        bay_gio = time.time()
+        khung_that = ("2026-10-30", 21)
+        r = self._runner(khung_that, bay_gio + 1200)
+        r.dung_gia_lap(("gia_lap", int(bay_gio)), bay_gio=bay_gio)
+        self.assertEqual(r.het_khung, bay_gio + 1200)
+        self.assertEqual(r.gauto_het_luc, bay_gio + 1200)
+        khung = ("gia_lap", int(bay_gio))
+        r = self._runner(khung, 0.0)
+        r.dung_gia_lap(khung, bay_gio=bay_gio)
+        self.assertEqual(r.gauto_het_luc, 0.0)
+        r.dung_gia_lap(None, bay_gio=bay_gio)
+
+    def test_dung_khi_dang_di_toi_map_gauto_khong_vang_loi(self):
+        khung = ("gia_lap", int(time.time()))
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r._bat_dau = lambda *a: ({}, khung)
+        r._dong_hoi_thoai = MagicMock()
+        r._di_toi_map = MagicMock(side_effect=sk._HetKhung())
+        r.game = MagicMock()
+        doi = MagicMock()
+        with patch.object(sk, "bo_theo_doi"):
+            r.di_den_map_gauto("truong", {}, {}, lambda: False, "Kiếm Các", doi)
+        self.assertEqual(doi.map_dich, "Kiếm Các")
+        self.assertIsNone(r.doi_at)
 
 
 class TestChoCaDoiTheoKhiDiMap(unittest.TestCase):
@@ -406,6 +592,87 @@ class TestChoCaDoiTheoKhiDiMap(unittest.TestCase):
             with self.assertRaises(sk.LoiAcTac) as cm:
                 r._cho_doi_vien_toi_map("Tung Sơn")
         self.assertIn("b chưa tới Tung Sơn", str(cm.exception))
+
+
+class TestRotTheoDoiTruocKhiDichChuyen(unittest.TestCase):
+    """14:03 / 14:07 ngày 12/11: đội viên rớt Theo đội lúc đội trưởng chạy tới Di Chuyển — chưa chọn dòng, mời lại."""
+
+    def _runner(self, chua_theo):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        r.ten, r.la_truong, r.in_log = "cosato10", True, MagicMock()
+        r.trang_thai = {}
+        r.doi_at = MagicMock(cac_doi_vien={"cosato12": MagicMock(), "cosato13": MagicMock()})
+        r.doi_at.chua_theo.side_effect = chua_theo
+        for ten in ("_cho_tat_ca_theo_truoc_khi_di", "_cho_doi_gan_npc", "_chon", "_cho_dong", "_dong_hoi_thoai",
+                    "_cho_doi_vien_toi_map"):
+            setattr(r, ten, MagicMock())
+        r._mo_npc = MagicMock(return_value=[])
+        r._cho_sang_map = MagicMock(return_value=sk.MAP_TO_CHAU)
+        return r
+
+    def _chang(self):
+        return sk.Chang(sk.MAP_DAI_LY, sk.NPC_DI_CHUYEN, sk.XY_DI_CHUYEN_DAI_LY,
+                        ((111116, 8888), (111116, 1002)), sk.MAP_TO_CHAU)
+
+    def test_rot_theo_thi_moi_lai_roi_moi_dich_chuyen(self):
+        r = self._runner([["cosato12", "cosato13"], []])
+        with patch.object(sk.time, "sleep"):
+            r._qua_chang(self._chang())
+        self.assertEqual(r._cho_tat_ca_theo_truoc_khi_di.call_count, 2)
+        self.assertEqual(r._chon.call_count, 1)
+        self.assertTrue(any("rớt Theo đội" in c.args[0] for c in r.in_log.call_args_list))
+        r._cho_doi_vien_toi_map.assert_called_once_with(sk.MAP_TO_CHAU)
+
+    def test_ca_doi_con_theo_thi_dich_chuyen_ngay(self):
+        r = self._runner([[]])
+        with patch.object(sk.time, "sleep"):
+            r._qua_chang(self._chang())
+        self.assertEqual(r._cho_tat_ca_theo_truoc_khi_di.call_count, 1)
+        r._chon.assert_called_once_with((111116, 8888))
+
+    def test_rot_mai_thi_khong_dich_chuyen_mot_minh(self):
+        r = self._runner([["cosato12"]] * sk.SO_LAN_THU)
+        with patch.object(sk.time, "sleep"):
+            with self.assertRaises(sk.LoiAcTac):
+                r._qua_chang(self._chang())
+        r._chon.assert_not_called()
+
+
+class TestKhongDanhSatTinhKhiMapCu(unittest.TestCase):
+    """Vòng chính chạy luồng Ác Tặc thì map_hien_tai còn «Lôi đài» cũ: luồng đánh không được coi NPC Đại Lý là Sát Tinh."""
+
+    def _luong(self, map_cu, map_that, dang_ac_tac=False):
+        luong = gd.LuongNhanVat.__new__(gd.LuongNhanVat)
+        luong.ten = "cosato10"
+        luong.map_hien_tai = map_cu
+        luong.da_noi = luong.dang_trong_game = True
+        luong.dang_ac_tac = dang_ac_tac
+        luong.game = MagicMock()
+        luong.game.thong_tin.return_value = {"map": map_that}
+        luong._bo_theo_de_danh_sat_tinh = MagicMock()
+        chien_dau = MagicMock()
+        npc = MagicMock(hp=100, ten="Vệ Binh", x=160, y=158)
+        chien_dau._doc_quanh_minh.return_value = MagicMock(cac_quai=[npc], vi_tri=(160, 157))
+        return luong, chien_dau
+
+    def test_da_ve_dai_ly_ma_map_cu_la_loi_dai(self):
+        luong, cd = self._luong(gd.MAP_SAT_TINH, "Đại Lý")
+        luong._cap_nhat_danh_npc_do_sat_tinh(cd)
+        self.assertFalse(luong.danh_npc_do_sat_tinh)
+        luong._bo_theo_de_danh_sat_tinh.assert_not_called()
+        cd._doc_quanh_minh.assert_not_called()
+
+    def test_dang_di_ac_tac_thi_khong_danh_sat_tinh(self):
+        luong, cd = self._luong(gd.MAP_SAT_TINH, gd.MAP_SAT_TINH, dang_ac_tac=True)
+        luong._cap_nhat_danh_npc_do_sat_tinh(cd)
+        self.assertFalse(luong.danh_npc_do_sat_tinh)
+        luong._bo_theo_de_danh_sat_tinh.assert_not_called()
+
+    def test_that_trong_loi_dai_van_danh(self):
+        luong, cd = self._luong(gd.MAP_SAT_TINH, gd.MAP_SAT_TINH)
+        luong._cap_nhat_danh_npc_do_sat_tinh(cd)
+        self.assertTrue(luong.danh_npc_do_sat_tinh)
+        luong._bo_theo_de_danh_sat_tinh.assert_called_once()
 
 
 class TestChoDoiGanNpcDiChuyen(unittest.TestCase):

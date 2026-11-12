@@ -341,7 +341,7 @@ MAC_DINH_PHO_BAN_PMP = {"bat": False, "so_vong": 0, "to_doi": False,
 
 # Sự kiện Ác Tặc (su_kien_ac_tac.py): map_uu_tien là các map đã chọn theo thứ tự đi, thu_tu_map là thứ tự hiện trong
 # danh sách (cả map chưa chọn); route "moi" = [ACTAC] GAuto (nhanh), "cu" = [ACTACKIEUCU] (chậm mà không sót).
-CAC_MAP_AC_TAC = ["Vô Lượng Sơn", "Kiếm Các", "Tây Hồ", "Đôn Hoàng", "Thái Hồ", "Tung Sơn"]
+CAC_MAP_AC_TAC = ["Vô Lượng Sơn", "Kiếm Các", "Kính Hồ", "Đôn Hoàng", "Thái Hồ", "Tung Sơn"]
 # chay_pathpoints / cho_party / tu_tim: GAuto tab Ác Tặc — cboxATRunPP (thường tắt), cboxChoParty, cboxIsTrungAc (Tự tìm).
 # Tắt pathpoints = «Chạy tìm»: quét lỏng quanh mốc ACTAC, không đi từng điểm cố định.
 MAC_DINH_AC_TAC = {"bat": False, "route": "moi", "ten_quai": "Ác Tặc",
@@ -352,15 +352,15 @@ MAC_DINH_AC_TAC = {"bat": False, "route": "moi", "ten_quai": "Ác Tặc",
 
 
 def _them_ac_tac(cai_dat):
-    """Sự kiện Ác Tặc (tab "Phó bản"), mặc định tắt. Bản đầu ghi nhầm Kính Hồ: đổi sang Tây Hồ."""
+    """Sự kiện Ác Tặc (tab "Phó bản"), mặc định tắt. Map Ác Tặc qua Tô Châu là Kính Hồ: json cũ ghi Tây Hồ thì đổi."""
     if "ac_tac" not in cai_dat:
         cai_dat["ac_tac"] = copy.deepcopy(MAC_DINH_AC_TAC)
         return True
     doi = False
     for khoa in ("map_uu_tien", "thu_tu_map"):
         ds = cai_dat["ac_tac"].get(khoa)
-        if isinstance(ds, list) and "Kính Hồ" in ds:
-            cai_dat["ac_tac"][khoa] = ["Tây Hồ" if m == "Kính Hồ" else m for m in ds]
+        if isinstance(ds, list) and "Tây Hồ" in ds:
+            cai_dat["ac_tac"][khoa] = list(dict.fromkeys("Kính Hồ" if m == "Tây Hồ" else m for m in ds))
             doi = True
     for khoa, gia_tri in MAC_DINH_AC_TAC.items():
         if khoa not in cai_dat["ac_tac"]:

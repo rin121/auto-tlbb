@@ -11,7 +11,7 @@ luồng nhân vật quay lại PMP / Sát Tinh như cũ.
 Đường đi: từ Đại Lý, NPC "Di Chuyển" (165, 156); đang đứng sẵn ở Lạc Dương / Tô Châu mà map nằm sau thành đó thì đi thẳng
 ra cổng, không về Đại Lý:
     Vô Lượng Sơn, Kiếm Các : Bản Đồ Luyện Cấp ở NPC Di Chuyển Đại Lý (dò dòng theo tên map).
-    Tây Hồ, Thái Hồ        : Bản Đồ Thành Thị (111116, 8888) -> Tô Châu (111116, 1002), rồi chạy tới cổng map.
+    Kính Hồ, Thái Hồ       : Bản Đồ Thành Thị (111116, 8888) -> Tô Châu (111116, 1002), rồi chạy tới cổng map.
     Đôn Hoàng, Tung Sơn    : Bản Đồ Thành Thị (111116, 8888) -> Lạc Dương (111116, 1001), rồi chạy tới cổng map.
 Cổng map lấy từ "Tiên Nhân Chỉ Lộ" của game (DataPool:GetAutoSearch, loại 99 "Vận chuyển"): chạy tới tọa độ cổng như
 khi nhấp đúp dòng "Bản đồ: ..." (AutoRunToTarget + SetAutoRunTargetNPCName). Ghi tay được trong cau_hinh.json,
@@ -47,10 +47,11 @@ PHUT_DI_TRUOC = 3  # ra map từ phút 57 (vd khung 21h → 20:57)
 PHUT_KHUNG_MAC_DINH = 30
 MAP_TO_CHAU = "Tô Châu"
 CAC_MAP = tuple(cau_hinh.CAC_MAP_AC_TAC)
-HUB_CUA_MAP = {"Vô Lượng Sơn": None, "Kiếm Các": None, "Tây Hồ": MAP_TO_CHAU, "Thái Hồ": MAP_TO_CHAU,
+HUB_CUA_MAP = {"Vô Lượng Sơn": None, "Kiếm Các": None, "Kính Hồ": MAP_TO_CHAU, "Thái Hồ": MAP_TO_CHAU,
                "Đôn Hoàng": MAP_LAC_DUONG, "Tung Sơn": MAP_LAC_DUONG}
 # Cổng map trong thành trung chuyển (Tiên Nhân Chỉ Lộ: Lạc Dương scene 0, Tô Châu scene 1).
-CONG_TOI_MAP = {"Tây Hồ": (182, 287), "Thái Hồ": (181, 33), "Đôn Hoàng": (33, 130), "Tung Sơn": (159, 287)}
+# Tô Châu (182, 287) là cổng Tây Hồ, không phải Kính Hồ.
+CONG_TOI_MAP = {"Kính Hồ": (32, 162), "Thái Hồ": (181, 33), "Đôn Hoàng": (33, 130), "Tung Sơn": (159, 287)}
 NPC_DI_CHUYEN = "Di Chuyển"
 XY_DI_CHUYEN_DAI_LY = (165, 156)
 BUOC_THANH_THI = (111116, 8888)
@@ -94,6 +95,8 @@ GIAY_GIUA_HAI_LAN_MOI_THEO = 3
 KHOANG_GAN_TRUONG = 10
 GIAY_GIUA_HAI_LAN_CHAY = 3
 GIAY_GIUA_HAI_LAN_DI_RIENG = 30
+# Đội trưởng đã sang map đích mà đội viên còn đứng Đại Lý chừng này giây (game bỏ lại lúc dịch chuyển): tự đi.
+GIAY_BI_BO_LAI_DAI_LY = 20
 GIAY_GIUA_HAI_LAN_VE_THANH = 5
 # Chọn dòng dịch chuyển xong mà chừng này giây chưa đổi map: hội thoại có thể đang hỏi xác nhận.
 GIAY_CHO_XAC_NHAN = 3
@@ -177,9 +180,11 @@ def bat_gia_lap_ac_tac(phut, bay_gio=None):
 
 
 def huy_gia_lap_ac_tac():
+    """Bỏ khung giả lập. Trả khóa khung vừa bỏ (None nếu không có)."""
     with _KHOA_GIA_LAP:
         global _GIA_LAP
-        _GIA_LAP = None
+        gia, _GIA_LAP = _GIA_LAP, None
+    return gia["khung"] if gia else None
 
 
 def gia_lap_con_hieu_luc(bay_gio=None):
@@ -574,6 +579,24 @@ class DoiAcTac:
         return vung if vung and cung_ten_map(self.map_vung, ten_map) else None
 
 
+def doi_vien_bi_bo_lai(map_dv, map_truong, map_dich, state, bay_gio=None):
+    """
+    Đội trưởng đã ở map đích mà mình còn ở Đại Lý quá GIAY_BI_BO_LAI_DAI_LY giây: ("di", map_dich) để tự đi
+    (di_rieng), ("mo_ta", chữ) khi chờ lượt thử lại, None nếu không bị bỏ lại / chưa đủ giây.
+    """
+    bay_gio = bay_gio or time.time()
+    if not (la_dai_ly(map_dv) and map_dich and isinstance(map_truong, str) and cung_ten_map(map_truong, map_dich)):
+        state.pop("luc_bi_bo_lai", None)
+        return None
+    tu = state.setdefault("luc_bi_bo_lai", bay_gio)
+    if bay_gio - tu < GIAY_BI_BO_LAI_DAI_LY:
+        return None
+    if bay_gio - state.get("luc_di_rieng", 0) >= GIAY_GIUA_HAI_LAN_DI_RIENG:
+        state["luc_di_rieng"] = bay_gio
+        return "di", map_dich
+    return "mo_ta", f"bị bỏ lại ở {MAP_DAI_LY}, chờ thử lại đường tới {map_dich}"
+
+
 def buoc_doi_vien(game, doi, tt, state, bay_gio=None, at=None):
     """
     Một bước của đội viên (gọi lặp từ luồng đội viên, không chặn). Trả về ("mo_ta", chữ) hoặc ("di", map) khi phải tự
@@ -592,6 +615,10 @@ def buoc_doi_vien(game, doi, tt, state, bay_gio=None, at=None):
                 game.lua.chay(f"AutoRunToTarget({int(diem[0][0])}, {int(diem[0][1])})")
                 return "mo_ta", f"tự chạy tuần tra {doi.map_dich} (chờ tín hiệu {doi.truong})"
         return "mo_ta", f"chờ đội trưởng {doi.truong}"
+    # Cờ Theo đội có thể vẫn đọc «đang theo» dù game đã bỏ mình lại ở Đại Lý: xét trước nhánh dang_theo.
+    bo_lai = doi_vien_bi_bo_lai(map_dv, vt[2], doi.map_dich, state, bay_gio)
+    if bo_lai:
+        return bo_lai
     try:
         dang_theo = game.lua.chay(MA_DANG_THEO_DOI) == b"1"
     except LoiLua:
@@ -626,7 +653,8 @@ def buoc_doi_vien(game, doi, tt, state, bay_gio=None, at=None):
         ve_dai_ly_neu_ket_truoc_ac_tac(game, map_dv, state, bay_gio)
         return "mo_ta", f"về {MAP_DAI_LY} để ra map Ác Tặc (đang ở [{map_dv}])"
     if doi.map_dich and cung_ten_map(vt[2], doi.map_dich) and not cung_ten_map(map_dv, doi.map_dich):
-        # Đội trưởng đã ra map đích: chỉ tự đi khi mình đang ở hub (bị bỏ lại), không tự đi từ Đại Lý.
+        # Đội trưởng đã ra map đích: ở hub thì tự đi ngay; ở Đại Lý thì mời Theo đội, quá
+        # GIAY_BI_BO_LAI_DAI_LY giây mới tự đi (doi_vien_bi_bo_lai ở trên).
         if o_thanh_trung_chuyen_ac_tac(map_dv) and not la_dai_ly(map_dv):
             if bay_gio - state.get("luc_di_rieng", 0) >= GIAY_GIUA_HAI_LAN_DI_RIENG:
                 state["luc_di_rieng"] = bay_gio
@@ -727,6 +755,16 @@ class AcTacRunner(PhoBanPMP):
         """Đang trong khung Ác Tặc chưa đi xong: bỏ PMP / Sát Tinh để đi Ác Tặc."""
         khung = khung_hien_tai(at, bay_gio)
         return khung is not None and khung != self.khung_xong
+
+    def dung_gia_lap(self, khung, bay_gio=None):
+        """Nút «Dừng giả lập»: khung giả lập hết ngay, luồng đi đường hết giờ (tắt GAuto, về thành, đi tiếp phó bản)."""
+        if khung is None:
+            return
+        bay_gio = time.time() if bay_gio is None else bay_gio
+        if self.khung == khung:
+            self.het_khung = min(self.het_khung, bay_gio)
+        if self.gauto_khung == khung and self.gauto_het_luc:
+            self.gauto_het_luc = min(self.gauto_het_luc, bay_gio)
 
     def dem_xong_khung(self, ten, khung):
         """Đội trưởng đi xong một khung (hết map / hết giờ / tắt GAuto): +1 «Hôm nay Ác Tặc», mỗi khung một lần."""
@@ -944,6 +982,15 @@ class AcTacRunner(PhoBanPMP):
                     self._goi_doi_vien_ve_thanh(bat_buoc=True)
                 self._moi_theo_doi()
             time.sleep(0.5)
+
+    def _kiem_tra_ca_doi_con_theo(self, ten_npc):
+        """Hội thoại NPC dịch chuyển đã mở: đội viên rớt Theo đội trong lúc chạy tới NPC thì chưa chọn dòng (lần thử
+        sau _cho_tat_ca_theo_truoc_khi_di mời lại), kẻo đội trưởng sang map một mình."""
+        if not self.doi_at or not self.doi_at.cac_doi_vien:
+            return
+        chua = self.doi_at.chua_theo()
+        if chua:
+            raise LoiAcTac(f"{', '.join(chua)} rớt Theo đội trước khi dịch chuyển ở {ten_npc}, mời lại")
 
     def _doi_vien_xa_npc(self, xy, map_tr):
         xa = []
@@ -1184,6 +1231,8 @@ class AcTacRunner(PhoBanPMP):
                 self._cho_doi_gan_npc(chang.ten_npc, chang.xy)
             try:
                 cac_dong = self._mo_npc(chang.ten_npc, chang.xy)
+                if self.la_truong:
+                    self._kiem_tra_ca_doi_con_theo(chang.ten_npc)
                 cac_buoc = chang.cac_buoc or self.duong_da_tim.get(khoa)
                 if cac_buoc:
                     for i, dong in enumerate(cac_buoc):
@@ -1625,7 +1674,7 @@ class AcTacRunner(PhoBanPMP):
         self._dong_hoi_thoai()
         try:
             self._di_toi_map(ten_map, ve_thanh_truoc=True, gom_doi=True)
-        except _Dung:
+        except (_Dung, _HetKhung):
             pass
         except _Chet:
             self._log("nhân vật chết khi đi tới map")
@@ -1728,6 +1777,8 @@ class AcTacRunner(PhoBanPMP):
         self._log(f"tự đi tới {ten_map} theo đội trưởng"
                   + ("" if ve_truoc else f" (giữ [{map_hien}], không về {MAP_DAI_LY})"))
         try:
+            # Đội trưởng đã ở map khác: cờ Theo đội còn lại chỉ làm kẹt lúc chạy tới NPC / cổng.
+            bo_theo_doi(self.game)
             self._di_toi_map(ten_map, ve_thanh_truoc=ve_truoc, gom_doi=False)
         except (_HetKhung, _Dung, _RoiMap, _Chet):
             pass
