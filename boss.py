@@ -18,6 +18,12 @@ GIO_BOSS = (0, 4, 8, 12, 16, 20)
 PHUT_VAO_TRUOC = 3
 PHUT_ROI = 5
 MAP_BOSS = ("Ngân Ngai Tuyết Nguyên", "Yến Vương Cổ Mộ")
+# Chữ trên bảng sự kiện khác chữ dòng NPC Di Chuyển (log 2026-11-18 03:25, cosato1):
+# «#HNgân Nga Tuyết Nguyên», «#HYến Vương Cổ Mộ Tầng 9».
+MAU_MAP_BOSS = {
+    "Ngân Ngai Tuyết Nguyên": ("ngan nga tuyet nguyen", "ngan ngai tuyet nguyen"),
+    "Yến Vương Cổ Mộ": ("yen vuong co mo",),
+}
 DONG_BOOS_VIP = ("boos vip", "boss vip")
 TU_BOSS_CHET = ("tieu diet", "da bi ha", "da chet", "bi giet", "danh bai")
 
@@ -82,8 +88,21 @@ def dong_menu_boss(cac_dong):
     return None
 
 
+def mau_map(ten):
+    """Các cụm không dấu để khớp dòng hội thoại và tên map trong game."""
+    khoa = bo_dau(ten or "")
+    for ten_ui, cac in MAU_MAP_BOSS.items():
+        if khoa == bo_dau(ten_ui) or any(m in khoa or khoa in m for m in cac):
+            return cac
+    return (khoa,) if khoa else ()
+
+
 def dong_map_boss(cac_dong, ten_map):
-    return _dong_id(cac_dong, ten_map)
+    cac_mau = mau_map(ten_map)
+    for loai, s, e, chu in cac_dong:
+        if loai == "id" and s >= 0 and any(m in bo_dau(chu or "") for m in cac_mau):
+            return s, e
+    return None
 
 
 def dong_tiep(cac_dong):
@@ -94,25 +113,24 @@ def cung_ten_map(dang_o, mong):
     if not dang_o or not mong:
         return False
     a, b = bo_dau(dang_o), bo_dau(mong)
-    return a == b or b in a or a in b
-
-
-def _cum_boss(ten_map):
-    return " ".join(bo_dau(ten_map).split()[:2])
+    if a == b or b in a or a in b:
+        return True
+    return any(x in y or y in x for x in mau_map(dang_o) for y in mau_map(mong))
 
 
 def khop_ten_boss(ten, ten_map):
-    """Tên quái chứa hai chữ đầu của map (Yến Vương / Ngân Ngai)."""
+    """Tên quái chứa hai chữ đầu của map (Yến Vương / Ngân Nga)."""
     if not ten:
         return False
-    return _cum_boss(ten_map) in bo_dau(ten)
+    b = bo_dau(ten)
+    return any(" ".join(m.split()[:2]) in b for m in mau_map(ten_map))
 
 
 def thong_bao_boss_chet(cac_dong, ten_map):
-    cum = _cum_boss(ten_map)
+    cac_cum = [" ".join(m.split()[:2]) for m in mau_map(ten_map)]
     for chu in cac_dong:
         b = bo_dau(chu or "")
-        if cum in b and any(tu in b for tu in TU_BOSS_CHET):
+        if any(cum in b for cum in cac_cum) and any(tu in b for tu in TU_BOSS_CHET):
             return True
     return False
 

@@ -54,9 +54,12 @@ class TestHoiThoaiBoss(unittest.TestCase):
     def test_chon_menu_roi_map(self):
         menu = [_dong("Tân Thủ 1", 1, 1), _dong("Bản Đồ BOOS VIP", 9, 3), _dong("Bản Đồ Phụ Bản", 4, 4)]
         self.assertEqual(boss.dong_menu_boss(menu), (9, 3))
-        con = [_dong("Ngân Ngai Tuyết Nguyên", 9, 8), _dong("Yến Vương Cổ Mộ", 9, 9)]
+        con = [_dong("#HNgân Nga Tuyết Nguyên", 9, 8), _dong("#HYến Vương Cổ Mộ Tầng 9", 9, 9),
+               _dong("#{loulan_yizhan_20080329}", 1, 1)]
+        self.assertEqual(boss.dong_map_boss(con, "Ngân Ngai Tuyết Nguyên"), (9, 8))
         self.assertEqual(boss.dong_map_boss(con, "Yến Vương Cổ Mộ"), (9, 9))
-        self.assertTrue(boss.cung_ten_map("Yến Vương Cổ Mộ", "Yến Vương Cổ Mộ"))
+        self.assertTrue(boss.cung_ten_map("Ngân Nga Tuyết Nguyên", "Ngân Ngai Tuyết Nguyên"))
+        self.assertTrue(boss.cung_ten_map("Yến Vương Cổ Mộ Tầng 9", "Yến Vương Cổ Mộ"))
 
     def test_boss_chet_khi_thong_bao_hoac_mau_0(self):
         ten = "Ngân Ngai Tuyết Nguyên"
