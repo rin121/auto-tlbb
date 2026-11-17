@@ -42,6 +42,7 @@ MAC_DINH_CHUNG = {"giay_cho_game_khoi_dong": 90, "bat_moi_nhom": False, "truong_
                   "fps_max": 25, "fps_front": 25, "fps_back": 5,
                   "danh_sach_map": CAC_MAP_MAC_DINH,
                   "thu_tu_tab": [], "tab_an": [], "thu_tu_nhan_vat": [], "cao_bang": {},
+                  "bat_boss": False, "map_boss": "Ngân Ngai Tuyết Nguyên", "moc_boss_da_xong": "",
                   "so_nguoi_mot_nhom": 4, "xv_chi_sat_tinh": False,
                   "xv_so_round": 3, "xv_test": False, "xv_chuyen_do": True, "xv_ngay_moi": True,
                   "xv_truong_nhom": [], "xv_tien_trinh": {},

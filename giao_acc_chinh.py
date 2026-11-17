@@ -9,8 +9,11 @@ lần lượt các acc giao dịch đăng nhập trên chính các client đó, 
 
 Túi acc chính còn dưới SO_O_TOI_THIEU ô trống thì cất đồ đã nhận:
     Thiên Cơ Cẩm Nang (cửa sổ Packet_Temporary, mở bằng MainMenuBar_KuaiJieYiZhan()):
-        Packet_Temporary_PutInItem(ô túi Đạo cụ); Phiếu KNB 2000 cũng cất TCCN; phiếu 100/300 giữ túi để hợp thành.
-        Nếu Thương khố đầy mà túi vẫn chật: cất tạm mọi món Đạo cụ vào TCCN.
+        chỉ cất món tên có «mảnh». Không cất phiếu KNB.
+    Gộp đồ: sau giao dịch đổi phiếu KNB trong túi trước (100 rồi 300). Túi còn chỗ thì rút thêm
+        phiếu từ TCCN rồi đổi tiếp. Chỉ mở Thương khố khi túi vẫn đầy sau khi đổi và cất mảnh.
+    Sau mỗi lần giao dịch, acc phụ và acc chính đều bấm Xếp túi.
+    Acc chính hoặc acc phụ bị ngắt kết nối giữa lúc giao thì đăng nhập lại acc đó rồi giao tiếp.
     Thương khố (NPC Tân Thủ, dòng (111111, 9993)): chuột phải ô túi khi cửa sổ Bank đang mở là cất vào kho.
         Số ô kho = Bank:GetRentBoxInfo(r) (ô đầu, số ô) của các ngăn r = 1..Bank:GetRentBoxNum().
 Cả hai đều đầy thì dừng, giữ tiến trình. Tiến trình (trưởng nhóm đã giao xong trong ngày, mã đồ đã nhận) lưu ở
@@ -37,7 +40,8 @@ from giao_dich import GiaoDich, LoiGiaoDich, doc_tui
 from keo_tha import LoiKeoTha, bam_phai
 from lua_game import LoiLua
 from nhan_vat_moi import NPC_TAN_THU, NhanDoTanThu, da_xong
-from pho_ban_pmp import LoiPhoBan, _Dung as DungPhoBan, cai_dat_pmp, chuan_bi_ve_thanh, hom_nay, la_dai_ly
+from pho_ban_pmp import (LoiPhoBan, MA_DOC_THONG_BAO, _Dung as DungPhoBan, cai_dat_pmp, chuan_bi_ve_thanh,
+                        hom_nay, la_dai_ly)
 import so_tui_do
 from so_tui_do import LOAI_TRU_MAC_DINH, bi_loai_tru, cac_tu_loai_tru
 from xoay_vong import (SO_ROUND_TOI_DA, LuongVaoNhanVat, cac_tai_khoan_dang_tich, chia_nhom, khoa_sap_xep_tai_khoan,
@@ -95,35 +99,34 @@ MA_LIET_KE_CUA_SO_DOI = (
     'local ten = ten_tu(k) '
     'if ten and not seen[ten] and not bo[ten] and IsWindowShow(ten) then '
     'seen[ten] = 1 s = s .. ten .. "," end end end return s')
-# Cửa sổ IsWindowShow = XiaoXiang_DuiHuanUI2; ô công thức ActionButton thật = DuiHuanUI_Bk_Icon1..50.
+# Cửa sổ IsWindowShow = XiaoXiang_DuiHuanUI2. Clicked/OK phải chạy trong *_Env
+# (trong_cua_so): ngoài env thì this:Disable lỗi và gói DuiHuan33 tự gửi không đổi được.
 MA_BAM_O_DOI = (
     'local mo = "{mo}" if mo == "" then return "dong" end '
     'if not IsWindowShow(mo) and not IsWindowShow("DuiHuanUI") then return "dong" end '
     'local i = {i} '
     'local goi = _G[mo .. "_Clicked"] '
-    'if goi then goi(i) return "1" end '
-    'goi = _G["DuiHuanUI_Clicked"] '
-    'if goi then goi(i) return "1" end '
-    'goi = _G[mo .. "_Item_Clicked"] or _G[mo .. "_Select"] or _G[mo .. "_Goods_Clicked"] '
-    'if goi then goi(i) return "1" end '
-    'goi = _G[string.format("%s_Item%02d_Clicked", mo, i)] or _G[string.format("%s_Item%d_Clicked", mo, i)] '
-    'if goi then goi() return "1" end '
-    'local nut = _G[string.format("DuiHuanUI_Bk_Icon%d", i)] '
-    'or _G[string.format("%s_Bk_Icon%d", mo, i)] '
-    'or _G[string.format("%s_Item%02d", mo, i)] or _G[string.format("%s_Item%d", mo, i)] '
-    'or _G[string.format("%s_Goods%02d", mo, i)] or _G[string.format("%s_Goods%d", mo, i)] '
-    'if nut and nut.DoAction then nut:DoAction() return "1" end '
-    'if nut and nut.Click then nut:Click() return "1" end return "khong"')
+    'if not goi then return "khong" end '
+    'goi(i) '
+    'local goi2 = _G[mo .. "_Clicked2"] '
+    'if goi2 then pcall(goi2, i) end '
+    'return "1"')
 MA_XAC_NHAN_DOI = (
     'local mo = "{mo}" if mo == "" then return "dong" end '
     'if not IsWindowShow(mo) and not IsWindowShow("DuiHuanUI") then return "dong" end '
-    'local hs = {mo .. "_OK_Clicked", "DuiHuanUI_OK_Clicked", mo .. "_Accept_Clicked", '
-    'mo .. "_Queding_Clicked", mo .. "_XN_Clicked", mo .. "_Confirm_Clicked", mo .. "_Yes_Clicked", '
-    '"DuiHuanUI_Accept_Clicked", "DuiHuanUI_Queding_Clicked"} '
-    'for _, ten in ipairs(hs) do local f = _G[ten] if f then f() return "1" end end '
-    'local nut = _G[mo .. "_OK"] or _G["DuiHuanUI_OK"] or _G[mo .. "_Accept"] or _G[mo .. "_Queding"] '
-    'if nut and nut.Click then nut:Click() return "1" end '
-    'if nut and nut.DoAction then nut:DoAction() return "1" end return "khong"')
+    'local goi = _G[mo .. "_OK_Clicked"] or _G["DuiHuanUI_OK_Clicked"] '
+    'if not goi then return "khong" end '
+    'goi() return "1"')
+
+
+def ma_bam_o_doi(mo, o):
+    """Chọn ô công thức, trong môi trường cửa sổ đổi."""
+    return trong_cua_so(mo, MA_BAM_O_DOI.replace("{mo}", mo).replace("{i}", str(int(o))))
+
+
+def ma_xac_nhan_doi(mo):
+    """Xác nhận đổi, trong môi trường cửa sổ đổi."""
+    return trong_cua_so(mo, MA_XAC_NHAN_DOI.replace("{mo}", mo))
 MA_CAC_O_DOI_CO_DO = (
     'local mo = "{mo}" '
     'if (mo == "" or not IsWindowShow(mo)) and not IsWindowShow("DuiHuanUI") then return "" end '
@@ -227,8 +230,22 @@ MA_DOC_TEN_O_DOI = (
     'local t = lay(nut) if t ~= "" then return t end '
     'return ""')
 SO_O_TOI_THIEU = 5
+# Sau mỗi lần đổi, túi trống ra thì rút tiếp phiếu ở rương/TCCN. Trần để không lặp mãi.
+SO_VONG_RUT_DOI_PHIEU = 40
+# Túi Đạo cụ đã nâng 100 ô. GetBaseBag_Num() vẫn trả số cũ nên ô trống bị 0 hoặc âm.
+SO_O_TUI_DAO_CU = 100
 SO_O_MOT_LAN = 5
 SO_LAN_THU_GIAO_DICH = 3
+SO_LAN_DANG_NHAP_LAI = 5
+SO_LAN_TU_BAT_DAU_LOI = 8
+MAN_NGOAI_GAME = ("chon_may_chu", "dang_nhap", "chon_nhan_vat", "thong_bao", "ma_kiem_tra")
+
+
+def nen_bat_lai_sau_loi(trang_thai, chay_lai, lan_da_bat, gioi_han=SO_LAN_TU_BAT_DAU_LOI):
+    """Lỗi khi còn nhân vật chưa giao thì tự bấm Bắt đầu. Dừng tay hoặc đã Xong thì không."""
+    if not chay_lai or lan_da_bat >= gioi_han:
+        return False
+    return str(trang_thai).startswith(("Dừng:", "Lỗi"))
 KHOANG_CACH_DUNG_CHO = 3
 GIAY_CHAY_TOI = 90
 GIAY_GUI_LAI_CHAY = 5
@@ -241,8 +258,13 @@ GIAY_GIUA_HAI_LAN_CAT = 0.5
 # Rút Thương khố (MoveItemToPacket) giữa hai lần — đổi phiếu rút 100/300. Thiên Cơ vẫn 3 giây.
 GIAY_GIUA_RUT_KHO = 0.5
 SO_LAN_THU_CAT = 2
-SO_LAN_HOP_THANH_TOI_DA = 40
-GIAY_XAC_NHAN_PHIEU = 0.5
+SO_LAN_HOP_THANH_TOI_DA = 2000
+# Vài cú bấm không trừ túi (server chưa kịp) không được cắt vòng đổi.
+SO_LAN_HUT_LIEN_TIEP = 40
+GIAY_XAC_NHAN_PHIEU = 0.25
+# Một lần OK: 200 phiếu 100 → 20K, 100 phiếu 300 → 30K (đúng câu game «Không Đủ»).
+SO_PHIEU_DOI_20K = 200
+SO_PHIEU_DOI_30K = 100
 # Giữ hằng cũ cho test / tool — auto không còn quét từng ô để tìm tên.
 SO_O_DOI_TIM_TOI_DA = 36
 GIAY_GIUA_HAI_LAN_TIM_O_DOI = 0.35
@@ -411,7 +433,18 @@ def luu_cai_dat(**thay_doi):
     cau_hinh.dat_chung({KHOA_CAI_DAT: dict(cai_dat(), **thay_doi)})
 
 
+def suc_chua_dao_cu(so_api):
+    """Sức chứa túi Đạo cụ: không nhỏ hơn túi 100 ô đã nâng."""
+    try:
+        so = int(float(so_api))
+    except (TypeError, ValueError):
+        so = 0
+    return max(so, SO_O_TUI_DAO_CU)
+
+
 def la_phieu_knb(ten):
+    if not isinstance(ten, str):
+        return False
     khoa = bo_dau(ten)
     return "phieu knb" in khoa or "phieu kim nguyen bao" in khoa
 
@@ -436,9 +469,41 @@ def la_phieu_nho(ten):
     return muc_phieu_knb(ten) in (100, 300)
 
 
-def la_phieu_cat_tccn(ten):
-    """Phiếu KNB 2000 (kể cả «2K»): acc chính cất vào Thiên Cơ Cẩm Nang."""
-    return muc_phieu_knb(ten) == 2000
+def thu_tu_rut_phieu_doi(ten):
+    """Rút phiếu 100 trước phiếu 300. Phiếu 2K/3K không có công thức đổi."""
+    m = muc_phieu_knb(ten)
+    if m == 100:
+        return 0
+    if m == 300:
+        return 1
+    return 9
+
+
+def la_manh_cat_tccn(ten):
+    """Mảnh (Ngọc, vỡ, …) được cất TCCN khi túi gần đầy. Phiếu KNB không bao giờ cất."""
+    if la_phieu_knb(ten):
+        return False
+    khoa = bo_dau(re.sub(r"#[-0-9a-fA-F]*", "", ten or ""))
+    return "manh" in khoa
+
+
+def la_thong_bao_het_phieu(chu):
+    """Game báo túi không còn đủ phiếu KNB để đổi tiếp."""
+    k = bo_dau(chu or "")
+    return "khong du" in k and ("phieu" in k or "knb" in k or "kim nguyen" in k)
+
+
+def la_thong_bao_thieu_20k(chu):
+    """Tay nải không đủ Phiếu KNB 100 (200 cái) để đổi Phiếu KNB 20K.
+
+    Câu này không kết thúc gộp: xếp túi, mở lại Trao Đổi, đổi tiếp 30K.
+    """
+    k = bo_dau(chu or "")
+    if "khong du" not in k:
+        return False
+    co_100 = "phieu knb 100" in k or "phieu kim nguyen bao 100" in k
+    co_20k = "20k" in k
+    return co_100 and co_20k
 
 
 def la_cong_thuc_phieu(ten, muc):
@@ -456,6 +521,8 @@ def la_cong_thuc_phieu(ten, muc):
 # Gộp đồ: giao mọi món, trừ ba loại mảnh vỡ bên dưới.
 SO_RUT_TCCN = 250
 GIAY_GIUA_RUT_TCCN = 3
+# Rút phiếu đang kẹt trong TCCN rồi đổi; trần để túi đầy phiếu 2000 không lặp mãi.
+SO_VONG_RUT_PHIEU_TCCN = 3
 
 
 def la_vat_pham_gop(ten):
@@ -671,6 +738,21 @@ class GiaoAccChinhEngine:
 
     ghi_so_tui = True
     thoat_sau_giao = False
+    chay_lai_khi_loi = False
+
+    def con_chua_xong(self):
+        """Còn nhân vật trong danh sách chưa nằm trong tiến trình đã giao xong hôm nay."""
+        ds = getattr(self, "ds_nguon", None)
+        if ds is None:
+            ds = getattr(self, "ds_truong", None) or []
+        tt = self.tien_trinh or {}
+        if tt.get("ngay") and tt.get("ngay") != date.today().isoformat():
+            return bool(ds)
+        da = {chuan_hoa(t) for t in tt.get("da_xong") or []}
+        return any(chuan_hoa(ten) not in da for _, ten in ds)
+
+    def _danh_dau_chay_lai_neu_chua_xong(self):
+        self.chay_lai_khi_loi = (not self.dung.is_set()) and self.con_chua_xong()
 
     def _kiem_tra_dung(self):
         if self.dung.is_set():
@@ -704,6 +786,61 @@ class GiaoAccChinhEngine:
             ve_chon_may_chu(game, self.dung.is_set, lambda chu: self.in_log(f"{ten}: {chu}"))
         except LoiDangNhap as loi:
             raise LoiGiaoAccChinh(f"{ten}: {loi}") from loi
+
+    def _con_trong_game(self, game):
+        """False khi cửa sổ đã tắt hoặc đang ở màn đăng nhập / chọn máy chủ / chọn nhân vật / hộp ngắt kết nối."""
+        if game is None:
+            return False
+        try:
+            if game.thong_tin():
+                return True
+            man = man_hinh_hien_tai(game.lua)
+        except (LoiLua, OSError, AttributeError):
+            return False
+        return man not in MAN_NGOAI_GAME
+
+    @staticmethod
+    def _la_loi_mat_game(loi):
+        chu = str(loi).lower()
+        return any(mau in chu for mau in ("đã đóng", "đã tắt", "không nạp được dll"))
+
+    def _hwnd_dang_giu(self, game):
+        try:
+            return game.lua.hwnd
+        except (AttributeError, OSError):
+            return None
+
+    def _dang_nhap_lai_mot(self, tai_khoan, game_cu, ten, hwnd_tranh):
+        """Đăng nhập lại đúng acc vừa diss. Không đăng xuất acc kia."""
+        self.in_log(f"{ten}: bị ngắt kết nối, đăng nhập lại")
+        hwnd = self._hwnd_dang_giu(game_cu)
+        if hwnd is not None and hwnd == hwnd_tranh:
+            hwnd = None
+        game = self._dang_nhap(tai_khoan, hwnd)
+        if game is None:
+            raise LoiGiaoAccChinh(f"{ten}: không đăng nhập lại được sau khi ngắt kết nối")
+        self._cho(lambda: self._doc(game), 60)
+        try:
+            game.lua.chay(MA_DONG_CUA_SO)
+        except (LoiLua, OSError):
+            pass
+        self._ve_dai_ly(game, ten)
+        try:
+            self._chay_toi(game, ten, NPC_TAN_THU[1])
+        except LoiGiaoAccChinh as loi:
+            self.in_log(f"{loi} — vẫn giao dịch (tự chạy lại gần nhau)")
+        return game
+
+    def _dang_nhap_lai_acc_diss(self, tk, ten, game):
+        """Acc nào rời game thì login lại acc đó, rồi đứng Đại Lý để giao tiếp."""
+        if not self._con_trong_game(self.chinh):
+            self.chinh = self._dang_nhap_lai_mot(
+                self.tk_chinh, self.chinh, self.tk_chinh["nhan_vat"], self._hwnd_dang_giu(game))
+        if not self._con_trong_game(game):
+            game = self._dang_nhap_lai_mot(
+                dict(tk, nhan_vat=ten), game, ten, self._hwnd_dang_giu(self.chinh))
+            self.hwnd_truong = game.lua.hwnd
+        return game
 
     def _dang_nhap(self, tai_khoan, hwnd):
         acc_chinh = tai_khoan["ten_dang_nhap"].lower() == self.tk_chinh["ten_dang_nhap"].lower()
@@ -944,6 +1081,24 @@ class GiaoAccChinhEngine:
         self.in_log(f"{ten}: đã về chọn máy chủ, sang nhân vật tiếp theo")
         self.hwnd_truong = hwnd
 
+    def _gan_bo_qua_sau_xep(self, game, mon_bo_qua):
+        """Sau Xếp, ô túi đổi chỗ. Gắn lại món không giao được theo túi, mã, số lượng và tên."""
+        try:
+            tui = doc_tui(game.lua)
+        except (LoiLua, OSError):
+            return set()
+        da_dung = set()
+        bo_qua = set()
+        for ten_tui, ma, so, ten_vat in mon_bo_qua:
+            for o, vat in tui.items():
+                if o in da_dung or o[0] != ten_tui:
+                    continue
+                if vat == (ma, so, ten_vat):
+                    bo_qua.add((o[0], o[1], ma))
+                    da_dung.add(o)
+                    break
+        return bo_qua
+
     def _do_can_giao(self, game, bo_qua):
         cac_o = []
         for (ten_tui, o), (ma, _, ten) in sorted(doc_tui(game.lua).items()):
@@ -967,6 +1122,7 @@ class GiaoAccChinhEngine:
         self.hwnd_truong = game.lua.hwnd
         self._cho(lambda: self._doc(game), 60)
         bo_qua = set()
+        mon_bo_qua = []
         if getattr(self, "rut_truoc_giao", False):
             self._ve_dai_ly(game, ten)
             try:
@@ -1010,52 +1166,84 @@ class GiaoAccChinhEngine:
                 except LoiGiaoAccChinh as loi:
                     self.in_log(f"{loi} — vẫn giao dịch (tự chạy lại gần {ten_chinh})")
             lan_loi = 0
+            lan_diss = 0
             while cac_o:
                 self._kiem_tra_dung()
-                self._don_tui_chinh()
-                lan_nay = cac_o[:SO_O_MOT_LAN]
-                tui = doc_tui(game.lua)
-                ma_moi = {tui[o][0] for o in lan_nay} - set(self.tien_trinh["ma_da_nhan"])
-                if ma_moi:
-                    self.tien_trinh["ma_da_nhan"] += sorted(ma_moi)
-                    self._luu_tien_trinh()
                 try:
-                    GiaoDich(game, self.chinh, ten, ten_chinh, self.in_log, self.dung.is_set).chuyen(lan_nay)
-                    lan_loi = 0
-                    self._xep_tui_chinh()
-                except LoiGiaoDich as loi:
-                    self._kiem_tra_dung()
-                    lan_loi += 1
-                    self.in_log(f"{ten}: giao dịch lỗi ({loi}), thử lại {lan_loi}/{SO_LAN_THU_GIAO_DICH}")
-                    if lan_loi >= SO_LAN_THU_GIAO_DICH:
-                        self.in_log(f"{ten}: giao dịch lỗi nhiều lần, bỏ qua (lần sau bấm Bắt đầu sẽ thử lại)")
-                        if self.ghi_so_tui:
-                            try:
-                                so_tui_do.ghi_so_o(tk["ten_dang_nhap"], ten, doc_tui(game.lua), self.loai_tru)
-                            except (LoiLua, OSError):
-                                pass
-                        return False
-                    self.dung.wait(3)
-                    continue
-                sau = doc_tui(game.lua)
-                for o in lan_nay:
-                    if o in sau and sau[o] == tui[o]:
-                        bo_qua.add((o[0], o[1], tui[o][0]))
-                cac_o = self._do_can_giao(game, bo_qua)
-                # Rương/TCCN: túi trống sau giao → kiểm còn món trong kho đó, còn thì rút tiếp.
-                if not cac_o and getattr(self, "rut_truoc_giao", False) and pha in ("kho", "tccn"):
-                    kq_rut = self._rut_do_gop(game, ten)
-                    if kq_rut is True:
+                    if not self._con_trong_game(self.chinh) or not self._con_trong_game(game):
+                        lan_diss += 1
+                        if lan_diss > SO_LAN_DANG_NHAP_LAI:
+                            raise LoiGiaoAccChinh(
+                                f"{ten}: ngắt kết nối quá {SO_LAN_DANG_NHAP_LAI} lần, dừng giao")
+                        game = self._dang_nhap_lai_acc_diss(tk, ten, game)
+                        bo_qua = self._gan_bo_qua_sau_xep(game, mon_bo_qua)
                         cac_o = self._do_can_giao(game, bo_qua)
-                        if cac_o:
-                            self.in_log(f"{ten}: {mo_ta_pha} còn đồ, rút thêm {len(cac_o)} ô rồi giao tiếp")
-                    elif kq_rut is False:
-                        if pha == "kho":
-                            self.in_log(f"{ten}: Thương khố đã trống sau giao, lần sau mở Thiên Cơ Cẩm Nang")
-                    elif kq_rut is None:
-                        self._don_tui_chinh()
-                        self.in_log(f"{ten}: chưa rút tiếp được {mo_ta_pha}, chưa đánh dấu xong")
-                        return False
+                        continue
+                    self._don_tui_chinh()
+                    lan_nay = cac_o[:SO_O_MOT_LAN]
+                    tui = doc_tui(game.lua)
+                    if any(o not in tui for o in lan_nay):
+                        self.in_log(f"{ten}: túi đã đổi ô sau khi Xếp, đọc lại đồ cần giao")
+                        bo_qua = self._gan_bo_qua_sau_xep(game, mon_bo_qua)
+                        cac_o = self._do_can_giao(game, bo_qua)
+                        continue
+                    ma_moi = {tui[o][0] for o in lan_nay} - set(self.tien_trinh["ma_da_nhan"])
+                    if ma_moi:
+                        self.tien_trinh["ma_da_nhan"] += sorted(ma_moi)
+                        self._luu_tien_trinh()
+                    try:
+                        GiaoDich(game, self.chinh, ten, ten_chinh, self.in_log, self.dung.is_set).chuyen(lan_nay)
+                        lan_loi = 0
+                        lan_diss = 0
+                    except LoiGiaoDich as loi:
+                        if not self._con_trong_game(self.chinh) or not self._con_trong_game(game):
+                            self.in_log(f"{ten}: giao dịch dở vì mất kết nối ({loi}), đăng nhập lại")
+                            continue
+                        self._kiem_tra_dung()
+                        lan_loi += 1
+                        self.in_log(f"{ten}: giao dịch lỗi ({loi}), thử lại {lan_loi}/{SO_LAN_THU_GIAO_DICH}")
+                        if lan_loi >= SO_LAN_THU_GIAO_DICH:
+                            self.in_log(f"{ten}: giao dịch lỗi nhiều lần, bỏ qua (lần sau bấm Bắt đầu sẽ thử lại)")
+                            if self.ghi_so_tui:
+                                try:
+                                    so_tui_do.ghi_so_o(tk["ten_dang_nhap"], ten, doc_tui(game.lua), self.loai_tru)
+                                except (LoiLua, OSError):
+                                    pass
+                            return False
+                        self.dung.wait(3)
+                        continue
+                    sau = doc_tui(game.lua)
+                    for o in lan_nay:
+                        if o in sau and sau[o] == tui[o]:
+                            ma, so, ten_vat = tui[o]
+                            mon_bo_qua.append((o[0], ma, so, ten_vat))
+                    self._xep_tui_sau_giao(game, ten)
+                    bo_qua = self._gan_bo_qua_sau_xep(game, mon_bo_qua)
+                    cac_o = self._do_can_giao(game, bo_qua)
+                    # Rương/TCCN: túi trống sau giao → kiểm còn món trong kho đó, còn thì rút tiếp.
+                    if not cac_o and getattr(self, "rut_truoc_giao", False) and pha in ("kho", "tccn"):
+                        kq_rut = self._rut_do_gop(game, ten)
+                        if kq_rut is True:
+                            cac_o = self._do_can_giao(game, bo_qua)
+                            if cac_o:
+                                self.in_log(f"{ten}: {mo_ta_pha} còn đồ, rút thêm {len(cac_o)} ô rồi giao tiếp")
+                        elif kq_rut is False:
+                            if pha == "kho":
+                                self.in_log(f"{ten}: Thương khố đã trống sau giao, lần sau mở Thiên Cơ Cẩm Nang")
+                        elif kq_rut is None:
+                            self._don_tui_chinh()
+                            self.in_log(f"{ten}: chưa rút tiếp được {mo_ta_pha}, chưa đánh dấu xong")
+                            return False
+                except (LoiLua, OSError) as loi:
+                    if (self._con_trong_game(self.chinh) and self._con_trong_game(game)
+                            and not self._la_loi_mat_game(loi)):
+                        raise
+                    lan_diss += 1
+                    if lan_diss > SO_LAN_DANG_NHAP_LAI:
+                        raise LoiGiaoAccChinh(
+                            f"{ten}: ngắt kết nối quá {SO_LAN_DANG_NHAP_LAI} lần, dừng giao") from loi
+                    self.in_log(f"{ten}: mất kết nối ({loi}), đăng nhập lại rồi giao tiếp")
+                    continue
         if getattr(self, "rut_truoc_giao", False) and not self._het_do_gop_nguon(game, ten):
             self.in_log(f"{ten}: túi đã giao hết nhưng Thiên Cơ/rương còn đồ gộp (hoặc chưa đọc được), "
                         "chưa đánh dấu xong")
@@ -1072,7 +1260,7 @@ class GiaoAccChinhEngine:
     def _o_trong_dao_cu(self, game):
         so_o = [int(float(x)) for x in game.lua.chay(MA_KICH_THUOC_TUI).decode().split("\t")]
         dung = sum(1 for ten_tui, _ in doc_tui(game.lua) if ten_tui == "base")
-        return so_o[0] - dung
+        return suc_chua_dao_cu(so_o[0]) - dung
 
     @staticmethod
     def _doc_bang_vat(raw):
@@ -1089,8 +1277,13 @@ class GiaoAccChinhEngine:
         return hang
 
     def _tong_trong_tui(self, game, ten_vat):
+        """Tổng số món trong túi. None nếu game chưa trả lời (đang xử lý rút 250 ô)."""
+        try:
+            cac = doc_tui(game.lua, giay_cho=8)
+        except (LoiLua, OSError):
+            return None
         khoa = bo_dau(ten_vat)
-        return sum(so for (_, _), (_, so, ten) in doc_tui(game.lua).items() if bo_dau(ten) == khoa)
+        return sum(so for (_, _), (_, so, ten) in cac.items() if bo_dau(ten) == khoa)
 
     def _rut_do_gop(self, game, ten):
         """Rút một nguồn theo `_nguon_rut`: 'kho' (Thương khố) hoặc 'tccn'.
@@ -1186,8 +1379,21 @@ class GiaoAccChinhEngine:
         return bang
 
     def _cho_tui_tang(self, game, ten_vat, truoc, lan=24):
+        """True khi túi tăng. Game im vài lần thì trả False, không ném lỗi làm dừng gộp."""
+        im = 0
         for _ in range(lan):
-            if self._tong_trong_tui(game, ten_vat) > truoc:
+            try:
+                tong = self._tong_trong_tui(game, ten_vat)
+            except (LoiLua, OSError):
+                tong = None
+            if tong is None:
+                im += 1
+                if im >= 2:
+                    return False
+                self.dung.wait(0.3)
+                continue
+            im = 0
+            if truoc is not None and tong > truoc:
                 return True
             self.dung.wait(0.15)
         return False
@@ -1246,7 +1452,8 @@ class GiaoAccChinhEngine:
             self.in_log(f"{ten}: không chuột phải thật được ô rương ({loi})")
             return False
 
-    def _rut_mot_kho(self, game, ten, ten_kho, mo, ma_liet_ke, ma_rut, giay_cho, loc=None):
+    def _rut_mot_kho(self, game, ten, ten_kho, mo, ma_liet_ke, ma_rut, giay_cho, loc=None,
+                     o_trong_dung=None, uu_tien=None):
         """True = rút được ≥1; False = liệt kê được, hết món khớp; None = lỗi / rút trượt còn món.
 
         Rương/TCCN: mỗi lần rút xong liệt kê lại (ô dồn chỉ số), rút hết món gộp
@@ -1256,106 +1463,144 @@ class GiaoAccChinhEngine:
             self.in_log(f"{ten}: không mở được {ten_kho}")
             return None
         loc_ten = loc or la_vat_pham_gop
+        nguong = 1 if o_trong_dung is None else o_trong_dung
         la_ruong = "khố" in ten_kho or ten_kho.startswith("Thương")
         la_tccn = ten_kho.startswith("Thiên")
         lay = False
         da_liet_ke = False
-        while True:
-            self._kiem_tra_dung()
-            bang = self._liet_ke_vat(game, ma_liet_ke)
-            if bang == "khong":
-                self.in_log(f"{ten}: game không có lệnh liệt kê {ten_kho}")
+        kq = b""
+        try:
+            while True:
+                self._kiem_tra_dung()
+                bang = self._liet_ke_vat(game, ma_liet_ke)
+                if bang == "khong":
+                    self.in_log(f"{ten}: game không có lệnh liệt kê {ten_kho}")
+                    game.lua.chay(MA_DONG_CUA_SO)
+                    return None
+                if bang == "dong":
+                    self.in_log(f"{ten}: {ten_kho} bị đóng")
+                    return None
+                da_liet_ke = True
+                khop = [(i, ten_vat, so) for i, ten_vat, so in bang if loc_ten(ten_vat)]
+                if uu_tien is not None:
+                    khop.sort(key=lambda dong: (uu_tien(dong[1]), dong[0]))
+                if not khop:
+                    if not lay:
+                        mau = ", ".join(ten_vat for _, ten_vat, _ in bang[:3])
+                        raw = getattr(self, "_raw_liet_ke", b"") or b""
+                        them = ""
+                        if raw.startswith(b"debug"):
+                            them = " (" + raw.decode("utf-8", "replace")[:160] + ")"
+                        self.in_log(f"{ten}: {ten_kho} liệt kê {len(bang)} ô"
+                                    + (f", không có món cần rút (vd: {mau})" if bang else ", không thấy ô nào")
+                                    + them)
+                    break
+                if self._o_trong_dao_cu(game) <= nguong:
+                    if nguong > 1:
+                        self.in_log(f"{ten}: túi còn không quá {nguong} ô trống, dừng rút {ten_kho}")
+                    else:
+                        self.in_log(f"{ten}: túi gần đầy sau khi rút {ten_kho}, giao bớt rồi rút tiếp")
+                    break
+                # Luôn lấy ô đầu trong danh sách mới (sau rút, chỉ số ô cũ lệch).
+                chi_so, ten_vat, _so = khop[0]
+                truoc = self._tong_trong_tui(game, ten_vat)
+                kq = b""
+                if la_ruong:
+                    try:
+                        kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
+                    except (LoiLua, OSError) as loi:
+                        self.in_log(f"{ten}: không gọi được Bank:MoveItemToPacket ({loi})")
+                        game.lua.chay(MA_DONG_CUA_SO)
+                        if lay or self._do_can_giao(game, set()):
+                            return True
+                        return None
+                    self.in_log(f"{ten}: Thương khố MoveItemToPacket({chi_so}) → {kq.decode('utf-8', 'replace')}")
+                    self.dung.wait(giay_cho)
+                elif la_tccn:
+                    try:
+                        kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
+                    except (LoiLua, OSError) as loi:
+                        self.in_log(f"{ten}: không gọi được Packet_Temporary_Select ({loi})")
+                        game.lua.chay(MA_DONG_CUA_SO)
+                        if lay or self._do_can_giao(game, set()):
+                            return True
+                        return None
+                    self.in_log(f"{ten}: Thiên Cơ Select({chi_so}) số {SO_RUT_TCCN} → {kq.decode('utf-8', 'replace')}")
+                    self.dung.wait(giay_cho)
+                else:
+                    kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
+                    self.dung.wait(giay_cho)
+                tang = self._cho_tui_tang(game, ten_vat, truoc)
+                if not tang and kq not in (b"dong",):
+                    try:
+                        tang = self._ruong_mat_o(game, ma_liet_ke, loc_ten, chi_so, ten_vat)
+                    except (LoiLua, OSError):
+                        tang = False
+                if (not tang and la_tccn and isinstance(kq, (bytes, bytearray))
+                    and (kq == b"1" or kq.startswith(b"1|"))):
+                    self.in_log(f"{ten}: {ten_kho} đã nhận lệnh rút {ten_vat} nhưng chưa đọc được túi "
+                                f"— dừng đợt rút, đổi và giao dịch tiếp")
+                    try:
+                        game.lua.chay(MA_DONG_CUA_SO)
+                    except (LoiLua, OSError):
+                        pass
+                    return True
+                if tang:
+                    lay = True
+                    self.in_log(f"{ten}: đã rút {ten_vat} từ {ten_kho}"
+                                + (f" (nhập {SO_RUT_TCCN})" if la_tccn else "")
+                                + (f", còn {len(khop) - 1}+ ô" if len(khop) > 1 else ""))
+                    continue
+                if not la_ruong and (kq in (b"dong", b"khong") or kq == b"0"
+                                     or kq.startswith(b"khong")):
+                    self.in_log(f"{ten}: không rút được {ten_vat} ở {ten_kho}")
+                else:
+                    self.in_log(f"{ten}: bấm rút {ten_vat} ở {ten_kho} nhưng túi không tăng")
                 game.lua.chay(MA_DONG_CUA_SO)
+                if lay or self._do_can_giao(game, set()):
+                    return True
                 return None
-            if bang == "dong":
-                self.in_log(f"{ten}: {ten_kho} bị đóng")
-                return None
-            da_liet_ke = True
-            khop = [(i, ten_vat, so) for i, ten_vat, so in bang if loc_ten(ten_vat)]
-            if not khop:
-                if not lay:
-                    mau = ", ".join(ten_vat for _, ten_vat, _ in bang[:3])
-                    raw = getattr(self, "_raw_liet_ke", b"") or b""
-                    them = ""
-                    if raw.startswith(b"debug"):
-                        them = " (" + raw.decode("utf-8", "replace")[:160] + ")"
-                    self.in_log(f"{ten}: {ten_kho} liệt kê {len(bang)} ô"
-                                + (f", không có món cần rút (vd: {mau})" if bang else ", không thấy ô nào")
-                                + them)
-                break
-            if self._o_trong_dao_cu(game) < 2:
-                self.in_log(f"{ten}: túi gần đầy sau khi rút {ten_kho}, giao bớt rồi rút tiếp")
-                break
-            # Luôn lấy ô đầu trong danh sách mới (sau rút, chỉ số ô cũ lệch).
-            chi_so, ten_vat, _so = khop[0]
-            truoc = self._tong_trong_tui(game, ten_vat)
-            kq = b""
-            if la_ruong:
-                try:
-                    kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
-                except (LoiLua, OSError) as loi:
-                    self.in_log(f"{ten}: không gọi được Bank:MoveItemToPacket ({loi})")
-                    game.lua.chay(MA_DONG_CUA_SO)
-                    if lay or self._do_can_giao(game, set()):
-                        return True
-                    return None
-                self.in_log(f"{ten}: Thương khố MoveItemToPacket({chi_so}) → {kq.decode('utf-8', 'replace')}")
-                self.dung.wait(giay_cho)
-            elif la_tccn:
-                try:
-                    kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
-                except (LoiLua, OSError) as loi:
-                    self.in_log(f"{ten}: không gọi được Packet_Temporary_Select ({loi})")
-                    game.lua.chay(MA_DONG_CUA_SO)
-                    if lay or self._do_can_giao(game, set()):
-                        return True
-                    return None
-                self.in_log(f"{ten}: Thiên Cơ Select({chi_so}) số {SO_RUT_TCCN} → {kq.decode('utf-8', 'replace')}")
-                self.dung.wait(giay_cho)
-            else:
-                kq = game.lua.chay(ma_rut.replace("{i}", str(chi_so)))
-                self.dung.wait(giay_cho)
-            tang = self._cho_tui_tang(game, ten_vat, truoc)
-            if not tang and kq not in (b"dong",):
-                tang = self._ruong_mat_o(game, ma_liet_ke, loc_ten, chi_so, ten_vat)
-            if tang:
-                lay = True
-                self.in_log(f"{ten}: đã rút {ten_vat} từ {ten_kho}"
-                            + (f" (nhập {SO_RUT_TCCN})" if la_tccn else "")
-                            + (f", còn {len(khop) - 1}+ ô" if len(khop) > 1 else ""))
-                continue
-            if not la_ruong and (kq in (b"dong", b"khong") or kq == b"0"
-                                 or kq.startswith(b"khong")):
-                self.in_log(f"{ten}: không rút được {ten_vat} ở {ten_kho}")
-            else:
-                self.in_log(f"{ten}: bấm rút {ten_vat} ở {ten_kho} nhưng túi không tăng")
             game.lua.chay(MA_DONG_CUA_SO)
-            if lay or self._do_can_giao(game, set()):
+            if not da_liet_ke:
+                return None
+            return lay
+        except (LoiLua, OSError) as loi:
+            self.in_log(f"{ten}: lỗi khi rút {ten_kho} ({loi}) — không dừng gộp")
+            try:
+                game.lua.chay(MA_DONG_CUA_SO)
+            except (LoiLua, OSError):
+                pass
+            if lay or (la_tccn and isinstance(kq, (bytes, bytearray))
+                       and (kq == b"1" or kq.startswith(b"1|"))):
                 return True
             return None
-        game.lua.chay(MA_DONG_CUA_SO)
-        if not da_liet_ke:
-            return None
-        return lay
 
-    def _xep_tui_chinh(self):
-        """Sau mỗi lần giao: acc chính bấm Xếp trong túi đồ (Packet_PackUp_Clicked)."""
-        ten = self.tk_chinh["nhan_vat"]
+    def _xep_tui(self, game, ten):
+        """Bấm Xếp trong túi đồ (Packet_PackUp_Clicked)."""
         try:
-            self.chinh.lua.chay('if not IsWindowShow("Packet") then OpenWindow("Packet") end')
+            game.lua.chay('if not IsWindowShow("Packet") then OpenWindow("Packet") end')
             time.sleep(0.4)
-            self.chinh.lua.chay(trong_cua_so("Packet", "Packet_PackUp_Clicked()"))
+            game.lua.chay(trong_cua_so("Packet", "Packet_PackUp_Clicked()"))
             time.sleep(0.6)
             self.in_log(f"{ten}: đã bấm Xếp túi đồ")
         except (LoiLua, OSError) as loi:
             self.in_log(f"{ten}: không bấm được Xếp túi ({loi})")
+
+    def _xep_tui_chinh(self):
+        """Acc chính bấm Xếp trong túi đồ."""
+        self._xep_tui(self.chinh, self.tk_chinh["nhan_vat"])
+
+    def _xep_tui_sau_giao(self, game, ten_phu):
+        """Sau mỗi lần giao: acc phụ rồi acc chính đều bấm Xếp."""
+        self._xep_tui(game, ten_phu)
+        self._xep_tui_chinh()
 
     def _o_trong(self):
         so_o = [int(float(x)) for x in self.chinh.lua.chay(MA_KICH_THUOC_TUI).decode().split("\t")]
         dung = {"base": 0, "material": 0}
         for ten_tui, _ in doc_tui(self.chinh.lua):
             dung[ten_tui] += 1
-        return {"base": so_o[0] - dung["base"], "material": so_o[1] - dung["material"]}
+        return {"base": suc_chua_dao_cu(so_o[0]) - dung["base"], "material": so_o[1] - dung["material"]}
 
     def _tui_chinh(self):
         return doc_tui(self.chinh.lua)
@@ -1364,30 +1609,133 @@ class GiaoAccChinhEngine:
         ma = set(self.tien_trinh["ma_da_nhan"])
         return {o: v for o, v in self._tui_chinh().items() if v[0] in ma}
 
+    def _tui_dao_cu_day(self):
+        """Đầy khi Đạo cụ còn dưới 5 ô. Nguyên liệu báo âm không tính là đầy."""
+        try:
+            return self._o_trong()["base"] < SO_O_TOI_THIEU
+        except (LoiLua, OSError, ValueError, IndexError, AttributeError, TypeError):
+            return True
+
     def _don_tui_chinh(self):
+        gop = bool(getattr(self, "chi_giao_gop", False))
+        ten = self.tk_chinh["nhan_vat"]
+        if gop:
+            # Đổi phiếu đang có trong túi trước. Không mở Thương khố khi túi còn chỗ.
+            self._hop_thanh_phieu()
+            for _vong in range(SO_VONG_RUT_DOI_PHIEU):
+                if self._tui_dao_cu_day():
+                    break
+                if not self._rut_phieu_knb_day_tui():
+                    break
+                self._hop_thanh_phieu()
+            if not self._tui_dao_cu_day():
+                try:
+                    trong = self._o_trong()
+                except (LoiLua, OSError, ValueError, IndexError, AttributeError, TypeError):
+                    return
+                if trong["material"] < SO_O_TOI_THIEU:
+                    self.in_log(f"{ten}: Đạo cụ còn {trong['base']} ô trống, Nguyên liệu báo {trong['material']} "
+                                f"— giao dịch tiếp, không dừng")
+                return
+            self.in_log(f"{ten}: túi đầy, cất mảnh vào Thiên Cơ Cẩm Nang")
+            self.bao_trang_thai(f"{ten}: cất mảnh vào Thiên Cơ Cẩm Nang, không cất Phiếu KNB")
+            self._cat_tccn()
+            if not self._tui_dao_cu_day():
+                return
+            if not self._chat_vi_mon_khac_phieu():
+                trong = self._o_trong()
+                self.in_log(f"{ten}: túi còn {trong['base']} ô trống vì Phiếu KNB đang nằm trong túi, "
+                            f"không mở Thương khố, không cất vào rương")
+                return
+            self.in_log(f"{ten}: túi vẫn đầy sau khi đổi phiếu và cất TCCN, mở Thương khố")
+            self._cat_kho(cat_het=True)
+            if self._tui_dao_cu_day() and self._chat_vi_mon_khac_phieu():
+                trong = self._o_trong()
+                raise LoiGiaoAccChinh(
+                    f"Thiên Cơ Cẩm Nang và Thương khố đã đầy (túi {ten} còn {trong['base']} ô Đạo cụ, "
+                    f"{trong['material']} ô Nguyên liệu trống)")
+            return
         trong = self._o_trong()
         if min(trong.values()) >= SO_O_TOI_THIEU:
             return
-        ten = self.tk_chinh["nhan_vat"]
         self.in_log(f"{ten}: túi còn {trong['base']} ô Đạo cụ, {trong['material']} ô Nguyên liệu trống, cất đồ")
-        self.bao_trang_thai(f"{ten}: cất đồ vào Thiên Cơ Cẩm Nang / Thương khố")
-        # Gộp đồ: cất TCCN → rút 100/300 từ rương + đổi 20K/30K → cất Thương khố.
-        # Giao dịch cho acc chính: chỉ cất TCCN + Thương khố.
+        self.bao_trang_thai(f"{ten}: cất mảnh / cất Thương khố, không cất Phiếu KNB")
         self._cat_tccn()
-        if getattr(self, "chi_giao_gop", False):
-            self._hop_thanh_phieu()
-        kho_day = self._cat_kho(cat_het=True)
+        self._cat_kho(cat_het=True)
         trong = self._o_trong()
-        if min(trong.values()) < SO_O_TOI_THIEU:
-            # Rương đầy (hoặc không cất hết) mà túi vẫn chật → cất tạm mọi món Đạo cụ vào TCCN.
-            self.in_log(f"{ten}: túi vẫn chật"
-                        + (" — Thương khố đã đầy" if kho_day else "")
-                        + ", cất tạm mọi món Đạo cụ vào Thiên Cơ Cẩm Nang")
-            self._cat_tccn(cat_bat_ky=True)
-            trong = self._o_trong()
         if min(trong.values()) < SO_O_TOI_THIEU:
             raise LoiGiaoAccChinh(f"Thiên Cơ Cẩm Nang và Thương khố đã đầy (túi {ten} còn {trong['base']} ô Đạo cụ, "
                                   f"{trong['material']} ô Nguyên liệu trống)")
+
+    def _chat_vi_mon_khac_phieu(self):
+        """True nếu bỏ phiếu KNB ra thì túi Đạo cụ vẫn còn dưới 5 ô trống.
+
+        Nguyên liệu báo âm là GetMatBag_Num thiếu, không tính là túi đầy.
+        """
+        try:
+            tui = self._tui_chinh()
+            so_o = [int(float(x)) for x in self.chinh.lua.chay(MA_KICH_THUOC_TUI).decode().split("\t")]
+        except (LoiLua, OSError, ValueError, IndexError, AttributeError):
+            return True
+        base_khac = sum(1 for (loai, _), (_, _, ten) in tui.items()
+                        if loai == "base" and not la_phieu_knb(ten))
+        return suc_chua_dao_cu(so_o[0]) - base_khac < SO_O_TOI_THIEU
+
+    def _rut_va_doi_phieu_lap(self):
+        """Rút phiếu từ rương/TCCN rồi đổi. Túi còn chỗ và vừa rút được thì lặp lại."""
+        ten = self.tk_chinh["nhan_vat"]
+        for vong in range(SO_VONG_RUT_DOI_PHIEU):
+            try:
+                free_truoc = self._o_trong_dao_cu(self.chinh)
+            except (LoiLua, OSError, ValueError, IndexError, AttributeError, TypeError):
+                free_truoc = None
+            lay = bool(self._rut_phieu_knb_day_tui())
+            self._hop_thanh_phieu()
+            if free_truoc is None:
+                return
+            try:
+                free_sau = self._o_trong_dao_cu(self.chinh)
+            except (LoiLua, OSError, ValueError, IndexError, AttributeError, TypeError):
+                return
+            if free_sau <= SO_O_TOI_THIEU:
+                return
+            if not lay and free_truoc > SO_O_TOI_THIEU:
+                return
+            if not lay and free_sau <= free_truoc:
+                return
+            self.in_log(f"{ten}: túi còn {free_sau} ô trống, rương/TCCN còn Phiếu KNB — rút và đổi tiếp "
+                        f"(vòng {vong + 2})")
+
+    def _rut_phieu_knb_day_tui(self):
+        """Rút Phiếu KNB 100 rồi 300 từ Thiên Cơ Cẩm Nang. Không mở Thương khố.
+
+        True nếu rút được ít nhất một món. Túi đầy thì không mở.
+        """
+        ten = self.tk_chinh["nhan_vat"]
+        try:
+            if self._o_trong_dao_cu(self.chinh) <= SO_O_TOI_THIEU:
+                return False
+        except (LoiLua, OSError, ValueError, IndexError, AttributeError):
+            return False
+        self.in_log(f"{ten}: túi còn chỗ, rút Phiếu KNB 100 rồi 300 từ Thiên Cơ Cẩm Nang "
+                    f"(không mở Thương khố)")
+        nguon = (
+            ("Thiên Cơ Cẩm Nang", self._mo_tccn, MA_LIET_KE_TCCN, MA_RUT_TCCN, GIAY_GIUA_RUT_TCCN),
+        )
+        lay = False
+        for ten_kho, mo, ma_liet_ke, ma_rut, giay in nguon:
+            self._kiem_tra_dung()
+            try:
+                if self._o_trong_dao_cu(self.chinh) <= SO_O_TOI_THIEU:
+                    self.in_log(f"{ten}: túi còn không quá {SO_O_TOI_THIEU} ô trống, không rút thêm phiếu")
+                    return lay
+            except (LoiLua, OSError, ValueError, IndexError, AttributeError):
+                return lay
+            if self._rut_mot_kho(
+                    self.chinh, ten, ten_kho, mo, ma_liet_ke, ma_rut, giay,
+                    loc=la_phieu_nho, uu_tien=thu_tu_rut_phieu_doi, o_trong_dung=SO_O_TOI_THIEU):
+                lay = True
+        return lay
 
     def _cat_mot_o(self, o, ma_cat):
         lua = self.chinh.lua
@@ -1404,18 +1752,11 @@ class GiaoAccChinhEngine:
                 return "1"
         return "0"
 
-    def _cat_tccn(self, cat_bat_ky=False):
-        """Cất Đạo cụ vào TCCN.
-
-        Mặc định: đồ thường + Phiếu KNB 2000 (giữ 100/300 để hợp thành).
-        cat_bat_ky: cất mọi ô Đạo cụ (kể cả phiếu) — dùng khi rương đầy, tạm giải phóng túi.
-        """
+    def _cat_tccn(self):
+        """Cất mảnh ở túi Đạo cụ vào TCCN. Không cất phiếu KNB."""
         lua = self.chinh.lua
-        if cat_bat_ky:
-            cac_o = [o for o, _ in sorted(self._tui_chinh().items()) if o[0] == "base"]
-        else:
-            cac_o = [o for o, (_, _, ten) in sorted(self._tui_chinh().items())
-                     if o[0] == "base" and (not la_phieu_knb(ten) or la_phieu_cat_tccn(ten))]
+        cac_o = [o for o, (_, _, ten) in sorted(self._tui_chinh().items())
+                 if o[0] == "base" and la_manh_cat_tccn(ten)]
         if not cac_o:
             return
         lua.chay(MA_DONG_CUA_SO)
@@ -1431,8 +1772,7 @@ class GiaoAccChinhEngine:
                 break
             da_cat += kq == "1"
         lua.chay(MA_DONG_CUA_SO)
-        self.in_log(f"Đã cất {da_cat}/{len(cac_o)} ô vào Thiên Cơ Cẩm Nang"
-                    + (" (tạm, mọi món)" if cat_bat_ky else ""))
+        self.in_log(f"Đã cất {da_cat}/{len(cac_o)} ô mảnh vào Thiên Cơ Cẩm Nang")
 
     def _mo_kho(self):
         lua = self.chinh.lua
@@ -1464,26 +1804,26 @@ class GiaoAccChinhEngine:
         return tong
 
     def _chua_o_truoc_doi(self):
-        """Chừa ≥1 ô trống Đạo cụ để nhận phiếu 20K/30K; nếu vừa mở rương cất đồ thì rút 100/300."""
+        """Chừa ≥1 ô trống Đạo cụ để nhận phiếu 20K/30K. Không cất phiếu KNB vào rương.
+
+        Túi đã còn chỗ thì không đóng cửa sổ đổi — đóng mỗi vòng làm hụt cú bấm 30K.
+        """
         da_mo_kho = False
         while self._o_trong()["base"] < 1:
             self._kiem_tra_dung()
             tui = self._tui_chinh()
-            nho = [o for o, (_, _, ten) in tui.items() if o[0] == "base" and la_phieu_nho(ten)]
-            khac = [o for o, (_, _, ten) in tui.items() if o[0] == "base" and not la_phieu_nho(ten)]
-            o = (khac or (nho if len(nho) > 1 else [None]))[0]
-            if o is None:
-                self.in_log(f"{self.tk_chinh['nhan_vat']}: không còn ô nào cất được để chừa chỗ hợp thành")
+            khac = [o for o, (_, _, ten) in tui.items() if o[0] == "base" and not la_phieu_knb(ten)]
+            if not khac:
+                self.in_log(f"{self.tk_chinh['nhan_vat']}: túi không còn ô trống, không cất Phiếu KNB vào rương")
                 return False
+            o = khac[0]
             if not self._mo_kho():
                 return False
-            da_mo_kho = True
             if self._cat_mot_o(o, MA_CAT_KHO.replace("{tui}", o[0]).replace("{o}", str(o[1]))) != "1":
                 self.chinh.lua.chay(MA_DONG_CUA_SO)
                 return False
-        if da_mo_kho:
-            self._rut_phieu_nho_tu_kho()
-        elif getattr(self, "chinh", None):
+            da_mo_kho = True
+        if da_mo_kho and getattr(self, "chinh", None):
             self.chinh.lua.chay(MA_DONG_CUA_SO)
         return True
 
@@ -1548,46 +1888,140 @@ class GiaoAccChinhEngine:
         del mo
         return list(O_DOI_PHIEU)
 
-    def _mot_lan_doi_phieu(self, mo, ten, o, im_lang=False):
-        """Clicked(o) rồi OK_Clicked — True nếu túi giảm phiếu 100 hoặc 300."""
+    def _doc_thong_bao_doi(self):
+        try:
+            raw = self.chinh.lua.chay(MA_DOC_THONG_BAO)
+        except (LoiLua, OSError, AttributeError):
+            return []
+        return [dong for dong in giai_ma(raw).split("\n") if dong]
+
+    def _thong_bao_het_phieu(self):
+        for dong in self._doc_thong_bao_doi():
+            if la_thong_bao_het_phieu(dong):
+                return dong
+        return ""
+
+    def _ghi_thong_bao_doi(self, het):
+        """Thiếu phiếu 100 để đổi 20K thì chuyển sang 30K. Thông báo hết phiếu khác thì dừng đổi."""
+        if not het:
+            return
+        if la_thong_bao_thieu_20k(het):
+            self._thieu_phieu_20k = het
+            return
+        self._ly_do_dung_doi = het
+
+    def _mot_lan_doi_phieu(self, mo, ten, o, im_lang=False, bo_qua_thieu_20k=False):
+        """Chọn ô rồi xác nhận. True chỉ khi túi thực sự giảm phiếu đúng loại đang đổi.
+
+        bo_qua_thieu_20k: đang đổi 30K. Thông báo «không đủ phiếu 100» còn trong bộ đệm
+        không được chặn cú bấm ô 30K, và không được tính là hết phiếu 300.
+        """
         lua = self.chinh.lua
         try:
+            het = self._thong_bao_het_phieu()
+            if het and not (bo_qua_thieu_20k and la_thong_bao_thieu_20k(het)):
+                self._ghi_thong_bao_doi(het)
+                return False
             truoc = self._so_phieu_theo_muc()
-            kq = lua.chay(MA_BAM_O_DOI.replace("{mo}", mo).replace("{i}", str(o)))
+            kq = lua.chay(ma_bam_o_doi(mo, o))
             if kq != b"1":
                 if not im_lang:
                     self.in_log(f"{ten}: không bấm được ô {o} ({kq.decode('utf-8', 'replace')})")
                 return False
             self.dung.wait(GIAY_SAU_CHON_O_DOI)
-            kq = lua.chay(MA_XAC_NHAN_DOI.replace("{mo}", mo))
+            kq = lua.chay(ma_xac_nhan_doi(mo))
             if kq != b"1":
                 if not im_lang:
                     self.in_log(f"{ten}: không bấm được Xác nhận ô {o} ({kq.decode('utf-8', 'replace')})")
                 return False
             time.sleep(GIAY_XAC_NHAN_PHIEU)
             sau = self._so_phieu_theo_muc()
+            het = self._thong_bao_het_phieu()
         except LoiLua as loi:
             if not im_lang:
                 self.in_log(f"{ten}: đổi phiếu ô {o} lỗi Lua ({loi})")
             return False
+        if het and bo_qua_thieu_20k and la_thong_bao_thieu_20k(het):
+            het = ""
+        if het:
+            self._ghi_thong_bao_doi(het)
+            if self._ly_do_dung_doi:
+                return False
+        if bo_qua_thieu_20k:
+            return sau[300] < truoc[300]
         if sau[100] < truoc[100] or sau[300] < truoc[300]:
-            self.in_log(f"{ten}: ô {o} đổi được — phiếu 100: {truoc[100]}→{sau[100]}, "
-                        f"300: {truoc[300]}→{sau[300]}")
             return True
         return False
 
+    def _doi_het_30k_trong_tui(self, mo, ten):
+        """Không đủ phiếu 100 đổi 20K: Xếp túi, bấm NPC Trao Đổi, đổi 30K đến hết phiếu 300 trong túi."""
+        bao = getattr(self, "_thieu_phieu_20k", "") or ""
+        self._thieu_phieu_20k = ""
+        self._ly_do_dung_doi = ""
+        self.in_log(f"{ten}: game báo «{bao}» — Xếp túi, đổi Phiếu KNB 30K trên cửa sổ đang mở")
+        self._xep_tui_chinh()
+        lua = self.chinh.lua
+        try:
+            con_mo = mo and lua.chay(f'return tostring(IsWindowShow("{mo}"))') == b"true"
+        except (LoiLua, OSError):
+            con_mo = False
+        if not con_mo:
+            mo = self._mo_cua_so_doi(ten)
+            if not mo:
+                return 0, mo
+            self.dung.wait(0.8)
+        self._doc_thong_bao_doi()
+        da = 0
+        trot = 0
+        o = O_PHIEU_KNB_30K
+        while da < SO_LAN_HOP_THANH_TOI_DA and trot < SO_LAN_HUT_LIEN_TIEP:
+            self._kiem_tra_dung()
+            try:
+                muc = self._so_phieu_theo_muc()
+            except LoiLua as loi:
+                self.in_log(f"{ten}: dừng đổi 30K — đọc túi lỗi ({loi})")
+                break
+            if muc[300] < SO_PHIEU_DOI_30K:
+                self.in_log(f"{ten}: túi còn {muc[300]} Phiếu KNB 300, không đủ {SO_PHIEU_DOI_30K} "
+                            f"(còn phiếu 100={muc[100]}), sang giao dịch")
+                break
+            if not self._chua_o_truoc_doi():
+                self.in_log(f"{ten}: túi không còn ô trống để nhận 30K, sang giao dịch")
+                break
+            if not self._mot_lan_doi_phieu(mo, ten, o, bo_qua_thieu_20k=True):
+                self._thieu_phieu_20k = ""
+                if self._ly_do_dung_doi:
+                    self.in_log(f"{ten}: game báo «{self._ly_do_dung_doi}» — hết phiếu đổi 30K, sang giao dịch")
+                    self._ly_do_dung_doi = ""
+                    break
+                trot += 1
+                if trot >= SO_LAN_HUT_LIEN_TIEP:
+                    self.in_log(f"{ten}: ô 30K không đổi thêm được, sang giao dịch")
+                    break
+                continue
+            trot = 0
+            da += 1
+            if da % 10 == 0:
+                self.in_log(f"{ten}: đã đổi 30K {da} lần")
+        return da, mo
+
     def _hop_thanh_phieu(self):
-        """Rút 100/300 từ rương (chừa 1 ô) rồi đổi ô 6 (20K) / 7 (30K)."""
+        """Đổi ô 6 (20K) / 7 (30K). Hết 100/300 trong túi thì rút thêm từ rương và TCCN, chừa 5 ô."""
         ten = self.tk_chinh["nhan_vat"]
         lua = self.chinh.lua
         self.bao_trang_thai(f"{ten}: hợp thành Phiếu KNB 100/300 → 20K/30K")
-        self._rut_phieu_nho_tu_kho()
+        if not self._co_phieu_nho():
+            self._rut_phieu_knb_day_tui()
         if not self._co_phieu_nho():
             self.in_log(f"{ten}: không có Phiếu KNB 100/300 trong túi/rương — bỏ qua hợp thành")
             return
         mo = ""
         da_doi = 0
         o_ten = list(O_DOI_PHIEU)
+        self._ly_do_dung_doi = ""
+        self._thieu_phieu_20k = ""
+        self._da_bao_bo_20k = False
+        self._doc_thong_bao_doi()
         while da_doi < SO_LAN_HOP_THANH_TOI_DA:
             self._kiem_tra_dung()
             try:
@@ -1596,7 +2030,7 @@ class GiaoAccChinhEngine:
                 self.in_log(f"{ten}: dừng hợp thành — đọc túi lỗi ({loi})")
                 break
             if muc[100] <= 0 and muc[300] <= 0:
-                self._rut_phieu_nho_tu_kho()
+                self._rut_phieu_knb_day_tui()
                 try:
                     muc = self._so_phieu_theo_muc()
                 except LoiLua:
@@ -1622,21 +2056,65 @@ class GiaoAccChinhEngine:
             if not o_ten:
                 self.in_log(f"{ten}: không có khung «Phiếu KNB 20K» / «30K» — dừng đổi phiếu")
                 break
+            o_vong = [o for o in o_ten
+                      if (o == O_PHIEU_KNB_20K and muc[100] >= SO_PHIEU_DOI_20K)
+                      or (o == O_PHIEU_KNB_30K and muc[300] >= SO_PHIEU_DOI_30K)]
+            if not o_vong:
+                self.in_log(f"{ten}: túi còn phiếu 100={muc[100]}, 300={muc[300]} — "
+                            f"không đủ một lần đổi ({SO_PHIEU_DOI_20K} phiếu 100 hoặc "
+                            f"{SO_PHIEU_DOI_30K} phiếu 300), sang giao dịch")
+                break
+            if (O_PHIEU_KNB_30K in o_vong and O_PHIEU_KNB_20K not in o_vong
+                    and not self._da_bao_bo_20k):
+                self._da_bao_bo_20k = True
+                self.in_log(f"{ten}: phiếu 100 còn {muc[100]}, không đủ {SO_PHIEU_DOI_20K} để đổi 20K "
+                            f"— đổi Phiếu KNB 30K")
             giam_vong = False
             dung_som = False
-            for o in o_ten:
+            for o in o_vong:
                 self._kiem_tra_dung()
-                if not self._co_phieu_nho() or not self._chua_o_truoc_doi():
+                if self._ly_do_dung_doi:
+                    break
+                if not self._co_phieu_nho():
                     dung_som = True
                     break
-                while da_doi < SO_LAN_HOP_THANH_TOI_DA and self._mot_lan_doi_phieu(mo, ten, o):
-                    da_doi += 1
-                    giam_vong = True
-                    if not self._chua_o_truoc_doi() or not self._co_phieu_nho():
+                doi_30k = o == O_PHIEU_KNB_30K
+                trot = 0
+                while da_doi < SO_LAN_HOP_THANH_TOI_DA and trot < SO_LAN_HUT_LIEN_TIEP:
+                    try:
+                        muc_nay = self._so_phieu_theo_muc()
+                    except LoiLua as loi:
+                        self.in_log(f"{ten}: dừng hợp thành — đọc túi lỗi ({loi})")
                         dung_som = True
                         break
-                if dung_som:
+                    du = SO_PHIEU_DOI_30K if doi_30k else SO_PHIEU_DOI_20K
+                    con = muc_nay[300] if doi_30k else muc_nay[100]
+                    if con < du:
+                        break
+                    if self._mot_lan_doi_phieu(mo, ten, o, bo_qua_thieu_20k=doi_30k):
+                        trot = 0
+                        da_doi += 1
+                        giam_vong = True
+                        if da_doi % 10 == 0:
+                            self.in_log(f"{ten}: đã đổi {da_doi} lần")
+                        if getattr(self, "_thieu_phieu_20k", ""):
+                            break
+                        if not self._co_phieu_nho():
+                            dung_som = True
+                            break
+                        continue
+                    if getattr(self, "_thieu_phieu_20k", "") or self._ly_do_dung_doi:
+                        break
+                    trot += 1
+                if getattr(self, "_thieu_phieu_20k", "") or self._ly_do_dung_doi or dung_som:
                     break
+            if getattr(self, "_thieu_phieu_20k", ""):
+                them, mo = self._doi_het_30k_trong_tui(mo, ten)
+                da_doi += them
+                break
+            if self._ly_do_dung_doi:
+                self.in_log(f"{ten}: game báo «{self._ly_do_dung_doi}» — dừng đổi sau {da_doi} lần")
+                break
             if dung_som:
                 break
             if not giam_vong:
@@ -1663,12 +2141,17 @@ class GiaoAccChinhEngine:
     def _cat_kho(self, cat_het=False, cac_o=None):
         """Cất túi vào Thương khố (cac_o: chỉ các ô này). True nếu Thương khố đã đầy."""
         lua = self.chinh.lua
+        tui = self._tui_chinh()
         if cac_o is not None:
             cac_o = list(cac_o)
         elif cat_het or getattr(self, "chi_giao_gop", False):
-            cac_o = [o for o in sorted(self._tui_chinh())]
+            cac_o = [o for o in sorted(tui)]
         else:
-            cac_o = [o for o, (_, _, ten_vat) in sorted(self._tui_chinh().items()) if not la_phieu_nho(ten_vat)]
+            cac_o = [o for o, (_, _, ten_vat) in sorted(tui.items()) if not la_phieu_nho(ten_vat)]
+        bo = [o for o in cac_o if la_phieu_knb(tui.get(o, (0, 0, ""))[2])]
+        if bo:
+            self.in_log(f"Không cất {len(bo)} ô Phiếu KNB vào Thương khố")
+        cac_o = [o for o in cac_o if o not in bo]
         if not cac_o:
             return False
         if not self._mo_kho():
@@ -1771,9 +2254,11 @@ class LuongGiaoAccChinh(threading.Thread, GiaoAccChinhEngine):
             self.in_log("Đã dừng (tiến trình đã lưu, bấm Bắt đầu để đi tiếp)")
             self.bao_trang_thai("Đã dừng")
         except LoiGiaoAccChinh as loi:
+            self._danh_dau_chay_lai_neu_chua_xong()
             self.in_log(f"Dừng: {loi} (tiến trình đã lưu)")
             self.bao_trang_thai(f"Dừng: {loi}")
         except Exception:
+            self._danh_dau_chay_lai_neu_chua_xong()
             self.in_log(f"Lỗi không mong đợi\n{traceback.format_exc()}")
             self.bao_trang_thai("Lỗi, xem log")
         finally:

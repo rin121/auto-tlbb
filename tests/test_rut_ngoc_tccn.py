@@ -184,12 +184,11 @@ class TestCatKhoChiO(unittest.TestCase):
         e = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
         e.chinh = MagicMock()
         e.chinh.lua.chay.return_value = b"10"
-        e._tui_chinh = MagicMock()
+        e._tui_chinh = lambda: {}
         e._mo_kho = lambda: True
         e._cat_mot_o = MagicMock(return_value="1")
         e.in_log = MagicMock()
         self.assertFalse(e._cat_kho(cac_o=[("material", 2)]))
-        e._tui_chinh.assert_not_called()
         e._cat_mot_o.assert_called_once()
         self.assertIn('"material", 2', e._cat_mot_o.call_args[0][1])
 

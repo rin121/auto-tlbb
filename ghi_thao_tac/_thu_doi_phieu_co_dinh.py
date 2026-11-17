@@ -23,7 +23,7 @@ def main():
     from lua_game import LuaGame, LoiLua
     import lua_game as lg
     from giao_acc_chinh import (
-        MA_BAM_O_DOI, MA_XAC_NHAN_DOI, MA_CUA_SO_DOI, NPC_TRAO_DOI,
+        ma_bam_o_doi, ma_xac_nhan_doi, MA_CUA_SO_DOI, NPC_TRAO_DOI,
         O_PHIEU_KNB_20K, O_PHIEU_KNB_30K, muc_phieu_knb, la_cong_thuc_phieu,
     )
     from game_api import Game
@@ -128,10 +128,10 @@ def main():
                 ghi("het phieu nho, dung")
                 break
             try:
-                k1 = lua.chay(MA_BAM_O_DOI.replace("{mo}", mo).replace("{i}", str(o)), giay_cho=8)
+                k1 = lua.chay(ma_bam_o_doi(mo, o), giay_cho=8)
                 ghi("Clicked", o, "->", k1)
                 time.sleep(0.3)
-                k2 = lua.chay(MA_XAC_NHAN_DOI.replace("{mo}", mo), giay_cho=8)
+                k2 = lua.chay(ma_xac_nhan_doi(mo), giay_cho=8)
                 ghi("OK", "->", k2)
                 time.sleep(0.45)
             except LoiLua as e:

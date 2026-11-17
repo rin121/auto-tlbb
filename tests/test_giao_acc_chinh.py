@@ -174,12 +174,115 @@ class TestChayToiNpcTanThu(unittest.TestCase):
         luong = self._luong([])
         luong.tk_chinh = {"nhan_vat": "accchinh"}
         luong.in_log = lambda *_: None
-        lua = self._Lua()
-        luong.chinh = type("G", (), {"lua": lua})()
+        lua_phu = self._Lua()
+        lua_chinh = self._Lua()
+        game = type("G", (), {"lua": lua_phu})()
+        luong.chinh = type("G", (), {"lua": lua_chinh})()
         with patch.object(gac.time, "sleep"):
-            luong._xep_tui_chinh()
-        self.assertTrue(any("OpenWindow" in m and "Packet" in m for m in lua.lenh))
-        self.assertTrue(any("Packet_PackUp_Clicked" in m for m in lua.lenh))
+            luong._xep_tui_sau_giao(game, "accphu")
+        for lua in (lua_phu, lua_chinh):
+            self.assertTrue(any("OpenWindow" in m and "Packet" in m for m in lua.lenh))
+            self.assertTrue(any("Packet_PackUp_Clicked" in m for m in lua.lenh))
+
+    def test_xep_roi_doc_lai_o_truoc_khi_giao_tiep(self):
+        import inspect
+        src = inspect.getsource(gac.GiaoAccChinhEngine._mot_truong_nhom)
+        i = src.index("self._xep_tui_sau_giao(game, ten)")
+        self.assertLess(i, src.index("self._do_can_giao(game, bo_qua)", i))
+        self.assertIn("o not in tui", src)
+
+    def test_gan_bo_qua_sau_xep_theo_mon_khong_theo_o_cu(self):
+        luong = self._luong([])
+        game = type("G", (), {"lua": object()})()
+        tui = {
+            ("base", 0): (111, 5, "Mảnh A"),
+            ("base", 12): (222, 1, "Khác"),
+        }
+        with patch.object(gac, "doc_tui", return_value=tui):
+            bo = luong._gan_bo_qua_sau_xep(game, [("base", 111, 5, "Mảnh A")])
+        self.assertEqual(bo, {("base", 0, 111)})
+        self.assertNotIn(("base", 12, 111), bo)
+
+
+class TestDangNhapLaiKhiDiss(unittest.TestCase):
+    def _luong(self):
+        luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        luong.tk_chinh = {"ten_dang_nhap": "chinh", "mat_khau": "x", "nhan_vat": "Gao"}
+        luong.in_log = lambda *_: None
+        luong._cho = lambda *a, **k: True
+        luong._ve_dai_ly = lambda *a: None
+        luong._chay_toi = lambda *a: None
+        luong._doc = lambda g: {"ten": "x"}
+        return luong
+
+    def test_hop_ngat_ket_noi_khong_con_trong_game(self):
+        luong = self._luong()
+        game = type("G", (), {})()
+        game.thong_tin = lambda: None
+        game.lua = object()
+        with patch.object(gac, "man_hinh_hien_tai", return_value="thong_bao"):
+            self.assertFalse(luong._con_trong_game(game))
+        game.thong_tin = lambda: {"ten": "Gao"}
+        self.assertTrue(luong._con_trong_game(game))
+        game.thong_tin = lambda: (_ for _ in ()).throw(gac.LoiLua("cửa sổ game đã đóng"))
+        self.assertFalse(luong._con_trong_game(game))
+
+    def test_loi_timeout_khong_phai_diss(self):
+        self.assertTrue(gac.GiaoAccChinhEngine._la_loi_mat_game(gac.LoiLua("cửa sổ game đã đóng")))
+        self.assertFalse(gac.GiaoAccChinhEngine._la_loi_mat_game(gac.LoiLua("Game không phản hồi")))
+
+    def test_chi_login_lai_acc_bi_diss(self):
+        luong = self._luong()
+        logs = []
+        luong.in_log = logs.append
+        chinh = type("G", (), {"lua": type("L", (), {"hwnd": 1})()})()
+        phu = type("G", (), {"lua": type("L", (), {"hwnd": 2})()})()
+        luong.chinh = chinh
+        luong._con_trong_game = lambda game: game is chinh
+        da_dn = []
+
+        def dang_nhap(tk, hwnd):
+            da_dn.append((tk["nhan_vat"], hwnd))
+            return type("G", (), {"lua": type("L", (), {"hwnd": 9, "chay": lambda *_a, **_k: None})()})()
+
+        luong._dang_nhap = dang_nhap
+        game = luong._dang_nhap_lai_acc_diss({"ten_dang_nhap": "phu", "mat_khau": "y"}, "Phu", phu)
+        self.assertEqual(da_dn, [("Phu", 2)])
+        self.assertIs(luong.chinh, chinh)
+        self.assertEqual(game.lua.hwnd, 9)
+        self.assertEqual(luong.hwnd_truong, 9)
+        self.assertTrue(any("Phu: bị ngắt kết nối, đăng nhập lại" in d for d in logs))
+
+    def test_vong_giao_co_dang_nhap_lai(self):
+        import inspect
+        src = inspect.getsource(gac.GiaoAccChinhEngine._mot_truong_nhom)
+        self.assertIn("_dang_nhap_lai_acc_diss", src)
+        self.assertIn("SO_LAN_DANG_NHAP_LAI", src)
+        self.assertLess(src.index("đăng nhập lại rồi giao tiếp"), src.index("đã giao xong"))
+
+
+class TestTuBatDauKhiLoi(unittest.TestCase):
+    def test_loi_khi_chua_xong_thi_bat_lai(self):
+        self.assertTrue(gac.nen_bat_lai_sau_loi("Dừng: túi đầy", True, 0))
+        self.assertTrue(gac.nen_bat_lai_sau_loi("Lỗi, xem log", True, 7))
+        self.assertFalse(gac.nen_bat_lai_sau_loi("Đã dừng", True, 0))
+        self.assertFalse(gac.nen_bat_lai_sau_loi("Xong", True, 0))
+        self.assertFalse(gac.nen_bat_lai_sau_loi("Dừng: túi đầy", False, 0))
+        self.assertFalse(gac.nen_bat_lai_sau_loi("Lỗi, xem log", True, gac.SO_LAN_TU_BAT_DAU_LOI))
+
+    def test_con_chua_xong_khi_con_acc_nguon(self):
+        luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        luong.ds_nguon = [({"ten_dang_nhap": "a"}, "Phu")]
+        luong.tien_trinh = {"ngay": gac.date.today().isoformat(), "da_xong": []}
+        luong.dung = type("E", (), {"is_set": lambda self: False})()
+        self.assertTrue(luong.con_chua_xong())
+        luong._danh_dau_chay_lai_neu_chua_xong()
+        self.assertTrue(luong.chay_lai_khi_loi)
+        luong.tien_trinh["da_xong"] = ["Phu"]
+        self.assertFalse(luong.con_chua_xong())
+        luong.dung = type("E", (), {"is_set": lambda self: True})()
+        luong._danh_dau_chay_lai_neu_chua_xong()
+        self.assertFalse(luong.chay_lai_khi_loi)
 
 
 class TestThoatAccChinh(unittest.TestCase):

@@ -24,7 +24,7 @@ def main():
     from lua_game import LuaGame
     import lua_game as lg
     from giao_acc_chinh import (
-        MA_DOC_TEN_O_DOI, MA_BAM_O_DOI, MA_XAC_NHAN_DOI, MA_DOI_DA_CHON,
+        MA_DOC_TEN_O_DOI, ma_bam_o_doi, ma_xac_nhan_doi, MA_DOI_DA_CHON,
         la_cong_thuc_phieu, NPC_TRAO_DOI, MA_CUA_SO_DOI, muc_phieu_knb,
     )
     from game_api import Game
@@ -206,12 +206,12 @@ return s
     for o in o_doi:
         try:
             ghi("doi o", o)
-            lua.chay(MA_BAM_O_DOI.replace("{mo}", mo).replace("{i}", str(o)), giay_cho=8)
+            lua.chay(ma_bam_o_doi(mo, o), giay_cho=8)
             time.sleep(0.4)
             da = lua.chay(MA_DOI_DA_CHON.replace("{mo}", mo), giay_cho=5)
             ghi("da_chon", da)
             if da == b"1":
-                kq = lua.chay(MA_XAC_NHAN_DOI.replace("{mo}", mo), giay_cho=8)
+                kq = lua.chay(ma_xac_nhan_doi(mo), giay_cho=8)
                 ghi("xac_nhan", kq)
                 time.sleep(0.5)
         except Exception as e:

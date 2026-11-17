@@ -23,12 +23,13 @@ import re
 import threading
 import time
 import traceback
-from datetime import date
+from datetime import date, datetime
 
 import win32gui
 import win32process
 
 import bao_cao_giao_dich
+import boss
 import cau_hinh
 import so_tui_do
 from auto_chuyen_sinh import chuan_hoa
@@ -45,11 +46,11 @@ from lua_game import LoiLua
 from moi_nhom import doc_nhom
 from nhan_vat_moi import (LuongTaoNhanVat, NhanDoTanThu, cac_ten_nhan_vat, da_xong, san_sang_di_pho_ban,
                           ten_sai_rule, ten_thuc)
-from pho_ban_pmp import (GIAY_MOT_VONG, MAP_DAI_LY, MAP_LAC_DUONG, cai_dat_pmp, chuan_bi_ve_thanh, dang_chay_vong,
-                         dat_chan_vong_moi, dat_phien_xoay_vong, hom_nay, la_dai_ly, la_dia_phu, la_lac_duong,
-                         la_map_trong_pho_ban, roi_dia_phu)
-from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, ac_tac_dang_bat, cai_dat_ac_tac, khung_hien_tai, mo_ta_khung,
-                            nguoi_nhan_khung)
+from pho_ban_pmp import (GIAY_MOT_VONG, MA_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, PhoBanPMP, cai_dat_pmp,
+                         chuan_bi_ve_thanh, dang_chay_vong, dat_chan_vong_moi, dat_phien_xoay_vong, dong_y_theo_doi_popup,
+                         hom_nay, la_dai_ly, la_dia_phu, la_lac_duong, la_map_trong_pho_ban, roi_dia_phu)
+from su_kien_ac_tac import (MO_TA as MO_TA_AC_TAC, NPC_DI_CHUYEN, XY_DI_CHUYEN_DAI_LY, ac_tac_dang_bat,
+                            cai_dat_ac_tac, khung_hien_tai, mo_ta_khung, nguoi_nhan_khung)
 
 SO_TAI_KHOAN_MOT_NHOM = 4  # mặc định; số thật lấy từ cau_hinh.chung()["so_nguoi_mot_nhom"]
 SO_NGUOI_MOT_NHOM_TOI_DA = 6
@@ -627,6 +628,10 @@ class LuongXoayVong(threading.Thread):
         self.dung = threading.Event()
         self.yeu_cau_giao_dich = threading.Event()
         self.yeu_cau_nhom_tiep = threading.Event()
+        self.yeu_cau_test_boss = threading.Event()
+        self.giao_dich_ngay_xong = threading.Event()
+        self._giao_ngay_ok = False
+        self._ma_giao_ngay = 0
         self._dang_cho_du_nhom = False
         self.ds_tai_khoan = [tv.tai_khoan for tv in nhom_online] if nhom_online else cac_tai_khoan_dang_tich()
         self.pid_dieu_khien = set()
@@ -660,6 +665,9 @@ class LuongXoayVong(threading.Thread):
         """
         if not self.is_alive() or not self.thanh_vien_dang_pb:
             return False
+        self.giao_dich_ngay_xong.clear()
+        self._giao_ngay_ok = False
+        self._ma_giao_ngay += 1
         self.yeu_cau_giao_dich.set()
         return True
 
@@ -672,6 +680,13 @@ class LuongXoayVong(threading.Thread):
         if not self.is_alive() or not (self.thanh_vien_dang_pb or self._dang_cho_du_nhom):
             return False
         self.yeu_cau_nhom_tiep.set()
+        return True
+
+    def test_boss(self):
+        """Nút Test: nhóm đang đi phó bản đi thử đường boss ngay, tới map rồi về Đại Lý, xoay vòng đi tiếp."""
+        if not self.is_alive() or not self.thanh_vien_dang_pb:
+            return False
+        self.yeu_cau_test_boss.set()
         return True
 
     def cac_tai_khoan(self):
@@ -1671,6 +1686,10 @@ class LuongXoayVong(threading.Thread):
             if self.yeu_cau_giao_dich.is_set():
                 self.yeu_cau_giao_dich.clear()
                 self._giao_dich_giua_chung(thanh_vien, truong, mo_ta)
+            test_boss = self.yeu_cau_test_boss.is_set()
+            if test_boss:
+                self.yeu_cau_test_boss.clear()
+            self._xu_ly_boss(thanh_vien, truong, mo_ta, test=test_boss)
             # Khung Ác Tặc: luồng nhân vật tự bỏ dở phó bản đi Ác Tặc rồi quay lại, ở đây chỉ chờ (không tính kẹt).
             at = cai_dat_ac_tac()
             khung_at = khung_hien_tai(at)
@@ -1720,6 +1739,7 @@ class LuongXoayVong(threading.Thread):
             self.dung.wait(GIAY_KIEM_TRA)
         self.yeu_cau_giao_dich.clear()
         self.yeu_cau_nhom_tiep.clear()
+        self.yeu_cau_test_boss.clear()
         for luong in dang_vao_lai.values():
             luong.dung.set()
         return bo_qua
@@ -1747,8 +1767,190 @@ class LuongXoayVong(threading.Thread):
     def _bat_lai_auto(da_luu):
         bat_lai_auto(da_luu)
 
+    def _nen_dung_boss(self):
+        if self.dung.is_set():
+            raise _Dung()
+        return False
+
+    def _tv_chet(self, tv):
+        tt = self._doc(tv)
+        if tt and tt["hp"] <= 0:
+            return True
+        try:
+            return tv.game.lua.chay('return tostring(IsWindowShow("Relive"))') == b"true"
+        except (LoiLua, OSError, AttributeError):
+            return False
+
+    def _hoi_sinh_roi_dia_phu(self, tv):
+        """Chết: Đầu thai (về Địa Phủ) rồi Mạnh Bà chọn Đại Lý."""
+        if not self._tv_chet(tv):
+            if la_dia_phu((self._doc(tv) or {}).get("map")):
+                roi_dia_phu(tv.game, tv.ten, self.in_log, self.dung.is_set)
+            return
+        self.in_log(f"[Boss] {tv.ten} bị giết, bấm hồi sinh rồi về {MAP_DAI_LY}")
+        try:
+            tv.game.lua.chay("Player:SendReliveMessage_OutGhost()")
+        except (LoiLua, OSError):
+            return
+        self._cho(lambda: (self._doc(tv) or {}).get("hp", 0) > 0 or la_dia_phu((self._doc(tv) or {}).get("map")), 30)
+        if la_dia_phu((self._doc(tv) or {}).get("map")):
+            roi_dia_phu(tv.game, tv.ten, self.in_log, self.dung.is_set)
+
+    def _pb_boss(self, truong):
+        pb = PhoBanPMP(truong.game, self.in_log)
+        pb.ten = truong.ten
+        pb.nen_dung = self._nen_dung_boss
+        pb.het_han_vong = time.time() + 180
+        pb.che_do = "ac_tac"
+        return pb
+
+    def _bam_theo_doi_boss(self, thanh_vien, truong):
+        try:
+            truong.game.lua.chay(MA_THEO_DOI)
+        except (LoiLua, OSError):
+            pass
+        for tv in thanh_vien:
+            if tv is not truong and getattr(tv, "game", None):
+                dong_y_theo_doi_popup(tv.game)
+        self.in_log(f"[Boss] {truong.ten} bấm Theo đội")
+
+    def _chon_dong_boss(self, pb, dong):
+        pb._chon(dong)
+        self.dung.wait(0.6)
+
+    def _dua_toi_map_boss(self, thanh_vien, truong, ten_map):
+        self.in_log(f"[Boss] {truong.ten} nói chuyện {NPC_DI_CHUYEN}, Bản Đồ BOOS VIP, rồi {ten_map}")
+        self._bam_theo_doi_boss(thanh_vien, truong)
+        pb = self._pb_boss(truong)
+        pb._mo_hoi_thoai(NPC_DI_CHUYEN, XY_DI_CHUYEN_DAI_LY, (-1, -1), dan_doi=False, giu_theo=True)
+        ht = pb._hoi_thoai()
+        cac = ht[1] if ht else []
+        if boss.dong_map_boss(cac, ten_map):
+            self._chon_dong_boss(pb, boss.dong_map_boss(cac, ten_map))
+        else:
+            menu = boss.dong_menu_boss(cac)
+            if not menu:
+                ds = [c[3] for c in cac if c[3]]
+                raise boss.LoiBoss(f"không thấy Bản Đồ BOOS VIP ({', '.join(ds[:6])})")
+            self._chon_dong_boss(pb, menu)
+            ht = pb._hoi_thoai()
+            cac = ht[1] if ht else []
+            dong = boss.dong_map_boss(cac, ten_map)
+            if not dong and boss.dong_tiep(cac):
+                self._chon_dong_boss(pb, boss.dong_tiep(cac))
+                ht = pb._hoi_thoai()
+                cac = ht[1] if ht else []
+                dong = boss.dong_map_boss(cac, ten_map)
+            if not dong:
+                ds = [c[3] for c in cac if c[3]]
+                raise boss.LoiBoss(f"không thấy map {ten_map} ({', '.join(ds[:6])})")
+            self._chon_dong_boss(pb, dong)
+        if not self._cho(lambda: boss.cung_ten_map((self._doc(truong) or {}).get("map"), ten_map), 60):
+            raise boss.LoiBoss(f"chọn {ten_map} mà {truong.ten} chưa sang map")
+        self._cho(lambda: all(
+            boss.cung_ten_map((self._doc(tv) or {}).get("map"), ten_map) or not getattr(tv, "game", None)
+            for tv in thanh_vien), 45)
+        self.in_log(f"[Boss] cả đội đang ở {ten_map}")
+
+    def _boss_chet(self, pb, ten_map, da_thay):
+        try:
+            bao = pb._doc_thong_bao()
+        except (LoiLua, OSError):
+            bao = []
+        if boss.thong_bao_boss_chet(bao, ten_map):
+            return True, da_thay
+        try:
+            quanh = [(ten, getattr(d, "hp", 1)) for ten, d in pb._quanh()]
+        except Exception:
+            quanh = []
+        chet, thay = boss.boss_bien_mat(da_thay, quanh, ten_map)
+        return chet, thay or da_thay
+
+    def _cho_xong_boss(self, thanh_vien, truong, ten_map, moc):
+        pb = self._pb_boss(truong)
+        da_thay = False
+        while True:
+            self._kiem_tra_dung()
+            if boss.den_luc_roi_boss(datetime.now(), moc):
+                self.in_log(f"[Boss] tới phút thứ {boss.PHUT_ROI}, về {MAP_DAI_LY} rồi xoay vòng tiếp")
+                return
+            chet_ai = [tv for tv in thanh_vien if getattr(tv, "game", None) and (
+                self._tv_chet(tv) or la_dia_phu((self._doc(tv) or {}).get("map")))]
+            if chet_ai:
+                for tv in chet_ai:
+                    self._hoi_sinh_roi_dia_phu(tv)
+                if boss.den_luc_roi_boss(datetime.now(), moc):
+                    self.in_log(f"[Boss] tới phút thứ {boss.PHUT_ROI}, về {MAP_DAI_LY} rồi xoay vòng tiếp")
+                    return
+                self._ve_dai_ly(thanh_vien)
+                self._dua_toi_map_boss(thanh_vien, truong, ten_map)
+                pb = self._pb_boss(truong)
+                da_thay = False
+                continue
+            chet, da_thay = self._boss_chet(pb, ten_map, da_thay)
+            if chet:
+                self.in_log(f"[Boss] boss ở {ten_map} đã chết, về {MAP_DAI_LY} rồi xoay vòng tiếp")
+                return
+            self.dung.wait(1)
+
+    def _xu_ly_boss(self, thanh_vien, truong, mo_ta, test=False):
+        """Trong cửa sổ boss: tạm dừng phó bản, đi boss, rồi bật lại xoay vòng. Test thì đi ngay, tới map là về."""
+        cd = boss.cai_dat_boss(cau_hinh.chung())
+        bay = datetime.now()
+        if not test and not boss.nen_di_boss(bay, cd["moc_da_xong"], cd["bat"]):
+            return
+        khung = None if test else boss.khung_boss(bay)
+        if (not test and khung is None) or not getattr(truong, "game", None):
+            return
+        moc = bay.replace(second=0, microsecond=0) if test else khung[0]
+        khoa = boss.khoa_moc_boss(moc)
+        if test:
+            self.in_log(f"{mo_ta}: [Boss test] đi thử {cd['map']} — về Đại Lý, Theo đội, Di Chuyển, tới map rồi về")
+        else:
+            self.in_log(f"{mo_ta}: [Boss] tới giờ {moc.strftime('%H:%M')}, map {cd['map']}")
+        self.bao_trang_thai(f"{mo_ta}: {'test boss' if test else 'đi boss'} {cd['map']}")
+        self.pid_dieu_khien = {tv.pid for tv in thanh_vien if getattr(tv, "pid", None)}
+        self._dat_chay_pb(thanh_vien, False)
+        try:
+            self._ve_dai_ly(thanh_vien)
+            self._dua_toi_map_boss(thanh_vien, truong, cd["map"])
+            if test:
+                self.in_log(f"{mo_ta}: [Boss test] đã tới {cd['map']}, về {MAP_DAI_LY} rồi xoay vòng tiếp")
+            else:
+                self._cho_xong_boss(thanh_vien, truong, cd["map"], moc)
+            self._ve_dai_ly(thanh_vien)
+            if not test:
+                cau_hinh.dat_chung({"moc_boss_da_xong": khoa})
+                self.in_log(f"{mo_ta}: [Boss] xong mốc {moc.strftime('%H:%M')}, tiếp tục xoay vòng phó bản")
+            self._boss_loi = None
+        except _Dung:
+            raise
+        except Exception as loi:
+            chu = str(loi)
+            if chu != getattr(self, "_boss_loi", None):
+                self._boss_loi = chu
+                self.in_log(f"{mo_ta}: [Boss] lỗi ({chu}), lát nữa thử lại")
+        finally:
+            self.pid_dieu_khien = set()
+            if not self.dung.is_set():
+                self._dat_chay_pb(thanh_vien, True)
+                self.bao_trang_thai(f"{mo_ta}: đang đi phó bản (trưởng nhóm {truong.ten})")
+
     def _giao_dich_giua_chung(self, thanh_vien, truong, mo_ta):
         """Nút "Giao dịch ngay": tạm dừng phó bản, đội viên giao đồ mới nhặt cho trưởng nhóm rồi bật lại đi tiếp."""
+        ma = self._ma_giao_ngay
+        try:
+            self._giao_dich_giua_chung_that(thanh_vien, truong, mo_ta)
+            xong = True
+        except BaseException:
+            xong = False
+            raise
+        finally:
+            if ma == self._ma_giao_ngay:
+                self._giao_ngay_ok = xong
+                self.giao_dich_ngay_xong.set()
+
+    def _giao_dich_giua_chung_that(self, thanh_vien, truong, mo_ta):
         doi_vien = [tv for tv in thanh_vien if tv is not truong and self._tv_dang_choi(tv)]
         if not doi_vien or not self._tv_dang_choi(truong):
             self.in_log(f"{mo_ta}: giao dịch ngay — trưởng nhóm / đội viên chưa ở trong game, bỏ qua")

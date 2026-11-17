@@ -73,7 +73,8 @@ import dang_ky_tai_khoan
 import proxy_mang
 import proxy_broker_ui
 from game_api import Game
-from giao_acc_chinh import LuongGiaoAccChinh, cai_dat as cai_dat_giao_acc_chinh, luu_cai_dat as luu_giao_acc_chinh
+from giao_acc_chinh import (LuongGiaoAccChinh, cai_dat as cai_dat_giao_acc_chinh,
+                            luu_cai_dat as luu_giao_acc_chinh, nen_bat_lai_sau_loi)
 from gop_acc_chinh import (LuongGopAccChinh, cai_dat as cai_dat_gop_acc_chinh,
                            luu_cai_dat as luu_gop_acc_chinh, parse_danh_sach)
 from rut_ngoc_tccn import (MANH_MOT_VIEN, SO_VIEN_TOI_DA, LuongRutNgoc, cai_dat as cai_dat_rut_ngoc,
@@ -102,7 +103,8 @@ from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC
                             nguoi_nhan_khung, phut_khung, ten_map_chuan, ve_thanh_neu_o_map_ac_tac)
 import gauto_ac_tac
 from giao_dich import anh_tui_goc
-from giao_dich_ngay import LuongGiaoDichNgay
+from giao_dich_ngay import (CAC_GIO_GIAO_HANG_NGAY, LuongGiaoDichNgay, chon_moc_giao,
+                            het_gio_cho_pho_ban, khoa_moc_giao, nhan_moc_giao)
 from moi_nhom import SO_NGUOI_TOI_DA, doc_nhom, doc_xung_quanh, xu_ly_nhom
 from nhat_do import NhatDo
 from nang_cap_nhan_vat import LuongNangCapOnline
@@ -1001,7 +1003,7 @@ class LuongNhanVat(threading.Thread):
         theo đội trưởng trong auto. True nếu lượt này đã dành cho Ác Tặc (không đi PMP / chuyển sinh).
         """
         at = cai_dat_ac_tac()
-        if at.get("dung_gauto") and (at.get("duong_dan_gauto") or "").strip():
+        if at.get("dung_gauto"):
             return self.xu_ly_gauto_ac_tac(tt, cai_dat, at)
         truong, thanh_vien = self.truong_ac_tac_trong_auto()
         if truong is not None:
@@ -2373,6 +2375,7 @@ class UngDung:
                 lambda: self._tao_tab_config(so_tay),
                 lambda: self._tao_tab_chien_dau(so_tay),
                 lambda: self._tao_tab_pho_ban(so_tay),
+                lambda: self._tao_tab_boss(so_tay),
                 lambda: self._tao_tab_chung(so_tay),
                 lambda: self._tao_tab_tai_khoan(so_tay),
                 lambda: self._tao_tab_nhom(so_tay),
@@ -3519,6 +3522,47 @@ class UngDung:
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(
             row=5, column=0, columnspan=len(auto_click.CAC_PHIM), sticky="w", pady=(8, 0))
 
+    def _tao_tab_boss(self, so_tay):
+        import boss as boss_mod
+        tab = self._tab_cuon(so_tay, "Boss")
+        chung = cau_hinh.chung()
+        self.bien_bat_boss = tk.BooleanVar(value=bool(chung.get("bat_boss")))
+        map_dang = chung.get("map_boss") or boss_mod.MAP_BOSS[0]
+        if map_dang not in boss_mod.MAP_BOSS:
+            map_dang = boss_mod.MAP_BOSS[0]
+        self.bien_map_boss = tk.StringVar(value=map_dang)
+        khung = ttk.LabelFrame(tab, text="Boss thế giới", padding=8)
+        khung.pack(fill="x")
+        ttk.Checkbutton(khung, text="Bật: xoay vòng đang chạy thì cả đội đi boss",
+                        variable=self.bien_bat_boss, command=self._luu_boss).pack(anchor="w")
+        ttk.Label(khung, text="Map (NPC Di Chuyển → Bản Đồ BOOS VIP)").pack(anchor="w", pady=(8, 2))
+        for ten in boss_mod.MAP_BOSS:
+            ttk.Radiobutton(khung, text=ten, value=ten, variable=self.bien_map_boss,
+                            command=self._luu_boss).pack(anchor="w")
+        dong = ttk.Frame(khung)
+        dong.pack(anchor="w", pady=(8, 0))
+        ttk.Button(dong, text="Test", command=self.test_boss).pack(side="left")
+        ttk.Label(khung, text="Giờ boss: 00, 04, 08, 12, 16, 20. Trước 3 phút cả đội về Đại Lý. "
+                              "Đội trưởng bấm Theo đội, nói chuyện NPC Di Chuyển, chọn Bản Đồ BOOS VIP "
+                              "rồi map ở trên. Bị giết thì hồi sinh, nói chuyện Mạnh Bà, về Đại Lý, ra map lại. "
+                              "Boss chết hoặc tới phút thứ 5 (ví dụ 4:05) thì về Đại Lý và xoay vòng phó bản tiếp. "
+                              "Nút Test: nhóm đang đi phó bản đi thử ngay đường này, tới map thì về Đại Lý và đi tiếp.",
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(8, 0))
+
+    def _luu_boss(self):
+        cau_hinh.dat_chung({"bat_boss": self.bien_bat_boss.get(), "map_boss": self.bien_map_boss.get()})
+
+    def test_boss(self):
+        self._luu_boss()
+        luong = self.luong_xoay_vong
+        if not luong or not luong.is_alive():
+            messagebox.showinfo("Boss", "Bắt đầu xoay vòng, đợi nhóm đi phó bản rồi bấm Test")
+            return
+        if not luong.test_boss():
+            messagebox.showinfo("Boss", "Nhóm chưa đi phó bản (đang đăng nhập hoặc lập nhóm). Bấm Test lại khi đã vào phó bản")
+            return
+        self.in_log(f"[Boss test] Nhóm đang đi phó bản sẽ về Đại Lý, sang {self.bien_map_boss.get()}, rồi về và đi tiếp")
+
     def _tao_tab_pho_ban(self, so_tay):
         tab = self._tab_cuon(so_tay, "Phó bản")
         self.nhan_pho_ban = ttk.Label(tab, text="Chọn một nhân vật trong danh sách để chỉnh cài đặt Phiêu Miễu Phong",
@@ -3645,7 +3689,8 @@ class UngDung:
                               "một nhân vật/acc). Kiểm tra túi Đạo cụ + Nguyên liệu: có đồ thì giao cho acc chính "
                               "(trừ ô Không giao, đồ khóa bỏ qua), không có đồ thì thoát game và sang acc tiếp (chế độ "
                               "tất cả acc). Túi acc chính còn dưới 5 ô trống thì cất vào Thiên Cơ Cẩm Nang / Thương khố. "
-                              "Cả hai đầy thì dừng. Bấm Dừng rồi Bắt đầu đi tiếp nhân vật chưa xong (tiến trình theo ngày).",
+                              "Cả hai đầy thì dừng. Bấm Dừng rồi Bắt đầu đi tiếp nhân vật chưa xong (tiến trình theo ngày). "
+                              "16:00 và 23:00 mỗi ngày: tự bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(row=7, column=0, columnspan=2,
                                                                                   sticky="w", pady=(6, 0))
 
@@ -3776,23 +3821,26 @@ class UngDung:
         khung = ttk.LabelFrame(tab, text="Sự kiện Ác Tặc (cài chung — chỉ đội trưởng trong nhóm game đi)", padding=8)
         khung.pack(fill="x", pady=(8, 0))
         self.bien_at_bat = tk.BooleanVar()
-        self.bien_at_dung_gauto = tk.BooleanVar(value=False)
-        self.bien_at_duong_dan_gauto = tk.StringVar(value="")
+        self.bien_at_gauto = tk.BooleanVar()
+        self.bien_at_duong_gauto = tk.StringVar()
+        self.bien_at_route = tk.StringVar(value="moi")
+        self.bien_at_pathpoints = tk.BooleanVar(value=False)
+        self.bien_at_tu_tim = tk.BooleanVar(value=True)
+        self.bien_at_cho_party = tk.BooleanVar(value=True)
+        self.bien_at_ten_quai = tk.StringVar(value="Ác Tặc")
         self.bien_at_phut_gauto = tk.StringVar(value="30")
         self.at_thu_tu = list(cau_hinh.CAC_MAP_AC_TAC)
         self.at_da_chon = set(cau_hinh.CAC_MAP_AC_TAC)
         ttk.Checkbutton(khung, text="Đi Ác Tặc trong khung giờ (ưu tiên hơn PMP / Sát Tinh: tới giờ thì bỏ dở phó bản, "
                                     "về Đại Lý rồi đi Ác Tặc)",
                         variable=self.bien_at_bat, command=self.luu_ac_tac).pack(anchor="w")
+        ttk.Checkbutton(khung, text="Đi Ác Tặc qua GAuto — tới giờ tự tích Ác Tặc trên cửa sổ GAuto, mỗi khung chạy",
+                        variable=self.bien_at_gauto, command=self.luu_ac_tac).pack(anchor="w")
         dong_g = ttk.Frame(khung)
         dong_g.pack(fill="x", pady=(6, 0))
-        ttk.Checkbutton(dong_g, text="Đi Ác Tặc qua GAuto — tới giờ tự tích Ác Tặc trên cửa sổ GAuto, mỗi khung chạy",
-                        variable=self.bien_at_dung_gauto, command=self.luu_ac_tac).pack(anchor="w")
-        dong_g2 = ttk.Frame(khung)
-        dong_g2.pack(fill="x", pady=(2, 0))
-        ttk.Label(dong_g2, text="Đường dẫn GAuto (.exe)").pack(side="left")
-        ttk.Entry(dong_g2, textvariable=self.bien_at_duong_dan_gauto, width=40).pack(side="left", padx=4)
-        ttk.Button(dong_g2, text="Chọn...", command=self.chon_duong_dan_gauto).pack(side="left")
+        ttk.Label(dong_g, text="Đường dẫn GAuto (.exe)").pack(side="left")
+        ttk.Entry(dong_g, textvariable=self.bien_at_duong_gauto, width=42).pack(side="left", padx=4, fill="x", expand=True)
+        ttk.Button(dong_g, text="Chọn...", command=self.chon_gauto).pack(side="left")
         dong_g3 = ttk.Frame(khung)
         dong_g3.pack(fill="x", pady=(2, 0))
         ttk.Button(dong_g3, text="Giả Lập Ác Tặc", command=self.gia_lap_ac_tac).pack(side="left")
@@ -3800,13 +3848,13 @@ class UngDung:
         ttk.Label(dong_g3, text="Phút / khung").pack(side="left", padx=(8, 0))
         ttk.Spinbox(dong_g3, from_=5, to=120, width=4, textvariable=self.bien_at_phut_gauto,
                     command=self.luu_ac_tac).pack(side="left", padx=4)
-        ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập đội trưởng trước; GAuto tự chạy quyền Admin nên "
-                              "AutoHoc cũng phải chạy quyền Admin. Tới giờ AutoHoc đưa đội tới map đầu danh sách ☑, mở "
-                              "cửa sổ GAuto, tích ô đầu dòng, chọn map rồi tích Ác Tặc; hết «Phút / khung» thì bỏ tích, "
-                              "đi tiếp phó bản. «Giả Lập Ác Tặc» chạy ngay luồng đó "
-                              "(ra map, cả đội theo, rồi bật GAuto nếu đang tích) trong số phút đã chọn, không chờ khung giờ; "
-                              "«Dừng giả lập» kết thúc khung đó ngay (tắt GAuto, về thành, đi tiếp phó bản — cả đội "
-                              "đang trong Tặc Khấu thì chờ xong ải).",
+        ttk.Label(khung, text="GAuto: mở GAuto (GAuto_2025) và đăng nhập đội trưởng. Tới giờ AutoHoc đưa cả đội tới "
+                              "map đầu tiên đang tích ☑, rồi tích Ác Tặc trên cửa sổ GAuto, mỗi khung chạy một lần. "
+                              "GAuto tự chạy tìm hoặc pathpoints, gặp NPC thì khiêu chiến, cả đội vào Tặc Khấu doanh địa "
+                              "đánh xong rồi đi tiếp. Hết «Phút / khung» (cả đội còn trong ải thì chờ ra) thì bỏ tích, "
+                              "về Đại Lý, đi tiếp phó bản. GAuto tự nâng quyền Admin nên AutoHoc cũng phải chạy Admin. "
+                              "Tắt «Đi Ác Tặc qua GAuto» thì AutoHoc tự đi, không mở GAuto. «Giả Lập Ác Tặc» chạy ngay "
+                              "số phút đã chọn, không chờ khung giờ; «Dừng giả lập» kết thúc khung đó.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(2, 0))
         dong = ttk.Frame(khung)
         dong.pack(fill="x", pady=(6, 0))
@@ -3824,12 +3872,12 @@ class UngDung:
         nut.pack(fill="x", pady=(6, 0))
         ttk.Button(nut, text="Lưu Ác Tặc", command=self.luu_ac_tac).pack(side="left")
         ttk.Button(nut, text="Áp dụng Ác Tặc cho tất cả", command=self.ap_dung_ac_tac_tat_ca).pack(side="left", padx=4)
-        ttk.Label(khung, text="Khung giờ: 02-03h, 13-14h, 15-16h, 17-18h, 19-20h, 21-22h. Đi các map đã tích (☑) theo "
-                              "thứ tự trên xuống: về Đại Lý → NPC Di Chuyển (Kính Hồ, Thái Hồ qua Tô Châu; Đôn Hoàng, "
-                              "Tung Sơn qua Lạc Dương, rồi chạy qua cổng map) → tuần tra theo điểm, gom Ác Tặc. Hết Ác Tặc thì sang map sau; "
-                              "hết giờ hoặc đi hết map thì về thành, đi tiếp PMP / Sát Tinh. Đi tổ đội: đội trưởng dẫn "
-                              "đường, đội viên chỉ cần bật Auto để theo và đánh. "
-                              "3 phút không thấy NPC/quái trên một map thì tự sang map kế (thứ tự danh sách).",
+        ttk.Label(khung, text="Khung giờ: 02, 13, 15, 17, 19, 21h, mỗi khung đúng số «Phút / khung» (mặc định 30, ra map "
+                              "trước 3 phút). Đi các map đã tích (☑) theo thứ tự trên xuống: về Đại Lý → NPC Di Chuyển "
+                              "(Kính Hồ, Thái Hồ qua Tô Châu; Đôn Hoàng, Tung Sơn qua Lạc Dương, rồi chạy qua cổng map) "
+                              "→ chạy tìm hoặc pathpoints. Hết Ác Tặc thì sang map sau; hết giờ hoặc đi hết map thì về "
+                              "thành, đi tiếp PMP / Sát Tinh. Đội trưởng dẫn, đội viên bật Auto để theo và đánh. "
+                              "3 phút không thấy NPC/quái trên một map thì tự sang map kế.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(6, 0))
         self.nap_form_ac_tac()
 
@@ -3869,8 +3917,13 @@ class UngDung:
     def nap_form_ac_tac(self, cai_dat=None):
         at = cai_dat_ac_tac()
         self.bien_at_bat.set(bool(at["bat"]))
-        self.bien_at_dung_gauto.set(bool(at.get("dung_gauto")))
-        self.bien_at_duong_dan_gauto.set(at.get("duong_dan_gauto") or "")
+        self.bien_at_gauto.set(bool(at.get("dung_gauto")))
+        self.bien_at_duong_gauto.set(at.get("duong_dan_gauto") or "")
+        self.bien_at_route.set("cu" if at.get("route") == "cu" else "moi")
+        self.bien_at_pathpoints.set(bool(at.get("chay_pathpoints")))
+        self.bien_at_tu_tim.set(bool(at.get("tu_tim", True)))
+        self.bien_at_cho_party.set(bool(at.get("cho_party", True)))
+        self.bien_at_ten_quai.set(at.get("ten_quai") or "Ác Tặc")
         self.bien_at_phut_gauto.set(str(at.get("phut_gauto") or 30))
         thu_tu = [m for m in at.get("thu_tu_map") or () if m in cau_hinh.CAC_MAP_AC_TAC]
         self.at_thu_tu = list(dict.fromkeys(thu_tu + list(cau_hinh.CAC_MAP_AC_TAC)))
@@ -3878,20 +3931,20 @@ class UngDung:
         self._ve_ds_map_ac_tac()
 
     def doc_form_ac_tac(self):
-        cu = cai_dat_ac_tac()
         try:
             phut_g = int(self.bien_at_phut_gauto.get().strip() or "30")
         except ValueError:
             phut_g = 30
         phut_g = max(5, min(phut_g, 120))
+        ten_quai = (self.bien_at_ten_quai.get() or "").strip() or "Ác Tặc"
         return {"bat": self.bien_at_bat.get(),
-                "route": cu.get("route", "moi"),
-                "ten_quai": cu.get("ten_quai") or "Ác Tặc",
-                "chay_pathpoints": bool(cu.get("chay_pathpoints", False)),
-                "cho_party": bool(cu.get("cho_party", True)),
-                "tu_tim": bool(cu.get("tu_tim", True)),
-                "dung_gauto": self.bien_at_dung_gauto.get(),
-                "duong_dan_gauto": self.bien_at_duong_dan_gauto.get().strip(),
+                "route": "cu" if self.bien_at_route.get() == "cu" else "moi",
+                "ten_quai": ten_quai,
+                "chay_pathpoints": bool(self.bien_at_pathpoints.get()),
+                "cho_party": bool(self.bien_at_cho_party.get()),
+                "tu_tim": bool(self.bien_at_tu_tim.get()),
+                "dung_gauto": bool(self.bien_at_gauto.get()),
+                "duong_dan_gauto": self.bien_at_duong_gauto.get().strip(),
                 "phut_gauto": phut_g,
                 "map_uu_tien": [m for m in self.at_thu_tu if m in self.at_da_chon],
                 "thu_tu_map": list(self.at_thu_tu)}
@@ -3908,8 +3961,6 @@ class UngDung:
                            if gia_tri["bat"] else ""))
             if gia_tri["bat"] and not gia_tri["map_uu_tien"]:
                 messagebox.showwarning("Ác Tặc", "Chưa tích map Ác Tặc nào")
-            if gia_tri["bat"] and gia_tri["dung_gauto"] and not gia_tri["duong_dan_gauto"]:
-                messagebox.showwarning("Ác Tặc", "Bật GAuto nhưng chưa nhập đường dẫn GAuto_2025.exe")
 
     def ap_dung_ac_tac_tat_ca(self):
         self.luu_ac_tac()
@@ -3966,7 +4017,46 @@ class UngDung:
             luu_gop_acc_chinh(tien_trinh={})
             self.nhan_gop_acc_chinh.configure(text="")
 
-    def bat_tat_gop_acc_chinh(self):
+    def _huy_hen_bat_lai(self, loai, tu_dong):
+        """Bấm tay thì hủy lịch tự bấm. Lần tự bấm không hủy chính nó."""
+        if tu_dong:
+            return
+        job = getattr(self, f"_job_bat_lai_{loai}", None)
+        if job is not None:
+            self.root.after_cancel(job)
+            setattr(self, f"_job_bat_lai_{loai}", None)
+
+    def _hen_bat_lai_sau_loi(self, loai):
+        """Giao chưa xong mà lỗi: đợi luồng cũ tắt rồi tự bấm Bắt đầu."""
+        if loai == "gop":
+            luong = self.luong_gop_acc_chinh
+            bat = lambda: self.bat_tat_gop_acc_chinh(tu_dong=True)
+            nhan = "[Gộp acc chính]"
+            khoa_lan = "_lan_tu_bat_gop"
+        else:
+            luong = self.luong_giao_acc_chinh
+            bat = lambda: self.bat_tat_giao_acc_chinh(tu_dong=True)
+            nhan = "[Giao acc chính]"
+            khoa_lan = "_lan_tu_bat_giao"
+        if luong and luong.is_alive():
+            setattr(self, f"_job_bat_lai_{loai}", self.root.after(500, lambda: self._hen_bat_lai_sau_loi(loai)))
+            return
+        lan = getattr(self, khoa_lan, 0)
+        chay_lai = bool(luong and getattr(luong, "chay_lai_khi_loi", False))
+        if not nen_bat_lai_sau_loi("Lỗi", chay_lai, lan):
+            if chay_lai:
+                self.in_log(f"{nhan} Lỗi lặp lại, không tự bấm Bắt đầu nữa")
+            else:
+                setattr(self, khoa_lan, 0)
+            return
+        setattr(self, khoa_lan, lan + 1)
+        self.in_log(f"{nhan} Chưa giao xong, tự bấm Bắt đầu ({lan + 1})")
+        setattr(self, f"_job_bat_lai_{loai}", self.root.after(3000, bat))
+
+    def bat_tat_gop_acc_chinh(self, tu_dong=False):
+        self._huy_hen_bat_lai("gop", tu_dong)
+        if not tu_dong:
+            self._lan_tu_bat_gop = 0
         if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
             self.luong_gop_acc_chinh.dung.set()
             self.nhan_gop_acc_chinh.configure(text="Đang dừng...")
@@ -4025,7 +4115,10 @@ class UngDung:
             luu_giao_acc_chinh(tien_trinh={})
             self.nhan_giao_acc_chinh.configure(text="")
 
-    def bat_tat_giao_acc_chinh(self):
+    def bat_tat_giao_acc_chinh(self, tu_dong=False):
+        self._huy_hen_bat_lai("giao", tu_dong)
+        if not tu_dong:
+            self._lan_tu_bat_giao = 0
         if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
             self.luong_giao_acc_chinh.dung.set()
             self.nhan_giao_acc_chinh.configure(text="Đang dừng...")
@@ -4033,21 +4126,20 @@ class UngDung:
             return
         self._luu_giao_acc_chinh()
         if not all(self.bien_gac[k].get().strip() for k in ("tai_khoan", "mat_khau", "nhan_vat")):
-            messagebox.showinfo("Giao dịch cho acc chính", "Điền tài khoản, mật khẩu, tên nhân vật của acc chính")
-            return
+            self._bao_gac(tu_dong, "Điền tài khoản, mật khẩu, tên nhân vật của acc chính")
+            return False
         if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
-            messagebox.showinfo("Giao dịch cho acc chính", "Đang xoay vòng tài khoản, chờ xong hoặc dừng trước")
-            return
+            self._bao_gac(tu_dong, "Đang xoay vòng tài khoản, chờ xong hoặc dừng trước")
+            return False
         if self.luong_tao_nv and self.luong_tao_nv.is_alive():
-            messagebox.showinfo("Giao dịch cho acc chính", "Đang tạo nhân vật ở tab Tạo nhân vật, chờ xong hoặc "
-                                                            "dừng trước")
-            return
+            self._bao_gac(tu_dong, "Đang tạo nhân vật ở tab Tạo nhân vật, chờ xong hoặc dừng trước")
+            return False
         if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
-            messagebox.showinfo("Giao dịch cho acc chính", "Đang gộp đồ về acc chính, chờ xong hoặc dừng trước")
-            return
+            self._bao_gac(tu_dong, "Đang gộp đồ về acc chính, chờ xong hoặc dừng trước")
+            return False
         if self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive():
-            messagebox.showinfo("Giao dịch cho acc chính", "Đang rút ngọc từ Thiên Cơ Cẩm Nang, chờ xong hoặc dừng trước")
-            return
+            self._bao_gac(tu_dong, "Đang rút ngọc từ Thiên Cơ Cẩm Nang, chờ xong hoặc dừng trước")
+            return False
         self.luong_giao_acc_chinh = LuongGiaoAccChinh(self.hang_doi)
         self.luong_giao_acc_chinh.start()
         cac_tk = self.luong_giao_acc_chinh.cac_tai_khoan()
@@ -4055,6 +4147,15 @@ class UngDung:
             if ten.lower() in cac_tk:
                 luong.dung.set()
         self.nut_giao_acc_chinh.configure(text="Dừng")
+        return True
+
+    def _bao_gac(self, tu_dong, chu):
+        if tu_dong:
+            if getattr(self, "_bao_gac_cu", None) != chu:
+                self._bao_gac_cu = chu
+                self.in_log(f"[Giao acc chính] {chu}")
+            return
+        messagebox.showinfo("Giao dịch cho acc chính", chu)
 
     def xoay_vong_sau_giao_acc_chinh(self):
         """Giao acc chính xong: chờ luồng giao thoát hẳn (trả client, bật lại phó bản) rồi tự bấm Bắt đầu xoay vòng."""
@@ -5843,55 +5944,22 @@ class UngDung:
         self.in_log("Khi vào game: " + ("giải mã kiểm tra" if bat else "nhập mã kiểm tra cố định")
                     + " (áp dụng từ lần đăng nhập sau)")
 
-    def chon_duong_dan_gauto(self):
-        """Chọn thư mục GAuto (vd. AutoTLBB); tự điền ChickenAuto.exe nếu có trong thư mục."""
-        hien_tai = self.bien_at_duong_dan_gauto.get().strip()
-        if hien_tai and os.path.isfile(hien_tai):
-            thu_muc = os.path.dirname(hien_tai)
-        elif hien_tai and os.path.isdir(hien_tai):
-            thu_muc = hien_tai
-        else:
-            thu_muc = None
-        thu_muc = filedialog.askdirectory(
-            parent=self.root,
-            title="Chọn thư mục GAuto (ChickenAuto / AutoTLBB)",
-            initialdir=thu_muc if thu_muc and os.path.isdir(thu_muc) else None,
-        )
-        if not thu_muc:
-            return
-        from gauto_ac_tac import CAC_TEN_EXE_GAUTO
-
-        for ten_file in CAC_TEN_EXE_GAUTO:
-            duong = os.path.join(thu_muc, ten_file)
-            if os.path.isfile(duong):
-                self.bien_at_duong_dan_gauto.set(duong)
-                self.luu_ac_tac()
-                return
-        duong = filedialog.askopenfilename(
-            parent=self.root,
-            title="Không thấy GAuto_2025.exe / ChickenAuto.exe — chọn file",
-            initialdir=thu_muc,
-            filetypes=[("GAuto", "GAuto*.exe"), ("ChickenAuto", "ChickenAuto.exe"), ("File chạy", "*.exe"),
-                       ("Tất cả", "*.*")],
-        )
-        if duong:
-            self.bien_at_duong_dan_gauto.set(duong)
-            self.luu_ac_tac()
-
     def gia_lap_ac_tac(self):
-        """Chạy ngay luồng Ác Tặc (ra map, đội theo, bật GAuto nếu đang tích), không chờ khung giờ."""
+        """Chạy ngay luồng Ác Tặc (ra map, đội theo, khiêu chiến, đánh ải), không chờ khung giờ."""
         self.luu_ac_tac()
         at = self.doc_form_ac_tac()
         cac_map = at["map_uu_tien"]
         if not cac_map:
             messagebox.showwarning("Giả Lập Ác Tặc", "Chưa tích map Ác Tặc nào", parent=self.root)
             return
-        if at["dung_gauto"] and not at["duong_dan_gauto"]:
-            messagebox.showwarning("Giả Lập Ác Tặc", "Đang tích GAuto nhưng chưa chọn đường dẫn GAuto", parent=self.root)
+        if at.get("dung_gauto") and not (at.get("duong_dan_gauto") or "").strip():
+            messagebox.showwarning("Giả Lập Ác Tặc", "Chưa chọn đường dẫn GAuto (.exe)", parent=self.root)
             return
         phut = at["phut_gauto"]
-        cach = (f"tới {cac_map[0]} rồi bật GAuto {phut} phút" if at["dung_gauto"]
-                else f"đi Ác Tặc map {cac_map[0]} trong {phut} phút")
+        if at.get("dung_gauto"):
+            cach = f"đưa đội tới {cac_map[0]} rồi tích Ác Tặc trên GAuto trong {phut} phút"
+        else:
+            cach = f"đi Ác Tặc map {cac_map[0]} trong {phut} phút"
         if not messagebox.askyesno(
                 "Giả Lập Ác Tặc",
                 f"Nhân vật đang bật Auto sẽ {cach} ngay, không chờ khung giờ.\n"
@@ -5911,7 +5979,7 @@ class UngDung:
         self.in_log(f"Giả Lập Ác Tặc: {mo_ta_khung(khung, at)} — {cach}")
 
     def dung_gia_lap_ac_tac(self):
-        """Kết thúc khung giả lập ngay: các luồng đi đường hết giờ (tắt GAuto, về thành, đi tiếp phó bản)."""
+        """Kết thúc khung giả lập ngay: các luồng đi đường hết giờ (về thành, đi tiếp phó bản)."""
         at = cai_dat_ac_tac()
         khung = khung_hien_tai(at) if gia_lap_con_hieu_luc() else None
         if not khung or khung[0] != "gia_lap":
@@ -5924,7 +5992,19 @@ class UngDung:
             ac = getattr(luong, "ac_tac", None)
             if ac is not None:
                 ac.dung_gia_lap(khung)
-        self.in_log(f"Dừng Giả Lập Ác Tặc ({mo_ta}): tắt GAuto, về thành rồi đi tiếp phó bản")
+        self.in_log(f"Dừng Giả Lập Ác Tặc ({mo_ta}): về thành rồi đi tiếp phó bản")
+
+    def chon_gauto(self):
+        hien = self.bien_at_duong_gauto.get().strip()
+        thu_muc = os.path.dirname(hien) if hien else ""
+        duong = filedialog.askopenfilename(
+            parent=self.root, title="Chọn GAuto (.exe)",
+            initialdir=thu_muc if os.path.isdir(thu_muc) else None,
+            filetypes=[("GAuto", "*.exe"), ("Tất cả", "*.*")])
+        if not duong:
+            return
+        self.bien_at_duong_gauto.set(duong)
+        self.luu_ac_tac()
 
     def chon_thu_muc_game(self):
         """Chọn file Game.exe của máy đang dùng; thư mục game là thư mục chứa Bin."""
@@ -6290,7 +6370,126 @@ class UngDung:
             if str(loi) != self.loi_giam_sat:
                 self.loi_giam_sat = str(loi)
                 self.in_log(f"Lỗi tự đăng nhập (kiểm tra tai_khoan.json):\n{traceback.format_exc()}")
+        try:
+            self._lich_giao_hang_ngay()
+        except Exception:
+            self.in_log(f"Lỗi lịch giao dịch\n{traceback.format_exc()}")
         self.root.after(3000, self.giam_sat_dang_nhap)
+
+    def _nhan_lich(self):
+        return nhan_moc_giao(getattr(self, "_moc_lich", None) or (16, 0))
+
+    def _xong_lich_16h(self, hom):
+        moc = getattr(self, "_moc_lich", None)
+        if moc:
+            cau_hinh.dat_chung({khoa_moc_giao(moc): hom})
+        self._moc_lich = None
+        self._buoc_16h = None
+        self._da_log_cho_16h = False
+        self._da_dung_xv_16h = False
+        self._da_log_cho_gac_16h = False
+
+    def _bo_moc_lich(self, hom, cac_moc, ly_do):
+        if not cac_moc:
+            return
+        cau_hinh.dat_chung({khoa_moc_giao(moc): hom for moc in cac_moc})
+        for moc in cac_moc:
+            self.in_log(f"[{nhan_moc_giao(moc)}] {ly_do}")
+
+    def _bat_giao_ngay_16h(self):
+        """Bấm đúng nút Giao dịch ngay. False nếu xoay vòng chưa ở đoạn đi phó bản."""
+        nhan = self._nhan_lich()
+        xv = self.luong_xoay_vong
+        if xv and xv.is_alive():
+            if not xv.giao_dich_ngay():
+                return False
+            self.in_log(f"[{nhan}] Bấm Giao dịch ngay — nhóm đang đi phó bản tạm dừng, giao đồ cho trưởng nhóm")
+            self._buoc_16h = "cho_xv"
+            return True
+        if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
+            return None
+        if self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive():
+            return None
+        if self.luong_giao_dich_ngay and self.luong_giao_dich_ngay.is_alive():
+            self._buoc_16h = "cho_luong"
+            return True
+        self.luong_giao_dich_ngay = LuongGiaoDichNgay(list(self.cac_luong.values()), self.hang_doi)
+        self.luong_giao_dich_ngay.start()
+        self.in_log(f"[{nhan}] Bấm Giao dịch ngay")
+        self._buoc_16h = "cho_luong"
+        return True
+
+    def _lich_giao_hang_ngay(self):
+        """16:00 và 23:00: Giao dịch ngay, thành công thì bật Giao dịch cho acc chính. Mỗi mốc một lần."""
+        bay_gio = datetime.now()
+        hom = bay_gio.date().isoformat()
+        chung = cau_hinh.chung()
+        da_chay = {moc: chung.get(khoa_moc_giao(moc)) or "" for moc in CAC_GIO_GIAO_HANG_NGAY}
+        buoc = getattr(self, "_buoc_16h", None)
+        moc, bo_qua = chon_moc_giao(bay_gio, da_chay, getattr(self, "_moc_lich", None), buoc)
+        if bo_qua:
+            self._bo_moc_lich(hom, bo_qua, "Đã tới mốc sau, bỏ qua mốc này")
+            if getattr(self, "_moc_lich", None) in bo_qua:
+                self._moc_lich = None
+                self._buoc_16h = None
+                self._da_log_cho_16h = False
+                buoc = None
+        if moc is None:
+            return
+        self._moc_lich = moc
+        nhan = self._nhan_lich()
+        if buoc is None:
+            ket = self._bat_giao_ngay_16h()
+            if ket is None:
+                if not getattr(self, "_da_log_cho_16h", False):
+                    self._da_log_cho_16h = True
+                    self.in_log(f"[{nhan}] Đang gộp hoặc giao acc chính, chờ xong rồi mới Giao dịch ngay")
+                return
+            if not ket:
+                if het_gio_cho_pho_ban(bay_gio, moc):
+                    self.in_log(f"[{nhan}] Chưa bấm được Giao dịch ngay, bỏ qua hôm nay")
+                    self._xong_lich_16h(hom)
+                elif not getattr(self, "_da_log_cho_16h", False):
+                    self._da_log_cho_16h = True
+                    self.in_log(f"[{nhan}] Chờ nhóm vào phó bản để Giao dịch ngay")
+            return
+        if buoc == "cho_xv":
+            xv = self.luong_xoay_vong
+            if xv and xv.is_alive() and not xv.giao_dich_ngay_xong.is_set():
+                return
+            if not xv or not getattr(xv, "_giao_ngay_ok", False):
+                self.in_log(f"[{nhan}] Giao dịch ngay không xong, không bật Giao dịch cho acc chính")
+                self._xong_lich_16h(hom)
+                return
+            self._buoc_16h = "dung_xv"
+        elif buoc == "cho_luong":
+            lg = self.luong_giao_dich_ngay
+            if lg and lg.is_alive():
+                return
+            if not lg or not getattr(lg, "thanh_cong", False):
+                self.in_log(f"[{nhan}] Giao dịch ngay không xong, không bật Giao dịch cho acc chính")
+                self._xong_lich_16h(hom)
+                return
+            self._buoc_16h = "dung_xv"
+        if self._buoc_16h != "dung_xv":
+            return
+        xv = self.luong_xoay_vong
+        if xv and xv.is_alive():
+            if not getattr(self, "_da_dung_xv_16h", False):
+                self._da_dung_xv_16h = True
+                self.in_log(f"[{nhan}] Giao dịch ngay xong, dừng xoay vòng rồi bật Giao dịch cho acc chính")
+                self.bat_tat_xoay_vong()
+            return
+        if not all(self.bien_gac[k].get().strip() for k in ("tai_khoan", "mat_khau", "nhan_vat")):
+            self.in_log(f"[{nhan}] Chưa điền acc chính, không bật Giao dịch cho acc chính")
+            self._xong_lich_16h(hom)
+            return
+        if self.bat_tat_giao_acc_chinh(tu_dong=True):
+            self.in_log(f"[{nhan}] Đã bật Giao dịch cho acc chính")
+            self._xong_lich_16h(hom)
+        elif not getattr(self, "_da_log_cho_gac_16h", False):
+            self._da_log_cho_gac_16h = True
+            self.in_log(f"[{nhan}] Chưa bật được Giao dịch cho acc chính, sẽ thử lại")
 
     def _giam_sat_dang_nhap(self):
         cai_dat = cau_hinh.doc_tai_khoan()
@@ -6509,12 +6708,19 @@ class UngDung:
                         or noi_dung[0].startswith(("Xong", "Đã dừng", "Dừng:", "Lỗi")):
                     self.nut_giao_acc_chinh.configure(text="Bắt đầu")
                 if noi_dung[0].startswith("Xong"):
+                    self._lan_tu_bat_giao = 0
                     self.xoay_vong_sau_giao_acc_chinh()
+                elif noi_dung[0].startswith(("Dừng:", "Lỗi")):
+                    self._hen_bat_lai_sau_loi("giao")
             elif loai == "trang_thai_gop_acc_chinh":
                 self.nhan_gop_acc_chinh.configure(text=noi_dung[0])
                 if not (self.luong_gop_acc_chinh and self.luong_gop_acc_chinh.is_alive()) \
                         or noi_dung[0].startswith(("Xong", "Đã dừng", "Dừng:", "Lỗi")):
                     self.nut_gop_acc_chinh.configure(text="Bắt đầu")
+                if noi_dung[0].startswith("Xong"):
+                    self._lan_tu_bat_gop = 0
+                elif noi_dung[0].startswith(("Dừng:", "Lỗi")):
+                    self._hen_bat_lai_sau_loi("gop")
             elif loai == "trang_thai_rut_ngoc":
                 self.nhan_rut_ngoc.configure(text=noi_dung[0])
                 if not (self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive()) \

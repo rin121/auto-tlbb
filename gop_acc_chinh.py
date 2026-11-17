@@ -165,12 +165,15 @@ class LuongGopAccChinh(threading.Thread, GiaoAccChinhEngine):
             self.in_log("Đã dừng (tiến trình đã lưu, bấm Bắt đầu để đi tiếp)")
             self.bao_trang_thai("Đã dừng")
         except LoiGiaoAccChinh as loi:
+            self._danh_dau_chay_lai_neu_chua_xong()
             self.in_log(f"Dừng: {loi} (tiến trình đã lưu)")
             self.bao_trang_thai(f"Dừng: {loi}")
         except ValueError as loi:
+            self._danh_dau_chay_lai_neu_chua_xong()
             self.in_log(f"Dừng: {loi}")
             self.bao_trang_thai(f"Dừng: {loi}")
         except Exception:
+            self._danh_dau_chay_lai_neu_chua_xong()
             self.in_log(f"Lỗi không mong đợi\n{traceback.format_exc()}")
             self.bao_trang_thai("Lỗi, xem log")
         finally:

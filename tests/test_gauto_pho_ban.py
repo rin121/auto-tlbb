@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import cau_hinh  # noqa: E402
 import giao_dien as gd  # noqa: E402
 import su_kien_ac_tac as sk  # noqa: E402
 
@@ -856,6 +857,88 @@ class TestDiThangTuThanhTrungChuyen(unittest.TestCase):
     def test_map_khac_di_tung_son_van_ve_dai_ly(self):
         self.assertEqual(self._di("Kiếm Các", "Tung Sơn"),
                          ["ve_dai_ly", "gom_dai_ly", ("Đại Lý", "Lạc Dương"), ("Lạc Dương", "Tung Sơn")])
+
+
+class _Quai:
+    def __init__(self, x, y):
+        self.x, self.y, self.id, self.hp = x, y, 1, 100
+
+
+class TestAcTacTuChay(unittest.TestCase):
+    """Ác Tặc chạy trong AutoHoc, kể cả khi cấu hình cũ còn bật GAuto."""
+
+    def test_tich_gauto_thi_di_qua_gauto(self):
+        at = dict(AT, bat=True, dung_gauto=True, duong_dan_gauto=r"C:\GAuto_2025.exe", phut_gauto=30)
+        with patch.object(gd, "khung_hien_tai", return_value=("2026-11-17", 21)), \
+                patch.object(gd, "cai_dat_ac_tac", return_value=at), \
+                patch.object(gd, "nhan_khung", return_value=True), \
+                patch.dict(sk._NHAN_KHUNG, clear=True):
+            luong = _luong()
+            luong.ac_tac.nghi_den = 0
+            luong.xu_ly_gauto_ac_tac = MagicMock(return_value=True)
+            self.assertTrue(luong.xu_ly_ac_tac({"map": "Đại Lý"}, {}))
+            luong.ac_tac.chay.assert_not_called()
+            luong.xu_ly_gauto_ac_tac.assert_called_once()
+
+    def test_khong_tich_gauto_thi_tu_chay(self):
+        at = dict(AT, bat=True, dung_gauto=False, duong_dan_gauto="", phut_gauto=30)
+        with patch.object(gd, "khung_hien_tai", return_value=("2026-11-17", 21)), \
+                patch.object(gd, "cai_dat_ac_tac", return_value=at), \
+                patch.object(gd, "nhan_khung", return_value=True), \
+                patch.dict(sk._NHAN_KHUNG, clear=True):
+            luong = _luong()
+            luong.ac_tac.nghi_den = 0
+            luong.xu_ly_gauto_ac_tac = MagicMock()
+            self.assertTrue(luong.xu_ly_ac_tac({"map": "Đại Lý"}, {}))
+            luong.ac_tac.chay.assert_called_once()
+            luong.xu_ly_gauto_ac_tac.assert_not_called()
+
+    def _aoi(self, maps, con):
+        r = sk.AcTacRunner.__new__(sk.AcTacRunner)
+        thu_tu = list(maps)
+
+        def map_hien():
+            return thu_tu.pop(0) if len(thu_tu) > 1 else thu_tu[0]
+
+        r._map = map_hien
+        r._kiem_tra = MagicMock()
+        r._vi_tri = MagicMock(return_value=(10, 10))
+        r._ac_tac_quanh = MagicMock(return_value=con)
+        r._dat_vung = MagicMock()
+        r._mo_ta = MagicMock()
+        r._log = MagicMock()
+        r._ghi_gap_ac_tac = MagicMock()
+        r._lua_dung = MagicMock(return_value=False)
+        r.game = MagicMock()
+        return r
+
+    def test_trong_aoi_het_quai_thi_ra_khong_chay_diem_ngoai(self):
+        r = self._aoi(["Tặc Khấu doanh địa", "Tặc Khấu doanh địa", "Kiếm Các"], [])
+        with patch.object(sk, "bo_theo_doi"):
+            self.assertFalse(r._danh_aoi(["ac tac"], "Kiếm Các", {}))
+        r.game.lua.chay.assert_not_called()
+        self.assertIn("ra [Tặc Khấu doanh địa]", r._log.call_args_list[-1].args[0])
+
+    def test_trong_aoi_chay_toi_quai(self):
+        r = self._aoi(["Tặc Khấu doanh địa", "Tặc Khấu doanh địa", "Kiếm Các"],
+                      [("Ác Tặc", _Quai(40, 40))])
+        with patch.object(sk, "bo_theo_doi"):
+            self.assertTrue(r._danh_aoi(["ac tac"], "Kiếm Các", {}))
+        lenh = r.game.lua.chay.call_args.args[0]
+        self.assertIn("AutoRunToTarget(40, 40)", lenh)
+
+    def test_cau_hinh_cu_giu_gauto(self):
+        cai = {"ac_tac": {"bat": True, "dung_gauto": True, "duong_dan_gauto": r"C:\GAuto_2025.exe"}}
+        self.assertTrue(cau_hinh._them_ac_tac(cai))
+        self.assertTrue(cai["ac_tac"]["dung_gauto"])
+        self.assertEqual(cai["ac_tac"]["duong_dan_gauto"], r"C:\GAuto_2025.exe")
+        self.assertFalse(cau_hinh._them_ac_tac(cai))
+
+    def test_danh_nhom_trong_aoi_khong_danh_ngoai(self):
+        r = self._aoi(["Tặc Khấu doanh địa"], [])
+        r._danh_aoi = MagicMock(return_value=True)
+        self.assertTrue(r._danh_nhom(["ac tac"], "Kiếm Các", {}))
+        r._danh_aoi.assert_called_once()
 
 
 if __name__ == "__main__":

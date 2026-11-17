@@ -17,6 +17,51 @@ from pho_ban_pmp import cai_dat_pmp
 GIAY_CHO_DUNG_AUTO = 3
 SO_LAN_THU = 3
 GIAY_GIUA_HAI_LAN = 5
+# 16:00 và 23:00 mỗi ngày: bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.
+CAC_GIO_GIAO_HANG_NGAY = ((16, 0), (23, 0))
+GIO_GIAO_HANG_NGAY = CAC_GIO_GIAO_HANG_NGAY[0]
+PHUT_CHO_VAO_PHO_BAN = 20
+
+
+def den_gio_giao_hang_ngay(bay_gio, ngay_da_chay, gio=GIO_GIAO_HANG_NGAY):
+    """True khi đã tới giờ và hôm nay chưa chạy mốc này."""
+    if ngay_da_chay == bay_gio.date().isoformat():
+        return False
+    return (bay_gio.hour, bay_gio.minute) >= gio
+
+
+def het_gio_cho_pho_ban(bay_gio, gio=GIO_GIAO_HANG_NGAY, phut_cho=PHUT_CHO_VAO_PHO_BAN):
+    """Xoay vòng mãi chưa vào phó bản thì thôi chờ."""
+    return bay_gio.hour * 60 + bay_gio.minute >= gio[0] * 60 + gio[1] + phut_cho
+
+
+def khoa_moc_giao(gio):
+    return f"ngay_giao_{gio[0]:02d}h"
+
+
+def nhan_moc_giao(gio):
+    return f"{gio[0]}h"
+
+
+def cac_moc_den_gio(bay_gio, da_chay):
+    """Các mốc đã tới giờ và hôm nay chưa chạy. da_chay: {(giờ, phút): 'YYYY-MM-DD'}."""
+    return [gio for gio in CAC_GIO_GIAO_HANG_NGAY if den_gio_giao_hang_ngay(bay_gio, da_chay.get(gio, ""), gio)]
+
+
+def chon_moc_giao(bay_gio, da_chay, moc_dang_cho=None, buoc=None):
+    """Mốc sẽ chạy, và các mốc sớm hơn cần đánh dấu bỏ qua.
+
+    Chuỗi đang dở (đã bấm Giao dịch ngay) thì chạy nốt mốc đó.
+    Chưa bấm mà đã tới mốc sau thì bỏ mốc trước, chỉ chạy mốc mới nhất.
+    """
+    due = cac_moc_den_gio(bay_gio, da_chay)
+    if moc_dang_cho is not None and buoc:
+        return moc_dang_cho, []
+    if moc_dang_cho is not None and not any(gio > moc_dang_cho for gio in due):
+        return moc_dang_cho, []
+    if not due:
+        return None, []
+    return due[-1], due[:-1]
 
 
 def tam_dung_auto(cac_ten):
@@ -66,6 +111,7 @@ class LuongGiaoDichNgay(threading.Thread):
         self.cac_luong = [luong for luong in cac_luong if luong.ten and luong.dang_trong_game]
         self.hang_doi = hang_doi
         self.dung = threading.Event()
+        self.thanh_cong = False
         self.pid_dieu_khien = set()
 
     def in_log(self, chu):
@@ -77,7 +123,9 @@ class LuongGiaoDichNgay(threading.Thread):
     def run(self):
         try:
             self._chay()
+            self.thanh_cong = not self.dung.is_set()
         except Exception:
+            self.thanh_cong = False
             self.in_log(f"Lỗi không mong đợi\n{traceback.format_exc()}")
 
     @staticmethod

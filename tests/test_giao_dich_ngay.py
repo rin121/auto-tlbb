@@ -322,5 +322,45 @@ class TestAnhTuiGoc(unittest.TestCase):
         self.assertIn(("base", 300), self._anh("DV1", (2026, 10, 29)))
 
 
+class TestLich16h(unittest.TestCase):
+    def test_truoc_16h_thi_chua_toi(self):
+        from datetime import datetime
+        bay = datetime(2026, 11, 18, 15, 59)
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, ""))
+        self.assertFalse(gdn.het_gio_cho_pho_ban(bay))
+
+    def test_dung_16h_va_moi_ngay_mot_lan(self):
+        from datetime import datetime
+        bay = datetime(2026, 11, 18, 16, 0)
+        self.assertTrue(gdn.den_gio_giao_hang_ngay(bay, ""))
+        self.assertTrue(gdn.den_gio_giao_hang_ngay(bay, "2026-11-17"))
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "2026-11-18"))
+        self.assertFalse(gdn.het_gio_cho_pho_ban(bay))
+        self.assertTrue(gdn.het_gio_cho_pho_ban(datetime(2026, 11, 18, 16, 20)))
+
+    def test_23h_lap_lai_va_bo_moc_16h_neu_chua_bam(self):
+        from datetime import datetime
+        bay = datetime(2026, 11, 18, 22, 59)
+        self.assertEqual(gdn.chon_moc_giao(bay, {}), ((16, 0), []))
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "", (23, 0)))
+        bay = datetime(2026, 11, 18, 23, 0)
+        self.assertTrue(gdn.den_gio_giao_hang_ngay(bay, "", (23, 0)))
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "2026-11-18", (23, 0)))
+        self.assertFalse(gdn.het_gio_cho_pho_ban(bay, (23, 0)))
+        self.assertTrue(gdn.het_gio_cho_pho_ban(datetime(2026, 11, 18, 23, 20), (23, 0)))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}), ((23, 0), [(16, 0)]))
+        self.assertEqual(gdn.chon_moc_giao(bay, {(16, 0): "2026-11-18"}), ((23, 0), []))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}, (16, 0), "cho_xv"), ((16, 0), []))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}, (16, 0), None), ((23, 0), [(16, 0)]))
+
+    def test_bo_qua_vi_khong_co_do_van_bao_xong(self):
+        luong = xv.LuongXoayVong(MagicMock(), 1, False, True)
+        luong.in_log = lambda *_: None
+        luong._tv_dang_choi = lambda _tv: False
+        luong._giao_dich_giua_chung([], SimpleNamespace(ten="T"), "n1")
+        self.assertTrue(luong.giao_dich_ngay_xong.is_set())
+        self.assertTrue(luong._giao_ngay_ok)
+
+
 if __name__ == "__main__":
     unittest.main()

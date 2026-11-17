@@ -58,10 +58,11 @@ class LoiGiaoDich(Exception):
     pass
 
 
-def doc_tui(lua):
+def doc_tui(lua, giay_cho=None):
     """{(túi, ô): (mã, số lượng, tên)} của túi đạo cụ và nguyên liệu."""
+    raw = lua.chay(MA_TUI) if giay_cho is None else lua.chay(MA_TUI, giay_cho=giay_cho)
     tui = {}
-    for dong in giai_ma(lua.chay(MA_TUI)).split("\n"):
+    for dong in giai_ma(raw).split("\n"):
         phan = dong.split("\t")
         if len(phan) == 5:
             tui[(phan[0], int(phan[1]))] = (int(float(phan[2])), int(float(phan[3])), phan[4])

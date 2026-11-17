@@ -1,9 +1,10 @@
 """
 SỰ KIỆN ÁC TẶC (tab "Phó bản", khung "Sự kiện Ác Tặc", cài riêng từng nhân vật).
 
-Lịch: mỗi ngày 6 khung, mỗi khung 1 giờ (KHUNG_GIO). Trong khung giờ, nhân vật bật Ác Tặc bỏ dở PMP / Sát Tinh (kể
+Lịch: mỗi ngày 6 khung. Trong khung giờ, nhân vật bật Ác Tặc bỏ dở PMP / Sát Tinh (kể
 cả đang ở trong phó bản), về Đại Lý rồi lần lượt đi các map đã chọn, tuần tra theo điểm như "Phụ Bản Tùy Chọn"
-[ACTAC] / [ACTACKIEUCU] của GAuto: tới điểm, thấy Ác Tặc thì đánh, dọn xong đi điểm sau. Một vòng tuần tra không
+[ACTAC] / [ACTACKIEUCU] của GAuto: tới điểm, thấy Ác Tặc thì khiêu chiến, cả đội vào Tặc Khấu doanh địa đánh xong
+rồi đi điểm sau. Không bấm cửa sổ GAuto. Một vòng tuần tra không
 thấy con nào thì map đó coi như hết: về Đại Lý, sang map tiếp theo. 3 phút liên tục không thấy NPC/quái cũng
 đổi sang map kế theo thứ tự đã chọn. Đi hết các map hoặc hết giờ thì về Đại Lý,
 luồng nhân vật quay lại PMP / Sát Tinh như cũ.
@@ -68,9 +69,15 @@ ROUTE_CU = ((98, 78, 0, 0), (105, 54, 0, 0), (105, 24, 0, 0), (79, 22, 0, 0), (5
 
 KHOANG_PHAT_HIEN = 30
 BAN_KINH_DANH = 12
+# Trong Tặc Khấu doanh địa quái đứng rải: quét rộng hơn lúc tuần tra ngoài map.
+BAN_KINH_AOI = 80
+# Hết quái trong ải mà cửa chưa nhả: chờ thêm rồi mới coi là ra được.
+GIAY_CHO_RA_AOI = 12
 # Ác Tặc chạy quanh: tâm vùng đánh lệch quá chừng này so với con gần nhất thì dời theo.
 KHOANG_DOI_TAM = 5
 GIAY_DANH_NHOM_TOI_DA = 180
+GIAY_DANH_AOI_TOI_DA = 240
+KHOANG_CHAY_TOI_QUAI_AOI = 8
 GIAY_TOI_DA_MOT_DIEM = 60
 GIAY_KET_O_DIEM = 6
 GIAY_CHO_HIEN_QUAI = 1.5
@@ -1432,8 +1439,53 @@ class AcTacRunner(PhoBanPMP):
         if nen_bao_roi_map_ac_tac(m, ten_map):
             raise _RoiMap(m)
 
+    def _danh_aoi(self, cac_mau, ten_map, at=None):
+        """Trong Tặc Khấu doanh địa: chạy tới quái, đánh đến khi ra ải. Không chạy tọa độ map ngoài."""
+        ten_aoi = self._map() or "Tặc Khấu doanh địa"
+        ten_npc_cfg = (at or {}).get("ten_npc") if at else None
+        self._log(f"vào [{ten_aoi}], đánh xong ải rồi đi tiếp {ten_map}")
+        self._ghi_gap_ac_tac()
+        bo_theo_doi(self.game)
+        if self._lua_dung(MA_DANG_CUOI):
+            xuong_thu(self.game)
+        bat_dau = time.time()
+        luc_trong = None
+        da_danh = False
+        try:
+            while la_pho_ban_ac_tac(self._map()):
+                self._kiem_tra()
+                bay_gio = time.time()
+                if bay_gio - bat_dau >= GIAY_DANH_AOI_TOI_DA:
+                    self._log(f"[{ten_aoi}] đánh {GIAY_DANH_AOI_TOI_DA} giây chưa ra, thôi")
+                    return da_danh
+                vi_tri = self._vi_tri()
+                con = (self._ac_tac_quanh(cac_mau, vi_tri, ban_kinh=BAN_KINH_AOI, ten_npc_cfg=ten_npc_cfg)
+                       if vi_tri else [])
+                if con:
+                    luc_trong = None
+                    da_danh = True
+                    self._ghi_gap_ac_tac()
+                    gan = min((d for _, d in con), key=lambda d: khoang_cach(vi_tri, (d.x, d.y)))
+                    tam = (int(gan.x), int(gan.y))
+                    self._dat_vung((*tam, BAN_KINH_DANH), {ten for ten, _ in con})
+                    if khoang_cach(vi_tri, (gan.x, gan.y)) > KHOANG_CHAY_TOI_QUAI_AOI:
+                        self.game.lua.chay(f"AutoRunToTarget({tam[0]}, {tam[1]})")
+                    self._mo_ta(f"[{ten_aoi}]: đánh {len(con)}")
+                else:
+                    luc_trong = luc_trong or bay_gio
+                    self._dat_vung(None)
+                    if bay_gio - luc_trong >= GIAY_SAU_CON_CUOI + GIAY_CHO_RA_AOI:
+                        self._mo_ta(f"[{ten_aoi}]: hết quái, chờ ra ải")
+                time.sleep(0.4)
+            self._log(f"ra [{ten_aoi}], tiếp {ten_map}")
+            return da_danh
+        finally:
+            self._dat_vung(None)
+
     def _danh_nhom(self, cac_mau, ten_map, at=None):
-        """Đánh các Ác Tặc quanh mình tới khi không còn con nào. Trả về True nếu đã đánh."""
+        """Đánh các Ác Tặc quanh mình tới khi không còn con nào. Trong ải thì đánh đến khi ra. Trả về True nếu đã đánh."""
+        if la_pho_ban_ac_tac(self._map()):
+            return self._danh_aoi(cac_mau, ten_map, at)
         ten_npc_cfg = (at or {}).get("ten_npc") if at else None
         bo_theo_doi(self.game)
         if self._lua_dung(MA_DANG_CUOI):
@@ -1535,6 +1587,17 @@ class AcTacRunner(PhoBanPMP):
             self._kiem_tra()
             self._kiem_tra_het_thoi_gian_tim(ten_map)
             self._dam_bao_dung_map(ten_map)
+            if la_pho_ban_ac_tac(self._map()):
+                if self._danh_aoi(cac_mau, ten_map, at):
+                    so_nhom += 1
+                if la_pho_ban_ac_tac(self._map()):
+                    time.sleep(0.4)
+                    continue
+                self.game.lua.chay(ma_chay)
+                het_han = time.time() + GIAY_TOI_DA_MOT_DIEM
+                vi_tri_cu, luc_di = self._vi_tri(), time.time()
+                lan_ket = 0
+                continue
             vi_tri = self._vi_tri()
             bay_gio = time.time()
             if vi_tri and self._thu_khieu_chien_npc(cac_mau, ten_map, at):
