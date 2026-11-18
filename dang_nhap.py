@@ -917,15 +917,19 @@ class LuongDangNhap(threading.Thread):
                 if man == "vao_game":
                     tt = game.thong_tin()
                     if tt:
-                        if tk.get("nhan_vat") and chuan_hoa(tt["ten"]) != chuan_hoa(tk["nhan_vat"]):
-                            self.in_log(f"Chú ý: vào game bằng {tt['ten']}, không phải {tk['nhan_vat']}")
-                        if proxy_mang.da_bat() and self.pid and proxy_mang.dang_di_proxy(self.pid):
-                            tr = proxy_mang.doc_vung_proxy(self.pid) or {}
+                        muon = (tk.get("nhan_vat") or "").strip()
+                        if muon and chuan_hoa(tt["ten"]) != chuan_hoa(muon):
                             self.in_log(
-                                f"Proxy sau vào game: hook={tr.get('cach_hook', 0)}, "
-                                f"kết nối qua proxy={tr.get('so_lan_ok', 0)}")
-                        self.in_log(f"{tt['ten']} đã vào game [{tt['map']}]")
-                        return man
+                                f"Đang ở {tt['ten']}, cần {muon}. Về chọn máy chủ để vào đúng nhân vật")
+                            ve_chon_may_chu(game, self.dung.is_set, self.in_log)
+                        else:
+                            if proxy_mang.da_bat() and self.pid and proxy_mang.dang_di_proxy(self.pid):
+                                tr = proxy_mang.doc_vung_proxy(self.pid) or {}
+                                self.in_log(
+                                    f"Proxy sau vào game: hook={tr.get('cach_hook', 0)}, "
+                                    f"kết nối qua proxy={tr.get('so_lan_ok', 0)}")
+                            self.in_log(f"{tt['ten']} đã vào game [{tt['map']}]")
+                            return man
                 elif bay_gio - luc_lam >= GIAY_LAM_LAI and self.lam_buoc(game.lua, man, bay_gio - luc_doi):
                     luc_lam = bay_gio
             except LoiLua:

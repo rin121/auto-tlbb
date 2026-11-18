@@ -179,6 +179,18 @@ def ket_luan_rut(tui_truoc, tui_sau, tccn_truoc, tccn_sau):
     return "rut_lai"
 
 
+def ket_luan_giao(loi):
+    """Sau một lần chuyển đồ. None là xong. Lời mời chưa tới thì gửi lại, không dừng."""
+    if loi is None:
+        return "xong"
+    chu = str(loi)
+    if chu == "đã dừng":
+        return "dung"
+    if "không nhận được lời mời giao dịch" in chu:
+        return "gui_lai"
+    return "loi"
+
+
 def ket_luan_doi(co_mon, manh_truoc, manh_sau):
     """
     Sau một lần bấm đổi.
@@ -293,9 +305,9 @@ def buoc_chon(cac_khoa):
 
 
 def sap_uu_tien_dang_online(con, dang_online):
-    """Nhân vật đã trong game làm trước, giữ thứ tự còn lại."""
-    online = {chuan_hoa(t) for t in dang_online}
-    return sorted(con, key=lambda item: 0 if chuan_hoa(item[1]) in online else 1)
+    """Giữ thứ tự bảng. `dang_online` không kéo nhân vật đang mở lên trước người đứng đầu."""
+    del dang_online
+    return list(con)
 
 
 def mo_ta_bang(xong):
@@ -758,17 +770,40 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
 
     def _giao(self, ten):
         manh = self._manh()
-        can = {manh["ma"]: manh["so"]}
-        cac_o = o_can_giao(self._tui(self.chinh), can)
-        if not cac_o:
-            raise LoiGiaoAccChinh(f"túi acc chính không có {manh['ten']} để giao cho {ten}")
-        self.in_log(f"Giao {manh['so']} {manh['ten']} cho {ten} "
-                    f"({len(cac_o)} ô, {so_lan_giao(len(cac_o))} lần, mỗi lần {SO_O_MOT_LAN} ô)")
+        ma, can = manh["ma"], manh["so"]
         try:
-            GiaoDich(self.chinh, self.phu, self.tk_chinh.get("nhan_vat") or "acc chính", ten,
-                     self.in_log, self.dung.is_set).chuyen(cac_o)
-        except LoiGiaoDich as loi:
-            raise LoiGiaoAccChinh(f"giao dịch với {ten} lỗi: {loi}") from loi
+            san = tong_ma(self._tui(self.phu), ma)
+        except (LoiLua, OSError):
+            san = None
+        da_bao = False
+        while True:
+            self._kiem_tra_dung()
+            con = can
+            if san is not None:
+                try:
+                    con = can - max(0, tong_ma(self._tui(self.phu), ma) - san)
+                except (LoiLua, OSError):
+                    con = can
+            if con <= 0:
+                return
+            cac_o = o_can_giao(self._tui(self.chinh), {ma: con})
+            if not cac_o:
+                raise LoiGiaoAccChinh(f"túi acc chính không có {manh['ten']} để giao cho {ten}")
+            if not da_bao:
+                self.in_log(f"Giao {manh['so']} {manh['ten']} cho {ten} "
+                            f"({len(cac_o)} ô, {so_lan_giao(len(cac_o))} lần, mỗi lần {SO_O_MOT_LAN} ô)")
+                da_bao = True
+            try:
+                GiaoDich(self.chinh, self.phu, self.tk_chinh.get("nhan_vat") or "acc chính", ten,
+                         self.in_log, self.dung.is_set).chuyen(cac_o)
+                return
+            except LoiGiaoDich as loi:
+                ket = ket_luan_giao(loi)
+                if ket == "dung":
+                    raise _Dung() from loi
+                if ket != "gui_lai":
+                    raise LoiGiaoAccChinh(f"giao dịch với {ten} lỗi: {loi}") from loi
+                self.in_log(f"{ten} chưa nhận lời mời giao dịch, gửi lại")
 
     def _cua_doi_mo(self, game):
         try:

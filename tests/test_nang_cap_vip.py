@@ -69,6 +69,12 @@ class TestManh(unittest.TestCase):
         self.assertEqual(vip.ket_luan_doi(False, 5000, None), "cho")
         self.assertEqual(vip.ket_luan_doi(False, None, 5000), "cho")
         self.assertEqual(vip.ket_luan_doi(False, 5000, 5000), "doi_lai")
+        self.assertEqual(vip.ket_luan_giao(None), "xong")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("đã dừng")), "dung")
+        self.assertEqual(
+            vip.ket_luan_giao(giao_dich.LoiGiaoDich("cosato3 không nhận được lời mời giao dịch")),
+            "gui_lai")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("cửa sổ giao dịch không mở")), "loi")
         self.assertEqual(vip.buoc_chon(["thoi trang", "trang bi", "khac"]), ["trang bi", "thoi trang"])
         self.assertEqual(vip.buoc_chon(()), [])
 
@@ -190,9 +196,9 @@ class TestDanhDau(unittest.TestCase):
     def test_dang_nhap_san_thi_giu_va_lam_truoc(self):
         self.assertEqual(
             vip.sap_uu_tien_dang_online(
-                [("a", "cosato1"), ("b", "cosato2"), ("c", "cosato3")],
-                ["cosato2"]),
-            [("b", "cosato2"), ("a", "cosato1"), ("c", "cosato3")])
+                [("a", "cosato3"), ("b", "cosato33"), ("c", "cosato14")],
+                ["cosato14"]),
+            [("a", "cosato3"), ("b", "cosato33"), ("c", "cosato14")])
         luong = vip.LuongNangCapVip.__new__(vip.LuongNangCapVip)
         luong.ten_giu_online = {vip.chuan_hoa("GaoDẻLâu")}
         with patch.object(vip, "tim_hwnd_theo_nhan_vat", side_effect=lambda ten, gan_tk=None: 5 if ten == "cosato2" else None):
