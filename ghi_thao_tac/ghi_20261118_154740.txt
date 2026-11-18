@@ -1,0 +1,7 @@
+[15:47:40.267] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261118_154740.txt (chỉ cosato777)
+[15:47:41.326] pid 21564: (đọc lỗi: không nạp được DLL vào game (game đã tắt?): PermissionError(13, 'Access is denied.', None, 5))
+[15:50:09.442] pid 22608: (đọc lỗi: Game không phản hồi (đang loading hoặc bị treo?))
+[15:50:12.947] pid 22608: cửa sổ game đã đóng
+[15:50:27.948] pid 21564: (đọc lỗi: không nạp được DLL vào game (game đã tắt?): OSError(22, 'The parameter is incorrect.', None, 87))
+[15:50:27.948] pid 21564: cửa sổ game đã đóng
+[15:50:42.281] pid 25248: (đọc lỗi: LoadLibraryA trong game thất bại (DLL không nạp được))

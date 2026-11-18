@@ -6,14 +6,14 @@ Xoay vòng ghi sổ:
     cuối round -> "da_ghi" + số ô (sau khi đội viên giao cho trưởng nhóm; giao lỗi thì đồ còn trong túi, số ô > 0)
 Giao dịch cho acc chính đọc sổ: còn đồ / chưa rõ thì đăng nhập để giao (kể cả không phải trưởng nhóm), đã ghi 0 ô thì
 bỏ qua; giao xong thì ghi 0 ô + đã giao cho acc chính, mã đồ không giao được (đồ khóa) để lần sau không đếm nữa.
-Số ô giao được = ô túi Đạo cụ + Nguyên liệu, trừ đồ loại trừ (tab Giao dịch cho acc chính) và mã không giao được.
+Số ô giao được = mọi ô túi Đạo cụ + Nguyên liệu, trừ mã đồ khóa không giao được.
+Ô «Không giao» đang tắt (loai_tru_hien_tai trả rỗng).
 """
 import json
 import os
 import threading
 from datetime import datetime
 
-import cau_hinh
 from auto_chuyen_sinh import chuan_hoa
 from dang_nhap import bo_dau
 from thu_muc import THU_MUC_APP
@@ -38,8 +38,10 @@ def bi_loai_tru(ten, cac_tu):
 
 
 def loai_tru_hien_tai():
-    cd = cau_hinh.chung().get("giao_acc_chinh") or {}
-    return cac_tu_loai_tru(cd.get("loai_tru") or LOAI_TRU_MAC_DINH)
+    # Tắt ô «Không giao». Ô trống trước đây vẫn rơi về LOAI_TRU_MAC_DINH nên xóa chữ không giao hết.
+    # cd = cau_hinh.chung().get("giao_acc_chinh") or {}
+    # return cac_tu_loai_tru(cd.get("loai_tru") or LOAI_TRU_MAC_DINH)
+    return []
 
 
 def dem_o(tui, cac_tu, ma_khong_giao=()):

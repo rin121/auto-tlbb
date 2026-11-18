@@ -118,6 +118,11 @@ def cung_ten_map(dang_o, mong):
     return any(x in y or y in x for x in mau_map(dang_o) for y in mau_map(mong))
 
 
+def la_map_boss(ten_map):
+    """Đang đứng ở Ngân Nga / Yến Vương (kể cả Tầng 9): không tự đánh quái, không phản công PK."""
+    return any(cung_ten_map(ten_map, ten) for ten in MAP_BOSS)
+
+
 def khop_ten_boss(ten, ten_map):
     """Tên quái chứa hai chữ đầu của map (Yến Vương / Ngân Nga)."""
     if not ten:

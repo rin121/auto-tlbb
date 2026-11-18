@@ -60,6 +60,10 @@ class TestHoiThoaiBoss(unittest.TestCase):
         self.assertEqual(boss.dong_map_boss(con, "Yến Vương Cổ Mộ"), (9, 9))
         self.assertTrue(boss.cung_ten_map("Ngân Nga Tuyết Nguyên", "Ngân Ngai Tuyết Nguyên"))
         self.assertTrue(boss.cung_ten_map("Yến Vương Cổ Mộ Tầng 9", "Yến Vương Cổ Mộ"))
+        self.assertTrue(boss.la_map_boss("Ngân Nga Tuyết Nguyên"))
+        self.assertTrue(boss.la_map_boss("Yến Vương Cổ Mộ Tầng 9"))
+        self.assertFalse(boss.la_map_boss("Đại Lý"))
+        self.assertFalse(boss.la_map_boss(""))
 
     def test_boss_chet_khi_thong_bao_hoac_mau_0(self):
         ten = "Ngân Ngai Tuyết Nguyên"

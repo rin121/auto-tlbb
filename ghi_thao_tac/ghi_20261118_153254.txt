@@ -1,0 +1,2 @@
+[15:32:54.960] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261118_153254.txt (chỉ thỏlèkhe)
+[15:32:55.531] pid 21564: (đọc lỗi: không nạp được DLL vào game (game đã tắt?): PermissionError(13, 'Access is denied.', None, 5))

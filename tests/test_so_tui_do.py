@@ -29,6 +29,10 @@ class TestSoTuiDo(unittest.TestCase):
     def _muc(self, ten):
         return so_tui_do.muc_cua(so_tui_do.doc(self.file), ten)
 
+    def test_loai_tru_dang_tat(self):
+        """Ô «Không giao» đang tắt: không lấy lại danh sách mặc định khi ô trống."""
+        self.assertEqual(so_tui_do.loai_tru_hien_tai(), [])
+
     def test_dem_o_tru_loai_tru_va_ma_khong_giao(self):
         self.assertEqual(so_tui_do.dem_o(TUI_CO_DO, LOAI_TRU), 2)
         self.assertEqual(so_tui_do.dem_o(TUI_CO_DO, LOAI_TRU, {303}), 1)

@@ -1,6 +1,6 @@
 """
 GIAO DỊCH CHO ACC CHÍNH: lần lượt đăng nhập acc phó bản (mặc định: trưởng nhóm; tùy chọn: mọi acc trong nhóm xoay vòng,
-từng nhân vật round 1..3), kiểm tra túi Đạo cụ + Nguyên liệu; có đồ thì giao cho acc chính (trừ loại trừ, đồ khóa),
+từng nhân vật round 1..3), kiểm tra túi Đạo cụ + Nguyên liệu; có đồ thì giao hết cho acc chính (đồ khóa game không đưa được),
 chế độ «tất cả acc» thì không có đồ sẽ thoát game và sang acc tiếp. Acc chính đứng ở NPC Tân Thủ (Đại Lý).
 Cả hai chế độ đều xem sổ túi đồ (so_tui_do.py, xoay vòng ghi cuối mỗi round): sổ ghi 0 ô thì bỏ qua, sổ ghi còn đồ /
 chưa rõ thì đăng nhập giao dù không phải trưởng nhóm; giao xong đánh dấu đã giao cho acc chính trong sổ.
@@ -43,12 +43,12 @@ from nhan_vat_moi import NPC_TAN_THU, NhanDoTanThu, da_xong
 from pho_ban_pmp import (LoiPhoBan, MA_DOC_THONG_BAO, _Dung as DungPhoBan, cai_dat_pmp, chuan_bi_ve_thanh,
                         hom_nay, la_dai_ly)
 import so_tui_do
-from so_tui_do import LOAI_TRU_MAC_DINH, bi_loai_tru, cac_tu_loai_tru
 from xoay_vong import (SO_ROUND_TOI_DA, LuongVaoNhanVat, cac_tai_khoan_dang_tich, chia_nhom, khoa_sap_xep_tai_khoan,
                        ten_round, ten_trong_tieu_de, tim_game_cua_tai_khoan, tim_hwnd_cua_tai_khoan)
 
 KHOA_CAI_DAT = "giao_acc_chinh"
-MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": LOAI_TRU_MAC_DINH, "chi_hom_nay": True,
+# loai_tru / LOAI_TRU_MAC_DINH tạm không áp dụng: giao hết mọi vật phẩm (đồ khóa game vẫn không đưa được).
+MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": "", "chi_hom_nay": True,
             "tat_ca_pho_ban": False, "tien_trinh": {}}
 DONG_THUONG_KHO = (111111, 9993)
 NPC_TRAO_DOI = ("Trao Đổi", (155, 173))
@@ -1107,8 +1107,8 @@ class GiaoAccChinhEngine:
             if getattr(self, "chi_giao_gop", False):
                 if not la_vat_pham_gop(ten):
                     continue
-            elif bi_loai_tru(ten, self.loai_tru):
-                continue
+            # elif bi_loai_tru(ten, self.loai_tru):
+            #     continue
             cac_o.append((ten_tui, o))
         return cac_o
 
@@ -2202,7 +2202,7 @@ class LuongGiaoAccChinh(threading.Thread, GiaoAccChinhEngine):
         self.cd = cai_dat()
         self.tk_chinh = {"ten_dang_nhap": self.cd["tai_khoan"], "mat_khau": self.cd["mat_khau"],
                          "nhan_vat": self.cd["nhan_vat"]}
-        self.loai_tru = cac_tu_loai_tru(self.cd["loai_tru"])
+        self.loai_tru = []  # không lọc tên vật phẩm; xem _do_can_giao
         self.tat_ca_pho_ban = bool(self.cd.get("tat_ca_pho_ban"))
         self.bo_qua = []
         self.tk_khong_co_do = set()

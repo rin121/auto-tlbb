@@ -54,6 +54,19 @@ MA_DONG_Y = trong_cua_so("Exchange", 'if IsWindowShow("Exchange") then Trade_Acc
 MA_HUY = trong_cua_so("Exchange", 'if IsWindowShow("Exchange") then Exchange_Cancel() end')
 
 
+def ma_xac_nhan_exchange_safe(gio):
+    """Cửa sổ ExchangeSafe (ghi_20261118_154125 GaoDẻLâu): xác nhận giờ HH:MM. Không mở thì bỏ qua."""
+    return (
+        'if not IsWindowShow("ExchangeSafe") then return "0" end '
+        'local mt = getmetatable(getfenv(0)) local cu = mt.__index '
+        'mt.__index = rawget(getfenv(0), "ExchangeSafe_Env") or cu '
+        'local ok, ket_qua = pcall(function() '
+        'if type(ExchangeSafe_Confirm) ~= "function" then return "0" end '
+        f'ExchangeSafe_Confirm({chuoi_lua(gio)}) return "1" end) '
+        'mt.__index = cu '
+        'if not ok then return "0" end return ket_qua')
+
+
 class LoiGiaoDich(Exception):
     pass
 
@@ -225,6 +238,10 @@ class GiaoDich:
                                      for g in (self.dua, self.nhan)), GIAY_CHO):
             self.dua.lua.chay(MA_HUY)
             raise LoiGiaoDich("hai bên chưa thấy nhau khóa")
+        # ghi_20261118_154125 GaoDẻLâu: sau khóa, ExchangeSafe_Confirm("HH:MM") rồi mới Trade_Accept.
+        gio = time.strftime("%H:%M")
+        for g in (self.dua, self.nhan):
+            g.lua.chay(ma_xac_nhan_exchange_safe(gio))
         for g in (self.dua, self.nhan):
             g.lua.chay(MA_DONG_Y)
             time.sleep(0.5)

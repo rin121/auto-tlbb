@@ -1,0 +1,1017 @@
+[15:41:25.393] GHI: bắt đầu ghi -> D:\Games\ThienLongCityCSClientFull2026\AutoHoc\ghi_thao_tac\ghi_20261118_154125.txt (chỉ gao dẻ lâu, gaodẻlâu)
+[15:41:26.253] pid 21564: (đọc lỗi: không nạp được DLL vào game (game đã tắt?): PermissionError(13, 'Access is denied.', None, 5))
+[15:41:26.317] GaoDẻLâu: (bọc thêm 1557 hàm giao diện để ghi nút bấm)
+[15:41:26.327] GaoDẻLâu: ở map [Đại Lý] (152, 172)
+[15:41:26.348] GaoDẻLâu: cửa sổ đang mở: ChatFrame, ControlButtonBar, DebugListBox, FunctionBarRight, MainMenuBar, MainMenuBar_2, MessageBall, MiniMap, PlayerFrame, PlayerImpactFrame, SelfEquip, SuperTooltip, TargetBuff, TargetFrame
+[15:41:26.359] GaoDẻLâu: túi lúc đầu: 
+[15:41:26.370] GaoDẻLâu: trang bị lúc đầu: ô 0 Thái Ất Huyền Hoàn - VIP2 (mã 10162660) x1; ô 1 Hoàng Kim - Khôi (mã 10162450) x1; ô 2 Hoàng Kim - Giáp (mã 10162453) x1; ô 3 Hoàng Kim - Thủ (mã 10162452) x1; ô 4 Hoàng Kim - Ngoa (mã 10162451) x1; ô 5 Hoàng Kim - Đái (mã 10162456) x1; ô 6 Hoàng Kim - Giới (mã 10162457) x1; ô 7 Hoàng Kim - Liên (mã 10162455) x1; ô 8 Toạ Kỵ: Thương Lan Nguyên Thánh - VIP2 (mã 10165066) x1; ô 9 Bách Bảo Nang (mã 10163506) x1; ô 10 Bách Bảo Rương (mã 10163512) x1; ô 11 Huyền Thiết - Giới (mã 10162437) x1; ô 12 Hoàng Kim - Ngọc (mã 10162458) x1; ô 13 Thần Vương - Ngọc (mã 10162478) x1; ô 14 Hoàng Kim - Uyển (mã 10162459) x1; ô 15 Hoàng Kim - Kiên (mã 10162454) x1; ô 16 Tư Vô Tà - VIP2 (mã 10163077) x1; ô 17 Ám Khí (mã 10163518) x1; ô 18 Long Văn (mã 10163500) x1
+[15:41:26.391] GaoDẻLâu: chỉ số lúc đầu: LEVEL=67, MEMPAI=6, POINT_REMAIN=25030, STR=396330, SPR=396329, CON=20962958, INT=10951229, DEX=61095093, MAXHP=250000000, MAXMP=182527875, MONEY=11304033, YUANBAO=144300, ZENGDIAN=1894085, EXP=1870947
+[15:41:32.289] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:41:59.461] GaoDẻLâu: GỌI SelfEquip_CloseUI()
+[15:41:59.461] GaoDẻLâu: GỌI SelfEquip_Close()
+[15:41:59.472] GaoDẻLâu: ĐÓNG cửa sổ SelfEquip
+[15:42:00.045] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:00.045] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:00.045] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:00.045] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 800)
+[15:42:00.045] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:00.045] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:00.640] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:00.640] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:00.640] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:00.640] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:00.640] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:00.640] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:00.640] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:00.640] GaoDẻLâu: GỌI PushEvent(UI_COMMAND, 2019051902)
+[15:42:00.640] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:00.651] GaoDẻLâu: MỞ cửa sổ Packet_Temporary
+[15:42:01.235] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:01.830] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:01.830] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:42:01.830] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:42:01.830] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:42:01.830] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 389)
+[15:42:01.830] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:42:01.830] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:01.830] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:01.840] GaoDẻLâu: MỞ cửa sổ Packet
+[15:42:03.613] GaoDẻLâu: GỌI PushEvent(UI_COMMAND, 2019051901)
+[15:42:03.613] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:03.624] GaoDẻLâu: ĐÓNG cửa sổ Packet
+[15:42:03.624] GaoDẻLâu: ĐÓNG cửa sổ Packet_Temporary
+[15:42:04.803] GaoDẻLâu: đi tới (158, 170)
+[15:42:05.398] GaoDẻLâu: đi tới (161, 167)
+[15:42:06.013] GaoDẻLâu: đi tới (164, 164)
+[15:42:14.512] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B574BA0)
+[15:42:14.512] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B574F10)
+[15:42:14.512] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B574F10)
+[15:42:14.512] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B575000)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B575000)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B575050)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B575000, table: 4B575050)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B575050)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574F10, table: 4B575050)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B574D08)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B575000, table: 4B574D08)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B574D08)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B575000, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574D08, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B575050, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574F10, table: 4B574D80)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574BA0, table: 4B574C18)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B575000, table: 4B574C18)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574D08, table: 4B574C18)
+[15:42:14.513] GaoDẻLâu: GỌI CompareTable_Quest(table: 4B574998, table: 4B574C18)
+[15:42:14.513] GaoDẻLâu: chọn mục tiêu Tân Thủ
+[15:42:14.534] GaoDẻLâu: MỞ cửa sổ Quest
+[15:42:14.587] GaoDẻLâu: hội thoại NPC [Tân Thủ]:
+        - Thông Báo :Các Hạ Vui Lòng Nhận Phái Trước Khi Mở Hộp Tân Thủ (Làm Mất Point Tự Chịu Trách Nhiệm ADMIN Không Giải Quyết) (mã -1, -1; loại text)
+        - Tôi muốn nhận Vàng + ĐT (mã 111111, 6666; loại id)
+        - Nhận Trang Bị Tân Thủ (mã 111111, 1200; loại id)
+        - Sửa lỗi Âm Kinh nghiệm (mã 0, 800; loại id)
+        - Sửa Nhanh Tất Cả Trang Bị (mã 111111, 1041; loại id)
+        - RESET mốc nạp #56! (mã 111111, 2025; loại id)
+        - Fix Lỗi Âm Điểm Tiềm Năng ( Point ) (mã 111111, 12; loại id)
+        - Thương khố (mã 111111, 9993; loại id)
+        - Gia Nhập Môn Phái - ( Mất Points ) (mã 111111, 9996; loại id)
+[15:42:15.809] GaoDẻLâu: GỌI QuestOption_Clicked()
+[15:42:15.809] GaoDẻLâu: GỌI QuestFrameOptionClicked(-1, 111111, 9993)
+[15:42:16.414] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:16.414] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:42:16.414] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:42:16.414] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:42:16.414] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 390)
+[15:42:16.414] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:42:16.414] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:16.414] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:16.424] GaoDẻLâu: MỞ cửa sổ Bank
+[15:42:16.424] GaoDẻLâu: MỞ cửa sổ Packet
+[15:42:16.424] GaoDẻLâu: ĐÓNG cửa sổ Quest
+[15:42:16.485] GaoDẻLâu: đóng hội thoại NPC
+[15:42:18.226] GaoDẻLâu: GỌI Bank_Close_Clicked()
+[15:42:18.237] GaoDẻLâu: ĐÓNG cửa sổ Bank
+[15:42:18.237] GaoDẻLâu: ĐÓNG cửa sổ Packet
+[15:42:19.447] GaoDẻLâu: đi tới (162, 167)
+[15:42:20.073] GaoDẻLâu: đi tới (158, 170)
+[15:42:20.668] GaoDẻLâu: đi tới (154, 172)
+[15:42:27.146] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:27.146] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:27.146] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:27.146] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 800)
+[15:42:27.146] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:27.146] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:27.147] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:27.147] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:27.147] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:27.147] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:27.147] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:27.147] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:27.147] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:27.147] GaoDẻLâu: GỌI PushEvent(UI_COMMAND, 2019051902)
+[15:42:27.147] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:27.147] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:27.157] GaoDẻLâu: MỞ cửa sổ Packet_Temporary
+[15:42:30.077] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:30.077] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:42:30.077] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:42:30.077] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:42:30.077] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 391)
+[15:42:30.077] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:42:30.077] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:30.088] GaoDẻLâu: MỞ cửa sổ Packet
+[15:42:30.692] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:31.882] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:33.656] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:33.656] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:33.656] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:33.656] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:36.013] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:36.013] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:36.013] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:36.013] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:36.013] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:36.013] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:36.013] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:36.013] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:36.013] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:36.013] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:36.024] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:36.034] GaoDẻLâu: túi ô 0: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:42:36.034] GaoDẻLâu: túi ô 1: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x50
+[15:42:36.076] GaoDẻLâu: thông báo: Da rut 250 vat pham, giu nguyen co dinh.
+[15:42:36.597] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:36.598] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:36.598] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:36.598] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:39.020] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:39.020] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:39.020] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:39.020] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:39.020] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:39.020] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:39.020] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:39.020] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:39.020] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:39.020] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:39.041] GaoDẻLâu: túi ô 1: #-09Mảnh Vỡ Trang Bị số lượng 50 -> 200
+[15:42:39.041] GaoDẻLâu: túi ô 2: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x100
+[15:42:41.400] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:42.558] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:42.558] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:42.558] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:42.558] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:44.906] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:44.906] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:44.906] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:44.906] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:44.906] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:44.906] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:44.906] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:44.906] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:44.906] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:44.906] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:44.918] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:44.928] GaoDẻLâu: túi ô 2: #-09Mảnh Vỡ Trang Bị số lượng 100 -> 200
+[15:42:44.928] GaoDẻLâu: túi ô 3: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x150
+[15:42:47.880] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:48.454] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:48.454] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:48.454] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:48.454] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:48.465] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:49.049] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(5, 7)
+[15:42:50.239] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:50.824] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:50.824] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:50.824] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:50.824] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:50.824] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:50.824] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:50.824] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:50.824] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:50.824] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:50.824] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:50.846] GaoDẻLâu: túi ô 3: #-09Mảnh Vỡ Trang Bị số lượng 150 -> 200
+[15:42:50.846] GaoDẻLâu: túi ô 4: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:42:51.420] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:52.025] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:52.609] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:52.609] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:52.609] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:52.609] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:53.205] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:54.946] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:54.946] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:54.946] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:54.946] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:54.946] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:54.946] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:54.946] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:54.946] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:54.946] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:54.946] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:54.967] GaoDẻLâu: túi ô 5: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:42:54.967] GaoDẻLâu: túi ô 6: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x50
+[15:42:56.114] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:42:56.114] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:42:56.114] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:42:56.114] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:56.124] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:42:56.729] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:42:58.503] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:58.503] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:42:58.503] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:42:58.503] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:42:58.503] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:42:58.503] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:42:58.504] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:42:58.504] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:42:58.504] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:42:58.525] GaoDẻLâu: túi ô 6: #-09Mảnh Vỡ Trang Bị số lượng 50 -> 200
+[15:42:58.525] GaoDẻLâu: túi ô 7: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x100
+[15:42:59.088] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:00.862] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:00.862] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:00.862] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:00.862] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:00.873] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:01.447] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:01.447] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:01.447] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:01.447] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:01.468] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:03.242] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:03.242] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:03.242] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:03.242] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:03.242] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:03.242] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:03.242] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:03.242] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:03.242] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:03.242] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:03.263] GaoDẻLâu: túi ô 7: #-09Mảnh Vỡ Trang Bị số lượng 100 -> 200
+[15:43:03.263] GaoDẻLâu: túi ô 8: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x150
+[15:43:03.305] GaoDẻLâu: thông báo: Vui long cho du 3 giay giua hai lan rut Cam Nang.
+[15:43:05.004] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:05.589] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:05.589] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:05.589] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:05.589] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:07.947] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:07.947] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:07.947] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:07.947] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:07.947] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:07.947] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:07.947] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:07.947] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:07.947] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:07.947] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:07.958] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:07.969] GaoDẻLâu: túi ô 8: #-09Mảnh Vỡ Trang Bị số lượng 150 -> 200
+[15:43:07.969] GaoDẻLâu: túi ô 9: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:08.011] GaoDẻLâu: thông báo: Da rut 250 vat pham, giu nguyen co dinh.
+[15:43:09.147] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:09.721] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:09.721] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:09.721] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:09.721] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:09.732] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:11.527] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:11.527] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:11.527] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:11.527] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:11.527] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:11.527] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:11.527] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:11.527] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:11.527] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:11.548] GaoDẻLâu: túi ô 10: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:11.548] GaoDẻLâu: túi ô 11: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x50
+[15:43:12.111] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:12.122] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:12.696] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:12.696] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:12.696] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:12.696] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:15.109] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:15.109] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:15.109] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:15.109] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:15.110] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:15.110] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:15.110] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:15.110] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:15.110] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:15.110] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:15.120] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:15.131] GaoDẻLâu: túi ô 11: #-09Mảnh Vỡ Trang Bị số lượng 50 -> 200
+[15:43:15.131] GaoDẻLâu: túi ô 12: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x100
+[15:43:15.693] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:15.693] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:15.693] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:15.693] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:16.872] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:22.733] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:22.733] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:22.733] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:22.733] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:22.744] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:23.317] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(4, 8)
+[15:43:25.101] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:25.101] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:25.101] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:25.101] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:25.101] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:25.101] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:25.101] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:25.101] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:25.101] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:25.101] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:25.122] GaoDẻLâu: túi ô 12: #-09Mảnh Vỡ Trang Bị số lượng 100 -> 200
+[15:43:25.122] GaoDẻLâu: túi ô 13: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x150
+[15:43:26.854] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:26.854] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:26.854] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:26.854] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:29.222] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:29.222] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:29.222] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:29.222] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:29.222] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:29.222] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:29.222] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:29.222] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:29.222] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:29.222] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:29.243] GaoDẻLâu: túi ô 13: #-09Mảnh Vỡ Trang Bị số lượng 150 -> 200
+[15:43:29.243] GaoDẻLâu: túi ô 14: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:32.801] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:34.008] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:34.008] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:34.008] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:34.008] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:34.025] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:35.945] GaoDẻLâu: túi ô 15: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:35.945] GaoDẻLâu: túi ô 16: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x50
+[15:43:36.529] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:36.529] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:36.529] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:36.529] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:36.529] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:36.529] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:36.529] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:36.529] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:36.529] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:36.529] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:37.124] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:37.709] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:37.709] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:37.709] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:37.709] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:38.304] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:38.878] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 7)
+[15:43:38.889] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:40.206] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:40.206] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:40.206] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:40.206] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:40.206] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:40.206] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:40.206] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:40.206] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:40.206] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:40.227] GaoDẻLâu: túi ô 16: #-09Mảnh Vỡ Trang Bị số lượng 50 -> 200
+[15:43:40.227] GaoDẻLâu: túi ô 17: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x100
+[15:43:40.269] GaoDẻLâu: thông báo: Da rut 250 vat pham, giu nguyen co dinh.
+[15:43:40.801] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:41.406] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:42.001] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:42.001] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:42.001] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:42.001] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:42.013] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:42.607] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:44.422] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:44.422] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:44.422] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:44.422] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:44.422] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:44.422] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:44.422] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:44.422] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:44.422] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:44.443] GaoDẻLâu: túi ô 17: #-09Mảnh Vỡ Trang Bị số lượng 100 -> 200
+[15:43:44.443] GaoDẻLâu: túi ô 18: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x150
+[15:43:45.006] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:45.622] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:45.622] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:45.622] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:45.622] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:45.633] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:43:48.088] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:48.088] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:48.088] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:48.088] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:48.088] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:48.088] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:48.088] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:48.088] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:48.088] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:48.110] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:43:48.120] GaoDẻLâu: túi ô 18: #-09Mảnh Vỡ Trang Bị số lượng 150 -> 200
+[15:43:48.121] GaoDẻLâu: túi ô 19: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:48.684] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:50.447] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:50.447] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:50.447] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:50.447] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:52.839] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:52.839] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:52.839] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:52.839] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:52.839] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:52.839] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:52.839] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:52.839] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:52.839] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:52.839] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:52.874] GaoDẻLâu: túi ô 20: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:43:52.874] GaoDẻLâu: túi ô 21: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x50
+[15:43:55.838] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:55.838] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:55.838] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:55.838] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:56.455] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(4, 8)
+[15:43:58.242] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:58.242] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:43:58.242] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:58.242] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:58.242] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:58.242] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:58.242] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:43:58.242] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:43:58.242] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:58.242] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:43:58.263] GaoDẻLâu: túi ô 21: #-09Mảnh Vỡ Trang Bị số lượng 50 -> 200
+[15:43:58.263] GaoDẻLâu: túi ô 22: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x100
+[15:43:59.422] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:43:59.422] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:43:59.422] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:43:59.422] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:43:59.432] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:00.612] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:01.186] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(4, 6)
+[15:44:01.866] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:01.866] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:01.866] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:01.866] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:01.866] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:01.866] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:01.866] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:01.866] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:01.866] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:01.887] GaoDẻLâu: túi ô 22: #-09Mảnh Vỡ Trang Bị số lượng 100 -> 200
+[15:44:01.888] GaoDẻLâu: túi ô 23: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x150
+[15:44:02.472] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:03.662] GaoDẻLâu: GỌI Packet_Temporary_Select(7)
+[15:44:03.662] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 7)
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:44:03.662] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:44:03.662] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:03.674] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:04.247] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(5, 6)
+[15:44:04.268] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:06.155] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:06.155] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:06.155] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:06.155] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:06.155] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:06.155] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:06.155] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:06.155] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:06.155] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:06.187] GaoDẻLâu: túi ô 23: #-09Mảnh Vỡ Trang Bị số lượng 150 -> 200
+[15:44:06.187] GaoDẻLâu: túi ô 24: thêm #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:44:06.751] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:08.568] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:13.351] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:15.724] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:18.094] GaoDẻLâu: GỌI Packet_Temporary_Select(2)
+[15:44:18.094] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 2)
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:44:18.094] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:44:18.094] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:18.710] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:20.557] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:20.557] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:20.557] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:20.557] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:20.557] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:20.557] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:20.557] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:20.557] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:20.557] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:20.589] GaoDẻLâu: túi ô 25: thêm #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x200
+[15:44:20.589] GaoDẻLâu: túi ô 26: thêm #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x50
+[15:44:20.641] GaoDẻLâu: thông báo: Da rut 250 vat pham, giu nguyen co dinh.
+[15:44:21.162] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:22.957] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:24.136] GaoDẻLâu: GỌI Packet_Temporary_Select(2)
+[15:44:24.136] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 2)
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:44:24.136] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:44:24.136] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:24.147] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:26.056] GaoDẻLâu: túi ô 26: #-09Mảnh Vỡ Thú Cưỡi số lượng 50 -> 200
+[15:44:26.056] GaoDẻLâu: túi ô 27: thêm #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x86
+[15:44:26.652] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:26.652] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:26.652] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:26.652] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:26.652] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:26.652] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:26.652] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:26.652] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:26.652] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:26.652] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:26.673] GaoDẻLâu: túi ô 27: #-09Mảnh Vỡ Thú Cưỡi số lượng 86 -> 100
+[15:44:27.842] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:29.615] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:30.210] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:30.784] GaoDẻLâu: GỌI Packet_Temporary_Select(1)
+[15:44:30.784] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 1)
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:44:30.784] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:44:30.784] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:31.390] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:33.143] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:33.143] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:33.143] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:33.143] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:33.143] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:33.143] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:33.143] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:33.143] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:33.143] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:33.143] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:33.164] GaoDẻLâu: túi ô 28: thêm #-09Mảnh Vỡ Thời Trang (mã 30503263) x200
+[15:44:33.165] GaoDẻLâu: túi ô 29: thêm #-09Mảnh Vỡ Thời Trang (mã 30503263) x50
+[15:44:34.343] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:44:34.917] GaoDẻLâu: GỌI Packet_Temporary_Select(1)
+[15:44:34.917] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 805)
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 1)
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(2, 250)
+[15:44:34.917] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(3)
+[15:44:34.917] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:35.522] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:44:37.275] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:37.275] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:44:37.275] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:37.275] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:44:37.275] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(CallUIClient)
+[15:44:37.275] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(359999)
+[15:44:37.275] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 801)
+[15:44:37.275] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(1)
+[15:44:37.275] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:44:37.307] GaoDẻLâu: túi ô 29: #-09Mảnh Vỡ Thời Trang số lượng 50 -> 200
+[15:44:37.307] GaoDẻLâu: túi ô 30: thêm #-09Mảnh Vỡ Thời Trang (mã 30503263) x100
+[15:44:37.881] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:44:39.687] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 6)
+[15:44:59.798] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:45:01.615] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:45:02.816] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:45:03.411] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:45:04.591] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:45:08.808] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:45:09.392] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 9)
+[15:45:30.837] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(7, 7)
+[15:45:30.837] GaoDẻLâu: GỌI PushEvent(UI_COMMAND, 2019051901)
+[15:45:30.837] GaoDẻLâu: GỌI City_Shop_SetCtl()
+[15:45:30.848] GaoDẻLâu: ĐÓNG cửa sổ Packet
+[15:45:30.848] GaoDẻLâu: ĐÓNG cửa sổ Packet_Temporary
+[15:45:34.398] GaoDẻLâu: MỞ cửa sổ PlayerList
+[15:45:36.175] GaoDẻLâu: GỌI PlayerList_PlayerSelect(0)
+[15:45:36.175] GaoDẻLâu: chọn mục tiêu cosato777
+[15:45:37.365] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:45:38.555] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:45:38.566] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:45:38.629] GaoDẻLâu: thông báo: #{SALE_TIP_090104_1}cosato777#{SALE_TIP_090104_2}
+[15:45:39.746] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:45:39.746] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:45:39.746] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:45:39.746] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:45:39.746] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 392)
+[15:45:39.746] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:45:39.746] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:45:39.746] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:45:39.757] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:45:39.757] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:45:39.757] GaoDẻLâu: MỞ cửa sổ Packet
+[15:45:39.757] GaoDẻLâu: MỞ cửa sổ PetList
+[15:45:40.394] GaoDẻLâu: thông báo: #{ResultText_157}
+[15:45:40.916] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 8)
+[15:45:41.521] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:45:42.106] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 1)
+[15:45:42.106] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:42.106] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 3)
+[15:45:42.106] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:42.711] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 2)
+[15:45:42.711] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:43.295] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 1)
+[15:45:43.295] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:43.306] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:45:43.912] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 2)
+[15:45:43.912] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:44.497] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:45:47.462] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:45)
+[15:45:48.672] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:45:48.672] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:45:48.672] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:48.672] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:45:48.672] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:45:48.672] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:48.683] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:45:48.683] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:45:48.683] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:45:48.693] GaoDẻLâu: túi ô 0: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:48.693] GaoDẻLâu: túi ô 1: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:48.694] GaoDẻLâu: túi ô 2: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:48.694] GaoDẻLâu: túi ô 10: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:48.694] GaoDẻLâu: túi ô 11: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:48.736] GaoDẻLâu: thông báo: Giao dịch thành công với cosato777
+[15:45:49.310] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:45:50.480] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:45:50.491] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:45:51.649] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:45:51.649] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:45:51.649] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:45:51.649] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:45:51.649] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 393)
+[15:45:51.649] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:45:51.649] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:45:51.650] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:45:51.661] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:45:51.661] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:45:51.661] GaoDẻLâu: MỞ cửa sổ PetList
+[15:45:52.235] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(5, 7)
+[15:45:52.840] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 4)
+[15:45:52.851] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:45:53.446] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:53.446] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 5)
+[15:45:53.446] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:54.041] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 6)
+[15:45:54.041] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:54.667] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 7)
+[15:45:54.667] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:54.667] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 8)
+[15:45:54.667] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:54.678] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:45:55.857] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:45:57.632] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:45)
+[15:45:58.238] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:45:58.238] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:45:58.238] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:45:58.238] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:45:58.238] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:45:58.249] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:45:58.249] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:45:58.249] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:45:58.270] GaoDẻLâu: túi ô 3: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:58.270] GaoDẻLâu: túi ô 4: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:58.270] GaoDẻLâu: túi ô 5: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:58.270] GaoDẻLâu: túi ô 6: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:58.270] GaoDẻLâu: túi ô 7: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:45:58.845] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:01.224] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:46:02.392] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:46:02.402] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:46:02.976] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:46:02.977] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:46:02.977] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:46:02.977] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:46:02.977] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 394)
+[15:46:02.977] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:46:02.977] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:46:02.977] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:46:02.988] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:46:02.988] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:46:02.988] GaoDẻLâu: MỞ cửa sổ PetList
+[15:46:06.519] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 9)
+[15:46:06.530] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:46:07.125] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:07.125] GaoDẻLâu: GỌI Packet_ItemBtnClicked(1, 10)
+[15:46:07.125] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:07.136] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:46:07.720] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 10)
+[15:46:07.720] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:08.315] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 9)
+[15:46:08.315] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:08.921] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 8)
+[15:46:08.921] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:09.516] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:46:11.885] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:46)
+[15:46:12.490] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:46:12.490] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:12.490] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:12.490] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:46:12.490] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:12.490] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:12.511] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:46:12.511] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:46:12.511] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:46:12.522] GaoDẻLâu: túi ô 8: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:12.522] GaoDẻLâu: túi ô 9: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:12.522] GaoDẻLâu: túi ô 17: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:12.522] GaoDẻLâu: túi ô 18: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:12.522] GaoDẻLâu: túi ô 19: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:14.266] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:46:15.434] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:46:15.445] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:46:15.498] GaoDẻLâu: thông báo: #{SALE_TIP_090104_1}cosato777#{SALE_TIP_090104_2}
+[15:46:16.040] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:46:16.040] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:46:16.040] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:46:16.040] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:46:16.040] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 395)
+[15:46:16.040] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:46:16.040] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:46:16.040] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:46:16.051] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:46:16.051] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:46:16.051] GaoDẻLâu: MỞ cửa sổ PetList
+[15:46:16.687] GaoDẻLâu: thông báo: #{ResultText_157}
+[15:46:17.209] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 8)
+[15:46:17.230] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:46:17.804] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 7)
+[15:46:17.804] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:18.399] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 6)
+[15:46:18.399] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:18.399] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 5)
+[15:46:18.399] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:18.994] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 4)
+[15:46:18.994] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:18.994] GaoDẻLâu: GỌI Packet_ItemBtnClicked(2, 3)
+[15:46:19.599] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:19.610] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:46:20.183] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:46:21.957] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:46)
+[15:46:23.147] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:46:23.147] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:23.147] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:23.147] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:46:23.147] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:23.147] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:23.157] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:46:23.157] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:46:23.157] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:46:23.168] GaoDẻLâu: túi ô 12: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:23.168] GaoDẻLâu: túi ô 13: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:23.168] GaoDẻLâu: túi ô 14: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:23.168] GaoDẻLâu: túi ô 15: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:23.168] GaoDẻLâu: túi ô 16: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:23.221] GaoDẻLâu: thông báo: Giao dịch thành công với cosato777
+[15:46:24.347] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:46:25.518] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:46:25.528] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:46:26.730] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:46:26.730] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:46:26.730] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:46:26.730] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:46:26.730] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 396)
+[15:46:26.730] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:46:26.730] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:46:26.730] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:46:26.741] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:46:26.741] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:46:26.741] GaoDẻLâu: MỞ cửa sổ PetList
+[15:46:27.315] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(5, 7)
+[15:46:27.325] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:46:27.910] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 1)
+[15:46:27.910] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:28.494] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 2)
+[15:46:28.494] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:29.079] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 3)
+[15:46:29.079] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:29.079] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 4)
+[15:46:29.079] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:29.684] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 5)
+[15:46:29.684] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:29.695] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:46:30.279] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:46:32.074] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:46)
+[15:46:33.251] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:46:33.251] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:33.251] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:33.251] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:46:33.251] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:33.251] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:33.262] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:46:33.262] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:46:33.262] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:46:33.273] GaoDẻLâu: túi ô 20: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:33.273] GaoDẻLâu: túi ô 21: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:33.273] GaoDẻLâu: túi ô 22: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:33.273] GaoDẻLâu: túi ô 23: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:33.273] GaoDẻLâu: túi ô 24: mất #-09Mảnh Vỡ Trang Bị (mã 30503234) x200
+[15:46:33.847] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:46:35.027] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:46:35.037] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:46:35.037] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:46:35.621] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:46:36.195] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:46:36.195] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:46:36.195] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:46:36.195] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:46:36.195] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 397)
+[15:46:36.195] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:46:36.195] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:46:36.195] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:46:36.206] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:46:36.206] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:46:36.206] GaoDẻLâu: MỞ cửa sổ PetList
+[15:46:36.790] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 6)
+[15:46:36.800] GaoDẻLâu: MỞ cửa sổ SuperTooltip
+[15:46:37.395] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:37.395] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 7)
+[15:46:37.395] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:37.990] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 8)
+[15:46:37.990] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:38.574] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 9)
+[15:46:38.574] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:38.574] GaoDẻLâu: GỌI Packet_ItemBtnClicked(3, 10)
+[15:46:38.595] GaoDẻLâu: ĐÓNG cửa sổ SuperTooltip
+[15:46:39.168] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:39.763] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:46:41.515] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:46)
+[15:46:42.726] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:46:42.726] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:42.726] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:42.726] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:46:42.726] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:42.726] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:42.747] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:46:42.747] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:46:42.747] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:46:42.757] GaoDẻLâu: túi ô 25: mất #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x200
+[15:46:42.757] GaoDẻLâu: túi ô 26: mất #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x200
+[15:46:42.757] GaoDẻLâu: túi ô 27: mất #-09Mảnh Vỡ Thú Cưỡi (mã 30503264) x100
+[15:46:42.757] GaoDẻLâu: túi ô 28: mất #-09Mảnh Vỡ Thời Trang (mã 30503263) x200
+[15:46:42.757] GaoDẻLâu: túi ô 29: mất #-09Mảnh Vỡ Thời Trang (mã 30503263) x200
+[15:46:43.926] GaoDẻLâu: MỞ cửa sổ ContexMenu
+[15:46:44.521] GaoDẻLâu: GỌI ContexMenu_Exchange_Clicked()
+[15:46:44.531] GaoDẻLâu: ĐÓNG cửa sổ ContexMenu
+[15:46:45.115] GaoDẻLâu: GỌI Clear_XSCRIPT()
+[15:46:45.115] GaoDẻLâu: GỌI Set_XSCRIPT_Function_Name(XSCRIPT)
+[15:46:45.115] GaoDẻLâu: GỌI Set_XSCRIPT_ScriptID(45060)
+[15:46:45.115] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(0, 1064)
+[15:46:45.115] GaoDẻLâu: GỌI Set_XSCRIPT_Parameter(1, 398)
+[15:46:45.115] GaoDẻLâu: GỌI Set_XSCRIPT_ParamCount(2)
+[15:46:45.115] GaoDẻLâu: GỌI Send_XSCRIPT()
+[15:46:45.115] GaoDẻLâu: GỌI CommisionStall_Close_Clicked()
+[15:46:45.126] GaoDẻLâu: MỞ cửa sổ Exchange
+[15:46:45.126] GaoDẻLâu: MỞ cửa sổ ExchangeSafe
+[15:46:45.126] GaoDẻLâu: MỞ cửa sổ PetList
+[15:46:46.284] GaoDẻLâu: GỌI Packet_ItemBtnSubClicked(6, 7)
+[15:46:46.879] GaoDẻLâu: GỌI Packet_ItemBtnClicked(4, 1)
+[15:46:46.879] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:48.079] GaoDẻLâu: GỌI Exchange_Lock_Button_Clicked()
+[15:46:49.259] GaoDẻLâu: GỌI ExchangeSafe_Confirm(15:46)
+[15:46:50.438] GaoDẻLâu: GỌI Trade_Accept_Button_Clicked()
+[15:46:50.438] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:50.438] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:50.438] GaoDẻLâu: GỌI Exchange_Cancel()
+[15:46:50.438] GaoDẻLâu: GỌI PetList_Refuse_Click()
+[15:46:50.438] GaoDẻLâu: GỌI Packet_ChangeTabIndex(0)
+[15:46:50.448] GaoDẻLâu: ĐÓNG cửa sổ Exchange
+[15:46:50.448] GaoDẻLâu: ĐÓNG cửa sổ ExchangeSafe
+[15:46:50.448] GaoDẻLâu: ĐÓNG cửa sổ PetList
+[15:46:50.470] GaoDẻLâu: túi ô 30: mất #-09Mảnh Vỡ Thời Trang (mã 30503263) x100

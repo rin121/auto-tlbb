@@ -79,9 +79,11 @@ from gop_acc_chinh import (LuongGopAccChinh, cai_dat as cai_dat_gop_acc_chinh,
                            luu_cai_dat as luu_gop_acc_chinh, parse_danh_sach)
 from rut_ngoc_tccn import (MANH_MOT_VIEN, SO_VIEN_TOI_DA, LuongRutNgoc, cai_dat as cai_dat_rut_ngoc,
                            luu_cai_dat as luu_rut_ngoc, so_manh_can)
+from nang_cap_vip import LuongNangCapVip
 from giai_captcha import (GIAY_RANH_GIAI_PHONG_OCR, LoiGiaiCaptcha, giai_phong_ocr_neu_ranh, kiem_tra_ocr_win7,
                           lam_nong_ocr)
 from lua_game import THONG_BAO_LOI, LoiLua, da_nap_dll
+from boss import la_map_boss
 from mat_ket_noi import XuLyMatKetNoi
 from pho_ban_pmp import (MA_BO_THEO_DOI, MA_DANG_THEO_DOI, MAP_DAI_LY, MAP_LAC_DUONG, MAP_PMP, MO_TA as MO_TA_PHO_BAN, DoiPMP,
                          PhoBanPMP, cap_nhat_chay_gan_npc_co_dinh, cap_nhat_di_lac_duong_doi_vien,
@@ -613,6 +615,7 @@ class LuongNhanVat(threading.Thread):
         cai_dat = cau_hinh.cua_nhan_vat(self.ten)
         return self.nen_dung() or self.dang_giao_acc_chinh() \
             or not pmp_dang_duoc_phep_chay(cai_dat) \
+            or la_map_boss(self.map_hien_tai) \
             or self.ac_tac_dang_chen(cai_dat) or self.dang_theo_ac_tac(cai_dat) \
             or (self.doi_pmp is None and self.doi_theo_truong() is not None)
 
@@ -1479,6 +1482,13 @@ class LuongNhanVat(threading.Thread):
             ten_acc_chinh_giao = (cai_dat_giao_acc_chinh().get("nhan_vat") or "").strip()
             dung_danh_giao = self.dang_giao_acc_chinh() and self.ten \
                 and chuan_hoa(self.ten) == chuan_hoa(ten_acc_chinh_giao)
+            if la_map_boss(self.map_hien_tai):
+                # Map boss: đứng yên, không đánh quái và không đánh trả người đang PK.
+                chien_dau.bo_muc_tieu()
+                self.mo_ta_chien_dau = ""
+                self.ke_danh = None
+                self.dung.wait(GIAY_GIUA_MOI_LUOT_DANH)
+                continue
             if not (cai_dat and cai_dat_nv["bat_auto"] and cai_dat["bat"] and self.da_noi and self.dang_trong_game) \
                     or (self.trang_thai.get("mo_ta") or "").startswith(MO_TA_TAM_DUNG_DANH) \
                     or self.tam_dung_vi_pho_ban() or dung_danh_giao:
@@ -1537,7 +1547,7 @@ class LuongNhanVat(threading.Thread):
             if not (cai_dat and cai_dat_nv["bat_auto"] and cai_dat["bat"] and cai_dat["cac_phim"]
                     and self.da_noi and self.dang_trong_game) \
                     or (self.trang_thai.get("mo_ta") or "").startswith(MO_TA_TAM_DUNG_DANH) \
-                    or self.tam_dung_vi_pho_ban():
+                    or self.tam_dung_vi_pho_ban() or la_map_boss(self.map_hien_tai):
                 self.mo_ta_auto_click = ""
                 self.dung.wait(GIAY_GIUA_MOI_LUOT_DANH)
                 continue
@@ -1901,6 +1911,9 @@ class UngDung:
         self.luong_giao_acc_chinh = None
         self.luong_gop_acc_chinh = None
         self.luong_rut_ngoc = None
+        self.luong_nang_cap_vip = None
+        self.vip_chon = {}
+        self._vip_hang = []
         self.luong_giao_dich_ngay = None
         dat_phien_xoay_vong(False)
         self.tai_khoan_tam_dung = set()
@@ -3662,22 +3675,23 @@ class UngDung:
         khung.pack(fill="x", pady=(8, 0))
         self.bien_gac = {}
         for hang, (khoa, nhan, an) in enumerate((("tai_khoan", "Tài khoản", False), ("mat_khau", "Mật khẩu", True),
-                                                 ("nhan_vat", "Tên nhân vật", False),
-                                                 ("loai_tru", "Không giao (cách nhau dấu phẩy)", False))):
+                                                 ("nhan_vat", "Tên nhân vật", False))):
             ttk.Label(khung, text=nhan).grid(row=hang, column=0, sticky="w", pady=1)
             self.bien_gac[khoa] = tk.StringVar(value=cd[khoa])
-            ttk.Entry(khung, textvariable=self.bien_gac[khoa], width=50 if khoa == "loai_tru" else 24,
+            ttk.Entry(khung, textvariable=self.bien_gac[khoa], width=24,
                       show="*" if an else "").grid(row=hang, column=1, sticky="w", padx=4, pady=1)
+        # Ô «Không giao» tạm ẩn. Xóa chữ không có tác dụng vì ô trống vẫn lấy danh sách mặc định.
+        # ("loai_tru", "Không giao (cách nhau dấu phẩy)", False)
         self.bien_gac_hom_nay = tk.BooleanVar(value=cd["chi_hom_nay"])
         ttk.Checkbutton(khung, text="Chỉ nhân vật đã đi phó bản hôm nay (bỏ tích: mọi nhân vật round đã tạo)",
-                        variable=self.bien_gac_hom_nay).grid(row=4, column=0, columnspan=2, sticky="w", pady=(4, 0))
+                        variable=self.bien_gac_hom_nay).grid(row=3, column=0, columnspan=2, sticky="w", pady=(4, 0))
         self.bien_gac_tat_ca_pb = tk.BooleanVar(value=cd.get("tat_ca_pho_ban", False))
         ttk.Checkbutton(khung, text="Tất cả acc phó bản (mọi tài khoản XV theo thứ tự bảng;\n"
                                     "một nhân vật/acc; không có NV thì bỏ qua; không đồ thì thoát sang acc sau)",
-                        variable=self.bien_gac_tat_ca_pb).grid(row=5, column=0, columnspan=2, sticky="w", pady=(2, 0))
+                        variable=self.bien_gac_tat_ca_pb).grid(row=4, column=0, columnspan=2, sticky="w", pady=(2, 0))
         self._gan_tu_dong_luu_giao_acc_chinh()
         dong = ttk.Frame(khung)
-        dong.grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        dong.grid(row=5, column=0, columnspan=2, sticky="w", pady=(6, 0))
         self.nut_giao_acc_chinh = ttk.Button(dong, text="Bắt đầu", command=self.bat_tat_giao_acc_chinh)
         self.nut_giao_acc_chinh.pack(side="left")
         ttk.Button(dong, text="Làm lại từ đầu", command=self.dat_lai_giao_acc_chinh).pack(side="left", padx=4)
@@ -3686,12 +3700,12 @@ class UngDung:
         ttk.Label(khung, text="Bấm Bắt đầu: mọi client đang trong game về chọn máy chủ (giữ client, không mở game mới). "
                               "Đăng nhập acc chính (đứng ở NPC Tân Thủ, Đại Lý), rồi lần lượt đăng nhập acc phó bản "
                               "(mặc định: chỉ trưởng nhóm; tích «Tất cả acc phó bản»: mọi tài khoản XV theo thứ tự bảng, "
-                              "một nhân vật/acc). Kiểm tra túi Đạo cụ + Nguyên liệu: có đồ thì giao cho acc chính "
-                              "(trừ ô Không giao, đồ khóa bỏ qua), không có đồ thì thoát game và sang acc tiếp (chế độ "
+                              "một nhân vật/acc). Kiểm tra túi Đạo cụ + Nguyên liệu: có đồ thì giao hết cho acc chính "
+                              "(đồ khóa game không đưa được), không có đồ thì thoát game và sang acc tiếp (chế độ "
                               "tất cả acc). Túi acc chính còn dưới 5 ô trống thì cất vào Thiên Cơ Cẩm Nang / Thương khố. "
                               "Cả hai đầy thì dừng. Bấm Dừng rồi Bắt đầu đi tiếp nhân vật chưa xong (tiến trình theo ngày). "
                               "16:00 và 23:00 mỗi ngày: tự bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.",
-                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(row=7, column=0, columnspan=2,
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(row=6, column=0, columnspan=2,
                                                                                   sticky="w", pady=(6, 0))
 
         cd_gop = cai_dat_gop_acc_chinh()
@@ -3700,16 +3714,16 @@ class UngDung:
         self.bien_gop = {}
         for hang, (khoa, nhan, an) in enumerate((("tai_khoan", "Acc nhận — tài khoản", False),
                                                  ("mat_khau", "Mật khẩu", True),
-                                                 ("nhan_vat", "Tên nhân vật", False),
-                                                 ("loai_tru", "Không giao (cách nhau dấu phẩy)", False))):
+                                                 ("nhan_vat", "Tên nhân vật", False))):
             ttk.Label(khung_gop, text=nhan).grid(row=hang, column=0, sticky="w", pady=1)
             self.bien_gop[khoa] = tk.StringVar(value=cd_gop.get(khoa, ""))
-            ttk.Entry(khung_gop, textvariable=self.bien_gop[khoa], width=50 if khoa == "loai_tru" else 24,
+            ttk.Entry(khung_gop, textvariable=self.bien_gop[khoa], width=24,
                       show="*" if an else "").grid(row=hang, column=1, sticky="w", padx=4, pady=1)
+        # ("loai_tru", "Không giao (cách nhau dấu phẩy)", False) — tạm ẩn, không lọc tên vật phẩm.
         ttk.Label(khung_gop, text="Acc nguồn (mỗi dòng: tài khoản, mật khẩu, tên nhân vật)").grid(
-            row=4, column=0, columnspan=2, sticky="w", pady=(6, 0))
+            row=3, column=0, columnspan=2, sticky="w", pady=(6, 0))
         khung_text = ttk.Frame(khung_gop)
-        khung_text.grid(row=5, column=0, columnspan=2, sticky="ew", pady=(2, 0))
+        khung_text.grid(row=4, column=0, columnspan=2, sticky="ew", pady=(2, 0))
         thanh_cuon = ttk.Scrollbar(khung_text)
         thanh_cuon.pack(side="right", fill="y")
         self.o_gop_danh_sach = tk.Text(khung_text, height=6, width=58, yscrollcommand=thanh_cuon.set, wrap="none",
@@ -3719,7 +3733,7 @@ class UngDung:
         self.o_gop_danh_sach.insert("1.0", cd_gop.get("danh_sach") or "")
         self._gan_tu_dong_luu_gop_acc_chinh()
         dong_gop = ttk.Frame(khung_gop)
-        dong_gop.grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        dong_gop.grid(row=5, column=0, columnspan=2, sticky="w", pady=(6, 0))
         self.nut_gop_acc_chinh = ttk.Button(dong_gop, text="Bắt đầu", command=self.bat_tat_gop_acc_chinh)
         self.nut_gop_acc_chinh.pack(side="left")
         ttk.Button(dong_gop, text="Làm lại từ đầu", command=self.dat_lai_gop_acc_chinh).pack(side="left", padx=4)
@@ -3732,7 +3746,7 @@ class UngDung:
                                   "Acc nhận / acc nguồn tự ghi vào cau_hinh.json khi sửa (không cần nút Lưu); "
                                   "Bắt đầu chỉ để chạy gộp đồ.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(
-            row=7, column=0, columnspan=2, sticky="w", pady=(6, 0))
+            row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
         self._tao_khung_rut_ngoc(tab)
 
     def _tao_khung_rut_ngoc(self, tab):
@@ -4077,6 +4091,9 @@ class UngDung:
         if self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive():
             messagebox.showinfo("Gộp đồ về acc chính", "Đang rút ngọc từ Thiên Cơ Cẩm Nang, chờ xong hoặc dừng trước")
             return
+        if self._dang_nang_cap_vip():
+            messagebox.showinfo("Gộp đồ về acc chính", "Đang nâng cấp VIP, chờ xong hoặc dừng trước")
+            return
         if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
             try:
                 so_nguoi = int(self.bien_xv_so_nguoi.get().strip())
@@ -4140,6 +4157,9 @@ class UngDung:
         if self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive():
             self._bao_gac(tu_dong, "Đang rút ngọc từ Thiên Cơ Cẩm Nang, chờ xong hoặc dừng trước")
             return False
+        if self._dang_nang_cap_vip():
+            self._bao_gac(tu_dong, "Đang nâng cấp VIP, chờ xong hoặc dừng trước")
+            return False
         self.luong_giao_acc_chinh = LuongGiaoAccChinh(self.hang_doi)
         self.luong_giao_acc_chinh.start()
         cac_tk = self.luong_giao_acc_chinh.cac_tai_khoan()
@@ -4148,6 +4168,155 @@ class UngDung:
                 luong.dung.set()
         self.nut_giao_acc_chinh.configure(text="Dừng")
         return True
+
+    def _cd_acc_chinh_vip(self):
+        """Acc chính nâng cấp VIP = acc nhận trong khung Gộp đồ về acc chính."""
+        if getattr(self, "bien_gop", None):
+            self._luu_gop_acc_chinh()
+        return cai_dat_gop_acc_chinh()
+
+    def nap_bang_nang_cap_vip(self):
+        """Đổ nhân vật đã xong level 2 vào bảng chọn ở tab Tạo nhân vật."""
+        if not getattr(self, "bang_vip", None):
+            return
+        import nang_cap_vip as vip
+        from nang_cap_nhan_vat import da_lam
+        cd = self._cd_acc_chinh_vip()
+        hang = vip.dong_bang(
+            cau_hinh.tat_ca_muc_tai_khoan(), cd.get("nhan_vat"), cd.get("tai_khoan"),
+            da_lam, lambda ten: False, buoc_xong=vip.buoc_da_xong)
+        self._vip_hang = hang
+        bang = self.bang_vip
+        bang.delete(*bang.get_children())
+        for i, (tk, ten, trang, xong) in enumerate(hang):
+            khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
+            if trang == "vip":
+                self.vip_chon[khoa] = False
+            elif khoa not in self.vip_chon:
+                self.vip_chon[khoa] = True
+            o = O_BAT if self.vip_chon.get(khoa) else O_TAT
+            bang.insert("", "end", iid=str(i), values=(
+                o, tk.get("ten_dang_nhap") or "", ten, vip.mo_ta_bang(xong)))
+
+    def _bam_bang_nang_cap_vip(self, su_kien):
+        bang = self.bang_vip
+        if bang.identify_region(su_kien.x, su_kien.y) != "cell" or bang.identify_column(su_kien.x) != "#1":
+            return
+        iid = bang.identify_row(su_kien.y)
+        if not iid:
+            return
+        tk, ten, trang, _xong = self._vip_hang[int(iid)]
+        if trang == "vip":
+            self.in_log(f"[Nâng cấp VIP] {ten} đã xong, không chọn lại")
+            return "break"
+        khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
+        self.vip_chon[khoa] = not self.vip_chon.get(khoa, False)
+        bang.set(iid, "chon", O_BAT if self.vip_chon[khoa] else O_TAT)
+        return "break"
+
+    def bat_tat_het_nang_cap_vip(self):
+        """Bấm tiêu đề Chọn: chọn hết hoặc bỏ hết các dòng Level 2."""
+        if not self._vip_hang:
+            return
+        dang_chon = [i for i, (tk, ten, trang, _xong) in enumerate(self._vip_hang)
+                     if trang == "level2" and self.vip_chon.get(
+                         ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten)))]
+        bat = len(dang_chon) < sum(1 for _, _, trang, _xong in self._vip_hang if trang == "level2")
+        for i, (tk, ten, trang, _xong) in enumerate(self._vip_hang):
+            if trang != "level2":
+                continue
+            khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
+            self.vip_chon[khoa] = bat
+            self.bang_vip.set(str(i), "chon", O_BAT if bat else O_TAT)
+
+    def _acc_vip_dang_chon(self):
+        chon = []
+        for tk, ten, trang, _xong in self._vip_hang:
+            khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
+            if trang == "level2" and self.vip_chon.get(khoa):
+                chon.append(dict(tk, nhan_vat=ten))
+        return chon
+
+    def _dang_nang_cap_vip(self):
+        return self.luong_nang_cap_vip is not None and self.luong_nang_cap_vip.is_alive()
+
+    def _dat_nut_vip(self, dang_chay=None):
+        if getattr(self, "nut_nang_cap_vip", None):
+            self.nut_nang_cap_vip.configure(text="Dừng" if dang_chay else "Bắt đầu", state="normal")
+        for o in getattr(self, "o_buoc_vip", {}).values():
+            o.configure(state="disabled" if dang_chay else "normal")
+
+    def bat_tat_nang_cap_vip(self):
+        if self._dang_nang_cap_vip():
+            self.luong_nang_cap_vip.dung.set()
+            self.nhan_nang_cap_vip.configure(text="Đang dừng...")
+            self.in_log("[Nâng cấp VIP] Dừng theo yêu cầu")
+            return
+        cd = self._cd_acc_chinh_vip()
+        if not all((cd.get(k) or "").strip() for k in ("tai_khoan", "mat_khau", "nhan_vat")):
+            messagebox.showinfo("Nâng cấp VIP",
+                                "Điền tài khoản, mật khẩu, tên nhân vật ở khung Gộp đồ về acc chính")
+            return
+        if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
+            messagebox.showinfo("Nâng cấp VIP", "Đang xoay vòng, chờ xong hoặc dừng trước")
+            return
+        if self.dang_giao_acc_chinh():
+            messagebox.showinfo("Nâng cấp VIP", "Đang giao hoặc gộp đồ, chờ xong hoặc dừng trước")
+            return
+        if self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive():
+            messagebox.showinfo("Nâng cấp VIP", "Đang rút ngọc, chờ xong hoặc dừng trước")
+            return
+        if self.luong_tao_nv and self.luong_tao_nv.is_alive():
+            messagebox.showinfo("Nâng cấp VIP", "Đang tạo nhân vật, chờ xong hoặc dừng trước")
+            return
+        chon = self._acc_vip_dang_chon()
+        if not chon:
+            messagebox.showinfo("Nâng cấp VIP", "Chọn ít nhất một nhân vật Level 2 trong bảng")
+            return
+        import nang_cap_vip as vip
+        cac_buoc = vip.buoc_chon(k for k, var in self.bien_buoc_vip.items() if var.get())
+        if not cac_buoc:
+            messagebox.showinfo("Nâng cấp VIP", "Tích ít nhất một bước: Kim Vương, thú cưỡi hoặc thời trang")
+            return
+        con, bo = [], []
+        for tk in chon:
+            xong_het = all(vip.da_xong_buoc(tk["nhan_vat"], k) for k in cac_buoc)
+            (bo if xong_het else con).append(tk)
+        if not con:
+            messagebox.showinfo("Nâng cấp VIP", "Nhân vật đang chọn đã xong các bước được tích")
+            return
+        ten_buoc = ", ".join(self._nhan_nut_vip[k] for k in cac_buoc)
+        mo_ta = "\n".join(self._mo_ta_buoc_vip[k] for k in cac_buoc)
+        ten_chon = ", ".join(tk["nhan_vat"] for tk in con)
+        extra = ("\n\nBỏ qua đã xong các bước này: " + ", ".join(tk["nhan_vat"] for tk in bo)) if bo else ""
+        if not messagebox.askyesno(
+                "Nâng cấp VIP",
+                f"Acc chính {cd['nhan_vat']} rút mảnh rồi giao.\n\n{mo_ta}\n\n"
+                f"Nhân vật nhận: {ten_chon}.{extra}\n\n"
+                "Thiếu mảnh của bước đang chạy thì không rút, đăng xuất và bắt đầu xoay vòng."):
+            return
+        self.luong_nang_cap_vip = LuongNangCapVip(self.hang_doi, {
+            "ten_dang_nhap": cd["tai_khoan"], "mat_khau": cd["mat_khau"], "nhan_vat": cd["nhan_vat"]},
+            cac_tk=con, cac_buoc=cac_buoc)
+        self.luong_nang_cap_vip.start()
+        for ten, luong in self.cac_luong_dang_nhap.items():
+            if ten.lower() in self.luong_nang_cap_vip.cac_tai_khoan():
+                luong.dung.set()
+        self._dat_nut_vip(True)
+        self.in_log(f"[Nâng cấp VIP] {ten_buoc}: acc chính {cd['nhan_vat']} → {ten_chon}")
+
+    def xoay_vong_sau_nang_cap_vip(self):
+        """Thiếu mảnh: chờ luồng VIP thoát (đã đăng xuất) rồi tự bấm xoay vòng."""
+        if self._dang_nang_cap_vip():
+            self.root.after(500, self.xoay_vong_sau_nang_cap_vip)
+            return
+        if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
+            return
+        if not cac_tai_khoan_dang_tich():
+            self.in_log("[Nâng cấp VIP] Thiếu mảnh — chưa tích XV tài khoản nào nên không tự xoay vòng")
+            return
+        self.in_log("[Nâng cấp VIP] Thiếu mảnh — tự bắt đầu xoay vòng phó bản")
+        self.bat_tat_xoay_vong()
 
     def _bao_gac(self, tu_dong, chu):
         if tu_dong:
@@ -4336,6 +4505,9 @@ class UngDung:
             return
         if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
             messagebox.showinfo("Xoay vòng", "Đang giao dịch cho acc chính, chờ xong hoặc dừng trước")
+            return
+        if self._dang_nang_cap_vip():
+            messagebox.showinfo("Xoay vòng", "Đang nâng cấp VIP, chờ xong hoặc dừng trước")
             return
         if not cac_tai_khoan_dang_tich():
             messagebox.showinfo("Xoay vòng", "Chưa tích XV (xoay vòng) tài khoản phó bản nào ở tab Tài khoản")
@@ -4755,6 +4927,53 @@ class UngDung:
                               "rồi về chọn máy chủ, tạo nhân vật tiếp theo; xong tài khoản thì tắt game. Nhân vật đã "
                               "nhận đồ được ghi lại, chạy lại không làm lại.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(6, 0))
+
+        khung_vip = ttk.LabelFrame(tab, text="Nâng cấp VIP", padding=8)
+        khung_vip.pack(fill="x", pady=(8, 0))
+        self.bang_vip = ttk.Treeview(khung_vip, columns=("chon", "tai_khoan", "nhan_vat", "trang_thai"),
+                                     show="headings", height=12, selectmode="browse")
+        for cot, tieu_de, rong in (("chon", "Chọn", 46), ("tai_khoan", "Tài khoản", 120),
+                                   ("nhan_vat", "Nhân vật", 140), ("trang_thai", "Trạng thái", 180)):
+            self.bang_vip.heading(cot, text=tieu_de)
+            self.bang_vip.column(cot, width=self.px(rong), anchor="center" if cot in ("chon", "trang_thai") else "w",
+                                 stretch=cot == "nhan_vat")
+        self.bang_vip.heading("chon", command=self.bat_tat_het_nang_cap_vip)
+        self.bang_vip.pack(fill="x")
+        self.bang_vip.bind("<Button-1>", self._bam_bang_nang_cap_vip)
+        self.vip_chon = {}
+        self._vip_hang = []
+        dong_vip = ttk.Frame(khung_vip)
+        dong_vip.pack(fill="x", pady=(6, 0))
+        self._nhan_nut_vip = {
+            "trang bi": "Kim Vương",
+            "thu cuoi": "Thú cưỡi",
+            "thoi trang": "Thời trang",
+        }
+        self._mo_ta_buoc_vip = {
+            "trang bi": "Kim Vương: rút và giao 5000 Mảnh Vỡ Trang Bị, đổi 10 món, mang vào và vứt món vừa tháo.",
+            "thu cuoi": "Thú cưỡi: rút và giao 500 Mảnh Vỡ Thú Cưỡi, đổi Ngọc Đoàn Đoàn VIP2, mang vào và vứt thú vừa tháo.",
+            "thoi trang": "Thời trang: rút và giao 500 Mảnh Vỡ Thời Trang, đổi Áo Tắm VIP2, mang vào và vứt áo vừa tháo.",
+        }
+        self.bien_buoc_vip = {}
+        self.o_buoc_vip = {}
+        for khoa, chu in self._nhan_nut_vip.items():
+            var = tk.BooleanVar(value=True)
+            o = ttk.Checkbutton(dong_vip, text=chu, variable=var)
+            o.pack(side="left", padx=(0, 8))
+            self.bien_buoc_vip[khoa] = var
+            self.o_buoc_vip[khoa] = o
+        self.nut_nang_cap_vip = ttk.Button(dong_vip, text="Bắt đầu", command=self.bat_tat_nang_cap_vip)
+        self.nut_nang_cap_vip.pack(side="left", padx=(4, 0))
+        ttk.Button(dong_vip, text="Làm mới", command=self.nap_bang_nang_cap_vip).pack(side="left", padx=4)
+        self.nhan_nang_cap_vip = ttk.Label(dong_vip, text="")
+        self.nhan_nang_cap_vip.pack(side="left", padx=8)
+        ttk.Label(khung_vip, text="Tích bước cần chạy rồi bấm Bắt đầu. Có thể tích một hoặc cả ba. "
+                                  "Thứ tự: Kim Vương (5000 mảnh trang bị), thú cưỡi (500 mảnh thú), "
+                                  "thời trang (500 mảnh áo). Mỗi tài khoản hiện ba nhân vật. "
+                                  "Acc chính là acc nhận ở khung Gộp đồ về acc chính. "
+                                  "Thiếu mảnh của bước đang chạy thì không rút, đăng xuất và tự xoay vòng.",
+                  foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(6, 0))
+        self.nap_bang_nang_cap_vip()
 
     def luu_tao_nv(self):
         """Lưu các ô của khung tạo nhân vật mới. Trả về (danh sách tài khoản, tùy chọn); sai thì báo ValueError."""
@@ -6356,6 +6575,8 @@ class UngDung:
             return True
         if self.luong_rut_ngoc and self.luong_rut_ngoc.dang_dieu_khien(pid):
             return True
+        if self.luong_nang_cap_vip and self.luong_nang_cap_vip.dang_dieu_khien(pid):
+            return True
         if self.luong_giao_dich_ngay and self.luong_giao_dich_ngay.dang_dieu_khien(pid):
             return True
         return any(luong.pid == pid and luong.is_alive()
@@ -6721,6 +6942,15 @@ class UngDung:
                     self._lan_tu_bat_gop = 0
                 elif noi_dung[0].startswith(("Dừng:", "Lỗi")):
                     self._hen_bat_lai_sau_loi("gop")
+            elif loai == "trang_thai_nang_cap_vip":
+                self.nhan_nang_cap_vip.configure(text=noi_dung[0])
+                if not self._dang_nang_cap_vip() \
+                        or noi_dung[0].startswith(("Xong", "Đã dừng", "Dừng:", "Lỗi", "Thiếu mảnh")):
+                    self._dat_nut_vip(None)
+                if noi_dung[0].startswith("Thiếu mảnh"):
+                    self.xoay_vong_sau_nang_cap_vip()
+                if noi_dung[0].startswith(("Xong", "Thiếu mảnh", "Đã dừng", "Dừng:", "Lỗi")):
+                    self.nap_bang_nang_cap_vip()
             elif loai == "trang_thai_rut_ngoc":
                 self.nhan_rut_ngoc.configure(text=noi_dung[0])
                 if not (self.luong_rut_ngoc and self.luong_rut_ngoc.is_alive()) \

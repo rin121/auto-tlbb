@@ -14,10 +14,10 @@ import cau_hinh
 from auto_chuyen_sinh import chuan_hoa
 from giao_acc_chinh import GiaoAccChinhEngine, LoiGiaoAccChinh, MA_DONG_CUA_SO, _Dung
 from lua_game import LoiLua
-from so_tui_do import LOAI_TRU_MAC_DINH, cac_tu_loai_tru
 
 KHOA_CAI_DAT = "gop_acc_chinh"
-MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": LOAI_TRU_MAC_DINH,
+# loai_tru tạm không dùng: không loại vật phẩm theo tên.
+MAC_DINH = {"tai_khoan": "", "mat_khau": "", "nhan_vat": "", "loai_tru": "",
             "danh_sach": "", "tien_trinh": {}}
 # Luồng gộp đang chạy — xoay vòng giữ hwnd, không logout chéo.
 _luong_gop_hien_tai = None
@@ -118,7 +118,7 @@ class LuongGopAccChinh(threading.Thread, GiaoAccChinhEngine):
         self.cd = cai_dat()
         self.tk_chinh = {"ten_dang_nhap": self.cd["tai_khoan"], "mat_khau": self.cd["mat_khau"],
                          "nhan_vat": self.cd["nhan_vat"]}
-        self.loai_tru = cac_tu_loai_tru(self.cd["loai_tru"])
+        self.loai_tru = []
         self.ds_nguon = parse_danh_sach(self.cd["danh_sach"])
         self.ghi_so_tui = False
         # Một acc nguồn thì giữ trong game. Nhiều acc thì giao xong đăng xuất để vào acc kế.
