@@ -73,8 +73,11 @@ class TestManh(unittest.TestCase):
         self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("đã dừng")), "dung")
         self.assertEqual(
             vip.ket_luan_giao(giao_dich.LoiGiaoDich("cosato3 không nhận được lời mời giao dịch")),
-            "gui_lai")
-        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("cửa sổ giao dịch không mở")), "loi")
+            "giao_lai")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("hai bên chưa khóa được giao dịch")), "giao_lai")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("cửa sổ giao dịch không mở")), "giao_lai")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("hai bên chưa thấy nhau khóa")), "giao_lai")
+        self.assertEqual(vip.ket_luan_giao(giao_dich.LoiGiaoDich("bấm đồng ý mà giao dịch chưa xong")), "giao_lai")
         self.assertEqual(vip.buoc_chon(["thoi trang", "trang bi", "khac"]), ["trang bi", "thoi trang"])
         self.assertEqual(vip.buoc_chon(()), [])
 

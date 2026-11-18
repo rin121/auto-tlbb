@@ -180,15 +180,12 @@ def ket_luan_rut(tui_truoc, tui_sau, tccn_truoc, tccn_sau):
 
 
 def ket_luan_giao(loi):
-    """Sau một lần chuyển đồ. None là xong. Lời mời chưa tới thì gửi lại, không dừng."""
+    """Sau một lần chuyển đồ. None là xong. Lỗi giao dịch thì giao lại phần còn thiếu. Dừng của user thì dừng."""
     if loi is None:
         return "xong"
-    chu = str(loi)
-    if chu == "đã dừng":
+    if str(loi) == "đã dừng":
         return "dung"
-    if "không nhận được lời mời giao dịch" in chu:
-        return "gui_lai"
-    return "loi"
+    return "giao_lai"
 
 
 def ket_luan_doi(co_mon, manh_truoc, manh_sau):
@@ -587,8 +584,10 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
                     self._vao_phu(tk, ten)
                     da_vao = True
                 self._giao(ten)
-                if not self._du_manh(self.phu):
-                    raise LoiGiaoAccChinh(f"{ten}: giao xong mà túi chưa đủ {manh['ten']}")
+                while not self._du_manh(self.phu):
+                    self._kiem_tra_dung()
+                    self.in_log(f"{ten}: túi chưa đủ {manh['ten']}, giao tiếp")
+                    self._giao(ten)
                 danh_dau_nhan_buoc(ten, khoa, self.duong_dan)
                 self.in_log(f"{ten}: đã nhận đủ {manh['ten']}, bắt đầu đổi")
             else:
@@ -771,24 +770,27 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
     def _giao(self, ten):
         manh = self._manh()
         ma, can = manh["ma"], manh["so"]
-        try:
-            san = tong_ma(self._tui(self.phu), ma)
-        except (LoiLua, OSError):
-            san = None
         da_bao = False
         while True:
             self._kiem_tra_dung()
-            con = can
-            if san is not None:
-                try:
-                    con = can - max(0, tong_ma(self._tui(self.phu), ma) - san)
-                except (LoiLua, OSError):
-                    con = can
+            try:
+                con = max(0, can - tong_ma(self._tui(self.phu), ma))
+            except (LoiLua, OSError):
+                self.in_log(f"{ten}: chưa đọc được túi người nhận, chờ rồi giao tiếp")
+                self.dung.wait(2)
+                continue
             if con <= 0:
                 return
-            cac_o = o_can_giao(self._tui(self.chinh), {ma: con})
+            try:
+                cac_o = o_can_giao(self._tui(self.chinh), {ma: con})
+            except (LoiLua, OSError):
+                self.in_log(f"{ten}: chưa đọc được túi acc chính, chờ rồi giao tiếp")
+                self.dung.wait(2)
+                continue
             if not cac_o:
-                raise LoiGiaoAccChinh(f"túi acc chính không có {manh['ten']} để giao cho {ten}")
+                self.in_log(f"{ten}: túi chưa thấy đủ {manh['ten']} để giao nốt, chờ rồi giao tiếp")
+                self.dung.wait(2)
+                continue
             if not da_bao:
                 self.in_log(f"Giao {manh['so']} {manh['ten']} cho {ten} "
                             f"({len(cac_o)} ô, {so_lan_giao(len(cac_o))} lần, mỗi lần {SO_O_MOT_LAN} ô)")
@@ -796,14 +798,11 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
             try:
                 GiaoDich(self.chinh, self.phu, self.tk_chinh.get("nhan_vat") or "acc chính", ten,
                          self.in_log, self.dung.is_set).chuyen(cac_o)
-                return
-            except LoiGiaoDich as loi:
+            except (LoiGiaoDich, LoiLua, OSError) as loi:
                 ket = ket_luan_giao(loi)
                 if ket == "dung":
                     raise _Dung() from loi
-                if ket != "gui_lai":
-                    raise LoiGiaoAccChinh(f"giao dịch với {ten} lỗi: {loi}") from loi
-                self.in_log(f"{ten} chưa nhận lời mời giao dịch, gửi lại")
+                self.in_log(f"{ten}: {loi}, giao lại phần còn thiếu")
 
     def _cua_doi_mo(self, game):
         try:
@@ -813,20 +812,25 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
 
     def _mo_menu(self, ten, dong_menu):
         game = self.phu
-        try:
-            game.lua.chay(f'if IsWindowShow("{CUA_SO_DOI}") then CloseWindow("{CUA_SO_DOI}", true) end '
-                          'if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
-        except (LoiLua, OSError):
-            pass
-        try:
-            NhanDoTanThu(game, ten, self.in_log, self.dung.is_set, self.bao_trang_thai)._noi_chuyen(
-                NPC_TRAO_DOI, (DONG_MENU[dong_menu],))
-        except DungPhoBan:
-            raise _Dung()
-        except LoiPhoBan as loi:
-            raise LoiGiaoAccChinh(f"{ten}: {loi}") from loi
-        if not self._cho(lambda: self._cua_doi_mo(game), GIAY_CHO_CUA_SO):
-            raise LoiGiaoAccChinh(f"{ten}: không mở được cửa sổ đổi (dòng {dong_menu})")
+        while True:
+            self._kiem_tra_dung()
+            try:
+                game.lua.chay(f'if IsWindowShow("{CUA_SO_DOI}") then CloseWindow("{CUA_SO_DOI}", true) end '
+                              'if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+            except (LoiLua, OSError):
+                pass
+            try:
+                NhanDoTanThu(game, ten, self.in_log, self.dung.is_set, self.bao_trang_thai)._noi_chuyen(
+                    NPC_TRAO_DOI, (DONG_MENU[dong_menu],))
+            except DungPhoBan:
+                raise _Dung()
+            except (LoiPhoBan, LoiLua, OSError) as loi:
+                self.in_log(f"{ten}: {loi}, nói chuyện NPC lại")
+                self.dung.wait(2)
+                continue
+            if self._cho(lambda: self._cua_doi_mo(game), GIAY_CHO_CUA_SO):
+                return
+            self.in_log(f"{ten}: chưa mở được cửa sổ đổi, nói chuyện lại")
 
     def _co_mon(self, game, ma):
         try:
@@ -899,16 +903,31 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
             pass
 
     def _mang_mot(self, game, ten, ma, ten_mon):
-        for lan in range(1, 4):
+        lan = 0
+        while True:
             self._kiem_tra_dung()
             if ma in self._trang_bi(game).values():
                 return True
-            tui = self._tui(game)
+            try:
+                tui = self._tui(game)
+            except (LoiLua, OSError):
+                self.in_log(f"{ten}: chưa đọc được túi để mang {ten_mon}, thử lại")
+                self.dung.wait(2)
+                continue
             o = next((slot for (loai, slot), (m, _, _) in tui.items() if loai == "base" and m == ma), None)
             if o is None:
-                return ma in self._trang_bi(game).values()
-            game.lua.chay('if not IsWindowShow("Packet") then OpenWindow("Packet") end')
-            game.lua.chay(MA_CHUOT_PHAI.replace("{o}", str(o)))
+                if ma in self._trang_bi(game).values():
+                    return True
+                self.in_log(f"{ten}: chưa thấy {ten_mon} trong túi, chờ rồi mang lại")
+                self.dung.wait(2)
+                continue
+            try:
+                game.lua.chay('if not IsWindowShow("Packet") then OpenWindow("Packet") end')
+                game.lua.chay(MA_CHUOT_PHAI.replace("{o}", str(o)))
+            except (LoiLua, OSError) as loi:
+                self.in_log(f"{ten}: {loi}, mang {ten_mon} lại")
+                self.dung.wait(2)
+                continue
             het = time.time() + 8
             while time.time() < het:
                 self._kiem_tra_dung()
@@ -920,8 +939,8 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
                         "MessageBox_Self",
                         'if IsWindowShow("MessageBox_Self") then MessageBox_Self_OK_Clicked() end'))
                 self.dung.wait(0.3)
-            self.in_log(f"{ten}: chưa mang được {ten_mon} (lần {lan})")
-        return ma in self._trang_bi(game).values()
+            lan += 1
+            self.in_log(f"{ten}: chưa mang được {ten_mon}, mang lại (lần {lan})")
 
     def _mang_va_vut(self, ten):
         game = self.phu
@@ -930,17 +949,23 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
         for _, _, ma, ten_mon in mon:
             if ma in truoc.values():
                 continue
-            if not self._mang_mot(game, ten, ma, ten_mon):
-                raise LoiGiaoAccChinh(f"{ten}: không mang được {ten_mon}")
+            self._mang_mot(game, ten, ma, ten_mon)
         sau = self._trang_bi(game)
         thao = ma_vua_thao(truoc, sau) | ma_thao_da_ghi(ten, self.duong_dan)
         danh_dau_thao(ten, thao, self.duong_dan)
         if thao:
             self.in_log(f"{ten}: vứt {len(thao)} món vừa tháo")
-            try:
-                vut_theo_ma(game.lua, ten, thao, self.in_log, self.dung.is_set)
-            except LoiVutRac as loi:
-                raise LoiGiaoAccChinh(f"{ten}: không vứt được đồ vừa tháo ({loi})") from loi
+            while True:
+                self._kiem_tra_dung()
+                try:
+                    vut_theo_ma(game.lua, ten, thao, self.in_log, self.dung.is_set)
+                    break
+                except (LoiVutRac, LoiLua, OSError) as loi:
+                    self.in_log(f"{ten}: chưa vứt được đồ vừa tháo ({loi}), vứt lại")
+                    self.dung.wait(2)
         con = [ten_mon for _, _, ma, ten_mon in mon if ma not in self._trang_bi(game).values()]
         if con:
-            raise LoiGiaoAccChinh(f"{ten}: chưa mang {', '.join(con)}")
+            self.in_log(f"{ten}: chưa mang {', '.join(con)}, mang lại")
+            for _, _, ma, ten_mon in mon:
+                if ma not in self._trang_bi(game).values():
+                    self._mang_mot(game, ten, ma, ten_mon)
