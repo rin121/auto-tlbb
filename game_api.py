@@ -56,9 +56,13 @@ class Game:
         if not ket_qua:
             return None
         phan = ket_qua.rsplit(b"|", 10)
-        if not phan[0]:
+        # Đang load map / client treo: chuỗi thiếu trường → không coi là trong game.
+        if len(phan) < 11 or not phan[0]:
             return None
-        so = [int(float(p)) for p in phan[1:2] + phan[3:9]]
+        try:
+            so = [int(float(p)) for p in phan[1:2] + phan[3:9]]
+        except ValueError:
+            return None
         try:
             mon_phai = int(float(phan[9]))
         except ValueError:

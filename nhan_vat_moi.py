@@ -161,8 +161,17 @@ def ma_khoi_dang_mang(game):
 
 
 def dang_mac_do_nang_cap(game):
-    """Đã mang mũ Hoàng Kim (nâng cấp xong). Còn Tân Thủ - Khôi thì chưa nâng cấp thật."""
-    return ma_khoi_dang_mang(game) in nang_cap_nhan_vat.MA_HOANG_KIM
+    """Đã mang mũ Hoàng Kim hoặc Kim Vương (VIP 3). Còn Tân Thủ - Khôi thì chưa nâng cấp thật."""
+    ma = ma_khoi_dang_mang(game)
+    return ma in nang_cap_nhan_vat.MA_HOANG_KIM or ma == nang_cap_nhan_vat.MA_KHOI_KIM_VUONG
+
+
+def dang_vip_3(game, ten):
+    """Đã VIP 3: sổ nâng cấp VIP đủ ba bước, hoặc đang mang Kim Vương - Khôi."""
+    if ma_khoi_dang_mang(game) == nang_cap_nhan_vat.MA_KHOI_KIM_VUONG:
+        return True
+    import nang_cap_vip
+    return nang_cap_vip.da_xong(ten)
 
 
 def da_co_tien_tan_thu(game):
@@ -173,13 +182,15 @@ def da_co_tien_tan_thu(game):
 
 
 def buoc_truoc_pho_ban_xong(game, ten):
-    """Đã vào phái, đang mặc Hoàng Kim, cờ nâng cấp có, không còn kẹt Địa Phủ."""
+    """Đã vào phái, không còn kẹt Địa Phủ, và đã nâng cấp (Hoàng Kim / VIP 3)."""
     try:
         tt = game.thong_tin()
     except LoiLua:
         return False
     if not tt or la_dia_phu(tt.get("map")) or not da_gia_nhap_phai(tt.get("mon_phai")):
         return False
+    if dang_vip_3(game, ten):
+        return True
     if not dang_mac_do_nang_cap(game) or not nang_cap_nhan_vat.da_lam(ten):
         return False
     return True
@@ -196,7 +207,9 @@ def _thieu_nhan_tien_do(game, ten):
 
 
 def _can_chay_nang_cap(game, ten, vua_nhan_do):
-    """Vừa nhận đồ tân thủ, chưa có cờ, hoặc còn mặc mũ Tân Thủ → phải chạy nâng cấp."""
+    """Vừa nhận đồ tân thủ, chưa có cờ, hoặc còn mặc mũ Tân Thủ → phải chạy nâng cấp. VIP 3 thì không."""
+    if dang_vip_3(game, ten):
+        return False
     if vua_nhan_do or not nang_cap_nhan_vat.da_lam(ten):
         return True
     return not dang_mac_do_nang_cap(game)
@@ -205,12 +218,15 @@ def _can_chay_nang_cap(game, ten, vua_nhan_do):
 def san_sang_di_pho_ban(game, ten, tai_khoan, in_log, nen_dung):
     """
     Về Đại Lý nếu đang ở Địa Phủ, rồi nhận tiền, nhận đồ, nâng cấp (giftcode, thần khí, pet…).
-    True chỉ khi đã mang Hoàng Kim và cờ nâng cấp. Cờ da_lam giả (còn mũ Tân Thủ) thì làm lại nâng cấp.
+    True khi đã mang Hoàng Kim và cờ nâng cấp, hoặc đã VIP 3 (không nhập lại giftcode).
+    Cờ da_lam giả (còn mũ Tân Thủ, chưa VIP 3) thì làm lại nâng cấp.
     """
     if not roi_dia_phu(game, ten, in_log, nen_dung):
         in_log(f"{ten}: còn ở Địa Phủ, chưa cho đi phó bản")
         return False
     if buoc_truoc_pho_ban_xong(game, ten):
+        if dang_vip_3(game, ten):
+            in_log(f"{ten}: đã VIP 3, không nhập giftcode")
         return True
     in_log(f"{ten}: chưa nhận tiền / nhận đồ / nâng cấp, làm trước khi đi phó bản")
     try:

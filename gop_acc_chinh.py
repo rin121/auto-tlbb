@@ -1,8 +1,7 @@
 """
 GỘP ĐỒ VỀ ACC CHÍNH: lần lượt đăng nhập các acc nguồn (user nhập: tài khoản, mật khẩu, tên nhân vật),
-giao đồ về một acc chính nhận. Acc nguồn về Đại Lý, rút Mảnh Ngọc Vip, Phiếu KNB 100/300/2000/3000,
-Thiên Mệnh Thần Thạch, Mảnh Vỡ Trân Thú, Mảnh vỡ Thiên Ngoại từ Thiên Cơ Cẩm Nang (mỗi lần nhập 250, cách 3 giây)
-và Thương khố, rồi giao các món đó. Không dùng xoay vòng / sổ túi đồ.
+giao đồ về một acc chính nhận. Acc nguồn về Đại Lý, rút hết đồ từ Thiên Cơ Cẩm Nang (mỗi lần nhập 250, cách 3 giây)
+và Thương khố, rồi giao hết. Không dùng xoay vòng / sổ túi đồ.
 """
 import re
 import threading

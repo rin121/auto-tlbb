@@ -237,13 +237,13 @@ SO_O_TUI_DAO_CU = 100
 SO_O_MOT_LAN = 5
 SO_LAN_THU_GIAO_DICH = 3
 SO_LAN_DANG_NHAP_LAI = 5
-SO_LAN_TU_BAT_DAU_LOI = 8
 MAN_NGOAI_GAME = ("chon_may_chu", "dang_nhap", "chon_nhan_vat", "thong_bao", "ma_kiem_tra")
 
 
-def nen_bat_lai_sau_loi(trang_thai, chay_lai, lan_da_bat, gioi_han=SO_LAN_TU_BAT_DAU_LOI):
-    """Lỗi khi còn nhân vật chưa giao thì tự bấm Bắt đầu. Dừng tay hoặc đã Xong thì không."""
-    if not chay_lai or lan_da_bat >= gioi_han:
+def nen_bat_lai_sau_loi(trang_thai, chay_lai, lan_da_bat=0, gioi_han=None):
+    """Còn nhân vật chưa giao thì tự bấm lại, không giới hạn số lần. Dừng tay hoặc đã Xong thì không."""
+    del lan_da_bat, gioi_han
+    if not chay_lai:
         return False
     return str(trang_thai).startswith(("Dừng:", "Lỗi"))
 KHOANG_CACH_DUNG_CHO = 3
@@ -314,15 +314,42 @@ MA_LIET_KE_TCCN_THAT = (
     'if n == "Packet_Temporary_ItemNum_Data" then sos = v end '
     'i = i + 1 end '
     'if type(ids) ~= "table" then return "khong" end '
+    'local grids = nil '
+    'pcall(function() '
+    'local j = 1 '
+    'while j < 15 do '
+    'local n, v = debug.getupvalue(fn, j) '
+    'if n == nil then break end '
+    'if type(v) == "table" and grids == nil then '
+    'local nut = v[0] or v[1] '
+    'if nut and (nut.GetActionItem or nut.EnumAction) then grids = v end '
+    'end '
+    'j = j + 1 end '
+    'end) '
+    'local function so_nut(o) '
+    'if type(grids) ~= "table" then return 0 end '
+    'local nut = grids[o] '
+    'if not nut then return 0 end '
+    'local so = 0 '
+    'pcall(function() '
+    'local act = nil '
+    'if nut.GetActionItem then act = nut:GetActionItem() end '
+    'if not act and nut.EnumAction then act = nut:EnumAction(0) end '
+    'if act and act.GetNum then so = tonumber(act:GetNum()) or 0 end '
+    'end) '
+    'return so end '
     'local s = "" '
-    'for o = 1, 60 do '
+    'for o = 0, 199 do '
     'local id = ids[o] '
     'if id and id ~= 0 then '
     'local ten = tostring(id) '
     'if GemMelting and GemMelting.UpdateProductAction then '
     'local ok, a = pcall(function() return GemMelting:UpdateProductAction(id) end) '
     'if ok and a and a.GetName and a:GetID() ~= 0 then ten = a:GetName() end end '
-    'local so = (type(sos) == "table" and sos[o]) or 1 '
+    'local so = 0 '
+    'if type(sos) == "table" then so = tonumber(sos[o]) or 0 end '
+    'local tu_nut = so_nut(o) '
+    'if tu_nut > so then so = tu_nut end '
     's = s .. o .. "\\t" .. ten .. "\\t" .. tostring(so) .. "\\n" '
     'end end return s')
 MA_LIET_KE_TCCN = trong_cua_so("Packet_Temporary", MA_LIET_KE_TCCN_THAT)
@@ -331,6 +358,9 @@ MA_RUT_TCCN_THAT = (
     'if not IsWindowShow("Packet_Temporary") then return "dong" end '
     'if type(Packet_Temporary_Select) ~= "function" then return "khong" end '
     'local sel = that(Packet_Temporary_Select) '
+    'local g = Packet_Temporary_Gold '
+    'if g and g.SetProperty then g:SetProperty("Text", "{so}") end '
+    'if g and g.SetText then g:SetText("{so}") end '
     'local i, dat = 1, 0 '
     'while i < 15 do '
     'local n = debug.getupvalue(sel, i) '
@@ -518,7 +548,7 @@ def la_cong_thuc_phieu(ten, muc):
     return False
 
 
-# Gộp đồ: giao mọi món, trừ ba loại mảnh vỡ bên dưới.
+# Gộp đồ và giao dịch cho acc chính: giao mọi món có tên (đồ khóa game vẫn không đưa được).
 SO_RUT_TCCN = 250
 GIAY_GIUA_RUT_TCCN = 3
 # Rút phiếu đang kẹt trong TCCN rồi đổi; trần để túi đầy phiếu 2000 không lặp mãi.
@@ -526,15 +556,9 @@ SO_VONG_RUT_PHIEU_TCCN = 3
 
 
 def la_vat_pham_gop(ten):
-    """Mọi vật phẩm, trừ Mảnh vỡ Thời trang, Thú cưỡi và Trang bị (không gồm bản VIP)."""
+    """Mọi vật phẩm có tên, kể cả Mảnh Vỡ Thời Trang, Thú Cưỡi và Trang Bị."""
     k = bo_dau(re.sub(r"#[-0-9a-fA-F]*", "", ten or "")).strip()
-    if not k:
-        return False
-    if "thoi trang" in k or "thu cuoi" in k:
-        return False
-    if "trang bi" in k and "vip" not in k:
-        return False
-    return True
+    return bool(k)
 
 
 def ten_nhan_vat_acc_chinh_online():
@@ -1656,14 +1680,17 @@ class GiaoAccChinhEngine:
                     f"{trong['material']} ô Nguyên liệu trống)")
             return
         trong = self._o_trong()
-        if min(trong.values()) >= SO_O_TOI_THIEU:
+        if trong["base"] >= SO_O_TOI_THIEU:
+            if trong["material"] < SO_O_TOI_THIEU:
+                self.in_log(f"{ten}: Đạo cụ còn {trong['base']} ô trống, Nguyên liệu còn {trong['material']} "
+                            f"— giao dịch tiếp, không dừng")
             return
         self.in_log(f"{ten}: túi còn {trong['base']} ô Đạo cụ, {trong['material']} ô Nguyên liệu trống, cất đồ")
         self.bao_trang_thai(f"{ten}: cất mảnh / cất Thương khố, không cất Phiếu KNB")
         self._cat_tccn()
         self._cat_kho(cat_het=True)
         trong = self._o_trong()
-        if min(trong.values()) < SO_O_TOI_THIEU:
+        if trong["base"] < SO_O_TOI_THIEU:
             raise LoiGiaoAccChinh(f"Thiên Cơ Cẩm Nang và Thương khố đã đầy (túi {ten} còn {trong['base']} ô Đạo cụ, "
                                   f"{trong['material']} ô Nguyên liệu trống)")
 

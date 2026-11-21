@@ -758,5 +758,34 @@ class TestHienCuaSoGauto(unittest.TestCase):
         self.assertEqual(da_vao, [True])
 
 
+class TestMsaaHong(unittest.TestCase):
+    """Cửa sổ GAuto vừa đóng / dòng MSAA hỏng (0x80070057) thì báo lỗi GAuto, không nổ traceback."""
+
+    def test_chon_dong_doi_loi_msaa(self):
+        class O:
+            def ten(self, _i):
+                raise g.msaa.LoiMsaa("lỗi MSAA 0x80070057 (hwnd 70178)")
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                return False
+
+        with patch.object(g, "_bang_nhan_vat", return_value=70178), \
+                patch.object(g, "_msaa", return_value=O()):
+            with self.assertRaises(g.LoiGautoAcTac) as cm:
+                g.chon_dong(1, 3, "bacmori1")
+        self.assertIn("80070057", str(cm.exception))
+
+    def test_tat_ac_tac_doi_loi_msaa(self):
+        with patch.object(g, "_doi_dau_dong", return_value=False), \
+                patch.object(g, "_chon_nhan_vat", side_effect=g.msaa.LoiMsaa("lỗi MSAA 0x80070057")), \
+                patch.object(g, "rut_bao_chuot"):
+            with self.assertRaises(g.LoiGautoAcTac) as cm:
+                g.tat_ac_tac(1, "bacmori1")
+        self.assertIn("80070057", str(cm.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

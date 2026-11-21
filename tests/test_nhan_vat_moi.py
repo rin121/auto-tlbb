@@ -262,6 +262,41 @@ class TestThuTuTruocPhoBan(unittest.TestCase):
         self.assertEqual(goi, ["nang_cap"])
         self.assertTrue(any("làm lại nâng cấp" in d for d in log))
 
+    def test_vip_3_mang_kim_vuong_khong_nhap_giftcode(self):
+        """cosato1: cờ nâng cấp có, mũ đã là Kim Vương — không xóa cờ, không nhập giftcode."""
+        game = MagicMock()
+        game.thong_tin.return_value = {"map": "Đại Lý", "mon_phai": MON_PHAI_TIEU_DAO}
+        game.lua.chay.side_effect = _lua_mac(ncnv.MA_KHOI_KIM_VUONG)
+        log = []
+        with patch("nhan_vat_moi.roi_dia_phu", return_value=True), \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.da_lam", return_value=True), \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.bo_danh_dau") as bo, \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.nang_cap") as nang, \
+                patch("nhan_vat_moi.NhanDoTanThu") as lop:
+            self.assertTrue(san_sang_di_pho_ban(
+                game, "cosato1", "cosato1", log.append, lambda: False))
+            lop.assert_not_called()
+            bo.assert_not_called()
+            nang.assert_not_called()
+        self.assertTrue(any("đã VIP 3, không nhập giftcode" in d for d in log))
+        self.assertFalse(any("làm lại nâng cấp" in d for d in log))
+
+    def test_so_vip_3_khong_nhap_giftcode_du_con_mu_tan_thu(self):
+        game = MagicMock()
+        game.thong_tin.return_value = {"map": "Đại Lý", "mon_phai": MON_PHAI_TIEU_DAO}
+        game.lua.chay.side_effect = _lua_mac(MA_KHOI_TAN_THU)
+        log = []
+        with patch("nhan_vat_moi.roi_dia_phu", return_value=True), \
+                patch("nang_cap_vip.da_xong", return_value=True), \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.da_lam", return_value=True), \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.bo_danh_dau") as bo, \
+                patch("nhan_vat_moi.nang_cap_nhan_vat.nang_cap") as nang:
+            self.assertTrue(san_sang_di_pho_ban(
+                game, "cosato1", "cosato1", log.append, lambda: False))
+            bo.assert_not_called()
+            nang.assert_not_called()
+        self.assertTrue(any("đã VIP 3, không nhập giftcode" in d for d in log))
+
     def test_chi_nhan_do_chua_nang_cap_thi_chua_di_pho_ban(self):
         game = MagicMock()
         game.thong_tin.return_value = {"map": "Đại Lý", "mon_phai": MON_PHAI_TIEU_DAO}

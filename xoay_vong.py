@@ -164,8 +164,19 @@ def hwnd_cua_nhom_xoay_vong():
     return giu
 
 
+def hwnd_gop_dang_chay():
+    """Cửa sổ gộp đang chạy — không logout, không lấy làm client xoay vòng."""
+    try:
+        from gop_acc_chinh import hwnd_giu_khi_gop, luong_gop_dang_chay
+        if luong_gop_dang_chay() is None:
+            return set()
+        return set(hwnd_giu_khi_gop())
+    except Exception:
+        return set()
+
+
 def hwnd_giu_khi_xoay_vong():
-    """Cửa sổ train / acc chính / gộp đồ — giữ khi tắt game thừa (kể cả đang đăng nhập)."""
+    """Cửa sổ train / acc chính / gộp đồ — không tính là nhóm phó bản đang online."""
     from giao_acc_chinh import cai_dat as cd_giao_acc_chinh
     giu = set()
     tk_chinh = (cd_giao_acc_chinh().get("tai_khoan") or "").strip()
@@ -199,17 +210,17 @@ def tat_game_khac(giu_hwnd, in_log):
 
 
 def game_ranh(giu_hwnd):
-    """Cửa sổ game không thuộc nhóm (và không phải acc train / acc chính): dùng lại cho thành viên chưa có game."""
-    giu = {h for h in giu_hwnd if h} | hwnd_giu_khi_xoay_vong()
+    """Mọi cửa sổ chưa gán cho nhóm (trừ gộp đang chạy): logout rồi đăng nhập acc xoay vòng."""
+    giu = {h for h in giu_hwnd if h} | hwnd_gop_dang_chay()
     return [c["hwnd"] for c in tim_cua_so_game() if c["hwnd"] not in giu]
 
 
 def thoat_game_khac(giu_hwnd, in_log, nen_dung=None):
     """
-    Server giới hạn số tài khoản online cùng lúc: game ngoài nhóm đang trong game thì về chọn máy chủ (giữ client
-    để nhóm sau dùng lại, khỏi mở game mới). Không về được thì mới tắt.
+    Server giới hạn số tài khoản online cùng lúc: nhân vật không thuộc nhóm xoay vòng thì về chọn máy chủ
+    (giữ client để đăng nhập acc trong nhóm, khỏi mở game mới). Gộp đang chạy thì không đụng. Không về được thì mới tắt.
     """
-    giu = {h for h in giu_hwnd if h} | hwnd_giu_khi_xoay_vong()
+    giu = {h for h in giu_hwnd if h} | hwnd_gop_dang_chay()
     for cua_so in tim_cua_so_game():
         if cua_so["hwnd"] in giu:
             continue
@@ -871,19 +882,20 @@ class LuongXoayVong(threading.Thread):
         self.cac_hwnd = []
 
     def _mo_du_client(self, can):
-        """Nhóm N người mà đang ít cửa sổ game hơn thì mở thêm, rồi đăng nhập acc tiếp trên các client đó."""
+        """Đủ cửa sổ thì dùng lại. Chỉ mở Game.exe khi số cửa sổ hiện có (trừ gộp đang chạy) chưa đủ nhóm."""
         try:
-            # Không đếm client gộp/train/acc chính — chúng nằm ngoài nhóm phó bản.
-            giu_ngoai = hwnd_giu_khi_xoay_vong()
+            giu_ngoai = hwnd_gop_dang_chay()
             dang_co = sum(1 for c in tim_cua_so_game() if c["hwnd"] not in giu_ngoai)
         except OSError:
             return
         thieu = can - dang_co
         if thieu <= 0:
+            self.in_log(f"Đã có {dang_co} cửa sổ game, cần {can} — logout người ngoài nhóm rồi đăng nhập, "
+                        f"không mở game mới")
             return
         cd = cau_hinh.doc_tai_khoan()
         thu_muc = cd.get("thu_muc_game") or ""
-        self.in_log(f"Đang có {dang_co} client cho nhóm (ngoài gộp/train), cần {can} — mở thêm {thieu} client")
+        self.in_log(f"Đang có {dang_co} cửa sổ game, cần {can} — mở thêm {thieu} client")
         pids = []
         for _ in range(thieu):
             self._kiem_tra_dung()
@@ -989,7 +1001,7 @@ class LuongXoayVong(threading.Thread):
             self._xv_so_nhom = so_nhom
             con_cho = sum(len(h) for h in hang_cho)
             self.in_log(f"Nhóm {so_nhom}: còn {con_cho} lượt acc trong hàng chờ, "
-                        f"mở đủ {n_mot_nhom} client rồi đăng nhập acc tiếp theo")
+                        f"dùng cửa sổ đang mở (chỉ mở thêm khi chưa đủ {n_mot_nhom}) rồi đăng nhập")
             self._mo_du_client(n_mot_nhom)
             ca_nhom = []
             r_bat_dau, r_dau = r_dau or 0, None
@@ -1353,7 +1365,7 @@ class LuongXoayVong(threading.Thread):
     def _doc(self, tv):
         try:
             return tv.game.thong_tin()
-        except (LoiLua, OSError):
+        except (LoiLua, OSError, IndexError, ValueError):
             return None
 
     def _dang_nhap(self, thanh_vien, giu_them=()):

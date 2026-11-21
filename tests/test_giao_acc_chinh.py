@@ -265,10 +265,10 @@ class TestTuBatDauKhiLoi(unittest.TestCase):
     def test_loi_khi_chua_xong_thi_bat_lai(self):
         self.assertTrue(gac.nen_bat_lai_sau_loi("Dừng: túi đầy", True, 0))
         self.assertTrue(gac.nen_bat_lai_sau_loi("Lỗi, xem log", True, 7))
+        self.assertTrue(gac.nen_bat_lai_sau_loi("Lỗi, xem log", True, 100))
         self.assertFalse(gac.nen_bat_lai_sau_loi("Đã dừng", True, 0))
         self.assertFalse(gac.nen_bat_lai_sau_loi("Xong", True, 0))
         self.assertFalse(gac.nen_bat_lai_sau_loi("Dừng: túi đầy", False, 0))
-        self.assertFalse(gac.nen_bat_lai_sau_loi("Lỗi, xem log", True, gac.SO_LAN_TU_BAT_DAU_LOI))
 
     def test_con_chua_xong_khi_con_acc_nguon(self):
         luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)

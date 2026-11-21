@@ -179,6 +179,13 @@ class TestThuTuNangCap(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.thu_muc, ignore_errors=True)
 
+    def test_vip_3_thi_khong_nhap_giftcode(self):
+        self.nc._la_vip_3 = lambda: True
+        self.nc.chay()
+        self.assertEqual(self.goi, [])
+        self.assertTrue(ncnv.da_lam("caychay24", self.file))
+        self.assertNotIn("buoc_3_giftcode", self.goi)
+
     def test_chay_du_6_buoc_theo_thu_tu(self):
         self.nc.chay()
         self.assertEqual(tuple(self.goi), THU_TU_NANG_CAP)

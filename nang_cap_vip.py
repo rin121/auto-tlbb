@@ -16,6 +16,7 @@ Thiếu mảnh: không rút, không giao, đăng xuất phiên này rồi xoay v
 Đủ và đổi xong: không xoay vòng. Chưa làm bước tẩy điểm.
 """
 import json
+import math
 import os
 import re
 import threading
@@ -26,9 +27,9 @@ from datetime import datetime
 from auto_chuyen_sinh import chuan_hoa
 from cua_so_game import tim_cua_so_game
 from dang_nhap import bo_dau, dang_hien, trong_cua_so
-from giao_acc_chinh import (GIAY_CHO_CUA_SO, GIAY_GIUA_RUT_TCCN, MA_DONG_CUA_SO, MA_LIET_KE_TCCN,
-                            NPC_TRAO_DOI, GiaoAccChinhEngine, LoiGiaoAccChinh, _Dung, ma_bam_o_doi,
-                            ma_xac_nhan_doi)
+from giao_acc_chinh import (GIAY_CHAY_TOI, GIAY_CHO_CUA_SO, GIAY_GIUA_RUT_TCCN, KHOANG_CACH_DUNG_CHO,
+                            MA_DONG_CUA_SO, MA_LIET_KE_TCCN, NPC_TRAO_DOI, SO_LAN_DANG_NHAP_LAI,
+                            GiaoAccChinhEngine, LoiGiaoAccChinh, _Dung, ma_bam_o_doi, ma_xac_nhan_doi)
 from giao_dich import GiaoDich, LoiGiaoDich, doc_tui
 from lua_game import LoiLua
 from nang_cap_nhan_vat import MA_TRANG_BI, da_lam, doc_bang
@@ -106,13 +107,44 @@ def _ten_sach(ten):
 def khoa_tu_ten(ten):
     """Khóa mảnh từ tên hoặc từ mã (chuỗi số) trong danh sách Thiên Cơ."""
     chu = _ten_sach(ten)
-    khoa = _TEN_MANH.get(bo_dau(chu).strip())
+    thuong = bo_dau(chu).strip()
+    khoa = _TEN_MANH.get(thuong)
     if khoa:
         return khoa
+    # «Mảnh Vỡ Trang Bị (Khóa)» vẫn là mảnh. Bản VIP là món khác, không tính.
+    if "vip" not in thuong:
+        for ten_khoa, khoa_khoa in _TEN_MANH.items():
+            if thuong.startswith(ten_khoa):
+                return khoa_khoa
     try:
-        return _MA_MANH.get(int(chu))
+        return _MA_MANH.get(int(float(chu)))
     except (TypeError, ValueError):
         return None
+
+
+def o_manh_tccn(bang, khoa, so_rut=250):
+    """
+    (ô, số trong ô) của chồng lớn nhất đúng loại.
+    Ô có món nhưng số đọc được là 0 (máy ảo hay trả 0) thì vẫn rút `so_rut`.
+    """
+    if not isinstance(bang, list):
+        return None
+    duong = []
+    for o, ten, so in bang:
+        if khoa_tu_ten(ten) != khoa:
+            continue
+        try:
+            n = int(so)
+        except (TypeError, ValueError):
+            n = 0
+        duong.append((int(o), n))
+    if not duong:
+        return None
+    co = [x for x in duong if x[1] > 0]
+    o, n = max(co or duong, key=lambda x: x[1])
+    if n < 1:
+        n = so_rut
+    return o, n
 
 
 def tong_ma(tui, ma):
@@ -177,6 +209,31 @@ def ket_luan_rut(tui_truoc, tui_sau, tccn_truoc, tccn_sau):
     if tccn_truoc is None or tccn_sau is None or tccn_sau < tccn_truoc:
         return "cho"
     return "rut_lai"
+
+
+def nen_rut_tiep(loi):
+    """Lỗi lúc rút Thiên Cơ thì rút tiếp. Hết mảnh hoặc túi không còn chỗ thì dừng."""
+    if isinstance(loi, (LoiLua, OSError)):
+        return True
+    chu = bo_dau(str(loi))
+    if "o trong" in chu or " het " in chu:
+        return False
+    return True
+
+
+def la_loi_diss(loi):
+    """Game treo, cửa sổ đóng, hoặc không còn process — acc chính bị ngắt."""
+    chu = str(loi).lower()
+    return any(mau in chu for mau in (
+        "đã đóng", "đã tắt", "invalid window", "không nạp được dll", "không phản hồi"))
+
+
+def can_mo_lai_client(loi, cua_so_con, da_thoat):
+    """Đóng hẳn hoặc đã bấm Hủy thoát game thì mở client mới. Treo mà cửa sổ còn thì bấm Duyệt trước."""
+    if da_thoat or not cua_so_con:
+        return True
+    chu = str(loi).lower()
+    return any(mau in chu for mau in ("đã đóng", "đã tắt", "invalid window", "không nạp được dll"))
 
 
 def ket_luan_giao(loi):
@@ -545,8 +602,10 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
             self._kiem_tra_dung()
             self.bao_trang_thai(f"{so}/{len(con)}: {ten}")
             self._mot_acc(tk, ten)
-        self.in_log(f"Xong {', '.join(_BUOC[k]['ten'] for k in self.cac_buoc)}. Không xoay vòng.")
-        self.bao_trang_thai("Xong " + ", ".join(_BUOC[k]["ten"] for k in self.cac_buoc))
+        ten_buoc_xong = ", ".join(_BUOC[k]["ten"] for k in self.cac_buoc)
+        self.in_log(f"Xong {ten_buoc_xong}, kể cả tài khoản tích cuối. Đăng xuất và xoay vòng.")
+        self._dang_xuat_phien()
+        self.bao_trang_thai("Xong — xoay vòng")
 
     def _dang_xuat_phien(self):
         if self.phu:
@@ -579,7 +638,7 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
             manh = self._manh()
             self.bao_trang_thai(f"{ten}: {self._ten_buoc()}")
             if not da_nhan_buoc(ten, khoa, self.duong_dan):
-                self._chuan_bi_manh(ten)
+                self._rut_tiep(ten)
                 if not da_vao:
                     self._vao_phu(tk, ten)
                     da_vao = True
@@ -626,6 +685,93 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
         manh = self._manh()
         return ton[manh["khoa"]] >= manh["so"]
 
+    def _cua_so_song(self, game):
+        hwnd = self._hwnd_dang_giu(game)
+        if not hwnd:
+            return False
+        try:
+            import win32gui
+            return bool(win32gui.IsWindow(hwnd))
+        except (OSError, ValueError):
+            return False
+
+    def _bam_duyet_mat_ket_noi(self):
+        """Bấm Duyệt hộp mất kết nối nếu cửa sổ acc chính còn. True khi đã bấm Duyệt hoặc Hủy."""
+        from mat_ket_noi import XuLyMatKetNoi
+        game = self.chinh
+        if not game or not getattr(game, "lua", None):
+            return False
+        xl = getattr(self, "_xu_ly_mat_ket_noi", None)
+        if xl is None or getattr(xl, "lua", None) is not game.lua:
+            xl = XuLyMatKetNoi(game.lua, self.in_log)
+            self._xu_ly_mat_ket_noi = xl
+        try:
+            xl.kiem_tra(True)
+        except (LoiLua, OSError):
+            return False
+        return bool(xl.da_duyet or xl.da_thoat)
+
+    def _mo_lai_acc_chinh(self):
+        ten = self.tk_chinh.get("nhan_vat") or "acc chính"
+        self._lan_mo_lai_diss = getattr(self, "_lan_mo_lai_diss", 0) + 1
+        if self._lan_mo_lai_diss > SO_LAN_DANG_NHAP_LAI:
+            raise LoiGiaoAccChinh(f"{ten}: ngắt kết nối quá {SO_LAN_DANG_NHAP_LAI} lần, dừng nâng cấp VIP")
+        self.in_log(f"{ten}: mở lại client và đăng nhập ({self._lan_mo_lai_diss}/{SO_LAN_DANG_NHAP_LAI})")
+        self._xu_ly_mat_ket_noi = None
+        self.chinh = self._dang_nhap_lai_mot(
+            self.tk_chinh, self.chinh, ten, self._hwnd_dang_giu(self.phu))
+
+    def _tat_client_treo(self):
+        game = self.chinh
+        pid = getattr(getattr(game, "lua", None), "pid", None)
+        if not pid:
+            return
+        from dang_nhap import tat_game
+        ten = self.tk_chinh.get("nhan_vat") or "acc chính"
+        self.in_log(f"{ten}: game không phản hồi, tắt client để mở lại")
+        tat_game(pid)
+
+    def _phuc_hoi_diss_acc_chinh(self, loi):
+        """Bấm Duyệt lúc cửa sổ còn. Cửa sổ đóng, đã thoát, hoặc treo vài lần thì mở client đăng nhập lại."""
+        if "không phản hồi" in str(loi).lower() and self._cua_so_song(self.chinh):
+            self._lan_treo = getattr(self, "_lan_treo", 0) + 1
+        else:
+            self._lan_treo = 0
+        if self._cua_so_song(self.chinh):
+            self._bam_duyet_mat_ket_noi()
+        xl = getattr(self, "_xu_ly_mat_ket_noi", None)
+        da_thoat = bool(xl and xl.da_thoat)
+        treo_lau = getattr(self, "_lan_treo", 0) >= 3
+        if not can_mo_lai_client(loi, self._cua_so_song(self.chinh), da_thoat) and not treo_lau:
+            ten = self.tk_chinh.get("nhan_vat") or "acc chính"
+            self.in_log(f"{ten}: mất kết nối ({loi}), đã thử Duyệt, rút tiếp")
+            self.dung.wait(3)
+            return True
+        if treo_lau and self._cua_so_song(self.chinh):
+            self._tat_client_treo()
+        self._lan_treo = 0
+        self._mo_lai_acc_chinh()
+        return True
+
+    def _rut_tiep(self, ten):
+        """Lỗi ở bước rút Thiên Cơ: mở lại và rút phần còn thiếu, không dừng cả phiên."""
+        while True:
+            self._kiem_tra_dung()
+            try:
+                self._chuan_bi_manh(ten)
+                return
+            except ThieuManh:
+                raise
+            except _Dung:
+                raise
+            except (LoiGiaoAccChinh, LoiLua, OSError) as loi:
+                if not nen_rut_tiep(loi):
+                    raise
+                if la_loi_diss(loi) and self._phuc_hoi_diss_acc_chinh(loi):
+                    continue
+                self.in_log(f"{ten}: lỗi rút Thiên Cơ ({loi}), rút tiếp từ Thiên Cơ")
+                self.dung.wait(2)
+
     def _chuan_bi_manh(self, ten):
         """Kiểm tra đủ trước. Thiếu thì không rút. Đủ thì rút phần túi còn thiếu."""
         game = self.chinh
@@ -660,19 +806,52 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
             raise LoiGiaoAccChinh(f"đã rút mà túi acc chính chưa đủ {self._manh()['ten']} cho {ten}")
 
     def _o_dau_tccn(self, khoa):
-        bang = self._liet_ke_vat(self.chinh, MA_LIET_KE_TCCN)
-        if not isinstance(bang, list):
-            return None, 0
-        for o, ten, so in bang:
-            if khoa_tu_ten(ten) == khoa and int(so) > 0:
-                return o, int(so)
+        """Ô mảnh còn hàng. Đọc hụt (máy ảo, hộp nhập số đang mở) thì đóng/mở lại rồi đọc tiếp."""
+        mau = None
+        for lan in range(4):
+            self._kiem_tra_dung()
+            if lan:
+                self.dung.wait(0.8)
+                try:
+                    self.chinh.lua.chay(MA_DONG_CUA_SO)
+                except (LoiLua, OSError):
+                    pass
+                if not self._mo_tccn(self.chinh):
+                    continue
+            bang = self._liet_ke_vat(self.chinh, MA_LIET_KE_TCCN)
+            chon = o_manh_tccn(bang, khoa, SO_RUT_TCCN)
+            if chon:
+                return chon
+            mau = bang
+        if isinstance(mau, list) and mau:
+            xem = ", ".join(f"ô {o} {ten} x{so}" for o, ten, so in mau[:6])
+            ten_manh = next(m["ten"] for m in MANH if m["khoa"] == khoa)
+            self.in_log(f"Thiên Cơ còn {len(mau)} ô, không thấy {ten_manh}: {xem}")
+        elif mau in ("dong", "khong"):
+            self.in_log(f"Thiên Cơ chưa đọc được danh sách ({mau})")
+        else:
+            self.in_log("Thiên Cơ liệt kê rỗng")
         return None, 0
 
     def _ton_tccn(self, khoa):
         bang = self._liet_ke_vat(self.chinh, MA_LIET_KE_TCCN)
         if not isinstance(bang, list):
             return None
-        return sum(int(so) for _, ten, so in bang if khoa_tu_ten(ten) == khoa and int(so) > 0)
+        tong, thay = 0, False
+        for _, ten, so in bang:
+            if khoa_tu_ten(ten) != khoa:
+                continue
+            thay = True
+            try:
+                n = int(so)
+            except (TypeError, ValueError):
+                n = 0
+            if n > 0:
+                tong += n
+        if not thay:
+            return 0
+        # Có ô đúng món mà số đang là 0: chưa đọc được, đừng coi là đã hết.
+        return tong or None
 
     def _rut_loai(self, manh, so):
         """Rút đúng `so` mảnh. Mỗi lần tối đa 250, cách 3 giây. Túi chưa kịp tăng vì lag thì chờ, không dừng."""
@@ -802,7 +981,40 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
                 ket = ket_luan_giao(loi)
                 if ket == "dung":
                     raise _Dung() from loi
-                self.in_log(f"{ten}: {loi}, giao lại phần còn thiếu")
+                if la_loi_diss(loi):
+                    self._phuc_hoi_diss_acc_chinh(loi)
+                    continue
+                self.in_log(f"{ten}: lỗi giao dịch ({loi})")
+                self._chay_lai_gan_acc_chinh(ten)
+
+    def _chay_lai_gan_acc_chinh(self, ten):
+        """Acc phụ chạy sát acc chính, rồi vòng giao dịch gọi lại."""
+        self.in_log(f"{ten}: chạy lại gần acc chính rồi giao dịch lại")
+        chinh, phu = self.chinh, self.phu
+        try:
+            a, b = self._doc(chinh), self._doc(phu)
+            if not a or not b or a.get("map") != b.get("map"):
+                xy = NPC_TRAO_DOI[1]
+                for g, ten_g in ((chinh, self.tk_chinh.get("nhan_vat") or "acc chính"), (phu, ten)):
+                    self._ve_dai_ly(g, ten_g)
+                    self._chay_toi(g, ten_g, xy)
+                return
+
+            def toi():
+                aa, bb = self._doc(chinh), self._doc(phu)
+                if not aa or not bb or aa.get("map") != bb.get("map"):
+                    return False
+                if math.hypot(aa["x"] - bb["x"], aa["y"] - bb["y"]) <= KHOANG_CACH_DUNG_CHO:
+                    return True
+                phu.lua.chay(f"AutoRunToTarget({int(aa['x']) + 1}, {int(aa['y'])})")
+                return False
+
+            if not self._cho(toi, GIAY_CHAY_TOI):
+                self.in_log(f"{ten}: chưa chạy sát acc chính, vẫn giao dịch lại")
+        except _Dung:
+            raise
+        except (LoiGiaoAccChinh, LoiLua, OSError) as loi:
+            self.in_log(f"{ten}: chạy gần acc chính chưa xong ({loi}), vẫn giao dịch lại")
 
     def _cua_doi_mo(self, game):
         try:
@@ -844,8 +1056,20 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
         except (LoiLua, OSError):
             return None
 
+    def _xep_roi_mo_doi(self, ten):
+        """Đổi không vào túi: tắt cửa sổ đổi, mở túi, bấm Xếp, rồi mở lại giao diện đổi."""
+        game = self.phu
+        self.in_log(f"{ten}: đổi không được, tắt giao diện đổi, xếp túi rồi mở lại")
+        try:
+            game.lua.chay(f'if IsWindowShow("{CUA_SO_DOI}") then CloseWindow("{CUA_SO_DOI}", true) end '
+                          'if IsWindowShow("Quest") then CloseWindow("Quest", true) end')
+        except (LoiLua, OSError) as loi:
+            self.in_log(f"{ten}: không đóng được cửa sổ đổi ({loi})")
+        self._xep_tui(game, ten)
+        self._mo_menu(ten, _BUOC[self.buoc]["dong"])
+
     def _doi_mot(self, ten, o, ma, ten_mon):
-        """Bấm chọn ô rồi OK. Túi chưa kịp có món vì lag thì chờ, không dừng."""
+        """Bấm chọn ô rồi OK. Túi chưa kịp có món vì lag thì chờ. Đổi không được thì xếp túi và mở lại."""
         game = self.phu
         lan_bam = 0
         while True:
@@ -878,7 +1102,8 @@ class LuongNangCapVip(threading.Thread, GiaoAccChinhEngine):
                 if lan_khong_doi < 6:
                     self.in_log(f"{ten}: chọn ô {o} chưa thấy {ten_mon}, chờ thêm ({lan_cho})")
                     continue
-                self.in_log(f"{ten}: chọn ô {o} chưa thấy {ten_mon}, bấm đổi lại (lần {lan_bam})")
+                self.in_log(f"{ten}: chọn ô {o} chưa thấy {ten_mon}, xếp túi rồi đổi lại (lần {lan_bam})")
+                self._xep_roi_mo_doi(ten)
                 break
 
     def _doi(self, ten):

@@ -12,22 +12,20 @@ class TestVatPhamGop(unittest.TestCase):
         from giao_acc_chinh import la_vat_pham_gop
         for ten in ("Mảnh Ngọc Vip", "Phiếu KNB 100", "Phiếu KNB 500", "Càn Khôn Hồ",
                     "Thiên Mệnh Thần Thạch", "Mảnh Vỡ Trân Thú", "#-09Mảnh vỡ Thiên Ngoại",
-                    "Mảnh Vỡ Bảo Thạch", "#-09Mảnh Vỡ Trang Bị VIP"):
+                    "Mảnh Vỡ Bảo Thạch", "#-09Mảnh Vỡ Trang Bị VIP",
+                    "Mảnh Vỡ Thời Trang", "#-09Mảnh Vỡ Thú Cưỡi", "Mảnh Vỡ Trang Bị",
+                    "#-09#c33ff99Mảnh Vỡ Thời Trang"):
             self.assertTrue(la_vat_pham_gop(ten), ten)
         self.assertFalse(la_vat_pham_gop(""))
-        self.assertFalse(la_vat_pham_gop("Mảnh Vỡ Thời Trang"))
-        self.assertFalse(la_vat_pham_gop("#-09Mảnh Vỡ Thú Cưỡi"))
-        self.assertFalse(la_vat_pham_gop("Mảnh Vỡ Trang Bị"))
-        self.assertFalse(la_vat_pham_gop("#-09#c33ff99Mảnh Vỡ Thời Trang"))
 
-    def test_liet_ke_viscii_van_loai_manh_vo_thoi_trang(self):
+    def test_liet_ke_viscii_van_nhan_manh_vo_thoi_trang(self):
         from bang_ma_viscii import ma_hoa
         from giao_acc_chinh import GiaoAccChinhEngine, la_vat_pham_gop
         raw = b"4\t" + ma_hoa("#-09#c33ff99Mảnh Vỡ Thời Trang") + b"\t7\n"
         raw += b"5\t" + ma_hoa("Mảnh Vỡ Trân Thú") + b"\t5\n"
         hang = GiaoAccChinhEngine._doc_bang_vat(raw)
         self.assertEqual([o for o, _, _ in hang], [4, 5])
-        self.assertFalse(la_vat_pham_gop(hang[0][1]))
+        self.assertTrue(la_vat_pham_gop(hang[0][1]))
         self.assertTrue(la_vat_pham_gop(hang[1][1]))
 
     def test_phieu_nho_khong_gom_2000(self):
@@ -117,7 +115,9 @@ class TestVatPhamGop(unittest.TestCase):
         self.assertIn("Packet_Temporary_ItemID", gac.MA_LIET_KE_TCCN)
         self.assertIn("Packet_Temporary_ItemNum_Data", gac.MA_LIET_KE_TCCN)
         self.assertIn("UpdateProductAction", gac.MA_LIET_KE_TCCN)
+        self.assertIn("for o = 0, 199", gac.MA_LIET_KE_TCCN)
         self.assertIn("Packet_Temporary_Select", gac.MA_RUT_TCCN)
+        self.assertIn("Packet_Temporary_Gold", gac.MA_RUT_TCCN)
         self.assertIn("g_EveryNum", gac.MA_RUT_TCCN)
         self.assertIn("setupvalue(sel, i, 250)", gac.MA_RUT_TCCN)
         self.assertIn("sel({i})", gac.MA_RUT_TCCN)
@@ -354,6 +354,34 @@ class TestDonTuiGop(unittest.TestCase):
         self.assertEqual(thu_tu, [
             "doi", "tccn", ("kho", {"cat_het": True}),
         ])
+
+    def test_giao_dao_cu_con_cho_nguyen_lieu_it_thi_khong_dung(self):
+        import giao_acc_chinh as gac
+        luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        luong.chi_giao_gop = False
+        luong.tk_chinh = {"nhan_vat": "cosato23"}
+        logs = []
+        luong.in_log = logs.append
+        luong.bao_trang_thai = lambda *_: None
+        luong._o_trong = lambda: {"base": 44, "material": 4}
+        luong._cat_tccn = lambda: self.fail("không cất khi Đạo cụ còn chỗ")
+        luong._cat_kho = lambda **_kw: self.fail("không cất khi Đạo cụ còn chỗ")
+        luong._don_tui_chinh()
+        self.assertTrue(any("giao dịch tiếp" in d for d in logs))
+
+    def test_giao_dao_cu_het_cho_sau_cat_thi_dung(self):
+        import giao_acc_chinh as gac
+        luong = gac.GiaoAccChinhEngine.__new__(gac.GiaoAccChinhEngine)
+        luong.chi_giao_gop = False
+        luong.tk_chinh = {"nhan_vat": "cosato23"}
+        luong.in_log = lambda *_: None
+        luong.bao_trang_thai = lambda *_: None
+        luong._o_trong = lambda: {"base": 0, "material": 4}
+        luong._cat_tccn = lambda: None
+        luong._cat_kho = lambda **_kw: None
+        with self.assertRaises(gac.LoiGiaoAccChinh) as cm:
+            luong._don_tui_chinh()
+        self.assertIn("đã đầy", str(cm.exception))
 
     def test_giao_dich_chi_cat_tccn_va_kho_khong_doi_phieu(self):
         import giao_acc_chinh as gac

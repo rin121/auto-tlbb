@@ -394,6 +394,20 @@ class TestThoatGameNgoaiNhom(unittest.TestCase):
             xv.thoat_game_khac([], lambda *_: None)
         thoat.assert_not_called()
 
+    def test_acc_ngoai_nhom_van_logout_du_hwnd_giu(self):
+        """Acc chính / train không thuộc nhóm xoay vòng: logout, giữ client để đăng nhập lại."""
+        cua = {"hwnd": 5, "pid": 9, "tieu_de": "cosato23 (10) [Lac Duong] - ChickenAuto"}
+        with patch.object(xv, "tim_cua_so_game", return_value=[cua]), \
+                patch.object(xv, "hwnd_giu_khi_xoay_vong", return_value={5}), \
+                patch.object(xv, "hwnd_gop_dang_chay", return_value=set()), \
+                patch.object(xv, "ten_trong_tieu_de", return_value="cosato23"), \
+                patch.object(xv, "Game") as game_cls, \
+                patch.object(xv, "man_hinh_hien_tai", return_value="vao_game"), \
+                patch.object(xv, "thoat_ve_chon_may_chu") as thoat:
+            game_cls.return_value.thong_tin.return_value = {"ten": "cosato23"}
+            xv.thoat_game_khac([], lambda *_: None)
+        thoat.assert_called_once()
+
     def test_da_vao_game_ngoai_nhom_van_logout(self):
         cua = {"hwnd": 5, "pid": 9, "tieu_de": "cosato777 (10) [Lac Duong] - ChickenAuto"}
         with patch.object(xv, "tim_cua_so_game", return_value=[cua]), \
@@ -442,6 +456,19 @@ class TestMoDuClient(unittest.TestCase):
         mo.assert_called_once_with("G")
         self.assertIn(50, luong.cac_hwnd)
         self.assertTrue(any("mở thêm 1" in dong for dong in log))
+
+    def test_du_cua_so_thi_khong_mo_game_moi(self):
+        luong = xv.LuongXoayVong(queue.Queue(), 1, False, False, False, False)
+        luong.cac_hwnd = []
+        log = []
+        luong.in_log = log.append
+        with patch.object(xv, "hwnd_giu_khi_xoay_vong", return_value={1}), \
+                patch.object(xv, "hwnd_gop_dang_chay", return_value=set()), \
+                patch.object(xv, "tim_cua_so_game", return_value=[{"hwnd": i} for i in range(6)]), \
+                patch.object(xv, "mo_game") as mo:
+            luong._mo_du_client(6)
+        mo.assert_not_called()
+        self.assertTrue(any("không mở game mới" in dong for dong in log))
 
 
 class TestChuaXongThiKhongPhoBan(unittest.TestCase):

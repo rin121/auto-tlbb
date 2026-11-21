@@ -105,7 +105,7 @@ from su_kien_ac_tac import (HUB_CUA_MAP as HUB_CUA_MAP_AC_TAC, MO_TA as MO_TA_AC
                             nguoi_nhan_khung, phut_khung, ten_map_chuan, ve_thanh_neu_o_map_ac_tac)
 import gauto_ac_tac
 from giao_dich import anh_tui_goc
-from giao_dich_ngay import (CAC_GIO_GIAO_HANG_NGAY, LuongGiaoDichNgay, chon_moc_giao,
+from giao_dich_ngay import (CAC_GIO_GIAO_HANG_NGAY, LuongGiaoDichNgay, chon_moc_giao, het_khung_giao,
                             het_gio_cho_pho_ban, khoa_moc_giao, nhan_moc_giao)
 from moi_nhom import SO_NGUOI_TOI_DA, doc_nhom, doc_xung_quanh, xu_ly_nhom
 from nhat_do import NhatDo
@@ -922,7 +922,7 @@ class LuongNhanVat(threading.Thread):
                 try:
                     tt_tr = luong_tr.game.thong_tin()
                     map_truong = (tt_tr or {}).get("map") or luong_tr.map_hien_tai
-                except (LoiLua, OSError, AttributeError):
+                except (LoiLua, OSError, AttributeError, IndexError, ValueError):
                     map_truong = luong_tr.map_hien_tai
                 # Flag het_luot lưu riêng từng acc; theo trưởng thì chỉ về thành khi TRƯỞNG hết lượt PMP.
                 dem_tr = hom_nay(cai_dat_pmp(cau_hinh.cua_nhan_vat(luong_tr.ten)))
@@ -3704,7 +3704,8 @@ class UngDung:
                               "(đồ khóa game không đưa được), không có đồ thì thoát game và sang acc tiếp (chế độ "
                               "tất cả acc). Túi acc chính còn dưới 5 ô trống thì cất vào Thiên Cơ Cẩm Nang / Thương khố. "
                               "Cả hai đầy thì dừng. Bấm Dừng rồi Bắt đầu đi tiếp nhân vật chưa xong (tiến trình theo ngày). "
-                              "16:00 và 23:00 mỗi ngày: tự bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.",
+                              "16:00–16:50 và 23:00–23:50 mỗi ngày: tự bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính. "
+                              "Hết phút 50 thì dừng, nhân vật chưa giao để khung sau.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(row=6, column=0, columnspan=2,
                                                                                   sticky="w", pady=(6, 0))
 
@@ -3740,9 +3741,9 @@ class UngDung:
         self.nhan_gop_acc_chinh = ttk.Label(dong_gop, text=self._mo_ta_tien_trinh_gop())
         self.nhan_gop_acc_chinh.pack(side="left", padx=8)
         ttk.Label(khung_gop, text="Gom đồ từ các acc nguồn về acc nhận. Mỗi acc nguồn về Đại Lý, mở Thiên Cơ Cẩm Nang "
-                                  "(nhập 250, mỗi lần rút cách 3 giây) và Thương khố (cách 1 giây), rút Mảnh Ngọc Vip, Phiếu KNB "
-                                  "100/300/2000/3000, Thiên Mệnh Thần Thạch, Mảnh Vỡ Trân Thú, Mảnh vỡ Thiên Ngoại "
-                                  "rồi giao các món đó. Xong thì về chọn máy chủ. Không lấy danh sách từ xoay vòng.\n"
+                                  "(nhập 250, mỗi lần rút cách 3 giây) và Thương khố (cách 1 giây), rút hết đồ "
+                                  "(kể cả Mảnh Vỡ Trang Bị, Thú Cưỡi, Thời Trang) rồi giao hết. "
+                                  "Xong thì về chọn máy chủ. Không lấy danh sách từ xoay vòng.\n"
                                   "Acc nhận / acc nguồn tự ghi vào cau_hinh.json khi sửa (không cần nút Lưu); "
                                   "Bắt đầu chỉ để chạy gộp đồ.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").grid(
@@ -4058,10 +4059,7 @@ class UngDung:
         lan = getattr(self, khoa_lan, 0)
         chay_lai = bool(luong and getattr(luong, "chay_lai_khi_loi", False))
         if not nen_bat_lai_sau_loi("Lỗi", chay_lai, lan):
-            if chay_lai:
-                self.in_log(f"{nhan} Lỗi lặp lại, không tự bấm Bắt đầu nữa")
-            else:
-                setattr(self, khoa_lan, 0)
+            setattr(self, khoa_lan, 0)
             return
         setattr(self, khoa_lan, lan + 1)
         self.in_log(f"{nhan} Chưa giao xong, tự bấm Bắt đầu ({lan + 1})")
@@ -4198,6 +4196,15 @@ class UngDung:
             bang.insert("", "end", iid=str(i), values=(
                 o, tk.get("ten_dang_nhap") or "", ten, vip.mo_ta_bang(xong)))
 
+    def _doi_chon_vip(self, iid):
+        tk, ten, trang, _xong = self._vip_hang[int(iid)]
+        if trang == "vip":
+            self.in_log(f"[Nâng cấp VIP] {ten} đã xong, không chọn lại")
+            return
+        khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
+        self.vip_chon[khoa] = not self.vip_chon.get(khoa, False)
+        self.bang_vip.set(iid, "chon", O_BAT if self.vip_chon[khoa] else O_TAT)
+
     def _bam_bang_nang_cap_vip(self, su_kien):
         bang = self.bang_vip
         if bang.identify_region(su_kien.x, su_kien.y) != "cell" or bang.identify_column(su_kien.x) != "#1":
@@ -4205,13 +4212,18 @@ class UngDung:
         iid = bang.identify_row(su_kien.y)
         if not iid:
             return
-        tk, ten, trang, _xong = self._vip_hang[int(iid)]
-        if trang == "vip":
-            self.in_log(f"[Nâng cấp VIP] {ten} đã xong, không chọn lại")
-            return "break"
-        khoa = ((tk.get("ten_dang_nhap") or "").lower(), chuan_hoa(ten))
-        self.vip_chon[khoa] = not self.vip_chon.get(khoa, False)
-        bang.set(iid, "chon", O_BAT if self.vip_chon[khoa] else O_TAT)
+        self._doi_chon_vip(iid)
+        return "break"
+
+    def _double_click_bang_vip(self, su_kien):
+        """Double-click tài khoản / nhân vật: tích hoặc bỏ tích. Cột Chọn để click đơn xử lý."""
+        bang = self.bang_vip
+        if bang.identify_region(su_kien.x, su_kien.y) != "cell" or bang.identify_column(su_kien.x) == "#1":
+            return
+        iid = bang.identify_row(su_kien.y)
+        if not iid:
+            return
+        self._doi_chon_vip(iid)
         return "break"
 
     def bat_tat_het_nang_cap_vip(self):
@@ -4293,7 +4305,7 @@ class UngDung:
                 "Nâng cấp VIP",
                 f"Acc chính {cd['nhan_vat']} rút mảnh rồi giao.\n\n{mo_ta}\n\n"
                 f"Nhân vật nhận: {ten_chon}.{extra}\n\n"
-                "Thiếu mảnh của bước đang chạy thì không rút, đăng xuất và bắt đầu xoay vòng."):
+                "Thiếu mảnh thì không rút. Giao hết tài khoản đang tích, hoặc thiếu mảnh, thì đăng xuất và xoay vòng."):
             return
         self.luong_nang_cap_vip = LuongNangCapVip(self.hang_doi, {
             "ten_dang_nhap": cd["tai_khoan"], "mat_khau": cd["mat_khau"], "nhan_vat": cd["nhan_vat"]},
@@ -4306,16 +4318,16 @@ class UngDung:
         self.in_log(f"[Nâng cấp VIP] {ten_buoc}: acc chính {cd['nhan_vat']} → {ten_chon}")
 
     def xoay_vong_sau_nang_cap_vip(self):
-        """Thiếu mảnh: chờ luồng VIP thoát (đã đăng xuất) rồi tự bấm xoay vòng."""
+        """VIP xong danh sách hoặc thiếu mảnh: chờ luồng thoát (đã đăng xuất) rồi tự bấm xoay vòng."""
         if self._dang_nang_cap_vip():
             self.root.after(500, self.xoay_vong_sau_nang_cap_vip)
             return
         if self.luong_xoay_vong and self.luong_xoay_vong.is_alive():
             return
         if not cac_tai_khoan_dang_tich():
-            self.in_log("[Nâng cấp VIP] Thiếu mảnh — chưa tích XV tài khoản nào nên không tự xoay vòng")
+            self.in_log("[Nâng cấp VIP] Chưa tích XV tài khoản nào nên không tự xoay vòng")
             return
-        self.in_log("[Nâng cấp VIP] Thiếu mảnh — tự bắt đầu xoay vòng phó bản")
+        self.in_log("[Nâng cấp VIP] Tự bắt đầu xoay vòng phó bản")
         self.bat_tat_xoay_vong()
 
     def _bao_gac(self, tu_dong, chu):
@@ -4940,6 +4952,7 @@ class UngDung:
         self.bang_vip.heading("chon", command=self.bat_tat_het_nang_cap_vip)
         self.bang_vip.pack(fill="x")
         self.bang_vip.bind("<Button-1>", self._bam_bang_nang_cap_vip)
+        self.bang_vip.bind("<Double-1>", self._double_click_bang_vip)
         self.vip_chon = {}
         self._vip_hang = []
         dong_vip = ttk.Frame(khung_vip)
@@ -4971,6 +4984,8 @@ class UngDung:
                                   "Thứ tự: Kim Vương (5000 mảnh trang bị), thú cưỡi (500 mảnh thú), "
                                   "thời trang (500 mảnh áo). Mỗi tài khoản hiện ba nhân vật. "
                                   "Acc chính là acc nhận ở khung Gộp đồ về acc chính. "
+                                  "Double-click tài khoản để tích hoặc bỏ tích. "
+                                  "Giao hết tài khoản đang tích (tài khoản tích cuối) thì đăng xuất và tự xoay vòng. "
                                   "Thiếu mảnh của bước đang chạy thì không rút, đăng xuất và tự xoay vòng.",
                   foreground="gray", wraplength=self.px(DOAN_WRAP_GHI_CHU), justify="left").pack(anchor="w", pady=(6, 0))
         self.nap_bang_nang_cap_vip()
@@ -6600,6 +6615,17 @@ class UngDung:
     def _nhan_lich(self):
         return nhan_moc_giao(getattr(self, "_moc_lich", None) or (16, 0))
 
+    def _dung_giao_het_khung(self, hom, moc):
+        """Hết 16:50 hoặc 23:50: dừng giao dịch cho acc chính, không giao nốt nhân vật còn lại."""
+        ket = moc[0] * 60 + moc[1] + 50
+        self.in_log(f"[{nhan_moc_giao(moc)}] Hết khung {moc[0]:02d}:{moc[1]:02d}–"
+                    f"{ket // 60:02d}:{ket % 60:02d}, dừng giao dịch")
+        if self.luong_giao_acc_chinh and self.luong_giao_acc_chinh.is_alive():
+            self.luong_giao_acc_chinh.dung.set()
+        if self.luong_giao_dich_ngay and self.luong_giao_dich_ngay.is_alive():
+            self.luong_giao_dich_ngay.dung.set()
+        self._xong_lich_16h(hom)
+
     def _xong_lich_16h(self, hom):
         moc = getattr(self, "_moc_lich", None)
         if moc:
@@ -6658,6 +6684,9 @@ class UngDung:
         if moc is None:
             return
         self._moc_lich = moc
+        if het_khung_giao(bay_gio, moc):
+            self._dung_giao_het_khung(hom, moc)
+            return
         nhan = self._nhan_lich()
         if buoc is None:
             ket = self._bat_giao_ngay_16h()
@@ -6947,7 +6976,7 @@ class UngDung:
                 if not self._dang_nang_cap_vip() \
                         or noi_dung[0].startswith(("Xong", "Đã dừng", "Dừng:", "Lỗi", "Thiếu mảnh")):
                     self._dat_nut_vip(None)
-                if noi_dung[0].startswith("Thiếu mảnh"):
+                if noi_dung[0].startswith("Thiếu mảnh") or noi_dung[0].startswith("Xong — xoay"):
                     self.xoay_vong_sau_nang_cap_vip()
                 if noi_dung[0].startswith(("Xong", "Thiếu mảnh", "Đã dừng", "Dừng:", "Lỗi")):
                     self.nap_bang_nang_cap_vip()

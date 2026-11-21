@@ -54,6 +54,9 @@ MA_HOANG_KIM = {
     10162456: "Hoàng Kim - Đái", 10162457: "Hoàng Kim - Giới", 10162458: "Hoàng Kim - Ngọc",
     10162459: "Hoàng Kim - Uyển",
 }
+# Kim Vương - Khôi thay mũ Hoàng Kim khi đã VIP 3 (nang_cap_vip.MON, ghi_20261118_155538).
+MA_KHOI_KIM_VUONG = 10162460
+O_MU = 1
 MA_DO_CU = {10100000, 10141030, 10141040} | set(range(10162420, 10162430))
 GIAY_MOT_NHAN_VAT = 30 * 60
 GIAY_CHO_SHOP_DOI = 8
@@ -225,6 +228,10 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
         def chay(self):
             if self._tt() is None:
                 raise LoiPhoBan("chưa vào game")
+            if self._la_vip_3():
+                danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
+                self.in_log(f"{self.ten}: đã VIP 3, không nhập giftcode")
+                return
             xong = cac_buoc_da_xong(self.ten, self.duong_dan)
             self._giftcode_da_nhap = set()
             self._giftcode_tai_khoan_da_kich_hoat = False
@@ -255,6 +262,16 @@ def tao_nang_cap(game, ten, in_log, nen_dung, bao_trang_thai, duong_dan=None):
             self.roi_cong_point()
             danh_dau_da_lam(self.ten, duong_dan=self.duong_dan)
             self.in_log(f"{self.ten}: giftcode đã kích hoạt từ trước — coi như đã nâng cấp, giữ nhân vật đi phó bản")
+
+        def _la_vip_3(self):
+            """Sổ VIP đủ 3 bước, hoặc đang mang Kim Vương - Khôi."""
+            import nang_cap_vip
+            if nang_cap_vip.da_xong(self.ten):
+                return True
+            try:
+                return self._trang_bi().get(O_MU, (0, ""))[0] == MA_KHOI_KIM_VUONG
+            except Exception:
+                return False
 
         def _thu_giftcode_da_kich_hoat_tai_khoan(self):
             """Nhập thử mã đầu: báo tài khoản đã kích hoạt giftcode thì bỏ các bước mua / tặng / cộng điểm."""

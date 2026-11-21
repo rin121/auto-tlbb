@@ -337,21 +337,28 @@ class TestLich16h(unittest.TestCase):
         self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "2026-11-18"))
         self.assertFalse(gdn.het_gio_cho_pho_ban(bay))
         self.assertTrue(gdn.het_gio_cho_pho_ban(datetime(2026, 11, 18, 16, 20)))
+        self.assertTrue(gdn.trong_khung_giao(datetime(2026, 11, 18, 16, 49)))
+        self.assertFalse(gdn.trong_khung_giao(datetime(2026, 11, 18, 16, 50)))
+        self.assertTrue(gdn.het_khung_giao(datetime(2026, 11, 18, 16, 50)))
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(datetime(2026, 11, 18, 17, 0), ""))
 
     def test_23h_lap_lai_va_bo_moc_16h_neu_chua_bam(self):
         from datetime import datetime
         bay = datetime(2026, 11, 18, 22, 59)
-        self.assertEqual(gdn.chon_moc_giao(bay, {}), ((16, 0), []))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}), (None, []))
         self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "", (23, 0)))
         bay = datetime(2026, 11, 18, 23, 0)
         self.assertTrue(gdn.den_gio_giao_hang_ngay(bay, "", (23, 0)))
         self.assertFalse(gdn.den_gio_giao_hang_ngay(bay, "2026-11-18", (23, 0)))
         self.assertFalse(gdn.het_gio_cho_pho_ban(bay, (23, 0)))
         self.assertTrue(gdn.het_gio_cho_pho_ban(datetime(2026, 11, 18, 23, 20), (23, 0)))
-        self.assertEqual(gdn.chon_moc_giao(bay, {}), ((23, 0), [(16, 0)]))
+        self.assertTrue(gdn.trong_khung_giao(datetime(2026, 11, 18, 23, 49), (23, 0)))
+        self.assertTrue(gdn.het_khung_giao(datetime(2026, 11, 18, 23, 50), (23, 0)))
+        self.assertFalse(gdn.den_gio_giao_hang_ngay(datetime(2026, 11, 18, 23, 50), "", (23, 0)))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}), ((23, 0), []))
         self.assertEqual(gdn.chon_moc_giao(bay, {(16, 0): "2026-11-18"}), ((23, 0), []))
         self.assertEqual(gdn.chon_moc_giao(bay, {}, (16, 0), "cho_xv"), ((16, 0), []))
-        self.assertEqual(gdn.chon_moc_giao(bay, {}, (16, 0), None), ((23, 0), [(16, 0)]))
+        self.assertEqual(gdn.chon_moc_giao(bay, {}, (16, 0), None), ((23, 0), []))
 
     def test_bo_qua_vi_khong_co_do_van_bao_xong(self):
         luong = xv.LuongXoayVong(MagicMock(), 1, False, True)

@@ -387,7 +387,15 @@ def chon_dong(hwnd, id_dong, ten_nv=None):
     Chọn dòng (GAuto đổi tab cài đặt sang nhân vật đó). Biết ten_nv thì chờ tới khi tab cài đặt đúng tên nhân vật đó
     (dòng hiện "đang chọn" chưa chắc GAuto đã đổi cài đặt sang nhân vật đó).
     """
-    with _msaa(_bang_nhan_vat(hwnd)) as o:
+    try:
+        with _msaa(_bang_nhan_vat(hwnd)) as o:
+            _chon_dong_that(hwnd, o, id_dong, ten_nv)
+    except msaa.LoiMsaa as loi:
+        raise LoiGautoAcTac(f"không đọc được dòng GAuto ({loi})") from loi
+
+
+def _chon_dong_that(hwnd, o, id_dong, ten_nv):
+    try:
         ten_dong = ten_tu_dong_gauto(o.ten(id_dong))
         if ten_nv and not _khop_ten(ten_dong, ten_nv):
             raise LoiGautoAcTac(f"dòng GAuto đã đổi, không còn là «{ten_nv}»")
@@ -415,6 +423,8 @@ def chon_dong(hwnd, id_dong, ten_nv=None):
                                 f"«{nhan_vat_dang_cai(hwnd) or '?'}»)")
         time.sleep(GIAY_CHO_DOI_NHAN_VAT)
         _nghi_sau_thao_tac()
+    except msaa.LoiMsaa as loi:
+        raise LoiGautoAcTac(f"không đọc được dòng GAuto ({loi})") from loi
 
 
 def _dam_bao_dang_cai(hwnd, ten_nv):
@@ -1482,11 +1492,14 @@ def _canh_gauto_nap_lai(hwnd, o, ten_nv, in_log):
 def tat_ac_tac(hwnd, ten_nv, chi_so_dong=None, cache=None, in_log=None):
     """Bỏ tích «Ác Tặc» của ten_nv một lần; ô đầu dòng AutoHoc đã tự tích (cache["dau_dong"]) thì bỏ tích lại."""
     try:
-        if cache is not None and cache.get("dau_dong"):
-            _doi_dau_dong(hwnd, cache.pop("dau_dong"), False, in_log)
-        o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
-        _dam_bao_dang_cai(hwnd, ten_nv)
-        dat_o_chuot(hwnd, o[O_AC_TAC], False, O_AC_TAC)
+        try:
+            if cache is not None and cache.get("dau_dong"):
+                _doi_dau_dong(hwnd, cache.pop("dau_dong"), False, in_log)
+            o = _chon_nhan_vat(hwnd, ten_nv, chi_so_dong)
+            _dam_bao_dang_cai(hwnd, ten_nv)
+            dat_o_chuot(hwnd, o[O_AC_TAC], False, O_AC_TAC)
+        except msaa.LoiMsaa as loi:
+            raise LoiGautoAcTac(f"không đọc được GAuto ({loi})") from loi
     finally:
         rut_bao_chuot(in_log)
 

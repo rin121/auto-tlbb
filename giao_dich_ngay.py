@@ -17,22 +17,39 @@ from pho_ban_pmp import cai_dat_pmp
 GIAY_CHO_DUNG_AUTO = 3
 SO_LAN_THU = 3
 GIAY_GIUA_HAI_LAN = 5
-# 16:00 và 23:00 mỗi ngày: bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.
+# 16:00–16:50 và 23:00–23:50: bấm Giao dịch ngay, xong thì bật Giao dịch cho acc chính.
+# Hết phút 50 thì dừng, nhân vật chưa giao để mốc sau.
 CAC_GIO_GIAO_HANG_NGAY = ((16, 0), (23, 0))
 GIO_GIAO_HANG_NGAY = CAC_GIO_GIAO_HANG_NGAY[0]
+PHUT_KHUNG_GIAO = 50
 PHUT_CHO_VAO_PHO_BAN = 20
 
 
+def _phut(bay_gio):
+    return bay_gio.hour * 60 + bay_gio.minute
+
+
+def trong_khung_giao(bay_gio, gio=GIO_GIAO_HANG_NGAY, phut_khung=PHUT_KHUNG_GIAO):
+    """Khung [giờ bắt đầu, giờ bắt đầu + 50 phút). 16:00–16:50, 23:00–23:50."""
+    bat = gio[0] * 60 + gio[1]
+    return bat <= _phut(bay_gio) < bat + phut_khung
+
+
+def het_khung_giao(bay_gio, gio=GIO_GIAO_HANG_NGAY, phut_khung=PHUT_KHUNG_GIAO):
+    bat = gio[0] * 60 + gio[1]
+    return _phut(bay_gio) >= bat + phut_khung
+
+
 def den_gio_giao_hang_ngay(bay_gio, ngay_da_chay, gio=GIO_GIAO_HANG_NGAY):
-    """True khi đã tới giờ và hôm nay chưa chạy mốc này."""
+    """True khi đang trong khung giờ và hôm nay chưa chạy mốc này."""
     if ngay_da_chay == bay_gio.date().isoformat():
         return False
-    return (bay_gio.hour, bay_gio.minute) >= gio
+    return trong_khung_giao(bay_gio, gio)
 
 
 def het_gio_cho_pho_ban(bay_gio, gio=GIO_GIAO_HANG_NGAY, phut_cho=PHUT_CHO_VAO_PHO_BAN):
     """Xoay vòng mãi chưa vào phó bản thì thôi chờ."""
-    return bay_gio.hour * 60 + bay_gio.minute >= gio[0] * 60 + gio[1] + phut_cho
+    return _phut(bay_gio) >= gio[0] * 60 + gio[1] + phut_cho
 
 
 def khoa_moc_giao(gio):
